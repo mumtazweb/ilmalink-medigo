@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <circle cx="600" cy="315" r="190" fill="#dbeafe"/>
+  <path d="M380 270h440v270H380z" fill="#fff" stroke="#0f4cff" stroke-width="8"/>
+  <path d="M420 270v-55h360v55M470 365h260M470 435h180" stroke="#0f172a" stroke-width="22" stroke-linecap="round"/>
+  <path d="m830 200 38 76 84 12-61 60 15 84-76-40-75 40 14-84-61-60 84-12z" fill="#16a34a"/>
+  <text x="210" y="650" fill="#0f172a" font-family="Inter,Arial" font-size="54" font-weight="800">Scholarships</text>
+</svg>

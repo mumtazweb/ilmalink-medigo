@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("author")
+  createdAt DateTime @default(now())
+  resetOtp       String?
+  resetOtpExpiry DateTime?
+
+  blogs Blog[]
+}
+
+model Blog {
+  id               String   @id @default(cuid())
+  title            String
+  slug             String   @unique
+  shortDescription String
+  content          String   @db.LongText
+  category         String
+  country          String
+  featuredImage    String?
+  images           String?  @db.LongText
+  status           String   @default("draft")
+  views            Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  authorId String
+  author   User @relation(fields: [authorId], references: [id])
+}

@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+:root {
+  /* STYLE UPDATED: Premium medical admission palette. */
+  --background: #ffffff;
+  --background-soft: #f8fafc;
+  --border-subtle: #e5e7eb;
+
+  --foreground: #0f172a;
+  --muted-foreground: #475569;
+
+  --primary: #0f4cff;
+  --primary-soft: #eaf1ff;
+  --accent: #16a34a;
+  --danger: #dc2626;
+
+  /* Fonts – from Geist */
+  /* STYLE UPDATED: Inter is now the default UI font. */
+  --font-sans: var(--font-inter-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-soft: var(--primary-soft);
+  --color-accent: var(--accent);
+  --color-danger: var(--danger);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #020617;
+    --background-soft: #020617;
+    --border-subtle: #1f2933;
+    --foreground: #e5e7eb;
+    --muted-foreground: #9ca3af;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}

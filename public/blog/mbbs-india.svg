@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#eff6ff"/>
+  <circle cx="250" cy="170" r="110" fill="#dcfce7"/>
+  <rect x="220" y="250" width="760" height="280" rx="36" fill="#fff" stroke="#bfdbfe" stroke-width="8"/>
+  <path d="M600 315v150M525 390h150" stroke="#0f4cff" stroke-width="42" stroke-linecap="round"/>
+  <path d="M310 530h580" stroke="#16a34a" stroke-width="26" stroke-linecap="round"/>
+  <text x="220" y="650" fill="#0f172a" font-family="Inter,Arial" font-size="54" font-weight="800">MBBS India</text>
+</svg>

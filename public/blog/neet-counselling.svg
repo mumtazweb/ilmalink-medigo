@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <rect x="190" y="110" width="820" height="500" rx="42" fill="#fff" stroke="#dbeafe" stroke-width="8"/>
+  <path d="M300 245h420M300 345h520M300 445h360" stroke="#0f4cff" stroke-width="26" stroke-linecap="round"/>
+  <path d="m820 240 45 45 95-110M820 440l45 45 95-110" fill="none" stroke="#16a34a" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="190" y="675" fill="#0f172a" font-family="Inter,Arial" font-size="54" font-weight="800">NEET Counselling</text>
+</svg>

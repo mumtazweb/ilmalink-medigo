@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <path d="M260 520V280l340-130 340 130v240" fill="#fff" stroke="#bfdbfe" stroke-width="8"/>
+  <path d="M350 500V330M500 500V330M650 500V330M800 500V330" stroke="#0f4cff" stroke-width="24" stroke-linecap="round"/>
+  <path d="m815 195 42 42 95-115" fill="none" stroke="#16a34a" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="170" y="650" fill="#0f172a" font-family="Inter,Arial" font-size="54" font-weight="800">University Reviews</text>
+</svg>

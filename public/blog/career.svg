@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#eff6ff"/>
+  <path d="M250 520c150-210 320-260 510-150" fill="none" stroke="#0f4cff" stroke-width="32" stroke-linecap="round"/>
+  <path d="M760 370h-90m90 0-35-75m35 75-80 35" fill="none" stroke="#0f4cff" stroke-width="26" stroke-linecap="round"/>
+  <circle cx="300" cy="510" r="58" fill="#16a34a"/>
+  <circle cx="560" cy="350" r="58" fill="#fff" stroke="#bfdbfe" stroke-width="8"/>
+  <circle cx="840" cy="390" r="58" fill="#0f4cff"/>
+  <text x="220" y="650" fill="#0f172a" font-family="Inter,Arial" font-size="54" font-weight="800">Medical Careers</text>
+</svg>
