@@ -1,49 +1,128 @@
 @import "tailwindcss";
 
 :root {
-  /* STYLE UPDATED: Premium medical admission palette. */
-  --background: #ffffff;
-  --background-soft: #f8fafc;
+  /* Premium ILMALINK MEDIGO design tokens */
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --surface-soft: #eef4fb;
+  --surface-muted: #f1f5f9;
   --border-subtle: #e5e7eb;
+  --border-strong: #cbd5e1;
 
   --foreground: #0f172a;
   --muted-foreground: #475569;
+  --subtle-foreground: #64748b;
 
-  --primary: #0f4cff;
-  --primary-soft: #eaf1ff;
-  --accent: #16a34a;
-  --danger: #dc2626;
+  --brand-red: #c8102e;
+  --brand-red-soft: #fee2e2;
+  --brand-green: #15803d;
+  --brand-green-soft: #dcfce7;
+  --brand-blue: #0f4cff;
+  --brand-blue-soft: #eff6ff;
 
-  /* Fonts – from Geist */
-  /* STYLE UPDATED: Inter is now the default UI font. */
+  --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.08);
+  --shadow-card: 0 22px 55px rgba(15, 23, 42, 0.10);
+
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+
   --font-sans: var(--font-inter-sans);
+  --font-heading: var(--font-plus-jakarta);
   --font-mono: var(--font-geist-mono);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-primary-soft: var(--primary-soft);
-  --color-accent: var(--accent);
-  --color-danger: var(--danger);
-
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #020617;
-    --background-soft: #020617;
-    --border-subtle: #1f2933;
-    --foreground: #e5e7eb;
-    --muted-foreground: #9ca3af;
-  }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading), var(--font-sans);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  min-height: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+input,
+textarea,
+select {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--foreground);
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 4px rgba(15, 76, 255, 0.12);
+  background: var(--surface);
+}
+
+::selection {
+  background: rgba(15, 76, 255, 0.14);
+  color: var(--foreground);
+}
+
+.section-surface {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
+}
+
+.card-surface {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+.text-strong {
+  color: var(--foreground);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.text-trust {
+  color: var(--brand-blue);
+}
+
+.button-primary {
+  background: var(--brand-red);
+  color: #ffffff;
+}
+
+.button-secondary {
+  background: var(--surface);
+  border-color: var(--brand-green);
+  color: var(--brand-green);
 }

@@ -1,982 +1,405 @@
-"use client";
-import { useState } from "react";
+﻿"use client";
+import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
-import {
-  Phone,
-  Mail,
-  MessageCircle,
-  Search,
-  Menu,
-  ChevronDown,
-} from "lucide-react";
+import AnnouncementTicker from "./AnnouncementTicker";
+import CounsellingPopup from "./CounsellingPopup";
+import SearchModal from "./SearchModal";
+import { Phone, Mail, MessageCircle, Menu, X, ChevronDown, Search, MessageSquare } from "lucide-react";
+import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaYoutube,
-} from "react-icons/fa";
+const countryDestinations = [
+  { href: "/mbbs-abroad/kyrgyzstan", label: "Kyrgyzstan", flag: "kg", badge: "Top" },
+  { href: "/mbbs-abroad/georgia", label: "Georgia", flag: "ge", badge: "Top" },
+  { href: "/mbbs-abroad/bangladesh", label: "Bangladesh", flag: "bd", badge: "Top" },
+  { href: "/mbbs-abroad/russia", label: "Russia", flag: "ru" },
+  { href: "/mbbs-abroad/kazakhstan", label: "Kazakhstan", flag: "kz" },
+  { href: "/mbbs-abroad/uzbekistan", label: "Uzbekistan", flag: "uz" },
+  { href: "/mbbs-abroad/tajikistan", label: "Tajikistan", flag: "tj" },
+  { href: "/mbbs-abroad/malaysia", label: "Malaysia", flag: "my" },
+  { href: "/mbbs-abroad/egypt", label: "Egypt", flag: "eg" },
+  { href: "/mbbs-abroad/saudi-arabia", label: "Saudi Arabia", flag: "sa" },
+  { href: "/mbbs-abroad/qatar", label: "Qatar", flag: "qa" },
+  { href: "/mbbs-abroad/uae", label: "UAE", flag: "ae" },
+  { href: "/mbbs-abroad/iran", label: "Iran", flag: "ir" },
+  { href: "/mbbs-abroad/usa", label: "USA", flag: "us" },
+  { href: "/mbbs-abroad/canada", label: "Canada", flag: "ca" },
+  { href: "/mbbs-abroad/australia", label: "Australia", flag: "au" },
+  { href: "/mbbs-abroad/new-zealand", label: "New Zealand", flag: "nz" },
+  { href: "/mbbs-abroad/uk", label: "England (UK)", flag: "gb" },
+];
 
 export default function Navbar() {
+  const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileCountryOpen, setMobileCountryOpen] = useState(false);
+  const [desktopCountryOpen, setDesktopCountryOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState("");
+  const [showCounsellingPopup, setShowCounsellingPopup] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
 
-const [countryMenuOpen, setCountryMenuOpen] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Keyboard shortcuts for search
+  useEffect(() => {
+    if (!mounted) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Ctrl+K or Cmd+K to open search
+      if ((event.ctrlKey || event.metaKey) && event.key === "k") {
+        event.preventDefault();
+        setShowSearchModal(true);
+      }
+      // ESC to close search
+      if (event.key === "Escape") {
+        setShowSearchModal(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mounted]);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : originalOverflow;
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [mobileMenuOpen, mounted]);
+
+  const filteredDestinations = useMemo(() => {
+    if (!countrySearch.trim()) return countryDestinations;
+    return countryDestinations.filter((destination) =>
+      destination.label.toLowerCase().includes(countrySearch.trim().toLowerCase())
+    );
+  }, [countrySearch]);
+
   return (
-
-    <header className="fixed left-0 top-0 z-50 w-full">
-
-      {/* ROW 1 — TOP CONTACT BAR */}
-      {/* STYLE UPDATED: Neutral, low-noise utility bar with consistent brand hover colors. */}
-      <div className="border-b border-slate-200/80 bg-white/95 text-xs font-medium text-slate-600 backdrop-blur-xl md:text-sm">
-
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-2 sm:px-6 lg:px-8">
-
-          {/* CONTACTS */}
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-
-            <a
-              href="tel:+919330155576"
-              className="flex items-center gap-2 transition hover:text-[#0F4CFF]"
-            >
-
-              <Phone size={14} />
-
-              <span>+91 9330155576</span>
-
-            </a>
-
-            <a
-              href="mailto:middya@ilmalink.com"
-              className="hidden items-center gap-2 transition hover:text-[#0F4CFF] md:flex"
-            >
-
-              <Mail size={14} />
-
-              <span>middya@ilmalink.com</span>
-
-            </a>
-
-            <a
-              href="https://wa.me/919563910223"
-              target="_blank"
-              className="hidden items-center gap-2 text-[#16A34A] transition hover:text-[#15803d] md:flex"
-            >
-
-              <MessageCircle size={14} />
-
-              <span>WhatsApp</span>
-
-            </a>
-
-          </div>
-
-          {/* SOCIALS */}
-          <div className="flex items-center gap-3 text-slate-500">
-
-            <a
-              href="https://www.facebook.com/share/1Edsb6dJwu/"
-              target="_blank"
-              className="transition hover:text-[#0F4CFF]"
-            >
-
-              <FaFacebookF size={14} />
-
-            </a>
-
-            <a
-              href="https://www.instagram.com/injamul_bin_ebrahim_middya"
-              target="_blank"
-              className="transition hover:text-[#0F4CFF]"
-            >
-
-              <FaInstagram size={15} />
-
-            </a>
-
-            <a
-              href="https://www.youtube.com/@injamul.h.middya"
-              target="_blank"
-              className="transition hover:text-[#0F4CFF]"
-            >
-
-              <FaYoutube size={16} />
-
-            </a>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* ROW 2 — MAIN NAVBAR */}
-      {/* STYLE UPDATED: Premium white header, calmer border, and cleaner vertical rhythm. */}
-      <div className="border-b border-slate-200/80 bg-white/95 shadow-[0_10px_30px_rgba(15,23,42,0.06)] backdrop-blur-xl">
-
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8 lg:py-3.5">
-
-          {/* MOBILE LEFT */}
-          <div className="flex min-w-0 items-center gap-2.5 lg:hidden">
-
-            {/* HAMBURGER */}
-            <button
-  onClick={() => setMobileMenuOpen(true)}
-  className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-[#0F172A] transition hover:border-[#0F4CFF]/30 hover:text-[#0F4CFF]"
->
-              <Menu size={24} />
-
-            </button>
-
-            {/* LOGO */}
-            <img
-              src="/logoimage.svg"
-              alt="ILMALINK MEDIGO Logo"
-              className="h-9 w-9 object-contain"
-            />
-
-            {/* LOGO TEXT */}
-            <h2 className="truncate text-base font-bold tracking-normal text-[#0F172A]">
-
-  <span className="text-[#0F172A]">
-    Ilma
-  </span>
-
-  <span className="text-[#0F172A]">
-    Link
-  </span>
-
-  <span className="text-[#0F4CFF]">
-    {" "}Medigo
-  </span>
-
-</h2>
-
-</div>
-
-          {/* DESKTOP LOGO */}
-          <div className="hidden items-center gap-2.5 lg:flex">
-
-            <img
-              src="/logoimage.svg"
-              alt="ILMALINK MEDIGO Logo"
-              className="h-10 w-10 object-contain"
-            />
-
-            <h2 className="text-xl font-bold tracking-normal text-[#0F172A]">
-
-              ILMALINK
-              <span className="text-[#0F4CFF]"> MEDIGO</span>
-
-            </h2>
-
-          </div>
-
-          {/* DESKTOP MENU */}
-          {/* STYLE UPDATED: Reduced menu spacing and calmer hover hierarchy. */}
-          <nav className="hidden items-center gap-5 text-sm font-medium text-[#0F172A] lg:flex xl:gap-7">
-
-            <a href="/about/" className="transition hover:text-[#0F4CFF]">
-
-              About Us
-
-            </a>
-{/* DESKTOP MBBS ABROAD */}
-<div className="relative">
-
-  <button
-    onClick={() => setCountryMenuOpen(!countryMenuOpen)}
-    className="flex items-center gap-1.5 text-[#0F172A] transition hover:text-[#0F4CFF]"
-  >
-
-    MBBS Abroad
-
-    <ChevronDown size={18} />
-
-  </button>
-
-  {/* STYLE UPDATED: Cleaner dropdown surface with consistent radius, spacing, and neutral text. */}
-  {countryMenuOpen && (
-
-    <div className="absolute left-0 top-full mt-4 w-[520px] rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.14)]">
-
-      <h3 className="mb-5 text-lg font-bold text-[#0F172A]">
-
-        Top MBBS Destinations
-
-      </h3>
-
-      <div className="flex justify-between gap-8 text-sm text-[#0F172A]">
-
-        {/* LEFT COLUMN */}
-        <div className="space-y-3">
-
-          <a href="/mbbs-abroad/kyrgyzstan" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            <img
-              src="https://flagcdn.com/w40/kg.png"
-              alt="Kyrgyzstan Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-            Kyrgyzstan
-
-            <span className="bg-[#0F4CFF]/10 text-[#0F4CFF] text-xs px-2 py-1 rounded-full">
-
-              Top
-
-            </span>
-
-          </a>
-
-          <a href="/mbbs-abroad/georgia" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            <img
-              src="https://flagcdn.com/w40/ge.png"
-              alt="Georgia Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-            Georgia
-
-            <span className="bg-[#0F4CFF]/10 text-[#0F4CFF] text-xs px-2 py-1 rounded-full">
-
-              Top
-
-            </span>
-
-          </a>
-
-          <a href="/mbbs-abroad/bangladesh" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            <img
-              src="https://flagcdn.com/w40/bd.png"
-              alt="Bangladesh Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-            Bangladesh
-
-            <span className="bg-[#0F4CFF]/10 text-[#0F4CFF] text-xs px-2 py-1 rounded-full">
-
-              Top
-
-            </span>
-
-          </a>
-
-          <a href="/mbbs-abroad/russia" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            <img
-              src="https://flagcdn.com/w40/ru.png"
-              alt="Russia Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-            Russia
-
-          </a>
-
-          <a href="/mbbs-abroad/kazakhstan" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            <img
-              src="https://flagcdn.com/w40/kz.png"
-              alt="Kazakhstan Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-            Kazakhstan
-
-          </a>
-
-          <a href="/mbbs-abroad/uzbekistan" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            <img
-              src="https://flagcdn.com/w40/uz.png"
-              alt="Uzbekistan Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-            Uzbekistan
-
-          </a>
-
-          <a href="/mbbs-abroad/tajikistan" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            <img
-              src="https://flagcdn.com/w40/tj.png"
-              alt="Tajikistan Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-            Tajikistan
-
-          </a>
-          <a href="/mbbs-abroad/malaysia" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-  <img
-    src="https://flagcdn.com/w40/my.png"
-    alt="Malaysia Flag"
-    className="w-5 h-4 rounded-sm"
-  />
-
-  Malaysia
-
-</a>
-          <a href="/mbbs-abroad/egypt" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            <img
-              src="https://flagcdn.com/w40/eg.png"
-              alt="Egypt Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-            Egypt
-
-          </a>
-
-        </div>
-
-        {/* RIGHT COLUMN */}
-        <div className="space-y-3 text-right">
-
-          <a href="/mbbs-abroad/saudi-arabia" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            Saudi Arabia
-
-            <img
-              src="https://flagcdn.com/w40/sa.png"
-              alt="Saudi Arabia Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-          </a>
-
-          <a href="/mbbs-abroad/qatar" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            Qatar
-
-            <img
-              src="https://flagcdn.com/w40/qa.png"
-              alt="Qatar Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-          </a>
-
-          <a href="/mbbs-abroad/uae" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            UAE
-
-            <img
-              src="https://flagcdn.com/w40/ae.png"
-              alt="UAE Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-          </a>
-
-          <a href="/mbbs-abroad/iran" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            Iran
-
-            <img
-              src="https://flagcdn.com/w40/ir.png"
-              alt="Iran Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-          </a>
-
-          <a href="/mbbs-abroad/usa" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            USA
-
-            <img
-              src="https://flagcdn.com/w40/us.png"
-              alt="USA Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-          </a>
-
-          <a href="/mbbs-abroad/canada" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            Canada
-
-            <img
-              src="https://flagcdn.com/w40/ca.png"
-              alt="Canada Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-          </a>
-
-          <a href="/mbbs-abroad/australia" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            Australia
-
-            <img
-              src="https://flagcdn.com/w40/au.png"
-              alt="Australia Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-          </a>
-
-          <a href="/mbbs-abroad/new-zealand" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            New Zealand
-
-            <img
-              src="https://flagcdn.com/w40/nz.png"
-              alt="New Zealand Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-          </a>
-
-          <a href="/mbbs-abroad/uk" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-            England (UK)
-
-            <img
-              src="https://flagcdn.com/w40/gb.png"
-              alt="UK Flag"
-              className="w-5 h-4 rounded-sm"
-            />
-
-          </a>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  )}
-
-</div>
-
-            <a href="/mbbs-india/" className="transition hover:text-[#0F4CFF]">
-
-              MBBS India
-
-            </a>
-
-          <a
-  href="https://www.mumtazeducation.com"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="transition hover:text-[#0F4CFF]"
->
-
-  NEET
-
-</a>
-
-            <Link
-  href="/blogs"
-  className="transition hover:text-[#0F4CFF]"
->
-  Blogs
-</Link>
-
-            <a href="/alert/" className="font-semibold text-[#0F4CFF] transition hover:text-[#0b3fd6]">
-
-              ALERT
-
-            </a>
-
-          </nav>
-
-          {/* RIGHT SIDE */}
-          <div className="flex items-center gap-2.5">
-
-            {/* DESKTOP LIVE BOX */}
-            {/* STYLE UPDATED: Premium live CTA using accent green and neutral live indicator. */}
-<a
-  href="https://wa.me/919563910223"
-  target="_blank"
-  className="group hidden items-center gap-2.5 rounded-full border border-[#16A34A]/20 bg-[#F8FAFC] px-3.5 py-2 text-[#0F172A] shadow-[0_8px_20px_rgba(15,23,42,0.06)] transition duration-300 hover:-translate-y-0.5 hover:border-[#16A34A]/35 hover:bg-white hover:shadow-[0_14px_28px_rgba(22,163,74,0.16)] md:flex"
->
-
-  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#16A34A]/10 text-[#16A34A] transition duration-300 group-hover:bg-[#16A34A] group-hover:text-white">
-    <MessageCircle size={18} />
-  </span>
-
-  {/* TEXT */}
-  <div className="flex flex-col leading-tight">
-
-    <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#0F4CFF]">
-
-      <span className="relative flex h-2 w-2">
-
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#16A34A] opacity-60"></span>
-
-        <span className="relative inline-flex h-2 w-2 rounded-full bg-[#16A34A]"></span>
-
-      </span>
-
-      LIVE
-
-    </span>
-
-    <span className="text-sm font-bold text-[#0F172A]">
-
-      Counselling
-
-    </span>
-
-  </div>
-
-</a>
-
-{/* MOBILE LIVE BOX */}
-<a
-  href="https://wa.me/919563910223"
-  target="_blank"
-  className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[#16A34A]/25 bg-white text-[#16A34A] shadow-[0_10px_22px_rgba(15,23,42,0.10)] transition duration-300 hover:bg-[#F8FAFC] md:hidden"
->
-
-  <MessageCircle size={19} />
-
-  <span className="absolute right-1.5 top-1.5 flex h-2.5 w-2.5">
-
-    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#16A34A] opacity-60"></span>
-
-    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#16A34A] ring-2 ring-white"></span>
-
-  </span>
-
-</a>
-
-            {/* SEARCH */}
-            <button className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-[#0F172A] transition hover:border-[#0F4CFF]/30 hover:bg-[#F8FAFC] hover:text-[#0F4CFF]">
-
-              <Search size={16} />
-
-            </button>
-
-            {/* APPLY */}
-            <button className="min-h-10 rounded-full bg-[#0F4CFF] px-5 py-2 text-sm font-bold text-white shadow-[0_10px_22px_rgba(15,76,255,0.20)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#0b3fd6]">
-
-              Apply
-
-            </button>
-
-          </div>
-
-        </div>
-{/* MOBILE MENU */}
-{/* STYLE UPDATED: Mobile drawer uses the same neutral production surface and spacing. */}
-{mobileMenuOpen && (
-
-  <div className="fixed left-0 top-[94px] z-50 flex h-[calc(100vh-94px)] w-full bg-[#0F172A]/20 backdrop-blur-sm lg:hidden">
-
-    {/* LEFT DRAWER */}
-    <div className="min-h-screen w-[84%] max-w-sm overflow-y-auto bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.18)] animate-in slide-in-from-left duration-300">
-
-      {/* TOP */}
-       <div className="mb-8 flex items-center justify-between">
-
-        <h2 className="text-lg font-bold tracking-normal text-[#0F172A]">
-
-          EXPLORE
-
-        </h2>
-
-        <button
-          onClick={() => {
-            setMobileMenuOpen(false);
-            setCountryMenuOpen(false);
-          }}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-xl text-[#0F172A] transition hover:border-[#0F4CFF]/30 hover:text-[#0F4CFF]"
-        >
-
-          ✕
-
-        </button>
-
-      </div>
-
-      {/* NAV LINKS */}
-      <div className="flex flex-col gap-5 text-base font-medium text-[#0F172A]">
-
-        <a
-          href="/about/"
-          className="transition hover:text-[#0F4CFF]"
-        >
-
-          About Us
-
-        </a>
-
-        {/* MBBS ABROAD */}
-        <button
-          onClick={() => setCountryMenuOpen(!countryMenuOpen)}
-          className="flex items-center justify-between transition hover:text-[#0F4CFF]"
-        >
-
-          <span>MBBS Abroad</span>
-
-          <span className="text-2xl leading-none">
-
-            {countryMenuOpen ? "−" : "+"}
-
-          </span>
-
-        </button>
-
-        <a
-          href="mbbs-india/west-bengal"
-          className="transition hover:text-[#0F4CFF]"
-        >
-
-          MBBS India
-
-        </a>
-
-        <a
-          href="https://www.mumtazeducation.com"
-          className="transition hover:text-[#0F4CFF]"
-        >
-
-          NEET
-
-        </a>
-
-        <Link
-  href="/blogs"
-  className="transition hover:text-[#0F4CFF]"
->
-  Blogs
-</Link>
-
-        <a
-          href="coming-soon"
-          className="font-semibold text-[#0F4CFF] transition hover:text-[#0b3fd6]"
-        >
-
-          ALERT
-
-        </a>
-
-      </div>
-
-    </div>
-
-    {/* COUNTRY PANEL */}
-   {countryMenuOpen && (
-
-  <div className="absolute left-0 top-0 z-[60] flex h-full w-full">
-
-       <div className="mx-auto mt-5 max-h-[80vh] w-[92%] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.18)] animate-in slide-in-from-left duration-300">
-          {/* HEADING */}
-          <h3 className="mb-5 text-lg font-bold text-[#0F172A]">
-
-            Top MBBS Destinations
- 
-          </h3>
-
-          {/* 2 COLUMNS */}
-          <div className="flex justify-between gap-6 text-sm text-[#0F172A]">
-
-            {/* LEFT COLUMN */}
-            <div className="space-y-3">
-
-              <a href="/mbbs-abroad/kyrgyzstan" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                <img
-                  src="https://flagcdn.com/w40/kg.png"
-                  alt="Kyrgyzstan Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-                Kyrgyzstan
-
-                <span className="bg-[#0F4CFF]/10 text-[#0F4CFF] text-xs px-2 py-1 rounded-full">
-
-                  Top
-
-                </span>
-
-              </a>
-
-              <a href="/mbbs-abroad/georgia" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                <img
-                  src="https://flagcdn.com/w40/ge.png"
-                  alt="Georgia Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-                Georgia
-
-                <span className="bg-[#0F4CFF]/10 text-[#0F4CFF] text-xs px-2 py-1 rounded-full">
-
-                  Top
-
-                </span>
-
-              </a>
-
-              <a href="/mbbs-abroad/bangladesh" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                <img
-                  src="https://flagcdn.com/w40/bd.png"
-                  alt="Bangladesh Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-                Bangladesh
-
-                <span className="bg-[#0F4CFF]/10 text-[#0F4CFF] text-xs px-2 py-1 rounded-full">
-
-                  Top
-
-                </span>
-
-              </a>
-
-              <a href="/mbbs-abroad/russia" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                <img
-                  src="https://flagcdn.com/w40/ru.png"
-                  alt="Russia Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-                Russia
-
-              </a>
-
-              <a href="/mbbs-abroad/kazakhstan" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                <img
-                  src="https://flagcdn.com/w40/kz.png"
-                  alt="Kazakhstan Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-                Kazakhstan
-
-              </a>
-
-              <a href="/mbbs-abroad/uzbekistan" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                <img
-                  src="https://flagcdn.com/w40/uz.png"
-                  alt="Uzbekistan Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-                Uzbekistan
-
-              </a>
-
-              <a href="/mbbs-abroad/tajikistan" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                <img
-                  src="https://flagcdn.com/w40/tj.png"
-                  alt="Tajikistan Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-                Tajikistan
-
-              </a>
-
-              <a href="/mbbs-abroad/egypt" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                <img
-                  src="https://flagcdn.com/w40/eg.png"
-                  alt="Egypt Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-                Egypt
-
-              </a>
-
-              <a href="/mbbs-abroad/malaysia" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                <img
-                  src="https://flagcdn.com/w40/my.png"
-                  alt="Malaysia Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-                Malaysia
-
-              </a>
-
-              <a href="/mbbs-abroad/barbados" className="flex items-center gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                <img
-                  src="https://flagcdn.com/w40/bb.png"
-                  alt="Barbados Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-                Barbados
-
-              </a>
-
+    <>
+      <div className="sticky top-0 z-50">
+        <AnnouncementTicker />
+        <header className="border-b border-slate-100/50 bg-white/95 shadow-sm backdrop-blur-xl">
+          <div className="mx-auto max-w-[1500px] px-3 sm:px-4 lg:px-6 py-2.5">
+            <div className="flex items-center justify-between gap-2 sm:gap-4 lg:gap-6">
+              {/* LEFT SECTION: HAMBURGER + BRANDING */}
+              <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                <button
+                  type="button"
+                  aria-label="Open navigation menu"
+                  onClick={() => setMobileMenuOpen(true)}
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-900 transition hover:border-[#00C896]/50 hover:text-[#00C896] lg:hidden flex-shrink-0"
+                >
+                  <Menu size={18} />
+                </button>
+
+                <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group flex-shrink-0">
+                  {/* Logo Image */}
+                  <div className="relative flex-shrink-0 h-14 w-14 sm:h-16 sm:w-16 flex items-center justify-center">
+                    <img 
+                      src="/logoimage.svg" 
+                      alt="ILMALINK MEDIGO Logo" 
+                      className="h-full w-full object-contain" 
+                    />
+                  </div>
+
+                  {/* Brand Text Stack - Desktop */}
+                  <div className="hidden lg:flex flex-col gap-0.5">
+                    <h1 className="font-[family-name:var(--font-plus-jakarta)] text-lg font-extrabold tracking-tight text-[#081B35] leading-tight">
+                      ILMALINK
+                    </h1>
+                    <h2 className="font-[family-name:var(--font-plus-jakarta)] text-lg font-extrabold tracking-tight text-[#00C896] leading-tight">
+                      MEDIGO
+                    </h2>
+                    <p className="text-[10px] font-medium text-slate-500 tracking-wide mt-0.5">
+                      Global Medical Education
+                    </p>
+                  </div>
+
+                  {/* Brand Text Stack - Mobile & Tablet */}
+                  <div className="flex lg:hidden flex-col gap-0.5">
+                    <div className="flex items-baseline gap-1">
+                      <h1 className="font-[family-name:var(--font-plus-jakarta)] text-xs sm:text-sm font-extrabold text-[#081B35]">
+                        ILMALINK
+                      </h1>
+                      <h2 className="font-[family-name:var(--font-plus-jakarta)] text-xs sm:text-sm font-extrabold text-[#00C896]">
+                        MEDIGO
+                      </h2>
+                    </div>
+                    <p className="text-[9px] sm:text-[10px] font-medium text-slate-500 tracking-wide">
+                      Global Medical Education
+                    </p>
+                  </div>
+                </Link>
+              </div>
+
+              {/* CENTER SECTION: NAVIGATION (Desktop Only) */}
+              <nav className="hidden lg:flex items-center gap-0.5 flex-1 justify-center">
+                <style>{`
+                  .nav-link {
+                    position: relative;
+                    padding: 0.375rem 0.875rem;
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: #475569;
+                    transition: color 0.2s ease;
+                  }
+
+                  .nav-link:hover {
+                    color: #00C896;
+                  }
+
+                  .nav-link::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0.2rem;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 0;
+                    height: 2px;
+                    background: linear-gradient(90deg, #00C896, #0EA5A4);
+                    border-radius: 2px;
+                    transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                  }
+
+                  .nav-link:hover::after {
+                    width: 55%;
+                  }
+                `}</style>
+
+                <Link href="/" className="nav-link">Home</Link>
+                <Link href="/about/" className="nav-link">About</Link>
+
+                <div className="relative group">
+                  <button
+                    type="button"
+                    onClick={() => setDesktopCountryOpen(!desktopCountryOpen)}
+                    className="nav-link flex items-center gap-1"
+                  >
+                    MBBS Abroad
+                    <ChevronDown 
+                      size={14} 
+                      className={`transition-transform duration-300 ${desktopCountryOpen ? "rotate-180" : ""}`}
+                    />
+                  </button>
+
+                  {desktopCountryOpen && (
+                    <div className="absolute left-0 top-full z-40 mt-2 min-w-[24rem] overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(0,0,0,0.12)]">
+                      <div className="flex items-center justify-between gap-3 mb-3">
+                        <div>
+                          <h3 className="text-base font-semibold text-slate-900">MBBS Abroad</h3>
+                          <p className="mt-0.5 text-xs text-slate-500">20+ destinations</p>
+                        </div>
+                        <div className="inline-flex rounded-full bg-gradient-to-r from-[#00C896]/10 to-[#0EA5A4]/10 px-2.5 py-1 text-xs font-semibold text-[#00C896]">
+                          Global
+                        </div>
+                      </div>
+                      <div className="mb-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+                        <div className="flex items-center gap-2 text-sm text-slate-700">
+                          <Search size={14} className="text-slate-400" />
+                          <input
+                            type="search"
+                            value={countrySearch}
+                            onChange={(event) => setCountrySearch(event.target.value)}
+                            placeholder="Search..."
+                            className="w-full border-0 bg-transparent px-1 text-sm outline-none placeholder-slate-400"
+                          />
+                        </div>
+                      </div>
+                      <div className="grid gap-1.5 text-xs text-slate-900 max-h-56 overflow-y-auto sm:grid-cols-2">
+                        {filteredDestinations.map((destination) => (
+                          <Link
+                            key={destination.href}
+                            href={destination.href}
+                            className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-white px-2.5 py-2 transition hover:border-[#00C896]/50 hover:bg-[#f0fdf9]"
+                          >
+                            <span className="flex items-center gap-1.5">
+                              <img
+                                src={`https://flagcdn.com/w40/${destination.flag}.png`}
+                                alt={`${destination.label} Flag`}
+                                className="h-3 w-4 rounded-sm"
+                              />
+                              <span className="text-xs">{destination.label}</span>
+                            </span>
+                            {destination.badge ? (
+                              <span className="rounded-full bg-[#00C896]/10 px-1.5 py-0.5 text-[9px] font-semibold text-[#00C896]">
+                                Top
+                              </span>
+                            ) : null}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <Link href="/mbbs-india/" className="nav-link">MBBS India</Link>
+                <a href="https://www.mumtazeducation.com" target="_blank" rel="noopener noreferrer" className="nav-link">NEET</a>
+                <Link href="/blogs" className="nav-link">Blogs</Link>
+              </nav>
+
+              {/* RIGHT SECTION: SEARCH + CTA */}
+              <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+                {/* Search Button */}
+                <button
+                  type="button"
+                  aria-label="Search"
+                  onClick={() => setShowSearchModal(true)}
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:border-[#00C896]/50 hover:text-[#00C896] group relative"
+                  title="Search (Ctrl+K)"
+                >
+                  <Search size={16} />
+                  <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded text-[10px] font-medium bg-slate-900 text-white opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">
+                    Ctrl+K
+                  </span>
+                </button>
+
+                {/* Enquire Now Button */}
+                <button
+                  type="button"
+                  onClick={() => setShowCounsellingPopup(true)}
+                  className="group inline-flex items-center gap-1 sm:gap-1.5 rounded-lg bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-2.5 sm:px-5 py-2 text-xs sm:text-sm font-semibold text-white transition duration-300 hover:shadow-[0_8px_20px_rgba(0,200,150,0.25)] hover:-translate-y-0.5 flex-shrink-0 whitespace-nowrap"
+                >
+                  <MessageSquare size={14} className="transition group-hover:rotate-12 flex-shrink-0" />
+                  <span className="hidden sm:inline">Enquire Now</span>
+                  <span className="sm:hidden">Enquire</span>
+                </button>
+              </div>
             </div>
-
-            {/* RIGHT COLUMN */}
-            <div className="space-y-4 text-right">
-
-              <a href="/mbbs-abroad/saudi-arabia" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                Saudi Arabia
-
-                <img
-                  src="https://flagcdn.com/w40/sa.png"
-                  alt="Saudi Arabia Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-              </a>
-
-              <a href="/mbbs-abroad/qatar" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                Qatar
-
-                <img
-                  src="https://flagcdn.com/w40/qa.png"
-                  alt="Qatar Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-              </a>
-
-               <a href="/mbbs-abroad/uae" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                UAE
-
-                <img
-                  src="https://flagcdn.com/w40/ae.png"
-                  alt="United Arab Emirates Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-              </a>
-
-              <a href="/mbbs-abroad/iran" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                Iran
-
-                <img
-                  src="https://flagcdn.com/w40/ir.png"
-                  alt="Iran Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-              </a>
-
-              <a href="/mbbs-abroad/vietnam" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                Vietnam
-
-                <img
-                  src="https://flagcdn.com/w40/vn.png"
-                  alt="Vietnam Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-              </a>
-
-              <a href="/mbbs-abroad/singapore" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                Singapore
-
-                <img
-                  src="https://flagcdn.com/w40/sg.png"
-                  alt="Singapore Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-              </a>
-
-              <a href="/mbbs-abroad/usa" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                USA
-
-                <img
-                  src="https://flagcdn.com/w40/us.png"
-                  alt="USA Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-              </a>
-
-              <a href="/mbbs-abroad/canada" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                Canada
-
-                <img
-                  src="https://flagcdn.com/w40/ca.png"
-                  alt="Canada Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-              </a>
-
-              <a href="/mbbs-abroad/australia" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                Australia
-
-                <img
-                  src="https://flagcdn.com/w40/au.png"
-                  alt="Australia Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-              </a>
-
-              <a href="/mbbs-abroad/new-zealand" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                New Zealand
-
-                <img
-                  src="https://flagcdn.com/w40/nz.png"
-                  alt="New Zealand Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-              </a>
-
-              <a href="/mbbs-abroad/united-kingdom" className="flex items-center justify-end gap-2 text-[#0F172A] hover:text-[#0F4CFF] transition">
-
-                England (UK)
-
-                <img
-                  src="https://flagcdn.com/w40/gb.png"
-                  alt="UK Flag"
-                  className="w-5 h-4 rounded-sm"
-                />
-
-              </a>
-
-            </div>
-
           </div>
+        </header>
 
-        </div>
+{/* Mobile Menu */}
+        {mounted && mobileMenuOpen &&
+          createPortal(
+            <div className="fixed inset-0 z-[99999] flex bg-slate-950/40 lg:hidden">
+              <div className="relative flex h-full w-[84%] max-w-sm flex-col overflow-y-auto bg-white p-5 shadow-[0_24px_60px_rgba(15,23,42,0.18)]">
+                <div className="mb-6 flex items-center justify-between gap-3">
+                  <div className="flex-1">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-[#00C896]">Menu</p>
+                    <h2 className="mt-1 text-lg font-extrabold text-[#081B35]">ILMALINK MEDIGO</h2>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setMobileCountryOpen(false);
+                    }}
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-900 transition hover:border-[#00C896]/50 hover:text-[#00C896]"
+                    aria-label="Close menu"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
 
+                <div className="space-y-1 text-sm font-medium text-slate-900">
+                  <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block rounded-lg px-3.5 py-2.5 transition hover:bg-slate-50 hover:text-[#00C896]">
+                    Home
+                  </Link>
+                  <Link href="/about/" onClick={() => setMobileMenuOpen(false)} className="block rounded-lg px-3.5 py-2.5 transition hover:bg-slate-50 hover:text-[#00C896]">
+                    About Us
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => setMobileCountryOpen(!mobileCountryOpen)}
+                    className="flex w-full items-center justify-between rounded-lg px-3.5 py-2.5 text-left transition hover:bg-slate-50 hover:text-[#00C896]"
+                  >
+                    <span>MBBS Abroad</span>
+                    <ChevronDown size={16} className={`transition-transform duration-300 ${mobileCountryOpen ? "rotate-180" : ""}`} />
+                  </button>
+                  <Link href="/mbbs-india/" onClick={() => setMobileMenuOpen(false)} className="block rounded-lg px-3.5 py-2.5 transition hover:bg-slate-50 hover:text-[#00C896]">
+                    MBBS India
+                  </Link>
+                  <a href="https://www.mumtazeducation.com" target="_blank" rel="noopener noreferrer" className="block rounded-lg px-3.5 py-2.5 transition hover:bg-slate-50 hover:text-[#00C896]">
+                    NEET
+                  </a>
+                  <Link href="/blogs" onClick={() => setMobileMenuOpen(false)} className="block rounded-lg px-3.5 py-2.5 transition hover:bg-slate-50 hover:text-[#00C896]">
+                    Blogs
+                  </Link>
+                  <Link href="/alert/" onClick={() => setMobileMenuOpen(false)} className="block rounded-lg bg-[#fee2e2] px-3.5 py-2.5 text-xs font-semibold text-red-700 transition hover:bg-[#fce7ea]">
+                    Alerts
+                  </Link>
+                </div>
+
+                {mobileCountryOpen && (
+                  <div className="mt-4 overflow-hidden rounded-lg border border-slate-200 bg-slate-50 p-3">
+                    <h3 className="mb-2.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Destinations
+                    </h3>
+                    <div className="grid gap-1.5 text-xs max-h-56 overflow-y-auto">
+                      {countryDestinations.map((destination) => (
+                        <Link
+                          key={destination.href}
+                          href={destination.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="flex items-center justify-between gap-2 rounded-lg bg-white px-2.5 py-2 transition hover:bg-slate-100"
+                        >
+                          <span className="flex items-center gap-1.5">
+                            <img
+                              src={`https://flagcdn.com/w40/${destination.flag}.png`}
+                              alt={`${destination.label} Flag`}
+                              className="h-3 w-4 rounded-sm"
+                            />
+                            <span className="text-xs">{destination.label}</span>
+                          </span>
+                          {destination.badge ? (
+                            <span className="rounded-full bg-[#00C896]/10 px-1 py-0.5 text-[9px] font-semibold text-[#00C896]">
+                              Top
+                            </span>
+                          ) : null}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="mt-auto flex flex-col gap-2 pt-4 border-t border-slate-200">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowCounsellingPopup(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="group inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-4 py-2.5 text-xs font-semibold text-white transition hover:shadow-lg hover:-translate-y-0.5"
+                  >
+                    <MessageSquare size={14} />
+                    Enquire Now
+                  </button>
+                  <a
+                    href="https://wa.me/919563910223"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-xs font-semibold text-slate-900 transition hover:bg-slate-50"
+                  >
+                    <Phone size={14} />
+                    WhatsApp
+                  </a>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="flex-1"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setMobileCountryOpen(false);
+                }}
+                aria-label="Close overlay"
+              />
+            </div>,
+            document.body
+          )}
+
+        {/* Counselling Popup */}
+        <CounsellingPopup isOpen={showCounsellingPopup} onClose={() => setShowCounsellingPopup(false)} />
+
+        {/* Search Modal */}
+        <SearchModal isOpen={showSearchModal} onClose={() => setShowSearchModal(false)} />
       </div>
-
-    )}
-
-  </div>
-
-)}
-
-      </div>
-
-    </header>
-
+    </>
   );
 }
-  
-
