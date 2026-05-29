@@ -259,8 +259,8 @@ export default function HomeHeroClient() {
   return (
     <>
       <section className="w-full bg-[#020C23] pt-[82px] md:pt-[90px] lg:pt-[96px]">
-        <div className="mx-auto max-w-[1500px] px-3 pb-16 sm:px-4 lg:px-6 lg:pb-24">
-          <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[#021A3D] shadow-[0_35px_120px_rgba(0,18,51,0.35)]">
+        <div className="w-full px-3 pb-16 sm:px-4 lg:px-6 lg:pb-24">
+          <section className="relative w-full overflow-hidden rounded-[32px] border border-white/10 bg-[#021A3D] shadow-[0_35px_120px_rgba(0,18,51,0.35)] aspect-video lg:aspect-auto lg:h-screen lg:max-h-[700px]">
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#021A3D] via-[#052A5B] to-[#0A356B]" />
             <div className="pointer-events-none absolute left-[-20%] top-[10%] h-[420px] w-[420px] rounded-full bg-[#3EA7FF]/15 blur-[120px]" />
             <div className="pointer-events-none absolute right-[-14%] top-[20%] h-[350px] w-[350px] rounded-full bg-[#0D9AE5]/10 blur-[110px]" />
@@ -270,7 +270,7 @@ export default function HomeHeroClient() {
             <div className="pointer-events-none absolute inset-x-0 top-12 h-[420px] bg-[radial-gradient(circle_at_center,rgba(46,132,255,0.18),transparent_42%)]" />
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent 28%,rgba(255,255,255,0.05) 52%,transparent 78%)]" />
 
-            <div className="relative grid gap-10 px-6 py-8 sm:px-8 md:px-10 md:py-10 lg:grid-cols-[1.6fr_1fr_0.95fr] lg:px-12 xl:px-14 xl:py-12">
+            <div className="relative h-full grid gap-6 px-6 py-8 sm:px-8 md:px-10 lg:grid-cols-[1.4fr_1.2fr_1fr] lg:px-12 xl:px-16">
               <div className="flex flex-col justify-center">
                 <div className="max-w-[720px]">
                   <p className="text-base font-medium uppercase tracking-[0.28em] text-white/85 sm:text-sm">
@@ -349,7 +349,7 @@ export default function HomeHeroClient() {
               </div>
 
               <div className="relative flex items-center justify-center">
-                <div className="relative flex h-[420px] w-[420px] items-center justify-center rounded-full border border-white/10 bg-white/5 p-5 shadow-[0_35px_90px_rgba(0,0,0,0.28)] backdrop-blur-[2px] sm:h-[460px] sm:w-[460px] lg:h-[520px] lg:w-[520px]">
+                <div className="relative flex h-[320px] w-[320px] items-center justify-center rounded-full border border-white/10 bg-white/5 p-5 shadow-[0_35px_90px_rgba(0,0,0,0.28)] backdrop-blur-[2px] sm:h-[380px] sm:w-[380px] md:h-[420px] md:w-[420px] lg:h-[520px] lg:w-[520px]">
                   <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.12),transparent_55%)]" />
                   <div className="absolute inset-0 rounded-full border border-white/15" />
                   <div className="absolute inset-[6%] rounded-full bg-[radial-gradient(circle_at_center,rgba(6,89,157,0.72),rgba(4,31,69,0.94))] shadow-[inset_0_0_45px_rgba(0,0,0,0.35)]" />
@@ -373,37 +373,37 @@ export default function HomeHeroClient() {
                 </div>
               </div>
 
-              <div className="flex flex-col justify-between rounded-[32px] border border-white/15 bg-white/5 p-6 backdrop-blur-xl shadow-[0_28px_80px_rgba(0,0,0,0.18)]">
-                <div className="space-y-5">
+              <div className="flex flex-col justify-center rounded-[32px] border border-white/15 bg-white/5 p-5 md:p-6 backdrop-blur-xl shadow-[0_28px_80px_rgba(0,0,0,0.18)]">
+                <div className="space-y-4 md:space-y-5">
                   <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.3em] text-white/80">
                     <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#5DE9FF]" />
                     Country Discovery
                   </div>
-                  <div className="space-y-2">
-                    <p className="text-sm uppercase tracking-[0.24em] text-white/60">Top MBBS destinations</p>
-                    <h2 className="text-2xl font-semibold text-white">Choose your study country</h2>
-                    <p className="text-sm leading-6 text-white/70">Premium university discovery with transparent country metrics.</p>
+                  <div className="space-y-1 md:space-y-2">
+                    <p className="text-xs md:text-sm uppercase tracking-[0.24em] text-white/60">Top MBBS destinations</p>
+                    <h2 className="text-lg md:text-2xl font-semibold text-white">Choose your study country</h2>
+                    <p className="text-xs md:text-sm leading-5 md:leading-6 text-white/70">Premium university discovery with transparent country metrics.</p>
                   </div>
                 </div>
 
-                <div className="space-y-3">
+                <div className="my-4 md:my-6 space-y-2 md:space-y-3 flex-1">
                   {heroCountryCards.map((country) => (
                     <Link
                       key={country.href}
                       href={country.href}
-                      className="group flex items-center gap-3 rounded-3xl border border-white/10 bg-white/5 px-4 py-3 transition duration-300 hover:-translate-y-0.5 hover:bg-white/10"
+                      className="group flex items-center gap-2 md:gap-3 rounded-3xl border border-white/10 bg-white/5 px-3 py-2.5 md:px-4 md:py-3 transition duration-300 hover:-translate-y-0.5 hover:bg-white/10"
                     >
-                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 shrink-0">
                         <img
                           src={`https://flagcdn.com/w80/${country.flag}.png`}
                           alt={`${country.label} flag`}
-                          className="h-9 w-7 rounded-[3px] object-cover"
+                          className="h-8 w-6 rounded-[3px] object-cover"
                           loading="lazy"
                         />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-base font-semibold text-white">{country.label}</p>
-                        <p className="text-sm text-white/70">{country.universities}+ Universities</p>
+                        <p className="truncate text-sm md:text-base font-semibold text-white">{country.label}</p>
+                        <p className="text-xs md:text-sm text-white/70">{country.universities}+ Universities</p>
                       </div>
                     </Link>
                   ))}
@@ -411,7 +411,7 @@ export default function HomeHeroClient() {
 
                 <Link
                   href="/mbbs-abroad"
-                  className="mt-3 inline-flex items-center justify-center gap-2 rounded-3xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:bg-white/15"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-3xl border border-white/20 bg-white/10 px-5 py-2.5 md:py-3 text-xs md:text-sm font-semibold text-white transition duration-300 hover:bg-white/15"
                 >
                   View All Countries
                   <ArrowRightIcon />
