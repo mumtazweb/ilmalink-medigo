@@ -260,121 +260,179 @@ export default function HomeHeroClient() {
 
   return (
     <>
-      <section className="relative z-10 w-full bg-[#020C23] pt-[82px] md:pt-[90px] lg:pt-[96px]">
-        <div className="w-full px-3 pb-16 sm:px-4 lg:px-6 lg:pb-24">
-          <section className="relative z-[60] -mt-[5px] w-full overflow-visible rounded-[36px] border border-white/10 bg-[#021A3D] shadow-[0_35px_120px_rgba(0,18,51,0.35)] mb-2.5 aspect-video lg:aspect-auto lg:h-[760px]">
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#021A3D] via-[#052A5B] to-[#0A356B]" />
-            <div className="pointer-events-none absolute left-[-20%] top-[10%] h-[420px] w-[420px] rounded-full bg-[#3EA7FF]/15 blur-[120px]" />
-            <div className="pointer-events-none absolute right-[-14%] top-[20%] h-[350px] w-[350px] rounded-full bg-[#0D9AE5]/10 blur-[110px]" />
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[180px] bg-[linear-gradient(180deg,rgba(2,26,61,0),rgba(2,26,61,0.88))]" />
-            <div className="pointer-events-none absolute inset-0 opacity-90 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_32%)]" />
-            <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px), radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px)', backgroundSize: '18px 18px, 12px 12px', backgroundPosition: '0 0, 6px 6px' }} />
-            <div className="pointer-events-none absolute inset-x-0 top-12 h-[420px] bg-[radial-gradient(circle_at_center,rgba(46,132,255,0.18),transparent_42%)]" />
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02),transparent 28%,rgba(255,255,255,0.05) 52%,transparent 78%)]" />
+      <section className="relative z-10 w-full bg-transparent pt-0">
+        <section className="relative z-10 left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] -mt-6 w-screen overflow-hidden rounded-t-[28px] border-t border-white/10 bg-[#062a55] bg-gradient-to-br from-[#061D3F] via-[#073B76] to-[#06234D] shadow-[0_35px_120px_rgba(0,18,51,0.45)] md:-mt-8 md:rounded-t-[36px] lg:min-h-[720px]">
+          {/* Background layers */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-20"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle, rgba(255,255,255,0.14) 1px, transparent 1px)",
+              backgroundSize: "18px 18px",
+            }}
+          />
+          <div className="pointer-events-none absolute left-[38%] top-[12%] h-[520px] w-[520px] rounded-full bg-[#33A6FF]/20 blur-[120px]" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-[45%] bg-[radial-gradient(circle_at_center,rgba(65,170,255,0.20),transparent_60%)]" />
 
-            <div className="relative h-full grid gap-6 px-6 py-8 sm:px-8 md:px-10 lg:grid-cols-[1.4fr_1.2fr_1fr] lg:px-12 xl:px-16 items-start">
-              <div className="flex flex-col justify-start pt-2 lg:pt-4 h-full">
-                <div className="max-w-[720px]">
-                  <p className="text-base font-medium uppercase tracking-[0.28em] text-white/85 sm:text-sm">
-                    Your Gateway to
-                  </p>
+          <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 pt-12 pb-10 sm:px-6 md:pt-16 md:pb-16 lg:min-h-[720px] lg:grid-cols-[1.05fr_1.15fr_0.75fr] lg:gap-12 lg:px-8">
+            {/* Left content */}
+            <div className="relative z-20 text-center lg:text-left">
+              <p className="text-sm font-semibold uppercase tracking-[0.45em] text-white/[0.85]">
+                Your Gateway To
+              </p>
 
-                  <h1 className="mt-2 text-[2.4rem] font-extrabold leading-[0.95] tracking-[-0.04em] text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.15)] sm:text-[3.2rem] md:text-[4rem] lg:text-[5rem]">
-                    <span className="block">Global Medical</span>
-                    <span className="block">Education</span>
-                  </h1>
+              <h1 className="mt-5 text-[3.2rem] font-extrabold leading-[0.95] tracking-[-0.05em] text-white sm:text-[4.3rem] lg:text-[5.4rem] xl:text-[6rem]">
+                <span className="block">Global</span>
+                <span className="block">Medical</span>
+                <span className="block">Education</span>
+              </h1>
 
-                  <div className="mt-4 space-y-2 max-w-2xl text-sm text-white/80 sm:text-base">
-                    <p>Explore 150+ NMC Approved Universities in 20+ Countries.</p>
-                    <p>Trusted by 50,000+ Students & Parents.</p>
+              <div className="mt-6 space-y-2 text-base text-white/[0.82]">
+                <p>Explore 150+ NMC Approved Universities in 20+ Countries.</p>
+                <p>Trusted by 50,000+ Students & Parents.</p>
+              </div>
+
+              <div className="mx-auto mt-8 grid max-w-[620px] grid-cols-2 gap-5 sm:grid-cols-4 lg:mx-0">
+                <div className="flex items-start justify-center gap-3 text-white lg:justify-start">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
+                    <UniversityIcon />
                   </div>
-
-                  <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                    <div className="flex items-start gap-3 text-white">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#7EE1FF] shrink-0">
-                        <UniversityIcon />
-                      </div>
-                      <div>
-                        <p className="text-lg font-semibold">150+</p>
-                        <p className="text-xs text-white/70">Universities</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 text-white">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#7EE1FF] shrink-0">
-                        <CountryIcon />
-                      </div>
-                      <div>
-                        <p className="text-lg font-semibold">20+</p>
-                        <p className="text-xs text-white/70">Countries</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 text-white">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#7EE1FF] shrink-0">
-                        <StudentsIcon />
-                      </div>
-                      <div>
-                        <p className="text-lg font-semibold">50,000+</p>
-                        <p className="text-xs text-white/70">Students Guided</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 text-white">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#7EE1FF] shrink-0">
-                        <ShieldIcon />
-                      </div>
-                      <div>
-                        <p className="text-lg font-semibold">100%</p>
-                        <p className="text-xs text-white/70">Transparency</p>
-                      </div>
-                    </div>
+                  <div>
+                    <p className="text-xl font-bold">150+</p>
+                    <p className="text-xs text-white/70">Universities</p>
                   </div>
+                </div>
 
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    <Link
-                      href="/mbbs-abroad"
-                      className="group inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[#22C47A] to-[#0DBD75] px-6 py-3 text-xs md:text-sm font-semibold text-white shadow-[0_18px_45px_rgba(34,196,122,0.28)] transition duration-300 hover:-translate-y-0.5"
-                    >
-                      Explore Universities
-                      <span className="transition-transform duration-300 group-hover:translate-x-1">
-                        <ArrowRightIcon />
-                      </span>
-                    </Link>
+                <div className="flex items-start justify-center gap-3 text-white lg:justify-start">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
+                    <CountryIcon />
+                  </div>
+                  <div>
+                    <p className="text-xl font-bold">20+</p>
+                    <p className="text-xs text-white/70">Countries</p>
+                  </div>
+                </div>
 
-                    <button
-                      type="button"
-                      onClick={() => setShowPopup(true)}
-                      className="inline-flex items-center justify-center rounded-2xl border border-white/25 bg-white/10 px-6 py-3 text-xs md:text-sm font-semibold text-white backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:bg-white/15"
-                    >
-                      NEET Rank Predictor
-                    </button>
+                <div className="flex items-start justify-center gap-3 text-white lg:justify-start">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
+                    <StudentsIcon />
+                  </div>
+                  <div>
+                    <p className="text-xl font-bold">50,000+</p>
+                    <p className="text-xs text-white/70">Students Guided</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start justify-center gap-3 text-white lg:justify-start">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
+                    <ShieldIcon />
+                  </div>
+                  <div>
+                    <p className="text-xl font-bold">100%</p>
+                    <p className="text-xs text-white/70">Transparency</p>
                   </div>
                 </div>
               </div>
 
-              <div className="relative pt-[3%] pb-[140px]">
+              <div className="mt-9 flex flex-wrap justify-center gap-4 lg:justify-start">
+                <Link
+                  href="/mbbs-abroad"
+                  className="group inline-flex items-center gap-2 rounded-[16px] bg-[#16C784] px-7 py-4 text-sm font-bold text-[#001B2E] shadow-[0_18px_45px_rgba(22,199,132,0.32)] transition hover:-translate-y-0.5 hover:bg-[#18d890]"
+                >
+                  Explore Universities
+                  <span className="transition-transform group-hover:translate-x-1">
+                    <ArrowRightIcon />
+                  </span>
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={() => setShowPopup(true)}
+                  className="inline-flex items-center justify-center rounded-[16px] border border-white/25 bg-white/10 px-7 py-4 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/[0.15]"
+                >
+                  NEET Rank Predictor
+                </button>
+              </div>
+            </div>
+
+            {/* Globe */}
+            <div className="relative z-10 mx-auto flex max-w-[340px] items-center justify-center sm:max-w-[420px] lg:-ml-12 lg:max-w-none">
+              <div className="relative aspect-square w-full lg:h-[610px] lg:w-[610px]">
                 <HeroGlobeV2 />
               </div>
+            </div>
 
-              <div className="flex flex-col justify-start rounded-[32px] border border-white/15 bg-white/5 p-5 md:p-6 backdrop-blur-xl shadow-[0_28px_80px_rgba(0,0,0,0.18)] pt-4 lg:pt-6 h-full">
-            
+            {/* Country card */}
+            <div className="relative z-30 w-full max-w-[360px] mx-auto lg:mx-0">
+              <div className="block rounded-[24px] border border-white/20 bg-[#143967]/[0.82] p-3 shadow-[0_35px_85px_rgba(0,0,0,0.38)] backdrop-blur-2xl md:hidden">
+                <div className="grid grid-cols-2 gap-2">
+                  {heroCountryCards.slice(0, 3).map((country) => (
+                    <Link
+                      key={country.href}
+                      href={country.href}
+                      className="group flex min-h-[74px] items-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.08] px-2 py-2 text-xs font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition duration-300 hover:-translate-y-0.5 hover:bg-white/[0.12]"
+                    >
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/10">
+                        <img
+                          src={`https://flagcdn.com/w80/${country.flag}.png`}
+                          alt={`${country.label} flag`}
+                          className="h-5 w-6 rounded-[3px] object-cover"
+                          loading="lazy"
+                        />
+                      </div>
 
-                <div className="my-4 md:my-6 space-y-2 md:space-y-3 flex-1">
+                      <div className="min-w-0">
+                        <p className="truncate font-bold leading-tight text-white">
+                          {country.label}
+                        </p>
+                        <p className="mt-0.5 text-[10px] leading-tight text-white/70">
+                          {country.universities}+ Universities
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+
+                  <Link
+                    href="/mbbs-abroad"
+                    className="group flex min-h-[74px] items-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.08] px-2 py-2 text-xs font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition duration-300 hover:-translate-y-0.5 hover:bg-white/[0.12]"
+                  >
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/10 text-[#7EE1FF]">
+                      <span className="text-[11px] font-bold uppercase">All</span>
+                    </div>
+
+                    <div className="min-w-0">
+                      <p className="font-bold leading-tight text-white">
+                        Explore All Countries
+                      </p>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+
+              <div className="hidden w-full rounded-[28px] border border-white/20 bg-[#143967]/[0.82] p-4 shadow-[0_35px_85px_rgba(0,0,0,0.38)] backdrop-blur-2xl md:block">
+                <div className="space-y-3">
                   {heroCountryCards.map((country) => (
                     <Link
                       key={country.href}
                       href={country.href}
-                      className="group flex items-center gap-2 md:gap-3 rounded-3xl border border-white/10 bg-white/5 px-3 py-2.5 md:px-4 md:py-3 transition duration-300 hover:-translate-y-0.5 hover:bg-white/10"
+                      className="group flex items-center gap-4 rounded-[22px] border border-white/[0.12] bg-white/[0.08] px-4 py-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition duration-300 hover:-translate-y-0.5 hover:bg-white/[0.12] md:px-3 md:py-3 md:text-sm"
                     >
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 shrink-0">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[16px] bg-white/10">
                         <img
                           src={`https://flagcdn.com/w80/${country.flag}.png`}
                           alt={`${country.label} flag`}
-                          className="h-8 w-6 rounded-[3px] object-cover"
+                          className="h-7 w-8 rounded-[4px] object-cover"
                           loading="lazy"
                         />
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm md:text-base font-semibold text-white">{country.label}</p>
-                        <p className="text-xs md:text-sm text-white/70">{country.universities}+ Universities</p>
+
+                      <div className="min-w-0">
+                        <p className="truncate text-[17px] font-bold leading-tight text-white">
+                          {country.label}
+                        </p>
+                        <p className="mt-1 text-[13px] text-white/75">
+                          {country.universities}+ Universities
+                        </p>
                       </div>
                     </Link>
                   ))}
@@ -382,14 +440,16 @@ export default function HomeHeroClient() {
 
                 <Link
                   href="/mbbs-abroad"
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-3xl border border-white/20 bg-white/10 px-5 py-2.5 md:py-3 text-xs md:text-sm font-semibold text-white transition duration-300 hover:bg-white/15"
+                  className="mt-7 hidden w-full items-center justify-center gap-2 rounded-full border border-white/25 bg-white/[0.12] px-5 py-3 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] transition hover:bg-white/[0.18] md:flex"
                 >
                   View All Countries
                   <ArrowRightIcon />
                 </Link>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
+      </section>
 
           <style jsx>{`
             @keyframes spin-slow {
@@ -755,8 +815,6 @@ export default function HomeHeroClient() {
               </div>
             </div>
           </section>
-        </div>
-      </section>
 
       {/* FOOTER - ADDED HERE */}
       <Footer />
