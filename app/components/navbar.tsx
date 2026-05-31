@@ -5,7 +5,7 @@ import Link from "next/link";
 import AnnouncementTicker from "./AnnouncementTicker";
 import CounsellingPopup from "./CounsellingPopup";
 import SearchModal from "./SearchModal";
-import { Phone, Mail, MessageCircle, Menu, X, ChevronDown, Search, MessageSquare } from "lucide-react";
+import { Phone, Mail, MessageCircle, Menu, X, ChevronDown, Search, Send, MessageSquare } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 
 const countryDestinations = [
@@ -98,9 +98,9 @@ export default function Navbar() {
                   <Menu size={18} />
                 </button>
 
-                <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group flex-shrink-0">
+                <Link href="/" className="group flex min-w-0 flex-1 items-center gap-2 sm:gap-2.5 lg:flex-none lg:flex-shrink-0">
                   {/* Logo Image */}
-                  <div className="relative flex-shrink-0 h-14 w-14 sm:h-16 sm:w-16 flex items-center justify-center">
+                  <div className="relative hidden h-14 w-14 flex-shrink-0 items-center justify-center sm:h-16 sm:w-16 lg:flex">
                     <img 
                       src="/logoimage.svg" 
                       alt="ILMALINK MEDIGO Logo" 
@@ -122,16 +122,12 @@ export default function Navbar() {
                   </div>
 
                   {/* Brand Text Stack - Mobile & Tablet */}
-                  <div className="flex lg:hidden flex-col gap-0.5">
-                    <div className="flex items-baseline gap-1">
-                      <h1 className="font-[family-name:var(--font-plus-jakarta)] text-xs sm:text-sm font-extrabold text-[#081B35]">
-                        ILMALINK
-                      </h1>
-                      <h2 className="font-[family-name:var(--font-plus-jakarta)] text-xs sm:text-sm font-extrabold text-[#00C896]">
-                        MEDIGO
-                      </h2>
-                    </div>
-                    <p className="text-[9px] sm:text-[10px] font-medium text-slate-500 tracking-wide">
+                  <div className="flex min-w-0 flex-col gap-0.5 overflow-hidden lg:hidden">
+                    <h1 className="min-w-0 truncate whitespace-nowrap font-[family-name:var(--font-plus-jakarta)] text-xs sm:text-sm font-extrabold leading-none">
+                      <span className="text-[#081B35]">ILMALINK</span>{" "}
+                      <span className="text-[#00C896]">MEDIGO</span>
+                    </h1>
+                    <p className="truncate text-[8px] sm:text-[9px] font-medium leading-tight text-slate-500">
                       Global Medical Education
                     </p>
                   </div>
@@ -244,13 +240,13 @@ export default function Navbar() {
               </nav>
 
               {/* RIGHT SECTION: SEARCH + CTA */}
-              <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+              <div className="flex flex-shrink-0 items-center gap-1 sm:gap-2.5">
                 {/* Search Button */}
                 <button
                   type="button"
                   aria-label="Search"
                   onClick={() => setShowSearchModal(true)}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:border-[#00C896]/50 hover:text-[#00C896] group relative"
+                  className="group relative flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-[#00C896]/50 hover:text-[#00C896] sm:h-9 sm:w-9 sm:shadow-none"
                   title="Search (Ctrl+K)"
                 >
                   <Search size={16} />
@@ -263,9 +259,9 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => setShowCounsellingPopup(true)}
-                  className="group inline-flex items-center gap-1 sm:gap-1.5 rounded-lg bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-2.5 sm:px-5 py-2 text-xs sm:text-sm font-semibold text-white transition duration-300 hover:shadow-[0_8px_20px_rgba(0,200,150,0.25)] hover:-translate-y-0.5 flex-shrink-0 whitespace-nowrap"
+                  className="group inline-flex h-8 flex-shrink-0 items-center gap-1 rounded-lg bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-2.5 text-xs font-semibold text-white shadow-[0_6px_16px_rgba(0,200,150,0.22)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,200,150,0.25)] sm:h-9 sm:gap-1.5 sm:px-5 sm:text-sm sm:shadow-none whitespace-nowrap"
                 >
-                  <MessageSquare size={14} className="transition group-hover:rotate-12 flex-shrink-0" />
+                  <Send size={13} className="flex-shrink-0 transition group-hover:translate-x-0.5" />
                   <span className="hidden sm:inline">Enquire Now</span>
                   <span className="sm:hidden">Enquire</span>
                 </button>

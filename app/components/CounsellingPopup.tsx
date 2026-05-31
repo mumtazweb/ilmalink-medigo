@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useEffect, useState, ChangeEvent, FormEvent } from "react";
+import { createPortal } from "react-dom";
 
 import {
   X,
@@ -27,7 +28,12 @@ interface FormData {
   message: string;
 }
 
-export default function CounsellingPopup({ isOpen, onClose }: PopupProps) {
+export default function CounsellingPopup({ isOpen, onClose }: PopupProps){
+  const [mounted, setMounted] = useState(false);
+
+useEffect(() => {
+  setMounted(true);
+}, []);
   const [formData, setFormData] = useState<FormData>({
     name: "",
     mobile: "",
@@ -37,7 +43,9 @@ export default function CounsellingPopup({ isOpen, onClose }: PopupProps) {
     message: "",
   });
 
-  if (!isOpen) return null;
+  if (!mounted || !isOpen) return null;
+
+const portalRoot = document.getElementById("modal-root") ?? document.body;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -72,15 +80,22 @@ Message: ${formData.message}
     }
   };
 
-  return (
-    <div 
-      className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 md:p-6"
-      onClick={onClose}
-    >
-      <div 
-        className="relative w-full max-w-6xl max-h-[90vh] bg-white rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden flex flex-col"
-        onClick={(e) => e.stopPropagation()}
-      >
+  return createPortal(
+  <div
+    className="fixed inset-0 isolate flex items-center justify-center bg-black/80 p-4 backdrop-blur-md md:p-6"
+    style={{
+      zIndex: 2147483647,
+      position: "fixed",
+      inset: 0,
+      isolation: "isolate",
+    }}
+    onClick={onClose}
+>
+  <div
+    className="relative w-full max-w-6xl max-h-[90vh] bg-white rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+    style={{ zIndex: 2147483647 }}
+    onClick={(e) => e.stopPropagation()}
+  >
         
         {/* Close Button - Always Visible */}
         <button
@@ -420,8 +435,9 @@ Message: ${formData.message}
 
             </div>
           </div>
-        </div>
-      </div>
+           </div>
     </div>
-  );
+  </div>,
+  portalRoot
+);
 }

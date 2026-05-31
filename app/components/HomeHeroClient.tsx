@@ -5,6 +5,7 @@ import Link from "next/link";
 import CounsellingPopup from "./CounsellingPopup";
 import HeroGlobeV2 from "./HeroGlobeV2";
 import Footer from "./Footer";
+import NeetRankPredictorTool from "./NeetRankPredictorTool";
 
 const destinationData = [
   {
@@ -247,6 +248,7 @@ function ArrowRightIcon() {
 
 export default function HomeHeroClient() {
   const [showPopup, setShowPopup] = useState(false);
+  const [showRankPredictor, setShowRankPredictor] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [neetScore, setNeetScore] = useState("");
 
@@ -347,7 +349,7 @@ export default function HomeHeroClient() {
 
                 <button
                   type="button"
-                  onClick={() => setShowPopup(true)}
+                  onClick={() => setShowRankPredictor(true)}
                   className="inline-flex min-w-0 flex-none items-center justify-center whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-2 py-2 text-[11px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/[0.15] sm:px-3 sm:text-xs md:flex-1 lg:flex-none lg:rounded-[14px] lg:px-5 lg:py-3 lg:text-sm"
                 >
                   NEET Rank Predictor
@@ -853,6 +855,14 @@ export default function HomeHeroClient() {
       {/* FOOTER - ADDED HERE */}
       <Footer />
 
+      <NeetRankPredictorTool
+        isOpen={showRankPredictor}
+        onClose={() => setShowRankPredictor(false)}
+        onBookCounselling={() => {
+          setShowRankPredictor(false);
+          setShowPopup(true);
+        }}
+      />
       <CounsellingPopup isOpen={showPopup} onClose={() => setShowPopup(false)} />
     </>
   );
