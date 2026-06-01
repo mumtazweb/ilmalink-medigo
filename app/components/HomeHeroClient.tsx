@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import CounsellingPopup from "./CounsellingPopup";
 import FMGEExplorerModal from "./FMGEExplorerModal";
@@ -8,12 +8,15 @@ import HeroGlobeV2 from "./HeroGlobeV2";
 import Footer from "./Footer";
 import NeetRankPredictorTool from "./NeetRankPredictorTool";
 
+const OPEN_FMGE_EVENT = "ilmalink:open-fmge-explorer";
+const PENDING_FMGE_KEY = "ilmalink-pending-fmge-explorer";
+
 const destinationData = [
   {
     href: "/mbbs-abroad/georgia",
     label: "Georgia",
     flag: "ge",
-    fee: "₹16.5L",
+    fee: "₹2L/semester",
     universities: 28,
     language: "English",
     recognition: "NMC, WHO",
@@ -22,7 +25,7 @@ const destinationData = [
     href: "/mbbs-abroad/kyrgyzstan",
     label: "Kyrgyzstan",
     flag: "kg",
-    fee: "₹15.2L",
+    fee: "₹1.5L/semester",
     universities: 150,
     language: "English",
     recognition: "NMC, WHO",
@@ -31,7 +34,7 @@ const destinationData = [
     href: "/mbbs-abroad/russia",
     label: "Russia",
     flag: "ru",
-    fee: "₹18.9L",
+    fee: "₹1.5L/semester",
     universities: 56,
     language: "English",
     recognition: "NMC, WHO",
@@ -40,7 +43,7 @@ const destinationData = [
     href: "/mbbs-abroad/kazakhstan",
     label: "Kazakhstan",
     flag: "kz",
-    fee: "₹14.4L",
+    fee: "₹1.6L/semester",
     universities: 7,
     language: "English",
     recognition: "NMC, WHO",
@@ -49,7 +52,7 @@ const destinationData = [
     href: "/mbbs-abroad/uzbekistan",
     label: "Uzbekistan",
     flag: "uz",
-    fee: "₹13.8L",
+    fee: "₹1.7L/semester",
     universities: 16,
     language: "English",
     recognition: "NMC, WHO",
@@ -58,7 +61,7 @@ const destinationData = [
     href: "/mbbs-abroad/usa",
     label: "USA",
     flag: "us",
-    fee: "₹45L",
+    fee: "₹10L/semester",
     universities: 12,
     language: "English",
     recognition: "NMC, WHO",
@@ -67,7 +70,7 @@ const destinationData = [
     href: "/mbbs-abroad/bangladesh",
     label: "Bangladesh",
     flag: "bd",
-    fee: "₹17.4L",
+    fee: "₹2.7L/semester",
     universities: 15,
     language: "English",
     recognition: "NMC, WHO",
@@ -79,31 +82,31 @@ const heroCountryCards = [
     href: "/mbbs-abroad/kyrgyzstan",
     label: "Kyrgyzstan",
     flag: "kg",
-    universities: 150,
+    universities: 32,
   },
   {
     href: "/mbbs-abroad/georgia",
     label: "Georgia",
     flag: "ge",
-    universities: 28,
+    Colleges: 39,
   },
   {
     href: "/mbbs-abroad/bangladesh",
     label: "Bangladesh",
     flag: "bd",
-    universities: 15,
+    Colleges: 110,
   },
   {
     href: "/mbbs-abroad/russia",
     label: "Russia",
     flag: "ru",
-    universities: 56,
+    universities: 102,
   },
   {
     href: "/mbbs-abroad/uzbekistan",
     label: "Uzbekistan",
     flag: "uz",
-    universities: 16,
+    universities: 39,
   },
 ];
 
@@ -127,17 +130,19 @@ const featureBlocks = [
 ];
 
 const liveMetrics = [
-  { label: "Applications Submitted", value: "12.6K+" },
-  { label: "Offer Letters Issued", value: "4.2K+" },
-  { label: "Visas Approved", value: "1.8K+" },
-  { label: "Universities Active", value: "180+" },
+  { label: "Applications Submitted", value: "1234K+" },
+  { label: "Offer Letters Issued", value: "1234K+" },
+  { label: "Visas Approved", value: "1234K+" },
+  { label: "Universities Active", value: "480+" },
 ];
 
 const costInsights = [
-  { label: "India Private", fee: "₹25L", hostel: "₹4L", living: "₹2L" },
-  { label: "Georgia", fee: "₹16L", hostel: "₹3L", living: "₹2L" },
-  { label: "Kyrgyzstan", fee: "₹15L", hostel: "₹3L", living: "₹2L" },
-  { label: "Uzbekistan", fee: "₹14L", hostel: "₹2.5L", living: "₹2L" },
+  { label: "India Private Management", fee: "70L+", hostel: "₹5L", living: "₹5L" },
+  { label: "Georgia", fee: "₹22L", hostel: "₹8L", living: "₹8L" },
+  { label: "Kyrgyzstan", fee: "₹16L", hostel: "₹4L", living: "₹4L" },
+  { label: "Bangladesh", fee: "₹30L", hostel: "₹3.5L", living: "₹3.5L" },
+  { label: "Russia", fee: "₹18L", hostel: "₹5L", living: "₹5L" },
+  { label: "Uzbekistan", fee: "₹16L", hostel: "₹4L", living: "₹4L" },
 ];
 
 const journeySteps = [
@@ -262,6 +267,26 @@ export default function HomeHeroClient() {
     [searchQuery]
   );
 
+  useEffect(() => {
+    const openExplorer = () => setShowFMGEExplorer(true);
+    const consumePendingOpen = () => {
+      const params = new URLSearchParams(window.location.search);
+      const shouldOpen =
+        params.get("fmge") === "explorer" ||
+        window.sessionStorage.getItem(PENDING_FMGE_KEY) === "1";
+
+      if (shouldOpen) {
+        window.sessionStorage.removeItem(PENDING_FMGE_KEY);
+        openExplorer();
+      }
+    };
+
+    window.addEventListener(OPEN_FMGE_EVENT, openExplorer);
+    window.setTimeout(consumePendingOpen, 0);
+
+    return () => window.removeEventListener(OPEN_FMGE_EVENT, openExplorer);
+  }, []);
+
   return (
     <>
       <section className="relative z-[60] left-1/2 right-1/2 w-screen -ml-[50vw] -mr-[50vw] border-b border-slate-100/50 bg-white pt-0 shadow-sm overflow-visible">
@@ -292,7 +317,7 @@ export default function HomeHeroClient() {
               </h1>
 
               <div className="mt-4 space-y-1 text-sm text-white/[0.82] sm:text-[15px]">
-                <p>Explore 437 NMC Approved  Universities in 49 Countries.</p>
+                <p>Explore 480+ NMC Approved  Universities in 54+ Countries.</p>
                 <p className="hidden md:block">As Per FMGE Screening Test 2023</p>
               </div>
 
@@ -302,7 +327,7 @@ export default function HomeHeroClient() {
                     <UniversityIcon />
                   </div>
                   <div>
-                    <p className="text-base font-bold">400+</p>
+                    <p className="text-base font-bold">480+</p>
                     <p className="text-[11px] text-white/70">Universities</p>
                   </div>
                 </div>
@@ -312,7 +337,7 @@ export default function HomeHeroClient() {
                     <CountryIcon />
                   </div>
                   <div>
-                    <p className="text-base font-bold">50+</p>
+                    <p className="text-base font-bold">54+</p>
                     <p className="text-[11px] text-white/70">Countries</p>
                   </div>
                 </div>
@@ -372,7 +397,7 @@ export default function HomeHeroClient() {
                 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
                   <UniversityIcon />
                 </div>
-                <p className="text-[10px] font-bold leading-none">150+</p>
+                <p className="text-[10px] font-bold leading-none">480+</p>
                 <p className="text-[8px] leading-tight text-white/70">Universities</p>
               </div>
 
@@ -380,7 +405,7 @@ export default function HomeHeroClient() {
                 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
                   <CountryIcon />
                 </div>
-                <p className="text-[10px] font-bold leading-none">50+</p>
+                <p className="text-[10px] font-bold leading-none">54+</p>
                 <p className="text-[8px] leading-tight text-white/70">Countries</p>
               </div>
 
@@ -441,7 +466,7 @@ export default function HomeHeroClient() {
 
                     <div className="min-w-0">
                       <p className="font-bold leading-tight text-white">
-                        View All Countries
+                        MBBS All Countries
                       </p>
                     </div>
                   </Link>
@@ -481,7 +506,7 @@ export default function HomeHeroClient() {
                   href="/mbbs-abroad"
                   className="mt-4 hidden w-full items-center justify-center gap-2 rounded-full border border-white/25 bg-white/[0.12] px-4 py-2 text-xs font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] transition hover:bg-white/[0.18] md:flex"
                 >
-                  View All Countries
+                  MBBS All Countries
                   <ArrowRightIcon />
                 </Link>
               </div>

@@ -2,118 +2,80 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { createPortal } from "react-dom";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Search, X, FileText, MapPin, BookOpen } from "lucide-react";
-import blogDatabase from "@/data/blog-db.json";
+import {
+  globalSearchIndex,
+  type GlobalSearchEntry,
+} from "../data/searchIndex";
 
-interface BlogEntry {
-  id: string;
-  title: string;
-  slug: string;
-  shortDescription: string;
-  category: string;
-  country: string;
-  tags: string[];
-  publishDate: string;
-  status: string;
-  views: number;
-  seoTitle?: string;
-  metaDescription?: string;
-  content?: string;
-}
-
-interface SearchResult {
-  id: string;
-  title: string;
-  description: string;
-  url: string;
-  category: string;
-  type: "blog" | "page" | "destination";
-  tags?: string[];
-  flag?: string;
-  popularity?: number;
-}
-
-const navigationPages: SearchResult[] = [
-  {
-    id: "home",
-    title: "Home",
-    description: "Main landing page",
-    url: "/",
-    category: "Pages",
-    type: "page",
-  },
-  {
-    id: "about",
-    title: "About Us",
-    description: "Learn about ILMALINK MEDIGO",
-    url: "/about",
-    category: "Pages",
-    type: "page",
-  },
-  {
-    id: "blogs",
-    title: "Blogs",
-    description: "Read latest medical education articles",
-    url: "/blogs",
-    category: "Pages",
-    type: "page",
-  },
-  {
-    id: "alert",
-    title: "Alerts",
-    description: "Important updates and announcements",
-    url: "/alert",
-    category: "Pages",
-    type: "page",
-  },
-  {
-    id: "neet",
-    title: "NEET",
-    description: "NEET preparation resources",
-    url: "https://www.mumtazeducation.com",
-    category: "Pages",
-    type: "page",
-  },
-];
-
-const destinations: SearchResult[] = [
-  { id: "kyrgyzstan", title: "Kyrgyzstan", description: "MBBS in Kyrgyzstan", url: "/mbbs-abroad/kyrgyzstan", category: "Destinations", type: "destination", flag: "kg", popularity: 92 },
-  { id: "georgia", title: "Georgia", description: "MBBS in Georgia", url: "/mbbs-abroad/georgia", category: "Destinations", type: "destination", flag: "ge", popularity: 84 },
-  { id: "bangladesh", title: "Bangladesh", description: "MBBS in Bangladesh", url: "/mbbs-abroad/bangladesh", category: "Destinations", type: "destination", flag: "bd", popularity: 78 },
-  { id: "russia", title: "Russia", description: "MBBS in Russia", url: "/mbbs-abroad/russia", category: "Destinations", type: "destination", flag: "ru", popularity: 88 },
-  { id: "kazakhstan", title: "Kazakhstan", description: "MBBS in Kazakhstan", url: "/mbbs-abroad/kazakhstan", category: "Destinations", type: "destination", flag: "kz", popularity: 80 },
-  { id: "uzbekistan", title: "Uzbekistan", description: "MBBS in Uzbekistan", url: "/mbbs-abroad/uzbekistan", category: "Destinations", type: "destination", flag: "uz", popularity: 74 },
-  { id: "tajikistan", title: "Tajikistan", description: "MBBS in Tajikistan", url: "/mbbs-abroad/tajikistan", category: "Destinations", type: "destination", flag: "tj", popularity: 66 },
-  { id: "malaysia", title: "Malaysia", description: "MBBS in Malaysia", url: "/mbbs-abroad/malaysia", category: "Destinations", type: "destination", flag: "my", popularity: 72 },
-  { id: "egypt", title: "Egypt", description: "MBBS in Egypt", url: "/mbbs-abroad/egypt", category: "Destinations", type: "destination", flag: "eg", popularity: 70 },
-  { id: "saudi-arabia", title: "Saudi Arabia", description: "MBBS in Saudi Arabia", url: "/mbbs-abroad/saudi-arabia", category: "Destinations", type: "destination", flag: "sa", popularity: 68 },
-  { id: "qatar", title: "Qatar", description: "MBBS in Qatar", url: "/mbbs-abroad/qatar", category: "Destinations", type: "destination", flag: "qa", popularity: 64 },
-  { id: "uae", title: "UAE", description: "MBBS in UAE", url: "/mbbs-abroad/uae", category: "Destinations", type: "destination", flag: "ae", popularity: 76 },
-  { id: "iran", title: "Iran", description: "MBBS in Iran", url: "/mbbs-abroad/iran", category: "Destinations", type: "destination", flag: "ir", popularity: 60 },
-  { id: "usa", title: "USA", description: "MBBS in USA", url: "/mbbs-abroad/usa", category: "Destinations", type: "destination", flag: "us", popularity: 82 },
-  { id: "canada", title: "Canada", description: "MBBS in Canada", url: "/mbbs-abroad/canada", category: "Destinations", type: "destination", flag: "ca", popularity: 79 },
-  { id: "australia", title: "Australia", description: "MBBS in Australia", url: "/mbbs-abroad/australia", category: "Destinations", type: "destination", flag: "au", popularity: 86 },
-  { id: "new-zealand", title: "New Zealand", description: "MBBS in New Zealand", url: "/mbbs-abroad/new-zealand", category: "Destinations", type: "destination", flag: "nz", popularity: 65 },
-  { id: "uk", title: "UK", description: "MBBS in UK", url: "/mbbs-abroad/uk", category: "Destinations", type: "destination", flag: "gb", popularity: 81 },
-];
+type SearchResult = GlobalSearchEntry & {
+  score: number;
+};
 
 const categories = ["All", "Pages", "Destinations", "Blogs"];
 const RECENT_SEARCH_KEY = "ilmalink-search-recent";
+const MAX_RESULTS = 30;
+const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
+const OPEN_FMGE_EVENT = "ilmalink:open-fmge-explorer";
+const PENDING_FMGE_KEY = "ilmalink-pending-fmge-explorer";
 
-const normalize = (value: string) => value.trim().toLowerCase();
+const normalize = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 
-const buildResult = (blog: BlogEntry): SearchResult => ({
-  id: blog.id,
-  title: blog.title,
-  description: blog.metaDescription || blog.shortDescription || blog.title,
-  url: `/blogs/${blog.slug}`,
-  category: "Blogs",
-  type: "blog",
-  tags: blog.tags,
-  popularity: blog.views,
-});
+const tokenize = (value: string) =>
+  normalize(value)
+    .split(/[^a-z0-9%]+/)
+    .filter((term) => term.length > 0);
+
+const textIncludesAllTerms = (text: string, terms: string[]) =>
+  terms.every((term) => text.includes(term));
+
+const tokenScore = (tokens: string[], term: string, startsWithScore: number, includesScore: number) => {
+  if (tokens.some((token) => token === term)) return startsWithScore + includesScore;
+  if (tokens.some((token) => token.startsWith(term))) return startsWithScore;
+  if (tokens.some((token) => token.includes(term))) return includesScore;
+  return 0;
+};
+
+const scoreResult = (entry: GlobalSearchEntry, normalizedQuery: string, queryTerms: string[]) => {
+  const title = normalize(entry.title);
+  const description = normalize(entry.description);
+  const category = normalize(entry.category);
+  const tags = normalize(entry.tags.join(" "));
+  const content = normalize(entry.content);
+  const url = normalize(entry.url);
+  const searchableText = [title, description, category, tags, content, url].join(" ");
+
+  if (!textIncludesAllTerms(searchableText, queryTerms)) return 0;
+
+  const titleTokens = tokenize(entry.title);
+  const descriptionTokens = tokenize(entry.description);
+  const tagTokens = tokenize(entry.tags.join(" "));
+  let score = entry.priority;
+
+  if (title === normalizedQuery) score += 500;
+  if (title.includes(normalizedQuery)) score += 220;
+  if (tags.includes(normalizedQuery)) score += 180;
+  if (description.includes(normalizedQuery)) score += 120;
+  if (category.includes(normalizedQuery)) score += 90;
+  if (url.includes(normalizedQuery)) score += 60;
+  if (content.includes(normalizedQuery)) score += 25;
+
+  queryTerms.forEach((term) => {
+    score += tokenScore(titleTokens, term, 90, 55);
+    score += tokenScore(tagTokens, term, 70, 40);
+    score += tokenScore(descriptionTokens, term, 45, 25);
+    if (content.includes(term)) score += 10;
+  });
+
+  return score;
+};
 
 const getIcon = (type: string) => {
   switch (type) {
@@ -130,45 +92,30 @@ const getIcon = (type: string) => {
 
 export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    const stored = window.localStorage.getItem(RECENT_SEARCH_KEY);
-    if (stored) {
-      try {
-        setRecentSearches(JSON.parse(stored));
-      } catch {
-        setRecentSearches([]);
-      }
+    try {
+      const stored = window.localStorage.getItem(RECENT_SEARCH_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
     }
-  }, [mounted]);
-
-  const blogResults = useMemo<SearchResult[]>(() => {
-    const blogs = Array.isArray(blogDatabase.blogs) ? blogDatabase.blogs : [];
-    return blogs
-      .filter((blog) => blog.status === "published")
-      .map(buildResult);
-  }, []);
-
-  const allResults = useMemo<SearchResult[]>(() => [...navigationPages, ...destinations, ...blogResults], [blogResults]);
+  });
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   const storeRecentSearch = useCallback(
     (term: string) => {
       const trimmed = term.trim();
-      if (!trimmed) return;
+      if (!trimmed || typeof window === "undefined") return;
+
       const updated = [
         trimmed,
         ...recentSearches.filter((item) => item.toLowerCase() !== trimmed.toLowerCase()),
       ].slice(0, 5);
+
       setRecentSearches(updated);
       window.localStorage.setItem(RECENT_SEARCH_KEY, JSON.stringify(updated));
     },
@@ -176,93 +123,121 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
   );
 
   const searchTerms = useMemo(() => normalize(query), [query]);
+  const queryTokens = useMemo(() => tokenize(query), [query]);
 
-  const filteredResults = useMemo(() => {
-    const normalizedQuery = searchTerms;
-    let filtered = allResults;
+  const filteredResults = useMemo<SearchResult[]>(() => {
+    let filtered = globalSearchIndex;
 
     if (selectedCategory !== "All") {
-      filtered = filtered.filter((result) => result.category === selectedCategory);
+      filtered = filtered.filter((result) => result.group === selectedCategory);
     }
 
-    if (normalizedQuery) {
-      filtered = filtered
-        .filter((result) => {
-          const searchableText = [
-            result.title,
-            result.description,
-            result.category,
-            ...(result.tags || []),
-          ]
-            .join(" ")
-            .toLowerCase();
-          return searchableText.includes(normalizedQuery);
-        })
-        .sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
-    } else {
-      filtered = filtered.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+    if (!searchTerms) {
+      return [...filtered]
+        .sort((a, b) => b.priority - a.priority || a.title.localeCompare(b.title))
+        .slice(0, MAX_RESULTS)
+        .map((result) => ({ ...result, score: result.priority }));
     }
 
-    return filtered.slice(0, 20);
-  }, [allResults, selectedCategory, searchTerms]);
+    return filtered
+      .map((result) => ({
+        ...result,
+        score: scoreResult(result, searchTerms, queryTokens),
+      }))
+      .filter((result) => result.score > 0)
+      .sort((a, b) => b.score - a.score || b.priority - a.priority || a.title.localeCompare(b.title))
+      .slice(0, MAX_RESULTS);
+  }, [queryTokens, searchTerms, selectedCategory]);
+
+  const selectedResultIndex =
+    filteredResults.length > 0 ? Math.min(selectedIndex, filteredResults.length - 1) : -1;
 
   const browseSuggestions = useMemo(() => {
     if (searchTerms || selectedCategory !== "All") return [];
+
+    const byUrl = (url: string) => globalSearchIndex.find((item) => item.url === url);
+
     return [
-      navigationPages[2],
-      destinations.find((item) => item.id === "kyrgyzstan"!)!,
-      destinations.find((item) => item.id === "russia"!)!,
-      blogResults[0],
-    ].filter(Boolean);
-  }, [searchTerms, selectedCategory, blogResults]);
+      byUrl("/blogs"),
+      byUrl("/mbbs-abroad/kyrgyzstan"),
+      byUrl("/mbbs-abroad/russia"),
+      globalSearchIndex.find((item) => item.group === "Blogs"),
+    ].filter(Boolean) as GlobalSearchEntry[];
+  }, [searchTerms, selectedCategory]);
 
   const handleSelectResult = useCallback(
-    (result: SearchResult) => {
+    (result: GlobalSearchEntry) => {
       if (!result) return;
+
       storeRecentSearch(query || result.title);
+
+      if (typeof window !== "undefined") {
+        if (result.url.includes("fmge=explorer")) {
+          window.sessionStorage.setItem(PENDING_FMGE_KEY, "1");
+          window.dispatchEvent(new Event(OPEN_FMGE_EVENT));
+        }
+
+        if (result.url.includes("counselling=open")) {
+          window.dispatchEvent(new Event(OPEN_COUNSELLING_EVENT));
+        }
+      }
+
       onClose();
+
+      if (/^https?:\/\//.test(result.url)) {
+        window.location.href = result.url;
+        return;
+      }
+
       router.push(result.url);
     },
     [onClose, query, router, storeRecentSearch]
   );
 
+  const handleQueryChange = (value: string) => {
+    setQuery(value);
+    setSelectedIndex(0);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    setSelectedIndex(0);
+  };
+
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (!isOpen) return;
+
       if (event.key === "ArrowDown") {
         event.preventDefault();
         setSelectedIndex((current) => Math.min(current + 1, filteredResults.length - 1));
       }
+
       if (event.key === "ArrowUp") {
         event.preventDefault();
         setSelectedIndex((current) => Math.max(current - 1, 0));
       }
-      if (event.key === "Enter" && filteredResults[selectedIndex]) {
+
+      if (event.key === "Enter" && filteredResults[selectedResultIndex]) {
         event.preventDefault();
-        handleSelectResult(filteredResults[selectedIndex]);
+        handleSelectResult(filteredResults[selectedResultIndex]);
       }
+
       if (event.key === "Escape") {
         onClose();
       }
     },
-    [filteredResults, handleSelectResult, isOpen, onClose, selectedIndex]
+    [filteredResults, handleSelectResult, isOpen, onClose, selectedResultIndex]
   );
 
   useEffect(() => {
-    if (!mounted) return;
+    if (!isOpen) return;
+
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleKeyDown, mounted]);
+  }, [handleKeyDown, isOpen]);
 
-  useEffect(() => {
-    if (filteredResults.length > 0) {
-      setSelectedIndex(0);
-    } else {
-      setSelectedIndex(-1);
-    }
-  }, [filteredResults]);
-
-  if (!mounted || !isOpen) return null;
+  if (!isOpen || typeof document === "undefined") return null;
 
   return createPortal(
     <div className="fixed inset-0 z-[99999] flex items-start justify-center bg-slate-950/40 pt-4 sm:pt-8 animate-in fade-in duration-200">
@@ -277,7 +252,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
             </div>
             <div className="flex-1 min-w-0">
               <h2 className="text-sm font-semibold text-slate-900">Search ILMALINK MEDIGO</h2>
-              <p className="text-xs text-slate-500">Search pages, countries, and published blogs instantly.</p>
+              <p className="text-xs text-slate-500">Search pages, countries, FMGE data, and blogs instantly.</p>
             </div>
             <button
               type="button"
@@ -300,8 +275,8 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
                   id="site-search-input"
                   autoFocus
                   value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search blogs, pages & destinations…"
+                  onChange={(event) => handleQueryChange(event.target.value)}
+                  placeholder="Search blogs, pages & destinations..."
                   className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm outline-none transition focus:border-[#00C896] focus:ring-2 focus:ring-[#00C896]/20"
                 />
               </div>
@@ -310,7 +285,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
                   <button
                     key={category}
                     type="button"
-                    onClick={() => setSelectedCategory(category)}
+                    onClick={() => handleCategoryChange(category)}
                     className={`rounded-2xl border px-3 py-2 text-xs font-semibold transition ${
                       selectedCategory === category
                         ? "border-[#00C896] bg-[#00C896]/10 text-[#0E766A]"
@@ -325,11 +300,17 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
           </div>
 
           {query ? (
-            <div className="px-5 pb-4 text-xs text-slate-500">Showing results for <span className="font-semibold text-slate-900">{query}</span></div>
+            <div className="px-5 pb-4 text-xs text-slate-500">
+              Showing results for <span className="font-semibold text-slate-900">{query}</span>
+            </div>
           ) : (
             <div className="px-5 pb-4 text-xs text-slate-500 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <span>Try searching for <span className="font-semibold text-slate-900">Kyrgyzstan</span>, <span className="font-semibold text-slate-900">NEET</span>, or <span className="font-semibold text-slate-900">MBBS India</span>.</span>
-              <span className="text-slate-400">Use ↑/↓ and Enter to select</span>
+              <span>
+                Try searching for <span className="font-semibold text-slate-900">Kyrgyzstan</span>,{" "}
+                <span className="font-semibold text-slate-900">NEET</span>, or{" "}
+                <span className="font-semibold text-slate-900">FMGE</span>.
+              </span>
+              <span className="text-slate-400">Use Up/Down and Enter to select</span>
             </div>
           )}
 
@@ -365,12 +346,16 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
                   type="button"
                   onClick={() => handleSelectResult(result)}
                   className={`group flex w-full items-start gap-4 px-5 py-4 text-left transition ${
-                    index === selectedIndex ? "bg-[#effaf5]" : "hover:bg-slate-50"
+                    index === selectedResultIndex ? "bg-[#effaf5]" : "hover:bg-slate-50"
                   }`}
                 >
-                  <div className={`mt-1 flex h-11 w-11 items-center justify-center rounded-2xl ${
-                    index === selectedIndex ? "bg-[#00C896]/15 text-[#0E766A]" : "bg-slate-100 text-slate-500"
-                  }`}>
+                  <div
+                    className={`mt-1 flex h-11 w-11 items-center justify-center rounded-2xl ${
+                      index === selectedResultIndex
+                        ? "bg-[#00C896]/15 text-[#0E766A]"
+                        : "bg-slate-100 text-slate-500"
+                    }`}
+                  >
                     {getIcon(result.type)}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -397,7 +382,11 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
               <div className="px-5 py-12 text-center text-slate-500">
                 <Search size={36} className="mx-auto mb-4" />
                 <p className="text-sm font-medium text-slate-800">No matches found</p>
-                <p className="mt-2 text-sm">Try different keywords like <span className="font-semibold">MBBS</span>, <span className="font-semibold">NEET</span> or <span className="font-semibold">Kyrgyzstan</span>.</p>
+                <p className="mt-2 text-sm">
+                  Try different keywords like <span className="font-semibold">MBBS</span>,{" "}
+                  <span className="font-semibold">NEET</span> or{" "}
+                  <span className="font-semibold">Kyrgyzstan</span>.
+                </p>
               </div>
             )}
           </div>

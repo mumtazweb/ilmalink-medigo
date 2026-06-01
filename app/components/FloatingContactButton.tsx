@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CounsellingPopup from "./CounsellingPopup";
+
+const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
 
 /**
  * ILMALINK MEDIGO: Global floating "CONTACT NOW" sticky button
@@ -10,6 +12,22 @@ import CounsellingPopup from "./CounsellingPopup";
  */
 export default function FloatingContactButton() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  useEffect(() => {
+    const openPopup = () => setIsPopupOpen(true);
+    const consumeUrlOpen = () => {
+      const params = new URLSearchParams(window.location.search);
+
+      if (params.get("counselling") === "open") {
+        openPopup();
+      }
+    };
+
+    window.addEventListener(OPEN_COUNSELLING_EVENT, openPopup);
+    window.setTimeout(consumeUrlOpen, 0);
+
+    return () => window.removeEventListener(OPEN_COUNSELLING_EVENT, openPopup);
+  }, []);
 
   return (
     <>
