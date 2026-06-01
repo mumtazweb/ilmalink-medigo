@@ -8,6 +8,8 @@ import {
   globalSearchIndex,
   type GlobalSearchEntry,
 } from "../data/searchIndex";
+import { mbbsIndiaColleges, mbbsIndiaCollegesByState } from "../data/mbbsIndiaColleges";
+import { navbarCountryDestinations } from "../data/navbarDestinations";
 
 type SearchResult = GlobalSearchEntry & {
   score: number;
@@ -32,6 +34,102 @@ const tokenize = (value: string) =>
   normalize(value)
     .split(/[^a-z0-9%]+/)
     .filter((term) => term.length > 0);
+
+const slugifySearchId = (value: string) =>
+  normalize(value)
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const navbarDropdownSearchEntries: GlobalSearchEntry[] = navbarCountryDestinations.map((destination) => ({
+  id: `navbar-destination-${slugifySearchId(destination.label)}`,
+  title: `Study MBBS in ${destination.label}`,
+  description: destination.insight,
+  url: destination.href,
+  category: "MBBS Abroad",
+  group: "Destinations",
+  type: "destination",
+  tags: [
+    destination.label,
+    `Study MBBS in ${destination.label}`,
+    "MBBS Abroad",
+    "Navbar destination",
+    destination.badge === "Top" ? "Top destination" : "Destination",
+  ],
+  content: [
+    `Study MBBS in ${destination.label}`,
+    destination.label,
+    destination.insight,
+    "universities fees eligibility FMGE admission counselling",
+  ].join(" "),
+  priority: destination.badge === "Top" ? 99 : 94,
+}));
+
+const mbbsIndiaStateSearchEntries: GlobalSearchEntry[] = mbbsIndiaCollegesByState.map((group) => {
+  const collegeNames = [...group.governmentColleges, ...group.privateColleges]
+    .map((college) => college.collegeName)
+    .join(" ");
+
+  return {
+    id: `mbbs-india-state-${slugifySearchId(group.state)}`,
+    title: `MBBS Colleges in ${group.state}`,
+    description: `${group.governmentCount} government, ${group.privateCount} private, and ${group.totalSeats.toLocaleString("en-IN")} MBBS seats in ${group.state}.`,
+    url: "/mbbs-india/",
+    category: "MBBS India",
+    group: "Pages",
+    type: "page",
+    tags: [
+      group.state,
+      `Study MBBS in ${group.state}`,
+      "MBBS India",
+      "Medical colleges in India",
+      "NMC college list",
+    ],
+    content: [
+      `Study MBBS in ${group.state}`,
+      `MBBS colleges in ${group.state}`,
+      `${group.governmentCount} government colleges`,
+      `${group.privateCount} private colleges`,
+      `${group.totalSeats} seats`,
+      collegeNames,
+    ].join(" "),
+    priority: 96,
+  };
+});
+
+const mbbsIndiaCollegeSearchEntries: GlobalSearchEntry[] = mbbsIndiaColleges.map((college) => ({
+  id: `mbbs-india-college-${slugifySearchId(`${college.state}-${college.collegeName}`)}`,
+  title: college.collegeName,
+  description: `${college.category} medical college in ${college.state} with ${college.seatCapacity.toLocaleString("en-IN")} MBBS seats.`,
+  url: "/mbbs-india/",
+  category: "MBBS India",
+  group: "Pages",
+  type: "page",
+  tags: [
+    college.state,
+    college.category,
+    "MBBS India",
+    "Medical college",
+    "NMC college list",
+    `Study MBBS in ${college.state}`,
+  ],
+  content: [
+    college.collegeName,
+    college.state,
+    college.category,
+    `${college.seatCapacity} MBBS seats`,
+    `established ${college.establishmentYear}`,
+    "fees ##",
+    `Study MBBS in ${college.state}`,
+  ].join(" "),
+  priority: college.category === "Government" ? 92 : 90,
+}));
+
+const siteSearchIndex: GlobalSearchEntry[] = [
+  ...navbarDropdownSearchEntries,
+  ...mbbsIndiaStateSearchEntries,
+  ...mbbsIndiaCollegeSearchEntries,
+  ...globalSearchIndex,
+];
 
 const textIncludesAllTerms = (text: string, terms: string[]) =>
   terms.every((term) => text.includes(term));
@@ -126,7 +224,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
   const queryTokens = useMemo(() => tokenize(query), [query]);
 
   const filteredResults = useMemo<SearchResult[]>(() => {
-    let filtered = globalSearchIndex;
+    let filtered = siteSearchIndex;
 
     if (selectedCategory !== "All") {
       filtered = filtered.filter((result) => result.group === selectedCategory);
@@ -155,13 +253,15 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
   const browseSuggestions = useMemo(() => {
     if (searchTerms || selectedCategory !== "All") return [];
 
-    const byUrl = (url: string) => globalSearchIndex.find((item) => item.url === url);
+    const byId = (id: string) => siteSearchIndex.find((item) => item.id === id);
+    const byUrl = (url: string) => siteSearchIndex.find((item) => item.url === url);
 
     return [
+      byId("mbbs-india-state-west-bengal"),
+      byId("mbbs-india-state-karnataka"),
       byUrl("/blogs"),
       byUrl("/mbbs-abroad/kyrgyzstan"),
-      byUrl("/mbbs-abroad/russia"),
-      globalSearchIndex.find((item) => item.group === "Blogs"),
+      siteSearchIndex.find((item) => item.group === "Blogs"),
     ].filter(Boolean) as GlobalSearchEntry[];
   }, [searchTerms, selectedCategory]);
 
@@ -252,7 +352,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
             </div>
             <div className="flex-1 min-w-0">
               <h2 className="text-sm font-semibold text-slate-900">Search ILMALINK MEDIGO</h2>
-              <p className="text-xs text-slate-500">Search pages, countries, FMGE data, and blogs instantly.</p>
+              <p className="text-xs text-slate-500">Search pages, dropdowns, countries, MBBS India colleges, FMGE data, and blogs instantly.</p>
             </div>
             <button
               type="button"
@@ -276,7 +376,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
                   autoFocus
                   value={query}
                   onChange={(event) => handleQueryChange(event.target.value)}
-                  placeholder="Search blogs, pages & destinations..."
+                  placeholder="Search pages, countries, states, colleges..."
                   className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm outline-none transition focus:border-[#00C896] focus:ring-2 focus:ring-[#00C896]/20"
                 />
               </div>
@@ -307,7 +407,8 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
             <div className="px-5 pb-4 text-xs text-slate-500 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <span>
                 Try searching for <span className="font-semibold text-slate-900">Kyrgyzstan</span>,{" "}
-                <span className="font-semibold text-slate-900">NEET</span>, or{" "}
+                <span className="font-semibold text-slate-900">MBBS India</span>,{" "}
+                <span className="font-semibold text-slate-900">West Bengal</span>, or{" "}
                 <span className="font-semibold text-slate-900">FMGE</span>.
               </span>
               <span className="text-slate-400">Use Up/Down and Enter to select</span>

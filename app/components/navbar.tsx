@@ -1,51 +1,131 @@
 ﻿"use client";
-import { useEffect, useMemo, useState } from "react";
+import { CSSProperties, ReactNode, RefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import AnnouncementTicker from "./AnnouncementTicker";
 import CounsellingPopup from "./CounsellingPopup";
 import SearchModal from "./SearchModal";
-import { Phone, Mail, MessageCircle, Menu, X, ChevronDown, Search, Send, MessageSquare } from "lucide-react";
-import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
+import { Phone, Menu, X, ChevronDown, Search, Send, MessageSquare } from "lucide-react";
+import { mbbsIndiaCollegesByState, type MBBSIndiaCollege, type MBBSIndiaStateGroup } from "../data/mbbsIndiaColleges";
+import { navbarCountryDestinations } from "../data/navbarDestinations";
 
-const countryDestinations = [
-  { href: "/mbbs-abroad/kyrgyzstan", label: "Kyrgyzstan", flag: "kg", badge: "Top" },
-  { href: "/mbbs-abroad/georgia", label: "Georgia", flag: "ge", badge: "Top" },
-  { href: "/mbbs-abroad/bangladesh", label: "Bangladesh", flag: "bd", badge: "Top" },
-  { href: "/mbbs-abroad/russia", label: "Russia", flag: "ru" },
-  { href: "/mbbs-abroad/kazakhstan", label: "Kazakhstan", flag: "kz" },
-  { href: "/mbbs-abroad/uzbekistan", label: "Uzbekistan", flag: "uz" },
-  { href: "/mbbs-abroad/tajikistan", label: "Tajikistan", flag: "tj" },
-  { href: "/mbbs-abroad/malaysia", label: "Malaysia", flag: "my" },
-  { href: "/mbbs-abroad/egypt", label: "Egypt", flag: "eg" },
-  { href: "/mbbs-abroad/saudi-arabia", label: "Saudi Arabia", flag: "sa" },
-  { href: "/mbbs-abroad/qatar", label: "Qatar", flag: "qa" },
-  { href: "/mbbs-abroad/uae", label: "UAE", flag: "ae" },
-  { href: "/mbbs-abroad/iran", label: "Iran", flag: "ir" },
-  { href: "/mbbs-abroad/usa", label: "USA", flag: "us" },
-  { href: "/mbbs-abroad/canada", label: "Canada", flag: "ca" },
-  { href: "/mbbs-abroad/australia", label: "Australia", flag: "au" },
-  { href: "/mbbs-abroad/new-zealand", label: "New Zealand", flag: "nz" },
-  { href: "/mbbs-abroad/uk", label: "England (UK)", flag: "gb" },
-];
+type NavbarMenuPortalProps = {
+  children: ReactNode;
+  mode: "anchored" | "fullscreen";
+  open: boolean;
+  onClose: () => void;
+  anchorRef?: RefObject<HTMLElement | null>;
+  className?: string;
+  maxWidth?: number;
+};
 
-export default function Navbar() {
-  const [mounted, setMounted] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileCountryOpen, setMobileCountryOpen] = useState(false);
-  const [desktopCountryOpen, setDesktopCountryOpen] = useState(false);
-  const [countrySearch, setCountrySearch] = useState("");
-  const [showCounsellingPopup, setShowCounsellingPopup] = useState(false);
-  const [showSearchModal, setShowSearchModal] = useState(false);
+// Keep every navbar menu surface in this portal so hero/page stacking contexts cannot cover it.
+function NavbarMenuPortal({
+  children,
+  mode,
+  open,
+  onClose,
+  anchorRef,
+  className = "",
+  maxWidth = 720,
+}: NavbarMenuPortalProps) {
+  const [position, setPosition] = useState<CSSProperties>({});
+
+  const updatePosition = useCallback(() => {
+    if (!open || mode !== "anchored" || !anchorRef?.current) return;
+
+    const rect = anchorRef.current.getBoundingClientRect();
+    const viewportMargin = 16;
+    const width = Math.min(maxWidth, window.innerWidth - viewportMargin * 2);
+    const centeredLeft = rect.left + rect.width / 2 - width / 2;
+    const left = Math.max(viewportMargin, Math.min(centeredLeft, window.innerWidth - width - viewportMargin));
+    const top = rect.bottom + 12;
+
+    setPosition({
+      left,
+      maxHeight: `calc(100vh - ${top + viewportMargin}px)`,
+      top,
+      width,
+    });
+  }, [anchorRef, maxWidth, mode, open]);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (!open) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose, open]);
+
+  useEffect(() => {
+    if (!open || mode !== "anchored") return;
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
+  }, [mode, open, updatePosition]);
+
+  if (!open || typeof document === "undefined") return null;
+
+  const isFullscreen = mode === "fullscreen";
+
+  return createPortal(
+    <div
+      className={`fixed inset-0 z-[2147483647] ${isFullscreen ? "bg-slate-950/45 backdrop-blur-[2px]" : "bg-transparent"} ${className}`}
+      onPointerDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <div
+        className={isFullscreen ? "h-full w-full" : "fixed overflow-y-auto"}
+        style={isFullscreen ? undefined : position}
+        onPointerDown={(event) => event.stopPropagation()}
+      >
+        {children}
+      </div>
+    </div>,
+    document.body
+  );
+}
+
+function buildIndiaStateColumns(groups: MBBSIndiaStateGroup[]) {
+  const westBengal = groups.find((group) => group.state === "West Bengal");
+  const karnataka = groups.find((group) => group.state === "Karnataka");
+  const remaining = groups
+    .filter((group) => group.state !== "West Bengal" && group.state !== "Karnataka")
+    .sort((a, b) => a.state.localeCompare(b.state));
+  const splitIndex = Math.ceil(remaining.length / 2);
+
+  return {
+    left: [...(westBengal ? [westBengal] : []), ...remaining.slice(0, splitIndex)],
+    right: [...(karnataka ? [karnataka] : []), ...remaining.slice(splitIndex)],
+  };
+}
+
+export default function Navbar() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileCountryOpen, setMobileCountryOpen] = useState(false);
+  const [mobileIndiaOpen, setMobileIndiaOpen] = useState(false);
+  const [desktopCountryOpen, setDesktopCountryOpen] = useState(false);
+  const [desktopIndiaOpen, setDesktopIndiaOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState("");
+  const [indiaSearch, setIndiaSearch] = useState("");
+  const [expandedIndiaState, setExpandedIndiaState] = useState<string | null>("West Bengal");
+  const [showCounsellingPopup, setShowCounsellingPopup] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
+  const desktopCountryButtonRef = useRef<HTMLButtonElement | null>(null);
+  const desktopIndiaButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Keyboard shortcuts for search
   useEffect(() => {
-    if (!mounted) return;
-
     const handleKeyDown = (event: KeyboardEvent) => {
       // Ctrl+K or Cmd+K to open search
       if ((event.ctrlKey || event.metaKey) && event.key === "k") {
@@ -60,25 +140,203 @@ export default function Navbar() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [mounted]);
+  }, []);
 
   useEffect(() => {
-    if (!mounted) return;
-
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = mobileMenuOpen ? "hidden" : originalOverflow;
 
     return () => {
       document.body.style.overflow = originalOverflow;
     };
-  }, [mobileMenuOpen, mounted]);
+  }, [mobileMenuOpen]);
 
   const filteredDestinations = useMemo(() => {
-    if (!countrySearch.trim()) return countryDestinations;
-    return countryDestinations.filter((destination) =>
-      destination.label.toLowerCase().includes(countrySearch.trim().toLowerCase())
+    if (!countrySearch.trim()) return navbarCountryDestinations;
+    return navbarCountryDestinations.filter((destination) =>
+      `${destination.label} ${destination.insight}`.toLowerCase().includes(countrySearch.trim().toLowerCase())
     );
   }, [countrySearch]);
+
+  const indiaSearchTerm = indiaSearch.trim().toLowerCase();
+
+  const filteredIndiaStateGroups = useMemo(() => {
+    if (!indiaSearchTerm) return mbbsIndiaCollegesByState;
+
+    return mbbsIndiaCollegesByState.filter((group) => {
+      const stateMatches = group.state.toLowerCase().includes(indiaSearchTerm);
+      const collegeMatches = [...group.governmentColleges, ...group.privateColleges].some((college) =>
+        college.collegeName.toLowerCase().includes(indiaSearchTerm)
+      );
+
+      return stateMatches || collegeMatches;
+    });
+  }, [indiaSearchTerm]);
+
+  const indiaStateColumns = useMemo(() => buildIndiaStateColumns(filteredIndiaStateGroups), [filteredIndiaStateGroups]);
+
+  const autoExpandedIndiaState = useMemo(() => {
+    if (!indiaSearchTerm) return null;
+
+    return filteredIndiaStateGroups.find((group) =>
+      [...group.governmentColleges, ...group.privateColleges].some((college) =>
+        college.collegeName.toLowerCase().includes(indiaSearchTerm)
+      )
+    )?.state ?? null;
+  }, [filteredIndiaStateGroups, indiaSearchTerm]);
+
+  const closeDesktopCountryMenu = useCallback(() => {
+    setDesktopCountryOpen(false);
+    setCountrySearch("");
+  }, []);
+
+  const closeDesktopIndiaMenu = useCallback(() => {
+    setDesktopIndiaOpen(false);
+    setIndiaSearch("");
+    setExpandedIndiaState("West Bengal");
+  }, []);
+
+  const closeMobileMenu = useCallback(() => {
+    setMobileMenuOpen(false);
+    setMobileCountryOpen(false);
+    setMobileIndiaOpen(false);
+    setCountrySearch("");
+    setIndiaSearch("");
+    setExpandedIndiaState("West Bengal");
+  }, []);
+
+  const destinationCards = (onLinkClick: () => void, compact = false) => (
+    <div className={`grid gap-2 ${compact ? "" : "sm:grid-cols-2"}`}>
+      {filteredDestinations.map((destination) => (
+        <Link
+          key={destination.href}
+          href={destination.href}
+          onClick={onLinkClick}
+          className="group flex min-h-[4rem] items-center gap-3 rounded-lg border border-slate-200/80 bg-white px-3 py-2.5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[#00C896]/45 hover:bg-[#f2fffb] hover:shadow-[0_14px_28px_rgba(15,23,42,0.08)]"
+        >
+          <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-slate-100 bg-slate-50 shadow-inner">
+            <img
+              src={`https://flagcdn.com/w40/${destination.flag}.png`}
+              alt={`${destination.label} Flag`}
+              className="h-4 w-5 rounded-sm object-cover"
+            />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="flex items-center gap-2">
+              <span className="truncate text-sm font-semibold text-slate-950 transition group-hover:text-[#008f72]">
+                Study MBBS in {destination.label}
+              </span>
+              {destination.badge ? (
+                <span className="rounded-full bg-[#00C896]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#008f72]">
+                  {destination.badge}
+                </span>
+              ) : null}
+            </span>
+            <span className="mt-0.5 line-clamp-2 text-xs leading-5 text-slate-500">
+              {destination.insight}
+            </span>
+          </span>
+        </Link>
+      ))}
+    </div>
+  );
+
+  const getVisibleIndiaColleges = (group: MBBSIndiaStateGroup, colleges: MBBSIndiaCollege[]) => {
+    if (!indiaSearchTerm || group.state.toLowerCase().includes(indiaSearchTerm)) return colleges;
+
+    return colleges.filter((college) => college.collegeName.toLowerCase().includes(indiaSearchTerm));
+  };
+
+  const renderIndiaCollegeSection = (
+    group: MBBSIndiaStateGroup,
+    title: "Government Colleges" | "Private Colleges",
+    colleges: MBBSIndiaCollege[],
+    badgeClassName: string
+  ) => {
+    const visibleColleges = getVisibleIndiaColleges(group, colleges);
+    if (!visibleColleges.length) return null;
+
+    return (
+      <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <h4 className="text-xs font-extrabold uppercase tracking-[0.12em] text-slate-700">{title}</h4>
+          <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${badgeClassName}`}>
+            {visibleColleges.length}
+          </span>
+        </div>
+        <div className="grid max-h-64 gap-2 overflow-y-auto pr-1">
+          {visibleColleges.map((college) => (
+            <div key={`${group.state}-${college.category}-${college.collegeName}`} className="rounded-lg border border-slate-100 bg-slate-50 px-3 py-2">
+              <p className="text-xs font-bold leading-5 text-slate-950">{college.collegeName}</p>
+              <p className="mt-1 text-[11px] font-medium leading-4 text-slate-500">
+                Seats: {college.seatCapacity.toLocaleString("en-IN")} | Established: {college.establishmentYear} | Fees: {college.fees}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const renderIndiaStateCard = (group: MBBSIndiaStateGroup, compact = false) => {
+    const isAutoExpanded = autoExpandedIndiaState === group.state;
+    const isExpanded = expandedIndiaState === group.state || isAutoExpanded;
+
+    return (
+      <div
+        key={group.state}
+        className={`overflow-hidden rounded-xl border bg-white shadow-sm transition duration-200 ${
+          isAutoExpanded ? "border-[#00C896] ring-2 ring-[#00C896]/25" : "border-slate-200 hover:border-[#00C896]/45"
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => setExpandedIndiaState(isExpanded && !isAutoExpanded ? null : group.state)}
+          className="flex w-full items-center justify-between gap-3 px-3.5 py-3 text-left transition hover:bg-[#f4fffb]"
+          aria-expanded={isExpanded}
+        >
+          <span className="min-w-0">
+            <span className="block truncate text-sm font-extrabold text-[#081B35]">{group.state}</span>
+            <span className="mt-1 block text-xs font-semibold text-slate-500">
+              Govt: {group.governmentCount} | Private: {group.privateCount}
+            </span>
+            <span className="mt-0.5 block text-xs font-semibold text-[#008f72]">
+              Seats: {group.totalSeats.toLocaleString("en-IN")}
+            </span>
+          </span>
+          <ChevronDown size={16} className={`flex-shrink-0 text-slate-400 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`} />
+        </button>
+
+        {isExpanded && (
+          <div className={`grid gap-3 border-t border-slate-100 bg-slate-50 p-3 ${compact ? "" : "xl:grid-cols-2"}`}>
+            {renderIndiaCollegeSection(group, "Government Colleges", group.governmentColleges, "bg-[#00C896]/10 text-[#008f72]")}
+            {renderIndiaCollegeSection(group, "Private Colleges", group.privateColleges, "bg-[#081B35]/10 text-[#081B35]")}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderIndiaStateGrid = (compact = false) => {
+    if (!filteredIndiaStateGroups.length) {
+      return (
+        <div className="rounded-xl border border-dashed border-slate-300 bg-white/90 px-4 py-6 text-center text-sm font-semibold text-slate-500">
+          No state or medical college found.
+        </div>
+      );
+    }
+
+    if (compact) {
+      return <div className="grid gap-2">{filteredIndiaStateGroups.map((group) => renderIndiaStateCard(group, true))}</div>;
+    }
+
+    return (
+      <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid content-start gap-2">{indiaStateColumns.left.map((group) => renderIndiaStateCard(group))}</div>
+        <div className="grid content-start gap-2">{indiaStateColumns.right.map((group) => renderIndiaStateCard(group))}</div>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -171,10 +429,16 @@ export default function Navbar() {
                 <Link href="/" className="nav-link">Home</Link>
                 <Link href="/about/" className="nav-link">About</Link>
 
-                <div className="relative group">
+                <div className="relative">
                   <button
                     type="button"
-                    onClick={() => setDesktopCountryOpen(!desktopCountryOpen)}
+                    ref={desktopCountryButtonRef}
+                    onClick={() => {
+                      setDesktopCountryOpen(!desktopCountryOpen);
+                      setDesktopIndiaOpen(false);
+                    }}
+                    aria-expanded={desktopCountryOpen}
+                    aria-haspopup="menu"
                     className="nav-link flex items-center gap-1"
                   >
                     MBBS Abroad
@@ -183,58 +447,27 @@ export default function Navbar() {
                       className={`transition-transform duration-300 ${desktopCountryOpen ? "rotate-180" : ""}`}
                     />
                   </button>
-
-                  {desktopCountryOpen && (
-                    <div className="absolute left-0 top-full z-40 mt-2 min-w-[24rem] overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(0,0,0,0.12)]">
-                      <div className="flex items-center justify-between gap-3 mb-3">
-                        <div>
-                          <h3 className="text-base font-semibold text-slate-900">MBBS Abroad</h3>
-                          <p className="mt-0.5 text-xs text-slate-500">20+ destinations</p>
-                        </div>
-                        <div className="inline-flex rounded-full bg-gradient-to-r from-[#00C896]/10 to-[#0EA5A4]/10 px-2.5 py-1 text-xs font-semibold text-[#00C896]">
-                          Global
-                        </div>
-                      </div>
-                      <div className="mb-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
-                        <div className="flex items-center gap-2 text-sm text-slate-700">
-                          <Search size={14} className="text-slate-400" />
-                          <input
-                            type="search"
-                            value={countrySearch}
-                            onChange={(event) => setCountrySearch(event.target.value)}
-                            placeholder="Search..."
-                            className="w-full border-0 bg-transparent px-1 text-sm outline-none placeholder-slate-400"
-                          />
-                        </div>
-                      </div>
-                      <div className="grid gap-1.5 text-xs text-slate-900 max-h-56 overflow-y-auto sm:grid-cols-2">
-                        {filteredDestinations.map((destination) => (
-                          <Link
-                            key={destination.href}
-                            href={destination.href}
-                            className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-white px-2.5 py-2 transition hover:border-[#00C896]/50 hover:bg-[#f0fdf9]"
-                          >
-                            <span className="flex items-center gap-1.5">
-                              <img
-                                src={`https://flagcdn.com/w40/${destination.flag}.png`}
-                                alt={`${destination.label} Flag`}
-                                className="h-3 w-4 rounded-sm"
-                              />
-                              <span className="text-xs">{destination.label}</span>
-                            </span>
-                            {destination.badge ? (
-                              <span className="rounded-full bg-[#00C896]/10 px-1.5 py-0.5 text-[9px] font-semibold text-[#00C896]">
-                                Top
-                              </span>
-                            ) : null}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
 
-                <Link href="/mbbs-india/" className="nav-link">MBBS India</Link>
+                <div className="relative">
+                  <button
+                    type="button"
+                    ref={desktopIndiaButtonRef}
+                    onClick={() => {
+                      setDesktopIndiaOpen(!desktopIndiaOpen);
+                      setDesktopCountryOpen(false);
+                    }}
+                    aria-expanded={desktopIndiaOpen}
+                    aria-haspopup="menu"
+                    className="nav-link flex items-center gap-1"
+                  >
+                    MBBS India
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform duration-300 ${desktopIndiaOpen ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                </div>
                 <a href="https://www.mumtazeducation.com" target="_blank" rel="noopener noreferrer" className="nav-link">NEET</a>
                 <Link href="/blogs" className="nav-link">Blogs</Link>
               </nav>
@@ -270,125 +503,276 @@ export default function Navbar() {
           </div>
         </header>
 
-{/* Mobile Menu */}
-        {mounted && mobileMenuOpen &&
-          createPortal(
-            <div className="fixed inset-0 z-[99999] flex bg-slate-950/40 lg:hidden">
-              <div className="relative flex h-full w-[84%] max-w-sm flex-col overflow-y-auto bg-white p-5 shadow-[0_24px_60px_rgba(15,23,42,0.18)]">
-                <div className="mb-6 flex items-center justify-between gap-3">
-                  <div className="flex-1">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-[#00C896]">Menu</p>
-                    <h2 className="mt-1 text-lg font-extrabold text-[#081B35]">ILMALINK MEDIGO</h2>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      setMobileCountryOpen(false);
-                    }}
-                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-900 transition hover:border-[#00C896]/50 hover:text-[#00C896]"
-                    aria-label="Close menu"
-                  >
-                    <X size={18} />
-                  </button>
+        <NavbarMenuPortal
+          anchorRef={desktopCountryButtonRef}
+          mode="anchored"
+          onClose={closeDesktopCountryMenu}
+          open={desktopCountryOpen}
+        >
+          <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_24px_70px_rgba(15,23,42,0.18)] ring-1 ring-slate-900/5">
+            <div className="border-b border-slate-100 bg-gradient-to-br from-white via-[#f6fffc] to-slate-50 px-5 py-4">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#008f72]">
+                    Popular MBBS Abroad Destinations
+                  </p>
+                  <h3 className="mt-1 text-lg font-extrabold text-[#081B35]">
+                    Find your best-fit country
+                  </h3>
+                  <p className="mt-1 max-w-xl text-sm leading-6 text-slate-600">
+                    Choose a country to explore universities, fees, eligibility, and FMGE insights.
+                  </p>
                 </div>
+                <div className="hidden rounded-full bg-white px-3 py-1.5 text-xs font-bold text-[#008f72] shadow-sm ring-1 ring-[#00C896]/20 sm:inline-flex">
+                  {navbarCountryDestinations.length} destinations
+                </div>
+              </div>
+              <label className="mt-4 flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 shadow-sm transition focus-within:border-[#00C896]/70 focus-within:ring-4 focus-within:ring-[#00C896]/10">
+                <Search size={16} className="text-slate-400" />
+                <input
+                  type="search"
+                  value={countrySearch}
+                  onChange={(event) => setCountrySearch(event.target.value)}
+                  placeholder="Search destinations, fees, or pathways"
+                  className="w-full border-0 bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400"
+                />
+              </label>
+            </div>
+            <div className="p-4">
+              {filteredDestinations.length ? (
+                destinationCards(closeDesktopCountryMenu)
+              ) : (
+                <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center text-sm text-slate-500">
+                  No destinations found. Try a country name like Russia or Georgia.
+                </div>
+              )}
+            </div>
+          </div>
+        </NavbarMenuPortal>
 
-                <div className="space-y-1 text-sm font-medium text-slate-900">
-                  <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block rounded-lg px-3.5 py-2.5 transition hover:bg-slate-50 hover:text-[#00C896]">
+        <NavbarMenuPortal
+          anchorRef={desktopIndiaButtonRef}
+          mode="anchored"
+          maxWidth={1120}
+          onClose={closeDesktopIndiaMenu}
+          open={desktopIndiaOpen}
+        >
+          <div className="overflow-hidden rounded-3xl border border-white/10 bg-[#071B35] text-white shadow-[0_28px_80px_rgba(8,27,53,0.28)] ring-1 ring-slate-900/10">
+            <div className="border-b border-white/10 bg-gradient-to-br from-[#081B35] via-[#0b315d] to-[#053f50] px-5 py-4">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#58f0c7]">
+                    MBBS India State Explorer
+                  </p>
+                  <h3 className="mt-1 text-lg font-extrabold text-white">
+                    NMC-listed Indian medical colleges
+                  </h3>
+                  <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-200">
+                    Explore states, government/private college counts, seat intake, establishment year, and fee placeholders from the provided NMC list.
+                  </p>
+                </div>
+                <div className="hidden rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold text-[#58f0c7] ring-1 ring-white/15 xl:inline-flex">
+                  823 colleges | 1,29,602 seats
+                </div>
+              </div>
+
+              <label className="mt-4 flex items-center gap-2 rounded-2xl border border-white/15 bg-white px-3 py-2.5 text-slate-900 shadow-sm transition focus-within:border-[#00C896] focus-within:ring-4 focus-within:ring-[#00C896]/20">
+                <Search size={16} className="text-slate-400" />
+                <input
+                  type="search"
+                  value={indiaSearch}
+                  onChange={(event) => setIndiaSearch(event.target.value)}
+                  placeholder="Search state or medical college…"
+                  className="w-full border-0 bg-transparent text-sm font-semibold outline-none placeholder:text-slate-400"
+                />
+              </label>
+            </div>
+
+            <div className="bg-slate-100 p-4 text-slate-900">
+              {renderIndiaStateGrid()}
+            </div>
+
+            <div className="flex items-center justify-between gap-3 border-t border-white/10 bg-[#071B35] px-5 py-3">
+              <p className="hidden text-xs font-medium text-slate-300 sm:block">
+                Govt/Private counts and seats are calculated from the provided NMC data.
+              </p>
+              <Link
+                href="/mbbs-india/"
+                onClick={closeDesktopIndiaMenu}
+                className="ml-auto inline-flex items-center justify-center rounded-lg bg-[#00C896] px-4 py-2.5 text-sm font-extrabold text-[#061D3F] shadow-[0_12px_28px_rgba(0,200,150,0.24)] transition hover:-translate-y-0.5 hover:bg-[#12dfad]"
+              >
+                View Full MBBS India List
+              </Link>
+            </div>
+          </div>
+        </NavbarMenuPortal>
+
+        {/* Mobile Menu */}
+        <NavbarMenuPortal
+          mode="fullscreen"
+          onClose={closeMobileMenu}
+          open={mobileMenuOpen}
+          className="lg:hidden"
+        >
+          <div className="flex h-full w-full">
+            <div className="relative flex h-full w-[min(92vw,27rem)] flex-col overflow-hidden bg-white shadow-[0_24px_70px_rgba(15,23,42,0.26)]">
+              <div className="flex items-center justify-between gap-3 border-b border-slate-100 bg-gradient-to-br from-white via-[#f6fffc] to-slate-50 p-5">
+                <div className="flex-1">
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#008f72]">Navigation</p>
+                  <h2 className="mt-1 text-lg font-extrabold text-[#081B35]">ILMALINK MEDIGO</h2>
+                  <p className="mt-0.5 text-xs font-medium text-slate-500">Global Medical Education</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={closeMobileMenu}
+                  className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-900 shadow-sm transition hover:border-[#00C896]/50 hover:text-[#00C896]"
+                  aria-label="Close menu"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-4 py-4">
+                <div className="space-y-1 text-sm font-semibold text-slate-900">
+                  <Link href="/" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
                     Home
                   </Link>
-                  <Link href="/about/" onClick={() => setMobileMenuOpen(false)} className="block rounded-lg px-3.5 py-2.5 transition hover:bg-slate-50 hover:text-[#00C896]">
+                  <Link href="/about/" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
                     About Us
                   </Link>
                   <button
                     type="button"
                     onClick={() => setMobileCountryOpen(!mobileCountryOpen)}
-                    className="flex w-full items-center justify-between rounded-lg px-3.5 py-2.5 text-left transition hover:bg-slate-50 hover:text-[#00C896]"
+                    className="flex w-full items-center justify-between rounded-lg px-3.5 py-3 text-left transition hover:bg-slate-50 hover:text-[#00C896]"
+                    aria-expanded={mobileCountryOpen}
                   >
                     <span>MBBS Abroad</span>
                     <ChevronDown size={16} className={`transition-transform duration-300 ${mobileCountryOpen ? "rotate-180" : ""}`} />
                   </button>
-                  <Link href="/mbbs-india/" onClick={() => setMobileMenuOpen(false)} className="block rounded-lg px-3.5 py-2.5 transition hover:bg-slate-50 hover:text-[#00C896]">
-                    MBBS India
-                  </Link>
-                  <a href="https://www.mumtazeducation.com" target="_blank" rel="noopener noreferrer" className="block rounded-lg px-3.5 py-2.5 transition hover:bg-slate-50 hover:text-[#00C896]">
+
+                  {mobileCountryOpen && (
+                    <div className="my-3 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+                      <div className="border-b border-slate-200 bg-white px-3 py-3">
+                        <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#008f72]">
+                          Popular MBBS Abroad Destinations
+                        </p>
+                        <p className="mt-1 text-xs leading-5 text-slate-500">
+                          Choose a country to explore universities, fees, eligibility, and FMGE insights.
+                        </p>
+                        <label className="mt-3 flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5 shadow-sm transition focus-within:border-[#00C896]/70 focus-within:ring-4 focus-within:ring-[#00C896]/10">
+                          <Search size={15} className="text-slate-400" />
+                          <input
+                            type="search"
+                            value={countrySearch}
+                            onChange={(event) => setCountrySearch(event.target.value)}
+                            placeholder="Search countries"
+                            className="w-full border-0 bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400"
+                          />
+                        </label>
+                      </div>
+                      <div className="max-h-[55vh] overflow-y-auto p-2.5">
+                        {filteredDestinations.length ? (
+                          destinationCards(closeMobileMenu, true)
+                        ) : (
+                          <div className="rounded-lg border border-dashed border-slate-200 bg-white px-3 py-5 text-center text-xs text-slate-500">
+                            No destinations found.
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => setMobileIndiaOpen(!mobileIndiaOpen)}
+                    className="flex w-full items-center justify-between rounded-lg px-3.5 py-3 text-left transition hover:bg-slate-50 hover:text-[#00C896]"
+                    aria-expanded={mobileIndiaOpen}
+                  >
+                    <span>MBBS India</span>
+                    <ChevronDown size={16} className={`transition-transform duration-300 ${mobileIndiaOpen ? "rotate-180" : ""}`} />
+                  </button>
+
+                  {mobileIndiaOpen && (
+                    <div className="my-3 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+                      <div className="border-b border-slate-200 bg-[#081B35] px-3 py-3 text-white">
+                        <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#58f0c7]">
+                          MBBS India State Explorer
+                        </p>
+                        <p className="mt-1 text-xs leading-5 text-slate-200">
+                          Search NMC-listed states and medical colleges by seat intake and category.
+                        </p>
+                        <label className="mt-3 flex items-center gap-2 rounded-lg border border-white/15 bg-white px-3 py-2.5 text-slate-900 shadow-sm transition focus-within:border-[#00C896] focus-within:ring-4 focus-within:ring-[#00C896]/20">
+                          <Search size={15} className="text-slate-400" />
+                          <input
+                            type="search"
+                            value={indiaSearch}
+                            onChange={(event) => setIndiaSearch(event.target.value)}
+                            placeholder="Search state or medical college…"
+                            className="w-full border-0 bg-transparent text-sm font-semibold outline-none placeholder:text-slate-400"
+                          />
+                        </label>
+                      </div>
+                      <div className="max-h-[58vh] overflow-y-auto p-2.5">
+                        {renderIndiaStateGrid(true)}
+                      </div>
+                      <div className="border-t border-slate-200 bg-white p-3">
+                        <Link
+                          href="/mbbs-india/"
+                          onClick={closeMobileMenu}
+                          className="inline-flex w-full items-center justify-center rounded-lg bg-[#00C896] px-4 py-3 text-sm font-extrabold text-[#061D3F] transition hover:bg-[#12dfad]"
+                        >
+                          View Full MBBS India List
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+
+                  <a href="https://www.mumtazeducation.com" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
                     NEET
                   </a>
-                  <Link href="/blogs" onClick={() => setMobileMenuOpen(false)} className="block rounded-lg px-3.5 py-2.5 transition hover:bg-slate-50 hover:text-[#00C896]">
+                  <Link href="/blogs" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
                     Blogs
                   </Link>
-                  <Link href="/alert/" onClick={() => setMobileMenuOpen(false)} className="block rounded-lg bg-[#fee2e2] px-3.5 py-2.5 text-xs font-semibold text-red-700 transition hover:bg-[#fce7ea]">
+                  <Link href="/alert/" onClick={closeMobileMenu} className="block rounded-lg bg-red-50 px-3.5 py-3 text-xs font-bold text-red-700 transition hover:bg-red-100">
                     Alerts
                   </Link>
                 </div>
+              </div>
 
-                {mobileCountryOpen && (
-                  <div className="mt-4 overflow-hidden rounded-lg border border-slate-200 bg-slate-50 p-3">
-                    <h3 className="mb-2.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                      Destinations
-                    </h3>
-                    <div className="grid gap-1.5 text-xs max-h-56 overflow-y-auto">
-                      {countryDestinations.map((destination) => (
-                        <Link
-                          key={destination.href}
-                          href={destination.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="flex items-center justify-between gap-2 rounded-lg bg-white px-2.5 py-2 transition hover:bg-slate-100"
-                        >
-                          <span className="flex items-center gap-1.5">
-                            <img
-                              src={`https://flagcdn.com/w40/${destination.flag}.png`}
-                              alt={`${destination.label} Flag`}
-                              className="h-3 w-4 rounded-sm"
-                            />
-                            <span className="text-xs">{destination.label}</span>
-                          </span>
-                          {destination.badge ? (
-                            <span className="rounded-full bg-[#00C896]/10 px-1 py-0.5 text-[9px] font-semibold text-[#00C896]">
-                              Top
-                            </span>
-                          ) : null}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="mt-auto flex flex-col gap-2 pt-4 border-t border-slate-200">
+              <div className="border-t border-slate-200 bg-white p-4">
+                <div className="grid gap-2">
                   <button
                     type="button"
                     onClick={() => {
                       setShowCounsellingPopup(true);
-                      setMobileMenuOpen(false);
+                      closeMobileMenu();
                     }}
-                    className="group inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-4 py-2.5 text-xs font-semibold text-white transition hover:shadow-lg hover:-translate-y-0.5"
+                    className="group inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-4 py-3 text-sm font-bold text-white shadow-[0_10px_24px_rgba(0,200,150,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(0,200,150,0.28)]"
                   >
-                    <MessageSquare size={14} />
+                    <MessageSquare size={15} />
                     Enquire Now
                   </button>
                   <a
                     href="https://wa.me/919563910223"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-xs font-semibold text-slate-900 transition hover:bg-slate-50"
+                    onClick={closeMobileMenu}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-900 transition hover:bg-slate-50"
                   >
-                    <Phone size={14} />
+                    <Phone size={15} />
                     WhatsApp
                   </a>
                 </div>
               </div>
-              <button
-                type="button"
-                className="flex-1"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setMobileCountryOpen(false);
-                }}
-                aria-label="Close overlay"
-              />
-            </div>,
-            document.body
-          )}
+            </div>
+            <button
+              type="button"
+              className="flex-1"
+              onClick={closeMobileMenu}
+              aria-label="Close overlay"
+            />
+          </div>
+        </NavbarMenuPortal>
 
         {/* Counselling Popup */}
         <CounsellingPopup isOpen={showCounsellingPopup} onClose={() => setShowCounsellingPopup(false)} />
