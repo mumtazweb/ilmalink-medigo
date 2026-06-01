@@ -7,6 +7,7 @@ import CounsellingPopup from "./CounsellingPopup";
 import SearchModal from "./SearchModal";
 import { Phone, Menu, X, ChevronDown, Search, Send, MessageSquare } from "lucide-react";
 import { mbbsIndiaCollegesByState, type MBBSIndiaCollege, type MBBSIndiaStateGroup } from "../data/mbbsIndiaColleges";
+import { getMBBSIndiaAdmissionAccess } from "../data/mbbsIndiaAdmissionAccess";
 import { navbarCountryDestinations } from "../data/navbarDestinations";
 
 type NavbarMenuPortalProps = {
@@ -97,17 +98,13 @@ function NavbarMenuPortal({
 }
 
 function buildIndiaStateColumns(groups: MBBSIndiaStateGroup[]) {
-  const westBengal = groups.find((group) => group.state === "West Bengal");
-  const karnataka = groups.find((group) => group.state === "Karnataka");
-  const remaining = groups
-    .filter((group) => group.state !== "West Bengal" && group.state !== "Karnataka")
-    .sort((a, b) => a.state.localeCompare(b.state));
-  const splitIndex = Math.ceil(remaining.length / 2);
-
-  return {
-    left: [...(westBengal ? [westBengal] : []), ...remaining.slice(0, splitIndex)],
-    right: [...(karnataka ? [karnataka] : []), ...remaining.slice(splitIndex)],
-  };
+  return groups.reduce(
+    (columns, group, index) => {
+      columns[index % 2 === 0 ? "left" : "right"].push(group);
+      return columns;
+    },
+    { left: [] as MBBSIndiaStateGroup[], right: [] as MBBSIndiaStateGroup[] }
+  );
 }
 
 export default function Navbar() {
@@ -281,6 +278,13 @@ export default function Navbar() {
   const renderIndiaStateCard = (group: MBBSIndiaStateGroup, compact = false) => {
     const isAutoExpanded = autoExpandedIndiaState === group.state;
     const isExpanded = expandedIndiaState === group.state || isAutoExpanded;
+    const access = getMBBSIndiaAdmissionAccess(group.state, group.privateCount);
+    const accessBadgeClass =
+      access.status === "open"
+        ? "bg-[#ECFDF5] text-[#047857] ring-[#A7F3D0]"
+        : access.status === "state-specific"
+          ? "bg-[#FFF7ED] text-[#C2410C] ring-[#FED7AA]"
+          : "bg-slate-100 text-slate-500 ring-slate-200";
 
     return (
       <div
@@ -303,14 +307,17 @@ export default function Navbar() {
             <span className="mt-0.5 block text-xs font-semibold text-[#008f72]">
               Seats: {group.totalSeats.toLocaleString("en-IN")}
             </span>
+            <span className={`mt-2 inline-flex rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide ring-1 ${accessBadgeClass}`}>
+              {access.label}
+            </span>
           </span>
           <ChevronDown size={16} className={`flex-shrink-0 text-slate-400 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`} />
         </button>
 
         {isExpanded && (
           <div className={`grid gap-3 border-t border-slate-100 bg-slate-50 p-3 ${compact ? "" : "xl:grid-cols-2"}`}>
-            {renderIndiaCollegeSection(group, "Government Colleges", group.governmentColleges, "bg-[#00C896]/10 text-[#008f72]")}
             {renderIndiaCollegeSection(group, "Private Colleges", group.privateColleges, "bg-[#081B35]/10 text-[#081B35]")}
+            {renderIndiaCollegeSection(group, "Government Colleges", group.governmentColleges, "bg-[#00C896]/10 text-[#008f72]")}
           </div>
         )}
       </div>

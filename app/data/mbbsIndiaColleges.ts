@@ -1,3 +1,5 @@
+import { compareMBBSIndiaStateGroups } from "./mbbsIndiaAdmissionAccess";
+
 export type MBBSIndiaCollege = {
   state: string;
   category: "Government" | "Private";
@@ -6627,7 +6629,7 @@ export const mbbsIndiaCollegesByState: MBBSIndiaStateGroup[] = Object.values(
 
     return groups;
   }, {})
-).sort((a, b) => a.state.localeCompare(b.state));
+).sort(compareMBBSIndiaStateGroups);
 
 const expectedCollegeCount = 823;
 const expectedTotalSeats = 129602;

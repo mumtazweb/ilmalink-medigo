@@ -9,6 +9,7 @@ import {
   type GlobalSearchEntry,
 } from "../data/searchIndex";
 import { mbbsIndiaColleges, mbbsIndiaCollegesByState } from "../data/mbbsIndiaColleges";
+import { getMBBSIndiaAdmissionAccess } from "../data/mbbsIndiaAdmissionAccess";
 import { navbarCountryDestinations } from "../data/navbarDestinations";
 
 type SearchResult = GlobalSearchEntry & {
@@ -40,6 +41,19 @@ const slugifySearchId = (value: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
+const mbbsIndiaDirectorySearchEntry: GlobalSearchEntry = {
+  id: "mbbs-india-directory",
+  title: "Study MBBS in India - Full NMC Medical College List",
+  description: "Open the complete state-wise MBBS India directory with government, private, seat intake, and college details.",
+  url: "/mbbs-india/",
+  category: "MBBS India",
+  group: "Pages",
+  type: "page",
+  tags: ["MBBS India", "Study MBBS in India", "NMC college list", "Medical colleges in India"],
+  content: "Study MBBS in India full NMC medical college list state-wise government private colleges seats fees counselling",
+  priority: 100,
+};
+
 const navbarDropdownSearchEntries: GlobalSearchEntry[] = navbarCountryDestinations.map((destination) => ({
   id: `navbar-destination-${slugifySearchId(destination.label)}`,
   title: `Study MBBS in ${destination.label}`,
@@ -65,6 +79,7 @@ const navbarDropdownSearchEntries: GlobalSearchEntry[] = navbarCountryDestinatio
 }));
 
 const mbbsIndiaStateSearchEntries: GlobalSearchEntry[] = mbbsIndiaCollegesByState.map((group) => {
+  const access = getMBBSIndiaAdmissionAccess(group.state, group.privateCount);
   const collegeNames = [...group.governmentColleges, ...group.privateColleges]
     .map((college) => college.collegeName)
     .join(" ");
@@ -72,7 +87,7 @@ const mbbsIndiaStateSearchEntries: GlobalSearchEntry[] = mbbsIndiaCollegesByStat
   return {
     id: `mbbs-india-state-${slugifySearchId(group.state)}`,
     title: `MBBS Colleges in ${group.state}`,
-    description: `${group.governmentCount} government, ${group.privateCount} private, and ${group.totalSeats.toLocaleString("en-IN")} MBBS seats in ${group.state}.`,
+    description: `${access.label}: ${group.privateCount} private, ${group.governmentCount} government, and ${group.totalSeats.toLocaleString("en-IN")} MBBS seats in ${group.state}.`,
     url: "/mbbs-india/",
     category: "MBBS India",
     group: "Pages",
@@ -80,6 +95,7 @@ const mbbsIndiaStateSearchEntries: GlobalSearchEntry[] = mbbsIndiaCollegesByStat
     tags: [
       group.state,
       `Study MBBS in ${group.state}`,
+      access.label,
       "MBBS India",
       "Medical colleges in India",
       "NMC college list",
@@ -90,46 +106,56 @@ const mbbsIndiaStateSearchEntries: GlobalSearchEntry[] = mbbsIndiaCollegesByStat
       `${group.governmentCount} government colleges`,
       `${group.privateCount} private colleges`,
       `${group.totalSeats} seats`,
+      access.detail,
       collegeNames,
     ].join(" "),
     priority: 96,
   };
 });
 
-const mbbsIndiaCollegeSearchEntries: GlobalSearchEntry[] = mbbsIndiaColleges.map((college) => ({
-  id: `mbbs-india-college-${slugifySearchId(`${college.state}-${college.collegeName}`)}`,
-  title: college.collegeName,
-  description: `${college.category} medical college in ${college.state} with ${college.seatCapacity.toLocaleString("en-IN")} MBBS seats.`,
-  url: "/mbbs-india/",
-  category: "MBBS India",
-  group: "Pages",
-  type: "page",
-  tags: [
-    college.state,
-    college.category,
-    "MBBS India",
-    "Medical college",
-    "NMC college list",
-    `Study MBBS in ${college.state}`,
-  ],
-  content: [
-    college.collegeName,
-    college.state,
-    college.category,
-    `${college.seatCapacity} MBBS seats`,
-    `established ${college.establishmentYear}`,
-    "fees ##",
-    `Study MBBS in ${college.state}`,
-  ].join(" "),
-  priority: college.category === "Government" ? 92 : 90,
-}));
+const mbbsIndiaCollegeSearchEntries: GlobalSearchEntry[] = mbbsIndiaColleges.map((college) => {
+  const access = getMBBSIndiaAdmissionAccess(college.state);
+
+  return {
+    id: `mbbs-india-college-${slugifySearchId(`${college.state}-${college.collegeName}`)}`,
+    title: college.collegeName,
+    description: `${college.category} medical college in ${college.state} with ${college.seatCapacity.toLocaleString("en-IN")} MBBS seats. ${access.label}.`,
+    url: "/mbbs-india/",
+    category: "MBBS India",
+    group: "Pages",
+    type: "page",
+    tags: [
+      college.state,
+      college.category,
+      access.label,
+      "MBBS India",
+      "Medical college",
+      "NMC college list",
+      `Study MBBS in ${college.state}`,
+    ],
+    content: [
+      college.collegeName,
+      college.state,
+      college.category,
+      access.detail,
+      `${college.seatCapacity} MBBS seats`,
+      `established ${college.establishmentYear}`,
+      "fees ##",
+      `Study MBBS in ${college.state}`,
+    ].join(" "),
+    priority: college.category === "Private" && access.status === "open" ? 94 : college.category === "Government" ? 92 : 90,
+  };
+});
 
 const siteSearchIndex: GlobalSearchEntry[] = [
+  mbbsIndiaDirectorySearchEntry,
   ...navbarDropdownSearchEntries,
   ...mbbsIndiaStateSearchEntries,
   ...mbbsIndiaCollegeSearchEntries,
   ...globalSearchIndex,
 ];
+
+const isMBBSIndiaCollegeResult = (entry: GlobalSearchEntry) => entry.id.startsWith("mbbs-india-college-");
 
 const textIncludesAllTerms = (text: string, terms: string[]) =>
   terms.every((term) => text.includes(term));
@@ -259,6 +285,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
     return [
       byId("mbbs-india-state-west-bengal"),
       byId("mbbs-india-state-karnataka"),
+      byId("mbbs-india-state-jharkhand"),
       byUrl("/blogs"),
       byUrl("/mbbs-abroad/kyrgyzstan"),
       siteSearchIndex.find((item) => item.group === "Blogs"),
@@ -272,6 +299,12 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
       storeRecentSearch(query || result.title);
 
       if (typeof window !== "undefined") {
+        if (isMBBSIndiaCollegeResult(result)) {
+          onClose();
+          window.dispatchEvent(new Event(OPEN_COUNSELLING_EVENT));
+          return;
+        }
+
         if (result.url.includes("fmge=explorer")) {
           window.sessionStorage.setItem(PENDING_FMGE_KEY, "1");
           window.dispatchEvent(new Event(OPEN_FMGE_EVENT));
