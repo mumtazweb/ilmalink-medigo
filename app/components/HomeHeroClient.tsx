@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import CounsellingPopup from "./CounsellingPopup";
+import FMGEExplorerModal from "./FMGEExplorerModal";
 import HeroGlobeV2 from "./HeroGlobeV2";
 import Footer from "./Footer";
 import NeetRankPredictorTool from "./NeetRankPredictorTool";
@@ -248,6 +249,7 @@ function ArrowRightIcon() {
 
 export default function HomeHeroClient() {
   const [showPopup, setShowPopup] = useState(false);
+  const [showFMGEExplorer, setShowFMGEExplorer] = useState(false);
   const [showRankPredictor, setShowRankPredictor] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [neetScore, setNeetScore] = useState("");
@@ -290,8 +292,8 @@ export default function HomeHeroClient() {
               </h1>
 
               <div className="mt-4 space-y-1 text-sm text-white/[0.82] sm:text-[15px]">
-                <p>Explore 150+ NMC Approved Universities in 20+ Countries.</p>
-                <p className="hidden md:block">Trusted by 50,000+ Students & Parents.</p>
+                <p>Explore 437 NMC Approved  Universities in 49 Countries.</p>
+                <p className="hidden md:block">As Per FMGE Screening Test 2023</p>
               </div>
 
               <div className="mx-auto mt-5 hidden max-w-[520px] grid-cols-2 gap-3 sm:grid-cols-4 md:grid lg:mx-0">
@@ -300,7 +302,7 @@ export default function HomeHeroClient() {
                     <UniversityIcon />
                   </div>
                   <div>
-                    <p className="text-base font-bold">150+</p>
+                    <p className="text-base font-bold">400+</p>
                     <p className="text-[11px] text-white/70">Universities</p>
                   </div>
                 </div>
@@ -310,7 +312,7 @@ export default function HomeHeroClient() {
                     <CountryIcon />
                   </div>
                   <div>
-                    <p className="text-base font-bold">20+</p>
+                    <p className="text-base font-bold">50+</p>
                     <p className="text-[11px] text-white/70">Countries</p>
                   </div>
                 </div>
@@ -320,8 +322,8 @@ export default function HomeHeroClient() {
                     <StudentsIcon />
                   </div>
                   <div>
-                    <p className="text-base font-bold">50,000+</p>
-                    <p className="text-[11px] text-white/70">Students Guided</p>
+                    <p className="text-base font-bold">100000+</p>
+                    <p className="text-[11px] text-white/70">MBBSs Abroad</p>
                   </div>
                 </div>
 
@@ -330,22 +332,23 @@ export default function HomeHeroClient() {
                     <ShieldIcon />
                   </div>
                   <div>
-                    <p className="text-base font-bold">100%</p>
-                    <p className="text-[11px] text-white/70">Transparency</p>
+                    <p className="text-base font-bold"> 823+ | 1.29L+ </p>
+                    <p className="text-[11px] text-white/70">Indian Colleges | MBBS Seats</p>
                   </div>
                 </div>
               </div>
 
               <div className="mx-0 mt-5 flex w-full max-w-[190px] flex-col items-stretch justify-center gap-2 md:mx-auto md:mt-6 md:max-w-[360px] md:flex-row md:flex-nowrap lg:mx-0 lg:max-w-none lg:justify-start lg:gap-3">
-                <Link
-                  href="/mbbs-abroad"
+                <button
+                  type="button"
+                  onClick={() => setShowFMGEExplorer(true)}
                   className="group inline-flex min-w-0 flex-none items-center justify-center gap-1.5 whitespace-nowrap rounded-xl bg-[#16C784] px-2 py-2 text-[11px] font-bold text-[#001B2E] shadow-[0_18px_45px_rgba(22,199,132,0.32)] transition hover:-translate-y-0.5 hover:bg-[#18d890] sm:px-3 sm:text-xs md:flex-1 lg:flex-none lg:gap-2 lg:rounded-[14px] lg:px-5 lg:py-3 lg:text-sm"
                 >
                   Explore Universities
                   <span className="transition-transform group-hover:translate-x-1">
                     <ArrowRightIcon />
                   </span>
-                </Link>
+                </button>
 
                 <button
                   type="button"
@@ -377,7 +380,7 @@ export default function HomeHeroClient() {
                 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
                   <CountryIcon />
                 </div>
-                <p className="text-[10px] font-bold leading-none">20+</p>
+                <p className="text-[10px] font-bold leading-none">50+</p>
                 <p className="text-[8px] leading-tight text-white/70">Countries</p>
               </div>
 
@@ -385,16 +388,16 @@ export default function HomeHeroClient() {
                 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
                   <StudentsIcon />
                 </div>
-                <p className="text-[10px] font-bold leading-none">50,000+</p>
-                <p className="text-[8px] leading-tight text-white/70">Students Guided</p>
+                <p className="text-[10px] font-bold leading-none">100000+</p>
+                <p className="text-[8px] leading-tight text-white/70">MBBS Abroad</p>
               </div>
 
               <div className="flex flex-col items-center gap-1 text-center">
                 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
                   <ShieldIcon />
                 </div>
-                <p className="text-[10px] font-bold leading-none">100%</p>
-                <p className="text-[8px] leading-tight text-white/70">Transparency</p>
+                <p className="text-[10px] font-bold leading-none">823+ | 1.29L+</p>
+                <p className="text-[8px] leading-tight text-white/70">Indian Colleges | MBBS Seats</p>
               </div>
             </div>
 
@@ -860,6 +863,14 @@ export default function HomeHeroClient() {
         onClose={() => setShowRankPredictor(false)}
         onBookCounselling={() => {
           setShowRankPredictor(false);
+          setShowPopup(true);
+        }}
+      />
+      <FMGEExplorerModal
+        isOpen={showFMGEExplorer}
+        onClose={() => setShowFMGEExplorer(false)}
+        onConnect={() => {
+          setShowFMGEExplorer(false);
           setShowPopup(true);
         }}
       />
