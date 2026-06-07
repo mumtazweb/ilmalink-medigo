@@ -30,6 +30,96 @@ function slugify(value) {
     .replace(/(^-|-$)/g, "");
 }
 
+function normalizeLookupKey(value) {
+  return value
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+const countryRouteAliases = new Map([
+  [
+    normalizeLookupKey("IRAN ISLAMIC REPUBLIC OF IRAN"),
+    "/mbbs-abroad/iran",
+  ],
+  [normalizeLookupKey("RUSSIAN FEDERATION"), "/mbbs-abroad/russia"],
+  [
+    normalizeLookupKey("UNITED ARAB EMIRATES"),
+    "/mbbs-abroad/uae",
+  ],
+  [
+    normalizeLookupKey("UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND"),
+    "/mbbs-abroad/uk",
+  ],
+]);
+
+const countryRoutes = [
+  ["Kyrgyzstan", "/mbbs-abroad/kyrgyzstan"],
+  ["Georgia", "/mbbs-abroad/georgia"],
+  ["Bangladesh", "/mbbs-abroad/bangladesh"],
+  ["Russia", "/mbbs-abroad/russia"],
+  ["Kazakhstan", "/mbbs-abroad/kazakhstan"],
+  ["Uzbekistan", "/mbbs-abroad/uzbekistan"],
+  ["Tajikistan", "/mbbs-abroad/tajikistan"],
+  ["Malaysia", "/mbbs-abroad/malaysia"],
+  ["Egypt", "/mbbs-abroad/egypt"],
+  ["Saudi Arabia", "/mbbs-abroad/saudi-arabia"],
+  ["Qatar", "/mbbs-abroad/qatar"],
+  ["UAE", "/mbbs-abroad/uae"],
+  ["Iran", "/mbbs-abroad/iran"],
+  ["USA", "/mbbs-abroad/usa"],
+  ["Canada", "/mbbs-abroad/canada"],
+  ["Australia", "/mbbs-abroad/australia"],
+  ["New Zealand", "/mbbs-abroad/new-zealand"],
+  ["England (UK)", "/mbbs-abroad/uk"],
+  ["Barbados", "/mbbs-abroad/barbados"],
+  ["Singapore", "/mbbs-abroad/singapore"],
+  ["Vietnam", "/mbbs-abroad/vietnam"],
+].flatMap(([label, href]) => {
+  const labelWithoutParentheses = label.replace(/\([^)]*\)/g, "");
+
+  return [
+    [normalizeLookupKey(label), href],
+    [normalizeLookupKey(labelWithoutParentheses), href],
+    [normalizeLookupKey(slugify(label)), href],
+  ];
+});
+
+const countryRouteByLookupKey = new Map(countryRoutes);
+
+function getFmgeCountryHref(country) {
+  const lookupKey = normalizeLookupKey(country);
+
+  return (
+    countryRouteAliases.get(lookupKey) ??
+    countryRouteByLookupKey.get(lookupKey) ??
+    `/mbbs-abroad/${slugify(country)}`
+  );
+}
+
+const detailedFmgeCollegeRoutes = new Map([
+  [
+    `${normalizeLookupKey("KYRGYZSTAN")}::${normalizeLookupKey("INTERNATIONAL HIGHER SCHOOL OF MEDICINE")}`,
+    "/mbbs-abroad/kyrgyzstan/international-higher-school-of-medicine",
+  ],
+  [
+    `${normalizeLookupKey("KYRGYZSTAN")}::${normalizeLookupKey("I K AKHUNBAEV KYRGYZ STATE MEDICAL ACADEMY FACULTY OF GENERAL MEDICINE")}`,
+    "/mbbs-abroad/kyrgyzstan/kyrgyz-state-medical-academy",
+  ],
+]);
+
+function getFmgeCollegeUrl(country, college) {
+  return (
+    detailedFmgeCollegeRoutes.get(
+      `${normalizeLookupKey(country)}::${normalizeLookupKey(college)}`
+    ) ?? "/?counselling=open"
+  );
+}
+
 function titleCase(value) {
   return value
     .replace(/[-_]/g, " ")
@@ -323,7 +413,7 @@ async function buildFmgeEntries() {
       id: `fmge-country-${slugify(country)}`,
       title: `${country} FMGE 2025 Data`,
       description: `${Number(appeared).toLocaleString("en-IN")} appeared, ${Number(passed).toLocaleString("en-IN")} passed, ${passRate} pass rate across ${colleges.length} college entries.`,
-      url: "/?fmge=explorer",
+      url: getFmgeCountryHref(country),
       category: "FMGE Data",
       group: "Destinations",
       type: "destination",
@@ -348,7 +438,7 @@ async function buildFmgeEntries() {
         id: `fmge-college-${slugify(country)}-${slugify(college.name)}`,
         title: college.name,
         description: `${country} FMGE 2025: ${college.appeared.toLocaleString("en-IN")} appeared, ${college.passed.toLocaleString("en-IN")} passed, ${college.passRate} pass rate.`,
-        url: "/?fmge=explorer",
+        url: getFmgeCollegeUrl(country, college.name),
         category: "FMGE Data",
         group: "Destinations",
         type: "destination",

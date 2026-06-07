@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
+import Link from "next/link";
 import {
   Building2,
   ChevronDown,
@@ -12,6 +13,14 @@ import {
   X,
 } from "lucide-react";
 import { fmgeCountries, type FMGECollege, type FmgeCountry } from "../data/fmgeData";
+import {
+  getFmgeCollegeConnectLabel,
+  getFmgeCollegeContextHref,
+  getFmgeCollegeDetailHref,
+  getFmgeCountryDisplayName,
+  getFmgeCountryHref,
+  whatsappCounsellingUrl,
+} from "../data/exploreLinks";
 
 type FMGEExplorerModalProps = {
   isOpen: boolean;
@@ -20,6 +29,10 @@ type FMGEExplorerModalProps = {
 };
 
 type SortOption = "appeared" | "passRate" | "az";
+type CollegeConnectPrompt = {
+  country: string;
+  college: string;
+};
 
 const headlineStats = [
   { value: "54+", label: "Countries / Territories" },
@@ -70,6 +83,7 @@ export default function FMGEExplorerModal({ isOpen, onClose, onConnect }: FMGEEx
   const [countrySort, setCountrySort] = useState<SortOption>("appeared");
   const [collegeSort, setCollegeSort] = useState<SortOption>("appeared");
   const [expandedCountries, setExpandedCountries] = useState<Set<string>>(new Set());
+  const [collegeConnectPrompt, setCollegeConnectPrompt] = useState<CollegeConnectPrompt | null>(null);
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
 
@@ -123,6 +137,15 @@ export default function FMGEExplorerModal({ isOpen, onClose, onConnect }: FMGEEx
 
   const portalRoot = document.getElementById("modal-root") ?? document.body;
 
+  const showCollegeConnectPrompt = (country: string, college: string) => {
+    setCollegeConnectPrompt((current) =>
+      current?.country === country && current.college === college ? null : { country, college }
+    );
+  };
+
+  const isCollegeConnectPromptOpen = (country: string, college: string) =>
+    collegeConnectPrompt?.country === country && collegeConnectPrompt.college === college;
+
   const toggleCountry = (country: string) => {
     setExpandedCountries((current) => {
       const next = new Set(current);
@@ -159,6 +182,40 @@ export default function FMGEExplorerModal({ isOpen, onClose, onConnect }: FMGEEx
         className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
       />
     </label>
+  );
+
+  const renderCollegeConnectPrompt = (country: string, college: string) => (
+    <div className="mt-3 rounded-2xl border border-[#16C784]/30 bg-[#ecfdf5] p-3">
+      <p className="text-xs font-semibold leading-5 text-[#064e3b]">
+        {getFmgeCollegeConnectLabel(country, college)}
+      </p>
+      <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+        <button
+          type="button"
+          onClick={onConnect}
+          className="inline-flex items-center justify-center rounded-xl bg-[#16C784] px-3 py-2 text-xs font-bold text-[#001B2E] transition hover:bg-[#18d890]"
+        >
+          Connect for Details
+        </button>
+        <a
+          href={`${whatsappCounsellingUrl}?text=${encodeURIComponent(
+            `I want verified details for ${college} in ${getFmgeCountryDisplayName(country)}.`
+          )}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center rounded-xl border border-[#16C784]/50 bg-white px-3 py-2 text-xs font-bold text-[#067348] transition hover:border-[#067348]"
+        >
+          WhatsApp
+        </a>
+        <Link
+          href={getFmgeCollegeContextHref(country, college)}
+          onClick={onClose}
+          className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 transition hover:border-[#16C784] hover:text-[#067348]"
+        >
+          View FMGE Row
+        </Link>
+      </div>
+    </div>
   );
 
   return createPortal(
@@ -319,7 +376,15 @@ export default function FMGEExplorerModal({ isOpen, onClose, onConnect }: FMGEEx
                     return (
                       <Fragment key={country.country}>
                         <tr className="transition hover:bg-slate-50">
-                          <td className="px-4 py-4 font-bold text-[#071f3f]">{country.country}</td>
+                          <td className="px-4 py-4">
+                            <Link
+                              href={getFmgeCountryHref(country.country)}
+                              onClick={onClose}
+                              className="font-bold text-[#071f3f] transition hover:text-[#067348]"
+                            >
+                              {getFmgeCountryDisplayName(country.country)}
+                            </Link>
+                          </td>
                           <td className="px-4 py-4 text-slate-700">{numberFormatter.format(country.appeared)}</td>
                           <td className="px-4 py-4 text-slate-700">{numberFormatter.format(country.passed)}</td>
                           <td className="px-4 py-4">
@@ -368,28 +433,72 @@ export default function FMGEExplorerModal({ isOpen, onClose, onConnect }: FMGEEx
                                         <th className="px-4 py-3 font-semibold">Appeared</th>
                                         <th className="px-4 py-3 font-semibold">Passed</th>
                                         <th className="px-4 py-3 font-semibold">Pass %</th>
+                                        <th className="px-4 py-3 font-semibold">Action</th>
                                       </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100">
-                                      {sortedColleges.map((college) => (
-                                        <tr
-                                          key={college.name}
-                                          className={
-                                            isCollegeMatch(college, normalizedQuery)
-                                              ? "bg-[#16C784]/10"
-                                              : "bg-white"
-                                          }
-                                        >
-                                          <td className="px-4 py-3 font-semibold text-[#071f3f]">{college.name}</td>
-                                          <td className="px-4 py-3 text-slate-700">
-                                            {numberFormatter.format(college.appeared)}
-                                          </td>
-                                          <td className="px-4 py-3 text-slate-700">
-                                            {numberFormatter.format(college.passed)}
-                                          </td>
-                                          <td className="px-4 py-3 font-bold text-[#067348]">{college.passRate}</td>
-                                        </tr>
-                                      ))}
+                                      {sortedColleges.map((college) => {
+                                        const detailHref = getFmgeCollegeDetailHref(country.country, college.name);
+                                        const promptOpen = isCollegeConnectPromptOpen(country.country, college.name);
+
+                                        return (
+                                          <tr
+                                            key={college.name}
+                                            className={
+                                              isCollegeMatch(college, normalizedQuery)
+                                                ? "bg-[#16C784]/10"
+                                                : "bg-white"
+                                            }
+                                          >
+                                            <td className="px-4 py-3 align-top font-semibold text-[#071f3f]">
+                                              {detailHref ? (
+                                                <Link
+                                                  href={detailHref}
+                                                  onClick={onClose}
+                                                  className="transition hover:text-[#067348]"
+                                                >
+                                                  {college.name}
+                                                </Link>
+                                              ) : (
+                                                <button
+                                                  type="button"
+                                                  onClick={() => showCollegeConnectPrompt(country.country, college.name)}
+                                                  className="text-left font-semibold text-[#071f3f] underline decoration-[#16C784]/40 underline-offset-4 transition hover:text-[#067348]"
+                                                >
+                                                  {college.name}
+                                                </button>
+                                              )}
+                                              {promptOpen ? renderCollegeConnectPrompt(country.country, college.name) : null}
+                                            </td>
+                                            <td className="px-4 py-3 align-top text-slate-700">
+                                              {numberFormatter.format(college.appeared)}
+                                            </td>
+                                            <td className="px-4 py-3 align-top text-slate-700">
+                                              {numberFormatter.format(college.passed)}
+                                            </td>
+                                            <td className="px-4 py-3 align-top font-bold text-[#067348]">{college.passRate}</td>
+                                            <td className="px-4 py-3 align-top">
+                                              {detailHref ? (
+                                                <Link
+                                                  href={detailHref}
+                                                  onClick={onClose}
+                                                  className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-[#071f3f] transition hover:border-[#16C784] hover:text-[#067348]"
+                                                >
+                                                  View Page
+                                                </Link>
+                                              ) : (
+                                                <button
+                                                  type="button"
+                                                  onClick={() => showCollegeConnectPrompt(country.country, college.name)}
+                                                  className="inline-flex items-center justify-center rounded-full bg-[#16C784] px-3 py-2 text-xs font-bold text-[#001B2E] transition hover:bg-[#18d890]"
+                                                >
+                                                  Connect
+                                                </button>
+                                              )}
+                                            </td>
+                                          </tr>
+                                        );
+                                      })}
                                     </tbody>
                                   </table>
                                 </div>
@@ -414,7 +523,15 @@ export default function FMGEExplorerModal({ isOpen, onClose, onConnect }: FMGEEx
                   <article key={country.country} className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <h4 className="text-base font-bold tracking-normal text-[#071f3f]">{country.country}</h4>
+                        <h4 className="text-base font-bold tracking-normal text-[#071f3f]">
+                          <Link
+                            href={getFmgeCountryHref(country.country)}
+                            onClick={onClose}
+                            className="transition hover:text-[#067348]"
+                          >
+                            {getFmgeCountryDisplayName(country.country)}
+                          </Link>
+                        </h4>
                         <p className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
                           {country.colleges.length} colleges
                         </p>
@@ -452,36 +569,79 @@ export default function FMGEExplorerModal({ isOpen, onClose, onConnect }: FMGEEx
                       <div className="mt-4 rounded-3xl border border-slate-200 bg-white p-3">
                         <div className="mb-3">{renderCollegeSort()}</div>
                         <div className="space-y-2">
-                          {sortedColleges.map((college) => (
-                            <div
-                              key={college.name}
-                              className={`rounded-2xl border p-3 ${
-                                isCollegeMatch(college, normalizedQuery)
-                                  ? "border-[#16C784] bg-[#ecfdf5]"
-                                  : "border-slate-200 bg-white"
-                              }`}
-                            >
-                              <p className="text-sm font-bold leading-5 text-[#071f3f]">{college.name}</p>
-                              <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
-                                <div>
-                                  <p className="text-slate-500">Appeared</p>
-                                  <p className="mt-1 font-bold text-slate-800">
-                                    {numberFormatter.format(college.appeared)}
-                                  </p>
+                          {sortedColleges.map((college) => {
+                            const detailHref = getFmgeCollegeDetailHref(country.country, college.name);
+                            const promptOpen = isCollegeConnectPromptOpen(country.country, college.name);
+
+                            return (
+                              <div
+                                key={college.name}
+                                className={`rounded-2xl border p-3 ${
+                                  isCollegeMatch(college, normalizedQuery)
+                                    ? "border-[#16C784] bg-[#ecfdf5]"
+                                    : "border-slate-200 bg-white"
+                                }`}
+                              >
+                                <p className="text-sm font-bold leading-5 text-[#071f3f]">
+                                  {detailHref ? (
+                                    <Link
+                                      href={detailHref}
+                                      onClick={onClose}
+                                      className="transition hover:text-[#067348]"
+                                    >
+                                      {college.name}
+                                    </Link>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => showCollegeConnectPrompt(country.country, college.name)}
+                                      className="text-left font-bold leading-5 text-[#071f3f] underline decoration-[#16C784]/40 underline-offset-4 transition hover:text-[#067348]"
+                                    >
+                                      {college.name}
+                                    </button>
+                                  )}
+                                </p>
+                                <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
+                                  <div>
+                                    <p className="text-slate-500">Appeared</p>
+                                    <p className="mt-1 font-bold text-slate-800">
+                                      {numberFormatter.format(college.appeared)}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-slate-500">Passed</p>
+                                    <p className="mt-1 font-bold text-slate-800">
+                                      {numberFormatter.format(college.passed)}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-slate-500">Pass %</p>
+                                    <p className="mt-1 font-bold text-[#067348]">{college.passRate}</p>
+                                  </div>
                                 </div>
-                                <div>
-                                  <p className="text-slate-500">Passed</p>
-                                  <p className="mt-1 font-bold text-slate-800">
-                                    {numberFormatter.format(college.passed)}
-                                  </p>
+                                <div className="mt-3">
+                                  {detailHref ? (
+                                    <Link
+                                      href={detailHref}
+                                      onClick={onClose}
+                                      className="inline-flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-[#071f3f] transition hover:border-[#16C784] hover:text-[#067348]"
+                                    >
+                                      View College Page
+                                    </Link>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => showCollegeConnectPrompt(country.country, college.name)}
+                                      className="inline-flex w-full items-center justify-center rounded-xl bg-[#16C784] px-3 py-2 text-xs font-bold text-[#001B2E] transition hover:bg-[#18d890]"
+                                    >
+                                      Connect for College Details
+                                    </button>
+                                  )}
                                 </div>
-                                <div>
-                                  <p className="text-slate-500">Pass %</p>
-                                  <p className="mt-1 font-bold text-[#067348]">{college.passRate}</p>
-                                </div>
+                                {promptOpen ? renderCollegeConnectPrompt(country.country, college.name) : null}
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       </div>
                     )}

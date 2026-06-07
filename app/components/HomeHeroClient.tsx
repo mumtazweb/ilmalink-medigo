@@ -58,7 +58,7 @@ const destinationData = [
     recognition: "NMC, WHO",
   },
   {
-    href: "/mbbs-abroad/222",
+    href: "/mbbs-abroad/usa",
     label: "USA",
     flag: "us",
     fee: "₹10L/semester",
@@ -71,7 +71,7 @@ const destinationData = [
     label: "Bangladesh",
     flag: "bd",
     fee: "₹2.7L/semester",
-    Colleges: 110,
+    universities: 110,
     language: "English",
     recognition: "NMC, WHO",
   },
@@ -88,13 +88,13 @@ const heroCountryCards = [
     href: "/mbbs-abroad/georgia",
     label: "Georgia",
     flag: "ge",
-    Colleges: 39,
+    universities: 39,
   },
   {
     href: "/mbbs-abroad/bangladesh",
     label: "Bangladesh",
     flag: "bd",
-    Colleges: 110,
+    universities: 110,
   },
   {
     href: "/mbbs-abroad/russia",

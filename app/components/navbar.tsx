@@ -9,6 +9,7 @@ import { Phone, Menu, X, ChevronDown, Search, Send, MessageSquare } from "lucide
 import { mbbsIndiaCollegesByState, type MBBSIndiaCollege, type MBBSIndiaStateGroup } from "../data/mbbsIndiaColleges";
 import { getMBBSIndiaAdmissionAccess } from "../data/mbbsIndiaAdmissionAccess";
 import { navbarCountryDestinations } from "../data/navbarDestinations";
+import { getMBBSIndiaCollegeHref } from "../data/exploreLinks";
 
 type NavbarMenuPortalProps = {
   children: ReactNode;
@@ -248,10 +249,12 @@ export default function Navbar() {
     group: MBBSIndiaStateGroup,
     title: "Government Colleges" | "Private Colleges",
     colleges: MBBSIndiaCollege[],
-    badgeClassName: string
+    badgeClassName: string,
+    compact = false
   ) => {
     const visibleColleges = getVisibleIndiaColleges(group, colleges);
     if (!visibleColleges.length) return null;
+    const closeMenuAfterClick = compact ? closeMobileMenu : closeDesktopIndiaMenu;
 
     return (
       <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
@@ -263,12 +266,17 @@ export default function Navbar() {
         </div>
         <div className="grid max-h-64 gap-2 overflow-y-auto pr-1">
           {visibleColleges.map((college) => (
-            <div key={`${group.state}-${college.category}-${college.collegeName}`} className="rounded-lg border border-slate-100 bg-slate-50 px-3 py-2">
+            <Link
+              key={`${group.state}-${college.category}-${college.collegeName}`}
+              href={getMBBSIndiaCollegeHref(college)}
+              onClick={closeMenuAfterClick}
+              className="rounded-lg border border-slate-100 bg-slate-50 px-3 py-2 transition hover:border-[#00C896]/50 hover:bg-white"
+            >
               <p className="text-xs font-bold leading-5 text-slate-950">{college.collegeName}</p>
               <p className="mt-1 text-[11px] font-medium leading-4 text-slate-500">
                 Seats: {college.seatCapacity.toLocaleString("en-IN")} | Established: {college.establishmentYear} | Fees: {college.fees}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -316,8 +324,8 @@ export default function Navbar() {
 
         {isExpanded && (
           <div className={`grid gap-3 border-t border-slate-100 bg-slate-50 p-3 ${compact ? "" : "xl:grid-cols-2"}`}>
-            {renderIndiaCollegeSection(group, "Private Colleges", group.privateColleges, "bg-[#081B35]/10 text-[#081B35]")}
-            {renderIndiaCollegeSection(group, "Government Colleges", group.governmentColleges, "bg-[#00C896]/10 text-[#008f72]")}
+            {renderIndiaCollegeSection(group, "Private Colleges", group.privateColleges, "bg-[#081B35]/10 text-[#081B35]", compact)}
+            {renderIndiaCollegeSection(group, "Government Colleges", group.governmentColleges, "bg-[#00C896]/10 text-[#008f72]", compact)}
           </div>
         )}
       </div>
@@ -785,7 +793,14 @@ export default function Navbar() {
         <CounsellingPopup isOpen={showCounsellingPopup} onClose={() => setShowCounsellingPopup(false)} />
 
         {/* Search Modal */}
-        <SearchModal isOpen={showSearchModal} onClose={() => setShowSearchModal(false)} />
+        <SearchModal
+          isOpen={showSearchModal}
+          onClose={() => setShowSearchModal(false)}
+          onOpenCounselling={() => {
+            setShowSearchModal(false);
+            setShowCounsellingPopup(true);
+          }}
+        />
       </div>
     </>
   );

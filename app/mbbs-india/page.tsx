@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Navbar from "../components/navbar";
 import { mbbsIndiaColleges, mbbsIndiaCollegesByState, type MBBSIndiaCollege } from "../data/mbbsIndiaColleges";
 import { getMBBSIndiaAdmissionAccess, type MBBSIndiaAdmissionAccess } from "../data/mbbsIndiaAdmissionAccess";
+import { getMBBSIndiaCollegeAnchor, getMBBSIndiaStateAnchor } from "../data/exploreLinks";
 
 export const dynamic = "force-static";
 
@@ -20,12 +21,6 @@ const privateColleges = mbbsIndiaColleges.filter((college) => college.category =
 const priorityStateCards = mbbsIndiaCollegesByState.filter((group) => group.privateCount > 0).slice(0, 6);
 
 const formatNumber = (value: number) => value.toLocaleString("en-IN");
-
-const slugify = (value: string) =>
-  value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
 
 function AdmissionAccessBadge({ access }: { access: MBBSIndiaAdmissionAccess }) {
   const className =
@@ -59,7 +54,11 @@ function CollegeList({ title, colleges, tone }: { title: string; colleges: MBBSI
       <div className="grid gap-2 p-3 sm:grid-cols-2 xl:grid-cols-3">
         {colleges.length > 0 ? (
           colleges.map((college) => (
-            <article key={`${college.state}-${college.collegeName}`} className="rounded-lg border border-slate-100 bg-slate-50 px-3 py-3">
+            <article
+              key={`${college.state}-${college.collegeName}`}
+              id={getMBBSIndiaCollegeAnchor(college)}
+              className="scroll-mt-32 rounded-lg border border-slate-100 bg-slate-50 px-3 py-3 transition target:border-[#00C896] target:bg-[#ECFDF5] target:ring-2 target:ring-[#00C896]/25"
+            >
               <h4 className="text-sm font-bold leading-5 text-slate-950">{college.collegeName}</h4>
               <p className="mt-2 text-xs font-semibold leading-5 text-slate-600">
                 Seats: {formatNumber(college.seatCapacity)} | Established: {college.establishmentYear} | Fees: {college.fees}
@@ -130,7 +129,7 @@ export default function MBBSIndiaPage() {
               return (
                 <a
                   key={group.state}
-                  href={`#${slugify(group.state)}`}
+                  href={`#${getMBBSIndiaStateAnchor(group.state)}`}
                   className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#00C896]/60 hover:shadow-md"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
@@ -166,7 +165,7 @@ export default function MBBSIndiaPage() {
               const access = getMBBSIndiaAdmissionAccess(group.state, group.privateCount);
 
               return (
-                <section key={group.state} id={slugify(group.state)} className="scroll-mt-28 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+                <section key={group.state} id={getMBBSIndiaStateAnchor(group.state)} className="scroll-mt-28 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
                   <div className="border-b border-slate-200 bg-[#F1F5F9] px-4 py-4 sm:px-5">
                     <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                       <div>

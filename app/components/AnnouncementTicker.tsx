@@ -6,27 +6,25 @@ import Link from "next/link";
 const announcements = [
   {
     title: "NEET 2026 Updates",
-    href: "##",
+    href: "https://www.mumtazeducation.com",
   },
   {
     title: "Admissions Open in 20+ Countries",
-    href: "##",
+    href: "/mbbs-abroad",
   },
   {
     title: "Scholarship Updates",
-    href: "##",
+    href: "/blogs/scholarships-for-medical-students-what-to-prepare",
   },
   {
     title: "Counselling Updates",
-    href: "##",
+    href: "/?counselling=open",
   },
   {
     title: "MBBS Abroad Admission Alerts",
-    href: "##",
+    href: "/alert",
   },
 ];
-
-const announcementContent = announcements.map((item) => item.title).join(" • ");
 
 export default function AnnouncementTicker() {
   const [isPaused, setIsPaused] = useState(false);
