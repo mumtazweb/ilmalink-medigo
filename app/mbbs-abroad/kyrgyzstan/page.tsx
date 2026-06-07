@@ -79,11 +79,26 @@ function matchesFilter(university: KyrgyzUniversityPageData, filter: FilterValue
 function matchesSearch(university: KyrgyzUniversityPageData, query: string) {
   if (!query) return true;
 
+  const campusSearchText =
+    university.campuses
+      ?.map((campus) =>
+        [
+          campus.name,
+          campus.location,
+          campus.address,
+          campus.program,
+          campus.intake,
+          ...campus.highlights,
+        ].join(" "),
+      )
+      .join(" ") ?? "";
+
   const haystack = [
     university.name,
     university.location,
     university.accreditationStatus,
     university.recommendationLevel,
+    campusSearchText,
   ]
     .join(" ")
     .toLowerCase();
@@ -108,6 +123,24 @@ function universityHref(slug: string) {
 }
 
 function feeSummary(university: KyrgyzUniversityPageData) {
+  if (university.campuses?.length) {
+    const campusFees = university.campuses
+      .map((campus) => {
+        const firstFee = campus.feeRows[0];
+        const firstAmount =
+          firstFee?.totalCost && firstFee.totalCost !== "Not specified in brochure"
+            ? `first listed total ${firstFee.totalCost}`
+            : firstFee?.tuitionFee
+              ? `first listed tuition ${firstFee.tuitionFee}`
+              : "fee table available";
+
+        return `${campus.name}: ${firstAmount}`;
+      })
+      .join("; ");
+
+    return `Campus-wise fee tables available (${campusFees})`;
+  }
+
   const firstFee = university.feeRows[0];
 
   if (!firstFee || firstFee.totalCost === "To be updated") {
@@ -250,6 +283,29 @@ function UniversityQuickView({ university }: { university: KyrgyzUniversityPageD
         </div>
       </dl>
 
+      {university.campuses?.length ? (
+        <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+          <h4 className="text-xs font-extrabold uppercase text-emerald-800">
+            Campus options
+          </h4>
+          <div className="mt-2 grid gap-2 sm:grid-cols-2">
+            {university.campuses.map((campus) => (
+              <div key={campus.name} className="rounded-lg bg-white p-3">
+                <p className="text-sm font-extrabold text-slate-950">{campus.name}</p>
+                <p className="mt-1 text-xs font-bold text-slate-500">
+                  {campus.location}
+                </p>
+                <p className="mt-2 text-sm font-semibold leading-5 text-slate-700">
+                  {campus.feeRows[0]?.totalCost !== "Not specified in brochure"
+                    ? `First listed total: ${campus.feeRows[0]?.totalCost}`
+                    : `First listed tuition: ${campus.feeRows[0]?.tuitionFee}`}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
       <p className="mt-4 text-sm font-medium leading-6 text-slate-700">
         {university.recommendationMessage}
       </p>
@@ -347,6 +403,11 @@ function UniversityCard({ university }: { university: KyrgyzUniversityPageData }
         <p className="mt-2 text-sm font-semibold text-slate-600">
           Location: {university.location}
         </p>
+        {university.campuses?.length ? (
+          <p className="mt-1 text-xs font-bold text-slate-500">
+            Campus options: {university.campuses.map((campus) => campus.name).join(", ")}
+          </p>
+        ) : null}
         <p className="mt-1 text-sm font-extrabold text-[#047857]">
           {feeSummary(university)}
         </p>

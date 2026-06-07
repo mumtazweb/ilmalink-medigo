@@ -158,8 +158,37 @@ const mbbsIndiaCollegeSearchEntries: GlobalSearchEntry[] = mbbsIndiaColleges.map
 
 const kyrgyzstanUniversitySearchEntries: GlobalSearchEntry[] = kyrgyzstanUniversities.map((university) => {
   const firstFee = university.feeRows[0];
-  const feeSummary =
-    firstFee && firstFee.totalCost !== "To be updated"
+  const campusSummary = university.campuses?.length
+    ? university.campuses
+        .map((campus) => {
+          const firstCampusFee = campus.feeRows[0];
+          const feeText =
+            firstCampusFee?.totalCost &&
+            firstCampusFee.totalCost !== "Not specified in brochure"
+              ? `first listed total ${firstCampusFee.totalCost}`
+              : firstCampusFee?.tuitionFee
+                ? `first listed tuition ${firstCampusFee.tuitionFee}`
+                : "fee table available";
+
+          return [
+            campus.name,
+            campus.location,
+            campus.address,
+            campus.program,
+            campus.intake,
+            feeText,
+            ...campus.highlights,
+            ...campus.entryRequirements,
+            ...campus.documentChecklist,
+          ].join(" ");
+        })
+        .join(" ")
+    : "";
+  const feeSummary = university.campuses?.length
+    ? `Campus-wise fee tables available for ${university.campuses
+        .map((campus) => campus.name)
+        .join(" and ")}`
+    : firstFee && firstFee.totalCost !== "To be updated"
       ? `${university.intake}: first listed total ${firstFee.totalCost}`
       : "Fees: To be updated";
   const fmgeSummary = university.fmgePerformance?.length
@@ -187,6 +216,8 @@ const kyrgyzstanUniversitySearchEntries: GlobalSearchEntry[] = kyrgyzstanUnivers
       university.recommendationLevel,
       university.accreditationLabel,
       university.location,
+      ...(university.campuses?.map((campus) => campus.name) ?? []),
+      ...(university.campuses?.map((campus) => campus.location) ?? []),
     ],
     content: [
       university.name,
@@ -197,6 +228,7 @@ const kyrgyzstanUniversitySearchEntries: GlobalSearchEntry[] = kyrgyzstanUnivers
       university.recommendationLevel,
       university.recommendationMessage,
       feeSummary,
+      campusSummary,
       fmgeSummary,
       ...university.highlights,
       ...university.entryRequirements,

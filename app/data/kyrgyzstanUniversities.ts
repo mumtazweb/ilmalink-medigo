@@ -28,6 +28,28 @@ export type KyrgyzFmgePerformance = {
   passRate: string;
 };
 
+export type KyrgyzCampusData = {
+  name: string;
+  location: string;
+  address: string;
+  program: string;
+  intake: string;
+  feeRows: KyrgyzFeeRow[];
+  additionalFees: { label: string; amount: string }[];
+  feeNotes: string[];
+  paymentTerms: string[];
+  entryRequirements: string[];
+  documentChecklist: string[];
+  highlights: string[];
+  facts: { label: string; value: string }[];
+  facilities: string[];
+  clinicalCenters?: string[];
+  history?: { year: string; text: string }[];
+  studentExamples?: string[];
+  fmgePassedExamples?: string[];
+  disclaimer?: string;
+};
+
 export type KyrgyzUniversityPageData = {
   name: string;
   slug: string;
@@ -49,6 +71,7 @@ export type KyrgyzUniversityPageData = {
   facilities: string[];
   clinicalCenters?: string[];
   fmgePerformance?: KyrgyzFmgePerformance[];
+  campuses?: KyrgyzCampusData[];
   history: { year: string; text: string }[];
   studentExamples?: string[];
   fmgePassedExamples?: string[];
@@ -142,14 +165,487 @@ function accreditationOnlyUniversity(
   };
 }
 
+const notSpecifiedInBrochure = "Not specified in brochure";
+
+const ihsmCentralCampusFeeRows: KyrgyzFeeRow[] = [
+  {
+    year: "Year 1",
+    semester: "Semester 1*",
+    tuitionFee: "$5000",
+    hostelAccommodation: "$0",
+    mess: "$750",
+    totalCost: notSpecifiedInBrochure,
+  },
+  {
+    year: "Year 1",
+    semester: "Semester 2",
+    tuitionFee: "$3000",
+    hostelAccommodation: "Included in tuition fee",
+    mess: "$750",
+    totalCost: notSpecifiedInBrochure,
+  },
+  {
+    year: "Year 2**",
+    semester: "Semester 3",
+    tuitionFee: "$3000",
+    hostelAccommodation: "$0",
+    mess: "Optional",
+    totalCost: notSpecifiedInBrochure,
+  },
+  {
+    year: "Year 2**",
+    semester: "Semester 4",
+    tuitionFee: "$3000",
+    hostelAccommodation: "Included in tuition fee",
+    mess: "Optional",
+    totalCost: notSpecifiedInBrochure,
+  },
+  {
+    year: "Year 3**",
+    semester: "Semester 5",
+    tuitionFee: "$3000",
+    hostelAccommodation: "$0",
+    mess: "Optional",
+    totalCost: notSpecifiedInBrochure,
+  },
+  {
+    year: "Year 3**",
+    semester: "Semester 6",
+    tuitionFee: "$3000",
+    hostelAccommodation: "Included in tuition fee",
+    mess: "Optional",
+    totalCost: notSpecifiedInBrochure,
+  },
+  {
+    year: "Year 4",
+    semester: "Semester 7",
+    tuitionFee: "$2750",
+    hostelAccommodation: "$325",
+    mess: "Optional",
+    totalCost: notSpecifiedInBrochure,
+  },
+  {
+    year: "Year 4",
+    semester: "Semester 8",
+    tuitionFee: "$2750",
+    hostelAccommodation: "$325",
+    mess: "Optional",
+    totalCost: notSpecifiedInBrochure,
+  },
+  {
+    year: "Year 5",
+    semester: "Semester 9",
+    tuitionFee: "$2750",
+    hostelAccommodation: "$325",
+    mess: "Optional",
+    totalCost: notSpecifiedInBrochure,
+  },
+  {
+    year: "Year 5",
+    semester: "Semester 10",
+    tuitionFee: "$2750",
+    hostelAccommodation: "$325",
+    mess: "Optional",
+    totalCost: notSpecifiedInBrochure,
+  },
+  {
+    year: "Year 6",
+    semester: "Semester 11",
+    tuitionFee: "$2750",
+    hostelAccommodation: "$325",
+    mess: "Optional",
+    totalCost: notSpecifiedInBrochure,
+  },
+];
+
+const ihsmEliteCampusFeeRows: KyrgyzFeeRow[] = [
+  {
+    year: "Year 1",
+    semester: "Semester 1",
+    tuitionFee: "$5200",
+    hostelAccommodation: "$0",
+    mess: "$0",
+    totalCost: "$5200",
+  },
+  {
+    year: "Year 1",
+    semester: "Semester 2",
+    tuitionFee: "$3000",
+    hostelAccommodation: "$0",
+    mess: "$0",
+    totalCost: "$3000",
+  },
+  {
+    year: "Year 2",
+    semester: "Semester 3",
+    tuitionFee: "$1900",
+    hostelAccommodation: "$325",
+    mess: "$750",
+    totalCost: "$2975",
+  },
+  {
+    year: "Year 2",
+    semester: "Semester 4",
+    tuitionFee: "$1900",
+    hostelAccommodation: "$325",
+    mess: "$750",
+    totalCost: "$2975",
+  },
+  {
+    year: "Year 3",
+    semester: "Semester 5",
+    tuitionFee: "$1900",
+    hostelAccommodation: "$325",
+    mess: "$750",
+    totalCost: "$2975",
+  },
+  {
+    year: "Year 3",
+    semester: "Semester 6",
+    tuitionFee: "$1900",
+    hostelAccommodation: "$325",
+    mess: "$750",
+    totalCost: "$2975",
+  },
+  {
+    year: "Year 4",
+    semester: "Semester 7",
+    tuitionFee: "$1900",
+    hostelAccommodation: "Optional",
+    mess: "Optional",
+    totalCost: "$1900",
+  },
+  {
+    year: "Year 4",
+    semester: "Semester 8",
+    tuitionFee: "$1900",
+    hostelAccommodation: "Optional",
+    mess: "Optional",
+    totalCost: "$1900",
+  },
+  {
+    year: "Year 5",
+    semester: "Semester 9",
+    tuitionFee: "$1900",
+    hostelAccommodation: "Optional",
+    mess: "Optional",
+    totalCost: "$1900",
+  },
+  {
+    year: "Year 5",
+    semester: "Semester 10",
+    tuitionFee: "$1900",
+    hostelAccommodation: "Optional",
+    mess: "Optional",
+    totalCost: "$1900",
+  },
+  {
+    year: "Year 6",
+    semester: "Semester 11",
+    tuitionFee: "$1900",
+    hostelAccommodation: "Optional",
+    mess: "Optional",
+    totalCost: "$1900",
+  },
+];
+
+const ihsmCommonEntryRequirements = [
+  "Completed intermediate",
+  "Education (12 years) equivalent to secondary education",
+  "50% scores in Biology, Physics, and Chemistry",
+  "NEET qualification / entrance exam as applicable",
+];
+
+const ihsmCommonPaymentTerms = [
+  "Tuition fees and Hostel-Mess fees must be paid in advance, as per the schedule specified by University.",
+  "Prior to the commencement of each semester, students are required to settle all tuition and semester fees.",
+  "Failure to settle semester fees may make the student ineligible to proceed to the next semester.",
+  "Students opting for financial loan services shall ensure the process is completed prior to their travel confirmation.",
+  "Failure to meet payment deadlines may result in late payment penalties or additional charges.",
+  "Upon obtaining a visa and officially commencing classes, students will be charged for one semester's fee.",
+  "Refunds for tuition fees and other charges are subject to the university's refund policy and calculated based on services availed by the student.",
+];
+
+const ihsmCommonClinicalCenters = [
+  "National Hospital clinical facilities",
+  "Leading research institutions",
+  "Bishkek municipal in-patient settings",
+  "Morphological Center for practical classes",
+  "Clinical Simulation Center with two floors and 2400 m2 total area",
+  "Vedanta Net of Hospitals",
+];
+
+const ihsmCentralStudentExamples = [
+  "Tajorshee Bala",
+  "SK Kasmin Tamanna",
+  "Rick Pal",
+  "MD Muaaz",
+  "SK Aftab Buddin",
+  "Shubham Raj Mandal",
+  "MD Farhan",
+  "Sneha Mandal",
+  "Momin Molla",
+  "Swastika Das",
+];
+
+const ihsmCentralFmgePassedExamples = [
+  "Dr. Arnab Datta - MD PGT, Anesthesia Branch, Lalbagh Subdivision Hospital",
+  "Dr. Enjamul Sarkar - Medical Officer at DESUN Hospital",
+  "Dr. Sahensha Seikh - JR Resident, Kalyani AIIMS",
+  "Dr. Golam Sarower - Internship in Kolkata Medical College",
+  "Dr. Neha Nusrat - Medical Officer at FORT HILL Hospital Siliguri",
+  "Dr. Mainak Chowdhury - MD PGT, R G Kar Medical College & Hospital",
+  "Dr. MD Mafik Seikh - FMGE Passed Dec 2025, FMGE Score: 235",
+  "Dr. MD Hares Rasel - FMGE Passed Dec 2025, FMGE Score: 164",
+  "Dr. Najmin Khatun - FMGE Passed Dec 2025, FMGE Score: 163",
+  "Dr. Sarwat Tahera Chaman - FMGE Passed Dec 2025, FMGE Score: 164",
+  "Dr. Priyanka Sarkar - FMGE Passed Jun 2025, FMGE Score: 180",
+  "Dr. Abdul Azad Saikh - FMGE Passed Dec 2025, FMGE Score: 162",
+];
+
+const ihsmEliteStudentExamples = [
+  "Lara Sharma",
+  "Asfakuddin Ahmed",
+  "Hasim Khan",
+  "Morium Khatun",
+  "Sumit Saha",
+  "Sirin Ebadi",
+  "Mahfooz Hashim Haldar",
+  "MD Najimul Islam",
+  "Yasir Hossain",
+  "SK Nouman",
+];
+
+const ihsmEliteFmgePassedExamples = [
+  "Dr. Sarfaz Hossain - Medical Officer, YUVAN Hospital Siliguri",
+  "Dr. Pronab Kumar Sarkar - Internship completed from Jalpaiguri Medical College",
+  "Dr. Meem Akkash - Junior Resident at J.R. Deben Mahato Medical College, Purulia",
+  "Dr. Raja Sekh - Internship at NRS Medical College & Hospital",
+  "Dr. Masud Hasan - Internship at Calcutta National Medical College & Hospital",
+  "Dr. Rajibul Islam - Internship at Rampurhat Government Medical College",
+  "Dr. Vani Oleti - FMGE Passed Dec 2025, FMGE Score: 215",
+  "Dr. Javed Khan - FMGE Passed Dec 2025, FMGE Score: 210",
+  "Dr. Arjun - FMGE Passed Dec 2025, FMGE Score: 201",
+  "Dr. Roshini - FMGE Passed Dec 2025",
+  "Dr. Susmita Mishra - FMGE Passed Dec 2025",
+  "Dr. Ranjit - FMGE Passed Dec 2025",
+];
+
+const ihsmCampuses: KyrgyzCampusData[] = [
+  {
+    name: "Central Campus",
+    location: "Bishkek, Kyrgyzstan",
+    address: "1F, Intergelpo st., Bishkek, Kyrgyzstan, 720054",
+    program: "MD Program (MBBS) - General Medicine",
+    intake: "2026-2027",
+    feeRows: ihsmCentralCampusFeeRows,
+    additionalFees: [
+      { label: "Premium Training Program", amount: "₹1,25,000" },
+      { label: "Visa & Air-ticket Fee", amount: "₹75,000" },
+    ],
+    feeNotes: [
+      "Duration of course: as per NMC guidelines.",
+      "Includes 1 year of rotatory clinical internship.",
+      "Monthly stipend of 100 USD shall be paid during internship for 10 months.",
+      "Mess fee is $750/sem.",
+      "Accommodation is mandatory for 3 years. T&C Apply.",
+      "Tuition fee includes accommodation fee for complete academic year.",
+      "1st semester tuition fee includes admission charges, hostel for full academic year, invitation charges, translation charges into local language, and Immigration Approval.",
+    ],
+    paymentTerms: [
+      ...ihsmCommonPaymentTerms,
+      "Hostel and Mess fee is compulsory for the 1st year and must be paid before arriving to the destination country.",
+      "In case a student wants to opt out of hostel from 2nd to 3rd year, after availing guardian's or parents' NOC a defined amount shall be refunded.",
+    ],
+    entryRequirements: [
+      "Completed intermediate",
+      "Education (12 years) equivalent to secondary education",
+      "50% scores in Biology, Physics, and Chemistry",
+      "NEET qualification",
+    ],
+    documentChecklist: [
+      "High school certificate (10th Grade)",
+      "Secondary School (12th Grade)",
+      "NEET Passing Certificate or as applicable",
+      "Passport Visa (6 month of validity)",
+      "Aadhar Card & PAN Card",
+    ],
+    highlights: [
+      "Central Campus in Bishkek, Kyrgyzstan",
+      "Global Recognition",
+      "Diverse Student Community",
+      "Comprehensive Clinical Training",
+      "Medical Research Exposure",
+      "Strong Alumni Network",
+      "Special focus on FMGE, USMLE, and PLAB training from 1st year",
+      "Latest NMC compliant MBBS curriculum",
+    ],
+    facts: [
+      { label: "Total students", value: "4432+" },
+      { label: "Alumni", value: "7000+" },
+      { label: "Faculty", value: "350+" },
+      { label: "International projects", value: "10+" },
+      { label: "Affiliated state hospitals", value: "20+" },
+      { label: "Vedanta Net of Hospitals", value: "10+" },
+      { label: "General Medicine study duration", value: "5.5 years" },
+      { label: "Instruction medium", value: "English medium" },
+    ],
+    facilities: [
+      "Hostel & mess",
+      "Campuses & divisions",
+      "Food & accommodation",
+      "Health & security",
+      "Sports and leisure facilities",
+      "Sports areas, theatres, libraries, and internet rooms",
+      "Hostels with modern facilities and internet services",
+    ],
+    clinicalCenters: ihsmCommonClinicalCenters,
+    history: [
+      {
+        year: "2003",
+        text: "IHSM was established on a special resolution of the Kyrgyz Government.",
+      },
+      {
+        year: "Brochure note",
+        text: "The brochure states that the first 13 students were enrolled eighteen years ago and about 3500 students study in the school.",
+      },
+    ],
+    studentExamples: ihsmCentralStudentExamples,
+    fmgePassedExamples: ihsmCentralFmgePassedExamples,
+    disclaimer: kyrgyzFinalDisclaimer,
+  },
+  {
+    name: "Elite Campus",
+    location: "Issyk-Kul, Kyrgyzstan",
+    address: "Issyk-Kul Campus, 3V Sovetskaya street, Cholpon-Ata",
+    program: "MD Program (MBBS) - General Medicine",
+    intake: "2026-2027",
+    feeRows: ihsmEliteCampusFeeRows,
+    additionalFees: [
+      { label: "Premium Training Program", amount: "₹1,25,000" },
+      { label: "Visa & Air-ticket Fee", amount: "₹75,000" },
+    ],
+    feeNotes: [
+      "Duration of course: as per NMC guidelines.",
+      "Includes 1 year of rotatory clinical internship.",
+      "Accommodation is mandatory for all 3 years.",
+      "1st semester tuition fee includes admission charges, hostel & mess for full 1st academic year, invitation charges, translation into local language documents, and Immigration Approval.",
+    ],
+    paymentTerms: [
+      ...ihsmCommonPaymentTerms,
+      "Hostel and mess is compulsory for 3 years and 1st year's hostel mess fees must be paid before arriving the destination country.",
+    ],
+    entryRequirements: ihsmCommonEntryRequirements,
+    documentChecklist: [
+      "High school certificate (10th Grade)",
+      "Secondary School (12th Grade)",
+      "NEET Passing Certificate or as applicable",
+      "Passport with Visa (6 month of validity)",
+      "Aadhar card",
+    ],
+    highlights: [
+      "Elite Campus in Issyk-Kul, Kyrgyzstan",
+      "Special campus for only Indian students",
+      "Global Recognition",
+      "Diverse Student Community",
+      "Comprehensive Clinical Training",
+      "Medical Research Exposure",
+      "Strong Alumni Network",
+      "Brochure claim: FMGE pass rate above 60%; verify latest official basis before admission",
+      "Special focus on FMGE, USMLE, and PLAB training from 1st year",
+      "Latest NMC compliant MBBS curriculum",
+    ],
+    facts: [
+      { label: "Total students", value: "4300+" },
+      { label: "Alumni", value: "7000+" },
+      { label: "Faculty", value: "350+" },
+      { label: "International projects", value: "10+" },
+      { label: "Affiliated state hospitals", value: "20+" },
+      { label: "Vedanta Net of Hospitals", value: "10+" },
+      { label: "General Medicine study duration", value: "5.5 years" },
+      { label: "Instruction medium", value: "English medium" },
+    ],
+    facilities: [
+      "Hostel & mess",
+      "Food & accommodation",
+      "Health & security",
+      "Campus and facilities at Issyk-Kul / Cholpon-Ata",
+      "Sports and leisure facilities",
+      "Hostels with modern facilities and internet services",
+    ],
+    clinicalCenters: ihsmCommonClinicalCenters,
+    history: [
+      {
+        year: "2003",
+        text: "IHSM was established on a special resolution of the Kyrgyz Government.",
+      },
+    ],
+    studentExamples: ihsmEliteStudentExamples,
+    fmgePassedExamples: ihsmEliteFmgePassedExamples,
+    disclaimer: kyrgyzFinalDisclaimer,
+  },
+];
+
 export const kyrgyzstanUniversities: KyrgyzUniversityPageData[] = [
-  accreditationOnlyUniversity({
-    name: "International Higher School of Medicine",
+  {
+    name: "International Higher School of Medicine (IHSM)",
     slug: "international-higher-school-of-medicine",
+    location: "Central Campus: Bishkek; Elite Campus: Issyk-Kul, Kyrgyzstan",
+    program: "MD Program (MBBS) - General Medicine",
+    intake: "2026-2027",
     accreditationStatus: "6-Year Accredited",
     accreditationLabel: "6-Year Accredited",
     recommendationLevel: "Recommended",
     recommendationMessage: recommendedMessage,
+    feeRows: toBeUpdatedFeeRows,
+    additionalFees: [
+      { label: "Premium Training Program", amount: "₹1,25,000" },
+      { label: "Visa & Air-ticket Fee", amount: "₹75,000" },
+    ],
+    feeNotes: [
+      "IHSM has separate Central Campus and Elite Campus fee tables in the uploaded 2026-2027 brochures.",
+      "Central Campus total costs are not specified in the brochure table.",
+      "Elite Campus total costs are specified semester-wise in the brochure table.",
+    ],
+    paymentTerms: ihsmCommonPaymentTerms,
+    entryRequirements: ihsmCommonEntryRequirements,
+    documentChecklist: [
+      "High school certificate (10th Grade)",
+      "Secondary School (12th Grade)",
+      "NEET Passing Certificate or as applicable",
+      "Passport with Visa / passport visa validity as applicable",
+      "Aadhar Card",
+      "PAN Card where applicable",
+    ],
+    highlights: [
+      "Two campus options: Central Campus and Elite Campus",
+      "Central Campus: Bishkek, Kyrgyzstan",
+      "Elite Campus: Issyk-Kul, Kyrgyzstan",
+      "MD Program (MBBS) 2026-2027",
+      "English medium undergraduate General Medicine program",
+      "General Medicine study duration: 5.5 years",
+      "Clinical training exposure through National Hospital, leading research institutions, and Bishkek municipal in-patient settings",
+    ],
+    facts: [
+      { label: "Campuses", value: "Central Campus and Elite Campus" },
+      { label: "Program", value: "MD Program (MBBS) - General Medicine" },
+      { label: "Central Campus location", value: "Bishkek, Kyrgyzstan" },
+      { label: "Elite Campus location", value: "Issyk-Kul / Cholpon-Ata, Kyrgyzstan" },
+      { label: "General Medicine study duration", value: "5.5 years" },
+      { label: "Instruction medium", value: "English medium" },
+      { label: "Alumni", value: "7000+" },
+      { label: "Faculty", value: "350+" },
+    ],
+    facilities: [
+      "Hostel & mess",
+      "Food & accommodation",
+      "Health & security",
+      "Sports and leisure facilities",
+      "Libraries and internet rooms",
+      "Morphological Center",
+      "Clinical Simulation Center",
+    ],
+    clinicalCenters: ihsmCommonClinicalCenters,
     fmgePerformance: [
       {
         sourceName: "INTERNATIONAL HIGHER SCHOOL OF MEDICINE",
@@ -158,7 +654,21 @@ export const kyrgyzstanUniversities: KyrgyzUniversityPageData[] = [
         passRate: "18.29%",
       },
     ],
-  }),
+    campuses: ihsmCampuses,
+    history: [
+      {
+        year: "2003",
+        text: "IHSM was established on a special resolution of the Kyrgyz Government.",
+      },
+    ],
+    studentExamples: [...ihsmCentralStudentExamples, ...ihsmEliteStudentExamples],
+    fmgePassedExamples: [
+      ...ihsmCentralFmgePassedExamples,
+      ...ihsmEliteFmgePassedExamples,
+    ],
+    disclaimer: kyrgyzFinalDisclaimer,
+    pageExists: true,
+  },
   accreditationOnlyUniversity({
     name: "Educational, Scientific, and Production Complex International University of Kyrgyzstan",
     slug: "educational-scientific-production-complex-international-university-of-kyrgyzstan",
