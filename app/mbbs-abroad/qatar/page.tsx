@@ -1,3 +1,5 @@
+import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
+
 export const dynamic = "force-static";
 
 export const metadata = {
@@ -393,6 +395,13 @@ export default function QatarPage() {
 
       </section>
 
-    </main>
+    
+
+      <VerificationCounsellingCard
+        countryName="Qatar MBBS"
+        title="Check Qatar MBBS eligibility with ILMALINK"
+        buttonLabel="Get Qatar MBBS Counselling"
+      />
+</main>
   );
 }

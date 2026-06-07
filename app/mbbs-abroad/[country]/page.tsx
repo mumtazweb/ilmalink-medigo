@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import CounsellingActionButton from "../../components/CounsellingActionButton";
 import Navbar from "../../components/navbar";
+import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
 import {
   getFmgeCollegeConnectLabel,
   getFmgeCollegeAnchor,
@@ -84,9 +85,9 @@ export default async function FmgeCountryPage({
           </h1>
           <p className="mt-5 max-w-3xl text-base font-medium leading-7 text-slate-200 md:text-lg md:leading-8">
             Country-wise and institute-wise FMGE data is shown for reference.
-            Students should verify university recognition, course duration,
-            internship rules, English medium, local licence eligibility, WDOMS
-            listing, and NMC/FMGL compliance before admission.
+            Use it with a guided eligibility check covering university recognition,
+            course duration, internship rules, English medium, local licence
+            eligibility, WDOMS listing, and NMC/FMGL compliance before admission.
           </p>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -109,7 +110,7 @@ export default async function FmgeCountryPage({
             <CounsellingActionButton
               className="inline-flex items-center justify-center rounded-lg bg-[#00C896] px-5 py-3 text-sm font-extrabold text-[#031525] transition hover:bg-[#12dfad]"
             >
-              Connect for Counselling
+              Check {displayName} MBBS Eligibility
             </CounsellingActionButton>
             <a
               href={whatsappHref}
@@ -122,6 +123,12 @@ export default async function FmgeCountryPage({
           </div>
         </div>
       </section>
+
+      <VerificationCounsellingCard
+        countryName={`${displayName} MBBS`}
+        title={`Check ${displayName} MBBS eligibility with an expert`}
+        buttonLabel={`Get ${displayName} Counselling`}
+      />
 
       <section id="fmge-colleges" className="px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">

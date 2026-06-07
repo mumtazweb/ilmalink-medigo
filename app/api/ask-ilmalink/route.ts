@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
       return Response.json(
         {
           answer:
-            "Please type a keyword or MBBS-related question so I can search ILMALINK MEDIGO data.",
+            "Please type a keyword or MBBS-related question.",
           confidence: "low",
           matchedItems: [],
           suggestedLinks: [],
@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
     return Response.json(
       {
         answer:
-          "I could not find enough verified information inside ILMALINK MEDIGO data for this question. Please connect with our counsellor for a personalised reply.",
+          "This question can be answered better by our experts. Connect ILMALINK for a personalised reply, and you can ask any other MBBS question there too.",
         confidence: "low",
         matchedItems: [],
         suggestedLinks: [],

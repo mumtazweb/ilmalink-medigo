@@ -1,3 +1,5 @@
+import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
+
 export const dynamic = "force-static";
 
 export const metadata = {
@@ -361,6 +363,13 @@ export default function BangladeshPage() {
 
       </section>
 
-    </main>
+    
+
+      <VerificationCounsellingCard
+        countryName="Bangladesh MBBS"
+        title="Check Bangladesh MBBS eligibility with ILMALINK"
+        buttonLabel="Get Bangladesh MBBS Counselling"
+      />
+</main>
   );
 }

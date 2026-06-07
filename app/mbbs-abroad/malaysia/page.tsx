@@ -1,3 +1,5 @@
+import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
+
 export default function MalaysiaPage() {
   return (
     <>
@@ -182,6 +184,11 @@ export default function MalaysiaPage() {
         </div>
 
       </section>
+      <VerificationCounsellingCard
+        countryName="Malaysia MBBS"
+        title="Check Malaysia MBBS eligibility with ILMALINK"
+        buttonLabel="Get Malaysia MBBS Counselling"
+      />
     </>
   );
 }

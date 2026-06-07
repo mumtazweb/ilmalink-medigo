@@ -1,3 +1,5 @@
+import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
+
 export const dynamic = "force-static";
 
 export const metadata = {
@@ -403,6 +405,13 @@ export default function SingaporePage() {
 
       </section>
 
-    </main>
+    
+
+      <VerificationCounsellingCard
+        countryName="Singapore MBBS"
+        title="Check Singapore MBBS eligibility with ILMALINK"
+        buttonLabel="Get Singapore MBBS Counselling"
+      />
+</main>
   );
 }

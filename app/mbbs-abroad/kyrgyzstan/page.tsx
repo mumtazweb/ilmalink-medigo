@@ -502,21 +502,21 @@ export default async function KyrgyzstanPage({
             </p>
             <p className="mt-4 text-sm font-medium leading-7 text-slate-700 md:text-base">
               The Kyrgyz Ministry of Health completed state accreditation of
-              medical educational institutions in May 2026. ILMALINK MEDIGO uses
-              this update to classify universities into clear guidance badges:
-              Recommended, Not Recommended, and No Admission. Students should
-              choose universities only after checking the latest accreditation
-              position, course duration, internship structure, English medium,
-              WDOMS listing, local licence eligibility, and NMC/FMGL compliance.
+              medical educational institutions in May 2026. Students can compare
+              universities through clear guidance categories: Recommended, Not
+              Recommended, and No Admission. Final shortlisting should include
+              the latest accreditation position, course duration, internship
+              structure, English medium, WDOMS listing, local licence eligibility,
+              and NMC/FMGL compliance.
             </p>
             <div className="mt-5 rounded-lg border border-[#00C896]/30 bg-white p-5 shadow-sm">
               <h3 className="text-lg font-extrabold text-[#031525]">
                 Recommended Medical Universities in Kyrgyzstan for Indian Students
               </h3>
               <p className="mt-2 text-sm font-medium leading-7 text-slate-700">
-                ILMALINK MEDIGO currently prioritizes universities with stronger
-                official standing, long-term accreditation, or special
-                government/official status. Universities with only 1-year
+                Start with universities that have stronger official standing,
+                long-term accreditation, or special government/official status.
+                Universities with only 1-year
                 conditional accreditation are not recommended as first-choice
                 options. Institutions that did not pass accreditation or did not
                 participate within the required deadline should not be considered
@@ -737,11 +737,10 @@ export default async function KyrgyzstanPage({
                 Which Kyrgyzstan medical universities are recommended in 2026?
               </h3>
               <p className="mt-2 text-sm font-medium leading-7 text-slate-700">
-                ILMALINK MEDIGO prioritizes 6-year accredited institutions and
-                special-status institutions that require separate official
-                verification. Conditional or unverified institutions should not
-                be first-choice options unless fresh official clarification is
-                available.
+                Start with 6-year accredited institutions and special-status
+                institutions that require separate official verification.
+                Conditional or unverified institutions should not be first-choice
+                options unless fresh official clarification is available.
               </p>
             </div>
           </div>

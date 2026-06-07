@@ -1,3 +1,5 @@
+import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
+
 export const dynamic = "force-static";
 
 export const metadata = {
@@ -464,6 +466,13 @@ export default function VietnamPage() {
 
       </section>
 
-    </main>
+    
+
+      <VerificationCounsellingCard
+        countryName="Vietnam MBBS"
+        title="Check Vietnam MBBS eligibility with ILMALINK"
+        buttonLabel="Get Vietnam MBBS Counselling"
+      />
+</main>
   );
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import CounsellingActionButton from "../components/CounsellingActionButton";
 import Navbar from "../components/navbar";
 import { mbbsIndiaColleges, mbbsIndiaCollegesByState, type MBBSIndiaCollege } from "../data/mbbsIndiaColleges";
 import { getMBBSIndiaAdmissionAccess, type MBBSIndiaAdmissionAccess } from "../data/mbbsIndiaAdmissionAccess";
@@ -88,7 +89,7 @@ export default function MBBSIndiaPage() {
               Study MBBS in India: Complete NMC Medical College List
             </h1>
             <p className="mt-5 max-w-3xl text-base font-medium leading-7 text-slate-200 md:text-lg md:leading-8">
-              Explore state-wise government and private medical colleges, MBBS seat intake, establishment year, and fee placeholders from the provided NMC list.
+              Explore state-wise government and private medical colleges, MBBS seat intake, establishment year, and counselling guidance for India admissions.
             </p>
           </div>
 
@@ -112,14 +113,19 @@ export default function MBBSIndiaPage() {
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#047857]">Private access first</p>
+              <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#047857]">Private MBBS planning</p>
               <h2 className="mt-2 text-2xl font-extrabold tracking-normal text-slate-950 md:text-3xl">
-                Open private MBBS states to review first
+                States to compare for private MBBS options
               </h2>
             </div>
-            <p className="max-w-2xl text-sm font-medium leading-6 text-slate-600">
-              West Bengal, Karnataka, and Jharkhand stay first, followed by states with private MBBS routes listed for all-India applicants.
-            </p>
+            <div className="max-w-2xl">
+              <p className="text-sm font-medium leading-6 text-slate-600">
+                Compare states with private medical college options, seat intake, fee notes, and counselling route indicators before building your preference list.
+              </p>
+              <CounsellingActionButton className="mt-3 inline-flex items-center justify-center rounded-lg bg-[#00C896] px-4 py-2.5 text-sm font-extrabold text-[#061D3F] shadow-sm transition hover:bg-[#12dfad]">
+                Discuss Private MBBS Options
+              </CounsellingActionButton>
+            </div>
           </div>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -155,9 +161,14 @@ export default function MBBSIndiaPage() {
             <h2 className="mt-2 text-2xl font-extrabold tracking-normal text-slate-950 md:text-3xl">
               All MBBS India colleges by state
             </h2>
-            <p className="mt-3 max-w-3xl text-sm font-medium leading-6 text-slate-600">
-              Private colleges are shown first for counselling review. Access labels are guidance for private/state quota discovery; always verify the latest state bulletin before choice filling.
-            </p>
+            <div className="mt-3 flex max-w-4xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm font-medium leading-6 text-slate-600">
+                Use this state-wise list to compare government/private college availability, seats, and counselling route indicators. For current quota, document, seat matrix, and reporting guidance, connect with ILMALINK.
+              </p>
+              <CounsellingActionButton className="inline-flex flex-shrink-0 items-center justify-center rounded-lg border border-[#00C896]/40 bg-white px-4 py-2.5 text-sm font-extrabold text-[#047857] shadow-sm transition hover:bg-[#ECFDF5]">
+                Check State Counselling Fit
+              </CounsellingActionButton>
+            </div>
           </div>
 
           <div className="grid gap-5">
@@ -174,7 +185,7 @@ export default function MBBSIndiaPage() {
                           <AdmissionAccessBadge access={access} />
                         </div>
                         <p className="mt-2 text-sm font-semibold text-slate-600">
-                          Study MBBS in {group.state} with private colleges listed first, then government colleges.
+                          Review government and private MBBS colleges in {group.state}.
                         </p>
                         <p className="mt-1 max-w-3xl text-xs font-semibold leading-5 text-slate-500">{access.detail}</p>
                       </div>

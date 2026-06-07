@@ -1,3 +1,5 @@
+import CounsellingActionButton from "./CounsellingActionButton";
+
 export type AdvisoryHistoryItem = {
   id: string;
   versionLabel: string;
@@ -23,7 +25,7 @@ export type OfficialAdvisoryBoxProps = {
 };
 
 const defaultDisclaimer =
-  "Official advisory and counselling information may change. Students must verify the latest official source, course duration, internship, English medium instruction, WDOMS listing, local licence eligibility, NMC/FMGL compliance, counselling rules, seat matrix, and reporting instructions before admission.";
+  "Official advisory and counselling information may change. Check the latest official source, course duration, internship, English medium instruction, WDOMS listing, local licence eligibility, NMC/FMGL compliance, counselling rules, seat matrix, and reporting instructions before admission.";
 
 function formatDate(value?: string | null) {
   if (!value) {
@@ -164,9 +166,14 @@ export default function OfficialAdvisoryBox({
         </div>
       )}
 
-      <p className="mt-5 border-t border-slate-200 pt-4 text-xs leading-5 text-slate-500">
-        {disclaimer}
-      </p>
+      <div className="mt-5 border-t border-slate-200 pt-4">
+        <p className="text-xs leading-5 text-slate-500">
+          {disclaimer}
+        </p>
+        <CounsellingActionButton className="mt-3 inline-flex items-center justify-center rounded-full bg-[#00C896] px-4 py-2 text-xs font-extrabold text-white transition hover:bg-[#0EA5A4]">
+          Request Advisory Review
+        </CounsellingActionButton>
+      </div>
     </article>
   );
 }

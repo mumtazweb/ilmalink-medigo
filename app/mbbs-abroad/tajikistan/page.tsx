@@ -1,3 +1,5 @@
+import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
+
 export const dynamic = "force-static";
 
 export const metadata = {
@@ -392,6 +394,13 @@ export default function TajikistanPage() {
 
       </section>
 
-    </main>
+    
+
+      <VerificationCounsellingCard
+        countryName="Tajikistan MBBS"
+        title="Check Tajikistan MBBS eligibility with ILMALINK"
+        buttonLabel="Get Tajikistan MBBS Counselling"
+      />
+</main>
   );
 }

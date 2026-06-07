@@ -1,3 +1,5 @@
+import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
+
 export const dynamic = "force-static";
 
 export const metadata = {
@@ -352,6 +354,13 @@ export default function BarbadosPage() {
 
       </section>
 
-    </main>
+    
+
+      <VerificationCounsellingCard
+        countryName="Barbados MBBS"
+        title="Check Barbados MBBS eligibility with ILMALINK"
+        buttonLabel="Get Barbados MBBS Counselling"
+      />
+</main>
   );
 }

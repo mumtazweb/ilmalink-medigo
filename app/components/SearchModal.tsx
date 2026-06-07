@@ -56,16 +56,85 @@ const MAX_RESULTS = 30;
 const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
 const OPEN_FMGE_EVENT = "ilmalink:open-fmge-explorer";
 const PENDING_FMGE_KEY = "ilmalink-pending-fmge-explorer";
-const ASK_DISCLAIMER =
-  "This answer is based on available ILMALINK MEDIGO website data and approved official-source updates. Cutoffs, fees, counselling rules, accreditation, and NMC/FMGL compliance may change. Please verify before final admission.";
-const suggestedQuestions = [
-  "Lowest cutoff state for MBBS",
-  "Latest seat matrix update",
-  "Recommended Kyrgyzstan universities",
-  "KSMA fee structure",
+const answerDisclaimer =
+  "Cutoffs, fees, counselling rules, accreditation, FMGE/NExT outcomes, and NMC/FMGL compliance can change. Use Connect ILMALINK for a personalised eligibility review before final admission.";
+const aspirantTopics = [
+  "best country to study MBBS",
+  "total fees and budget",
   "NMC/FMGL rules",
-  "FMGE country data",
-  "MBBS India colleges",
+  "FMGE result trends",
+  "low-cost private MBBS options",
+];
+const searchSpellingAliases: Record<string, string> = {
+  collage: "college",
+  colage: "college",
+  colleg: "college",
+  collge: "college",
+  colloge: "college",
+  counceling: "counselling",
+  councling: "counselling",
+  counselng: "counselling",
+  cutof: "cutoff",
+  cuttoff: "cutoff",
+  fgme: "fmge",
+  fmg: "fmge",
+  fmgee: "fmge",
+  kirgistan: "kyrgyzstan",
+  kirgigystan: "kyrgyzstan",
+  kirgizstan: "kyrgyzstan",
+  kirgystan: "kyrgyzstan",
+  kyrgistan: "kyrgyzstan",
+  kyrgyzsthan: "kyrgyzstan",
+  kyrgyztan: "kyrgyzstan",
+  kyrgyzystan: "kyrgyzstan",
+  mbb: "mbbs",
+  mbbsindia: "mbbs",
+  phillipines: "philippines",
+  philipines: "philippines",
+  universitys: "universities",
+  univercity: "university",
+  unversity: "university",
+  uzbakistan: "uzbekistan",
+  uzbekstan: "uzbekistan",
+};
+const searchCorrectionVocabulary = [
+  "abroad",
+  "academy",
+  "accreditation",
+  "admission",
+  "advisory",
+  "appeared",
+  "budget",
+  "college",
+  "colleges",
+  "counselling",
+  "country",
+  "cutoff",
+  "fee",
+  "fees",
+  "fmge",
+  "fmgl",
+  "hostel",
+  "india",
+  "institute",
+  "internship",
+  "kyrgyzstan",
+  "matrix",
+  "mbbs",
+  "medical",
+  "neet",
+  "nmc",
+  "private",
+  "quota",
+  "result",
+  "round",
+  "seat",
+  "state",
+  "study",
+  "tuition",
+  "university",
+  "universities",
+  "uzbekistan",
 ];
 
 const normalize = (value: string) =>
@@ -76,10 +145,64 @@ const normalize = (value: string) =>
     .replace(/\s+/g, " ")
     .trim();
 
+const levenshteinDistance = (first: string, second: string) => {
+  if (first === second) return 0;
+  if (!first.length) return second.length;
+  if (!second.length) return first.length;
+
+  const previous = Array.from({ length: second.length + 1 }, (_, index) => index);
+  const current = new Array<number>(second.length + 1);
+
+  for (let i = 1; i <= first.length; i += 1) {
+    current[0] = i;
+
+    for (let j = 1; j <= second.length; j += 1) {
+      const cost = first[i - 1] === second[j - 1] ? 0 : 1;
+      current[j] = Math.min(
+        current[j - 1] + 1,
+        previous[j] + 1,
+        previous[j - 1] + cost
+      );
+    }
+
+    for (let j = 0; j <= second.length; j += 1) {
+      previous[j] = current[j];
+    }
+  }
+
+  return previous[second.length];
+};
+
+const correctSearchToken = (term: string) => {
+  const aliased = searchSpellingAliases[term];
+  if (aliased) return aliased;
+  if (term.length <= 3 || searchCorrectionVocabulary.includes(term)) return term;
+
+  const allowedDistance = term.length <= 5 ? 1 : term.length <= 8 ? 2 : 3;
+  let bestTerm = term;
+  let bestDistance = Number.POSITIVE_INFINITY;
+
+  searchCorrectionVocabulary.forEach((candidate) => {
+    if (Math.abs(candidate.length - term.length) > allowedDistance) return;
+
+    const distance = levenshteinDistance(term, candidate);
+
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestTerm = candidate;
+    }
+  });
+
+  return bestDistance <= allowedDistance ? bestTerm : term;
+};
+
 const tokenize = (value: string) =>
   normalize(value)
     .split(/[^a-z0-9%]+/)
-    .filter((term) => term.length > 0);
+    .filter((term) => term.length > 0)
+    .map(correctSearchToken);
+
+const normalizeQueryForSearch = (value: string) => tokenize(value).join(" ");
 
 const slugifySearchId = (value: string) =>
   normalize(value)
@@ -358,6 +481,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
   const [askAnswer, setAskAnswer] = useState<AskIlmalinkResponse | null>(null);
   const [askLoading, setAskLoading] = useState(false);
   const [askError, setAskError] = useState("");
+  const [hasAsked, setHasAsked] = useState(false);
 
   const storeRecentSearch = useCallback(
     (term: string) => {
@@ -375,7 +499,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
     [recentSearches]
   );
 
-  const searchTerms = useMemo(() => normalize(query), [query]);
+  const searchTerms = useMemo(() => normalizeQueryForSearch(query), [query]);
   const queryTokens = useMemo(() => tokenize(query), [query]);
   const trimmedQuery = query.trim();
 
@@ -429,6 +553,45 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
     storeRecentSearch(query || "Ask ILMALINK counselling");
     openCounselling();
   }, [openCounselling, query, storeRecentSearch]);
+
+  const runAskSearch = useCallback(async () => {
+    if (!trimmedQuery) return;
+
+    storeRecentSearch(trimmedQuery);
+    setHasAsked(true);
+    setAskAnswer(null);
+    setAskLoading(true);
+    setAskError("");
+
+    try {
+      const response = await fetch("/api/ask-ilmalink/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question: trimmedQuery }),
+      });
+      const data = (await response.json()) as AskIlmalinkResponse;
+
+      setAskAnswer(data);
+
+      if (data.notFound) {
+        window.setTimeout(() => {
+          openCounselling();
+        }, 250);
+      }
+    } catch {
+      setAskError(
+        "This question can be answered better by our experts. Connect ILMALINK for a personalised reply."
+      );
+      setAskAnswer(null);
+      window.setTimeout(() => {
+        openCounselling();
+      }, 250);
+    } finally {
+      setAskLoading(false);
+    }
+  }, [openCounselling, storeRecentSearch, trimmedQuery]);
 
   const browseSuggestions = useMemo(() => {
     if (searchTerms || selectedCategory !== "All") return [];
@@ -500,25 +663,9 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
   const handleQueryChange = (value: string) => {
     setQuery(value);
     setSelectedIndex(0);
-
-    if (value.trim().length < 2) {
-      setAskAnswer(null);
-      setAskLoading(false);
-      setAskError("");
-      return;
-    }
-
+    setHasAsked(false);
     setAskAnswer(null);
-    setAskLoading(true);
-    setAskError("");
-  };
-
-  const handleSuggestedQuestionClick = (question: string) => {
-    setQuery(question);
-    setSelectedCategory("All");
-    setSelectedIndex(0);
-    setAskAnswer(null);
-    setAskLoading(true);
+    setAskLoading(false);
     setAskError("");
   };
 
@@ -541,6 +688,16 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
         setSelectedIndex((current) => Math.max(current - 1, 0));
       }
 
+      if (
+        event.key === "Enter" &&
+        document.activeElement instanceof HTMLElement &&
+        document.activeElement.id === "site-search-input"
+      ) {
+        event.preventDefault();
+        void runAskSearch();
+        return;
+      }
+
       if (event.key === "Enter" && filteredResults[selectedResultIndex]) {
         event.preventDefault();
         handleSelectResult(filteredResults[selectedResultIndex]);
@@ -550,7 +707,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
         onClose();
       }
     },
-    [filteredResults, handleSelectResult, isOpen, onClose, selectedResultIndex]
+    [filteredResults, handleSelectResult, isOpen, onClose, runAskSearch, selectedResultIndex]
   );
 
   useEffect(() => {
@@ -560,68 +717,23 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown, isOpen]);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    if (trimmedQuery.length < 2) return;
-
-    const controller = new AbortController();
-    const timer = window.setTimeout(async () => {
-      try {
-        setAskLoading(true);
-        setAskError("");
-
-        const response = await fetch("/api/ask-ilmalink/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ question: trimmedQuery }),
-          signal: controller.signal,
-        });
-
-        const data = (await response.json()) as AskIlmalinkResponse;
-
-        if (!controller.signal.aborted) {
-          setAskAnswer(data);
-        }
-      } catch {
-        if (controller.signal.aborted) return;
-
-        setAskError(
-          "I could not prepare an answer right now. Please try another keyword or connect with our counsellor."
-        );
-        setAskAnswer(null);
-      } finally {
-        if (!controller.signal.aborted) {
-          setAskLoading(false);
-        }
-      }
-    }, 350);
-
-    return () => {
-      window.clearTimeout(timer);
-      controller.abort();
-    };
-  }, [isOpen, trimmedQuery]);
-
   if (!isOpen || typeof document === "undefined") return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[99999] flex items-start justify-center bg-slate-950/40 pt-4 sm:pt-8 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[99999] flex items-start justify-center bg-slate-950/50 px-2 pt-3 backdrop-blur-sm sm:pt-8 animate-in fade-in duration-200">
       <div
-        className="w-full max-w-2xl mx-auto px-4 sm:px-6 animate-in slide-in-from-top-2 duration-300"
+        className="w-full max-w-3xl mx-auto px-1 sm:px-6 animate-in slide-in-from-top-2 duration-300"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="relative max-h-[calc(100vh-2rem)] overflow-y-auto overflow-x-hidden bg-white rounded-3xl shadow-2xl border border-slate-200">
-          <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-200 bg-slate-50">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#00C896]/10 text-[#0E766A]">
+        <div className="relative max-h-[calc(100vh-1rem)] overflow-y-auto overflow-x-hidden rounded-[1.75rem] border border-white/70 bg-white shadow-[0_30px_90px_rgba(8,27,53,0.28)]">
+          <div className="flex items-center gap-3 border-b border-slate-200 bg-gradient-to-br from-white via-[#f3fffb] to-slate-50 px-5 py-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#00C896]/12 text-[#0E766A] shadow-inner">
               <Search size={22} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#0E766A]">Search keywords or ask MBBS questions</p>
-              <h2 className="mt-0.5 text-base font-extrabold text-slate-900">Ask ILMALINK</h2>
-              <p className="text-xs text-slate-500">Search ILMALINK MEDIGO data or ask MBBS-related questions.</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#0E766A]">Search keywords or ask questions</p>
+              <h2 className="mt-0.5 text-lg font-extrabold text-slate-950">Ask ILMALINK</h2>
+              <p className="text-xs text-slate-500">Find pages, colleges, countries, fees, FMGE data, blogs, or ask directly.</p>
             </div>
             <button
               type="button"
@@ -634,7 +746,13 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
           </div>
 
           <div className="px-5 py-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <form
+              className="flex flex-col gap-3 sm:flex-row sm:items-center"
+              onSubmit={(event) => {
+                event.preventDefault();
+                void runAskSearch();
+              }}
+            >
               <label className="sr-only" htmlFor="site-search-input">
                 Search query
               </label>
@@ -645,40 +763,44 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
                   autoFocus
                   value={query}
                   onChange={(event) => handleQueryChange(event.target.value)}
-                  placeholder="Search keywords or ask anything related to MBBS..."
-                  className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm outline-none transition focus:border-[#00C896] focus:ring-2 focus:ring-[#00C896]/20"
+                  placeholder="Search keywords or ask questions..."
+                  className="min-h-14 w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-base font-semibold text-slate-900 shadow-[0_12px_30px_rgba(15,23,42,0.06)] outline-none transition placeholder:font-medium placeholder:text-slate-400 focus:border-[#00C896] focus:ring-4 focus:ring-[#00C896]/15"
                 />
               </div>
-              <div className="flex flex-wrap gap-2">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    type="button"
-                    onClick={() => handleCategoryChange(category)}
-                    className={`rounded-2xl border px-3 py-2 text-xs font-semibold transition ${
-                      selectedCategory === category
-                        ? "border-[#00C896] bg-[#00C896]/10 text-[#0E766A]"
-                        : "border-slate-200 bg-slate-100 text-slate-600 hover:border-slate-300"
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-            </div>
+              <button
+                type="submit"
+                disabled={!trimmedQuery || askLoading}
+                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-5 text-sm font-extrabold text-white shadow-[0_14px_34px_rgba(0,200,150,0.30)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_42px_rgba(0,200,150,0.34)] disabled:cursor-not-allowed disabled:opacity-50"
+                aria-label="Search or ask"
+              >
+                {askLoading ? <Loader2 size={18} className="animate-spin" /> : <Search size={18} />}
+                <span>Search</span>
+              </button>
+            </form>
 
             <div className="mt-3 flex flex-wrap gap-2">
-              {suggestedQuestions.map((question) => (
+              {categories.map((category) => (
                 <button
-                  key={question}
+                  key={category}
                   type="button"
-                  onClick={() => handleSuggestedQuestionClick(question)}
-                  className="rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-600 transition hover:border-[#00C896]/60 hover:bg-[#ecfdf5] hover:text-[#0E766A]"
+                  onClick={() => handleCategoryChange(category)}
+                  className={`rounded-2xl border px-3 py-2 text-xs font-semibold transition ${
+                    selectedCategory === category
+                      ? "border-[#00C896] bg-[#00C896]/10 text-[#0E766A]"
+                      : "border-slate-200 bg-slate-100 text-slate-600 hover:border-slate-300"
+                  }`}
                 >
-                  {question}
+                  {category}
                 </button>
               ))}
             </div>
+
+            {!query && (
+              <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-6 text-slate-600">
+                <span className="font-bold text-slate-800">Students often ask about: </span>
+                {aspirantTopics.join(", ")}.
+              </div>
+            )}
           </div>
 
           {query ? (
@@ -697,30 +819,39 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
             </div>
           )}
 
-          {trimmedQuery.length > 1 && (
+          {(hasAsked || askLoading || askError || askAnswer) && (
             <div className="px-5 pb-4">
-              <div className="rounded-2xl border border-[#00C896]/20 bg-[#f3fffb] p-4">
+              <div className={`rounded-2xl border p-4 ${
+                askAnswer?.notFound
+                  ? "border-amber-200 bg-amber-50"
+                  : "border-[#00C896]/20 bg-[#f3fffb]"
+              }`}>
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#00C896]/15 text-[#0E766A]">
-                      <Sparkles size={17} />
+                    <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${
+                      askAnswer?.notFound
+                        ? "bg-amber-100 text-amber-800"
+                        : "bg-[#00C896]/15 text-[#0E766A]"
+                    }`}>
+                      {askAnswer?.notFound ? <MessageCircle size={17} /> : <Sparkles size={17} />}
                     </span>
                     <div>
-                      <p className="text-sm font-extrabold text-slate-900">Ask ILMALINK Answer</p>
-                      <p className="text-xs text-slate-500">Built from internal ILMALINK MEDIGO data only.</p>
+                      <p className="text-sm font-extrabold text-slate-900">
+                        {askAnswer?.notFound ? "Connect ILMALINK" : "Answer"}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {askAnswer?.notFound
+                          ? "This question deserves a personal expert reply."
+                          : "Here is a quick answer for your MBBS question."}
+                      </p>
                     </div>
                   </div>
-                  {askAnswer && (
-                    <span className="rounded-full border border-white bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-[#0E766A] shadow-sm">
-                      {askAnswer.confidence} confidence
-                    </span>
-                  )}
                 </div>
 
                 {askLoading ? (
                   <div className="mt-4 flex items-center gap-3 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-600">
                     <Loader2 size={16} className="animate-spin text-[#0E766A]" />
-                    Preparing a verified internal-data answer...
+                    Preparing your answer...
                   </div>
                 ) : askError ? (
                   <div className="mt-4 rounded-xl bg-white px-4 py-3 text-sm leading-6 text-slate-700">
@@ -733,7 +864,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
                     </p>
 
                     <p className="mt-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs leading-5 text-slate-500">
-                      {ASK_DISCLAIMER}
+                      {answerDisclaimer}
                     </p>
 
                     {askAnswer.suggestedLinks.length > 0 && (
@@ -772,7 +903,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
                   className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-4 py-3 text-sm font-extrabold text-white shadow-[0_10px_24px_rgba(0,200,150,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(0,200,150,0.28)] sm:w-auto"
                 >
                   <MessageCircle size={16} />
-                  Let&apos;s Connect
+                  Connect ILMALINK
                 </button>
               </div>
             </div>
@@ -845,18 +976,31 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
             ) : (
               <div className="px-5 py-12 text-center text-slate-500">
                 <Search size={36} className="mx-auto mb-4" />
-                <p className="text-sm font-medium text-slate-800">No matches found</p>
+                <p className="text-sm font-medium text-slate-800">Need a sharper answer?</p>
                 <p className="mt-2 text-sm">
-                  Try different keywords like <span className="font-semibold">MBBS</span>,{" "}
-                  <span className="font-semibold">NEET</span> or{" "}
-                  <span className="font-semibold">Kyrgyzstan</span>.
+                  This question can be answered better by our experts.
                 </p>
+                <button
+                  type="button"
+                  onClick={handleConnectClick}
+                  className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-5 text-sm font-extrabold text-white shadow-[0_12px_28px_rgba(0,200,150,0.24)] transition hover:-translate-y-0.5"
+                >
+                  <MessageCircle size={16} />
+                  Connect ILMALINK
+                </button>
               </div>
             )}
           </div>
 
-          <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 text-xs text-slate-500 flex flex-col gap-1 sm:flex-row sm:justify-between sm:items-center">
-            <span>Improved on-site search for better user experience and quick content discovery.</span>
+          <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 text-xs text-slate-500 flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
+            <button
+              type="button"
+              onClick={handleConnectClick}
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-[#00C896]/30 bg-white px-4 text-xs font-extrabold text-[#0E766A] transition hover:bg-[#ecfdf5]"
+            >
+              <MessageCircle size={14} />
+              Connect ILMALINK
+            </button>
             <span className="font-medium text-slate-700">Press ESC to close</span>
           </div>
         </div>

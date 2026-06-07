@@ -494,10 +494,13 @@ export default function Navbar() {
                   type="button"
                   aria-label="Search"
                   onClick={() => setShowSearchModal(true)}
-                  className="group relative flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-[#00C896]/50 hover:text-[#00C896] sm:h-9 sm:w-9 sm:shadow-none"
+                  className="group relative flex h-8 min-w-8 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-2 text-slate-600 shadow-sm transition hover:border-[#00C896]/50 hover:bg-[#f4fffb] hover:text-[#00C896] sm:h-9 sm:min-w-[10rem] sm:justify-start sm:px-3 sm:shadow-none md:min-w-[14rem]"
                   title="Search (Ctrl+K)"
                 >
                   <Search size={16} />
+                  <span className="hidden truncate text-xs font-bold text-slate-500 transition group-hover:text-[#008f72] sm:inline">
+                    Search keywords or ask questions
+                  </span>
                   <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded text-[10px] font-medium bg-slate-900 text-white opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">
                     Ctrl+K
                   </span>

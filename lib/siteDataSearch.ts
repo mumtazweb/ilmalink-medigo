@@ -114,10 +114,14 @@ const stopWords = new Set([
   "on",
   "or",
   "please",
+  "question",
   "show",
+  "specific",
   "tell",
   "the",
   "to",
+  "unknown",
+  "very",
   "what",
   "when",
   "where",
@@ -130,14 +134,155 @@ const stopWords = new Set([
 const synonymGroups = [
   ["cutoff", "cut", "off", "closing", "rank", "neet", "score"],
   ["fee", "fees", "cost", "tuition", "budget", "structure"],
-  ["fmge", "nbems", "pass", "passed", "result", "performance"],
+  ["fmge", "nbems", "pass", "passed", "result", "performance", "appeared"],
   ["nmc", "fmgl", "wdoms", "internship", "licence", "license"],
   ["seat", "matrix", "allotment", "round", "mop", "stray"],
   ["counselling", "counseling", "quota", "domicile", "reporting"],
   ["accreditation", "recognition", "recommended", "verified"],
   ["advisory", "official", "embassy", "notice", "update"],
-  ["college", "colleges", "university", "universities", "institute"],
+  ["college", "colleges", "university", "universities", "institute", "institution"],
 ];
+
+const spellingAliases: Record<string, string> = {
+  acadamy: "academy",
+  accreditaton: "accreditation",
+  accredition: "accreditation",
+  admision: "admission",
+  advicory: "advisory",
+  advisary: "advisory",
+  alloted: "allotted",
+  allottment: "allotment",
+  alredy: "already",
+  aproval: "approval",
+  aproved: "approved",
+  atest: "latest",
+  buget: "budget",
+  collage: "college",
+  colage: "college",
+  colleg: "college",
+  collge: "college",
+  colloge: "college",
+  counceling: "counselling",
+  councling: "counselling",
+  counselng: "counselling",
+  counsiling: "counselling",
+  cutof: "cutoff",
+  cuttoff: "cutoff",
+  domacile: "domicile",
+  eligiblity: "eligibility",
+  embasy: "embassy",
+  fgme: "fmge",
+  fmg: "fmge",
+  fmgee: "fmge",
+  hostelss: "hostel",
+  institue: "institute",
+  intarnship: "internship",
+  kirgistan: "kyrgyzstan",
+  kirgigystan: "kyrgyzstan",
+  kirgizstan: "kyrgyzstan",
+  kirgystan: "kyrgyzstan",
+  kyrgistan: "kyrgyzstan",
+  kyrgyzsthan: "kyrgyzstan",
+  kyrgyztan: "kyrgyzstan",
+  kyrgyzystan: "kyrgyzstan",
+  licance: "licence",
+  lisence: "license",
+  mbb: "mbbs",
+  mbbsindia: "mbbs",
+  medicl: "medical",
+  neetug: "neet",
+  phillipines: "philippines",
+  philipines: "philippines",
+  recomend: "recommend",
+  recomended: "recommended",
+  russianfederation: "russian",
+  scholorship: "scholarship",
+  universitys: "universities",
+  univercity: "university",
+  unversity: "university",
+  uzbakistan: "uzbekistan",
+  uzbekstan: "uzbekistan",
+};
+
+const coreVocabulary = [
+  "abroad",
+  "academy",
+  "accreditation",
+  "admission",
+  "advisory",
+  "allotment",
+  "appeared",
+  "approval",
+  "approved",
+  "budget",
+  "category",
+  "college",
+  "colleges",
+  "counselling",
+  "country",
+  "cutoff",
+  "domicile",
+  "education",
+  "eligibility",
+  "embassy",
+  "fee",
+  "fees",
+  "fmge",
+  "fmgl",
+  "government",
+  "hostel",
+  "india",
+  "institute",
+  "institution",
+  "internship",
+  "kyrgyzstan",
+  "latest",
+  "licence",
+  "license",
+  "matrix",
+  "mbbs",
+  "medical",
+  "neet",
+  "nmc",
+  "private",
+  "quota",
+  "recognition",
+  "recommended",
+  "reporting",
+  "result",
+  "round",
+  "russia",
+  "russian",
+  "score",
+  "seat",
+  "state",
+  "study",
+  "tuition",
+  "university",
+  "universities",
+  "uzbekistan",
+  "wdoms",
+];
+
+const neverCorrectTerms = new Set([
+  "best",
+  "better",
+  "biggest",
+  "compare",
+  "good",
+  "greater",
+  "has",
+  "highest",
+  "large",
+  "larger",
+  "largest",
+  "maximum",
+  "most",
+  "number",
+  "student",
+  "students",
+  "top",
+]);
 
 const universityAliases: Record<string, string[]> = {
   "international-higher-school-of-medicine": [
@@ -162,10 +307,125 @@ export function normalizeSiteSearchText(value: string) {
     .trim();
 }
 
-function tokenize(value: string) {
+function baseTokenize(value: string) {
   return normalizeSiteSearchText(value)
     .split(" ")
     .filter((term) => term.length > 0);
+}
+
+let canonicalVocabularyCache: Set<string> | null = null;
+
+function getCanonicalVocabulary() {
+  if (canonicalVocabularyCache) return canonicalVocabularyCache;
+
+  const vocabulary = new Set(coreVocabulary);
+
+  for (const group of synonymGroups) {
+    group.forEach((term) => vocabulary.add(term));
+  }
+
+  Object.values(spellingAliases).forEach((term) => vocabulary.add(term));
+
+  for (const destination of navbarCountryDestinations) {
+    baseTokenize(destination.label).forEach((term) => vocabulary.add(term));
+  }
+
+  for (const country of fmgeCountries) {
+    baseTokenize(country.country).forEach((term) => vocabulary.add(term));
+  }
+
+  for (const group of mbbsIndiaCollegesByState) {
+    baseTokenize(group.state).forEach((term) => vocabulary.add(term));
+  }
+
+  for (const university of kyrgyzstanUniversities) {
+    baseTokenize(university.name).forEach((term) => vocabulary.add(term));
+    baseTokenize(university.location).forEach((term) => vocabulary.add(term));
+  }
+
+  for (const aliases of Object.values(universityAliases)) {
+    aliases.forEach((alias) =>
+      baseTokenize(alias).forEach((term) => vocabulary.add(term))
+    );
+  }
+
+  canonicalVocabularyCache = vocabulary;
+  return vocabulary;
+}
+
+function levenshteinDistance(first: string, second: string) {
+  if (first === second) return 0;
+  if (!first.length) return second.length;
+  if (!second.length) return first.length;
+
+  const previous = Array.from({ length: second.length + 1 }, (_, index) => index);
+  const current = new Array<number>(second.length + 1);
+
+  for (let i = 1; i <= first.length; i += 1) {
+    current[0] = i;
+
+    for (let j = 1; j <= second.length; j += 1) {
+      const cost = first[i - 1] === second[j - 1] ? 0 : 1;
+      current[j] = Math.min(
+        current[j - 1] + 1,
+        previous[j] + 1,
+        previous[j - 1] + cost
+      );
+    }
+
+    for (let j = 0; j <= second.length; j += 1) {
+      previous[j] = current[j];
+    }
+  }
+
+  return previous[second.length];
+}
+
+function maxCorrectionDistance(term: string) {
+  if (term.length <= 3) return 0;
+  if (term.length <= 5) return 1;
+  if (term.length <= 8) return 2;
+  return 3;
+}
+
+function correctSearchToken(term: string) {
+  const aliased = spellingAliases[term];
+  if (aliased) return aliased;
+
+  const vocabulary = getCanonicalVocabulary();
+  if (
+    neverCorrectTerms.has(term) ||
+    stopWords.has(term) ||
+    vocabulary.has(term) ||
+    term.length <= 3
+  ) {
+    return term;
+  }
+
+  let bestTerm = term;
+  let bestDistance = Number.POSITIVE_INFINITY;
+  const allowedDistance = maxCorrectionDistance(term);
+
+  for (const candidate of vocabulary) {
+    if (Math.abs(candidate.length - term.length) > allowedDistance) continue;
+
+    const distance = levenshteinDistance(term, candidate);
+
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestTerm = candidate;
+    }
+  }
+
+  return bestDistance <= allowedDistance ? bestTerm : term;
+}
+
+function tokenize(value: string) {
+  return baseTokenize(value).map(correctSearchToken);
+}
+
+export function normalizeSearchQueryWithCorrections(value: string) {
+  return tokenize(value).join(" ");
 }
 
 function slugify(value: string) {
@@ -175,7 +435,7 @@ function slugify(value: string) {
 }
 
 function getImportantQueryTerms(query: string) {
-  const normalizedQuery = normalizeSiteSearchText(query);
+  const normalizedQuery = normalizeSearchQueryWithCorrections(query);
   const terms = new Set(
     tokenize(query).filter(
       (term) => term.length > 1 && !stopWords.has(term)
@@ -206,7 +466,7 @@ function getImportantQueryTerms(query: string) {
 export function detectSiteQuestionIntent(
   query: string
 ): SiteQuestionIntent {
-  const text = normalizeSiteSearchText(query);
+  const text = normalizeSearchQueryWithCorrections(query);
 
   if (
     text.includes("seat matrix") ||
@@ -249,6 +509,10 @@ export function detectSiteQuestionIntent(
   if (
     text.includes("fmge") ||
     text.includes("nbems") ||
+    text.includes("appeared") ||
+    text.includes("has most") ||
+    text.includes("highest number") ||
+    text.includes("most number") ||
     text.includes("pass rate") ||
     text.includes("better result")
   ) {
@@ -297,6 +561,7 @@ export function detectSiteQuestionIntent(
     text.includes("country") ||
     text.includes("countries") ||
     text.includes("compare") ||
+    text.includes("abroad") ||
     text.includes("better")
   ) {
     return "mbbs-abroad-country-comparison";
@@ -317,6 +582,16 @@ function createRecord(
     sourceLabel,
     ...extra,
   };
+}
+
+function getCountryAliases(country: string) {
+  if (country === "RUSSIAN FEDERATION") return ["Russia"];
+  if (country === "UNITED ARAB EMIRATES") return ["UAE", "Dubai"];
+  if (country === "UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND") {
+    return ["United Kingdom", "UK"];
+  }
+
+  return [];
 }
 
 function buildBaseRecords() {
@@ -587,6 +862,8 @@ function buildBaseRecords() {
   }
 
   for (const country of fmgeCountries) {
+    const countryAliases = getCountryAliases(country.country);
+
     records.push(
       createRecord(
         {
@@ -603,17 +880,22 @@ function buildBaseRecords() {
           type: "destination",
           tags: [
             country.country,
+            ...countryAliases,
+            "MBBS Abroad",
+            "best country",
             "FMGE",
             "NBEMS",
             "country-wise FMGE",
+            "appeared",
             "pass rate",
           ],
           content: [
             country.country,
+            ...countryAliases,
             country.appeared,
             country.passed,
             country.passRate,
-            "FMGE NBEMS country wise institute wise pass rate better result comparison",
+            "MBBS abroad best country study FMGE NBEMS country wise institute wise appeared pass rate better result comparison",
             ...country.colleges.map((college) => college.name),
           ].join(" "),
           priority: 94,
@@ -658,18 +940,22 @@ function buildBaseRecords() {
             type: "destination",
             tags: [
               country.country,
+              ...countryAliases,
               college.name,
+              "MBBS Abroad",
               "FMGE",
               "NBEMS",
               "college-wise FMGE",
+              "appeared",
             ],
             content: [
               college.name,
               country.country,
+              ...countryAliases,
               college.appeared,
               college.passed,
               college.passRate,
-              "FMGE NBEMS institute wise pass rate result",
+              "MBBS abroad college university most appeared number FMGE NBEMS institute wise pass rate result",
             ].join(" "),
             priority: 90,
           },
@@ -746,7 +1032,11 @@ function scoreRecord(
     searchableText.includes(term)
   );
   const requiredMatches =
-    queryTerms.length <= 2 ? queryTerms.length : Math.min(2, queryTerms.length);
+    queryTerms.length <= 2
+      ? queryTerms.length
+      : queryTerms.length <= 4
+        ? Math.min(3, queryTerms.length)
+        : Math.ceil(queryTerms.length * 0.45);
 
   if (queryTerms.length > 0 && matchedTerms.length < requiredMatches) {
     return 0;
@@ -767,6 +1057,75 @@ function scoreRecord(
     if (tags.includes(term)) score += 38;
     if (description.includes(term)) score += 28;
     if (content.includes(term)) score += 10;
+  }
+
+  const queryAsksFmge =
+    normalizedQuery.includes("fmge") ||
+    normalizedQuery.includes("nbems") ||
+    normalizedQuery.includes("appeared") ||
+    normalizedQuery.includes("pass rate") ||
+    normalizedQuery.includes("result");
+  const queryWantsVolumeRanking =
+    normalizedQuery.includes("most appeared") ||
+    normalizedQuery.includes("highest appeared") ||
+    normalizedQuery.includes("maximum appeared") ||
+    normalizedQuery.includes("most number") ||
+    normalizedQuery.includes("highest number") ||
+    normalizedQuery.includes("largest number") ||
+    normalizedQuery.includes("has most") ||
+    normalizedQuery.includes("most student") ||
+    normalizedQuery.includes("highest student") ||
+    normalizedQuery.includes("best country") ||
+    normalizedQuery.includes("best countries") ||
+    normalizedQuery.includes("best college") ||
+    normalizedQuery.includes("best university");
+  const queryAsksCollege =
+    normalizedQuery.includes("college") ||
+    normalizedQuery.includes("university") ||
+    normalizedQuery.includes("institute") ||
+    normalizedQuery.includes("institution");
+  const queryAsksCountry =
+    normalizedQuery.includes("country") ||
+    normalizedQuery.includes("countries") ||
+    normalizedQuery.includes("abroad");
+
+  if (
+    !queryAsksFmge &&
+    !queryWantsVolumeRanking &&
+    (record.data?.kind === "fmge-country" ||
+      record.data?.kind === "fmge-college")
+  ) {
+    score -= 180;
+  }
+
+  if (
+    queryWantsVolumeRanking &&
+    record.data?.kind === "fmge-country" &&
+    !queryAsksCollege
+  ) {
+    const appeared =
+      typeof record.data.appeared === "number" ? record.data.appeared : 0;
+
+    score += Math.min(appeared / 2, 7000);
+  }
+
+  if (
+    queryWantsVolumeRanking &&
+    record.data?.kind === "fmge-college" &&
+    queryAsksCollege
+  ) {
+    const appeared =
+      typeof record.data.appeared === "number" ? record.data.appeared : 0;
+
+    score += Math.min(appeared, 6000);
+  }
+
+  if (queryAsksCollege && record.data?.kind === "fmge-country") {
+    score -= 260;
+  }
+
+  if (queryAsksCountry && record.data?.kind === "fmge-college") {
+    score -= 260;
   }
 
   if (
@@ -823,7 +1182,7 @@ export function searchInternalSiteData(
     extraRecords?: SiteSearchRecord[];
   } = {}
 ): SiteDataSearchResponse {
-  const normalizedQuery = normalizeSiteSearchText(query);
+  const normalizedQuery = normalizeSearchQueryWithCorrections(query);
   const queryTerms = getImportantQueryTerms(query);
   const limit = options.limit ?? 12;
   const intent = detectSiteQuestionIntent(query);

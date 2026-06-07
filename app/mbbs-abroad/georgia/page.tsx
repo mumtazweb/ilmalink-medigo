@@ -1,3 +1,5 @@
+import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
+
 export const dynamic = "force-static";
 
 export const metadata = {
@@ -384,6 +386,13 @@ export default function GeorgiaPage() {
 
       </section>
 
-    </main>
+    
+
+      <VerificationCounsellingCard
+        countryName="Georgia MBBS"
+        title="Check Georgia MBBS eligibility with ILMALINK"
+        buttonLabel="Get Georgia MBBS Counselling"
+      />
+</main>
   );
 }
