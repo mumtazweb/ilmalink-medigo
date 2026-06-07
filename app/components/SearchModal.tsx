@@ -11,12 +11,21 @@ import {
 import { mbbsIndiaColleges, mbbsIndiaCollegesByState } from "../data/mbbsIndiaColleges";
 import { getMBBSIndiaAdmissionAccess } from "../data/mbbsIndiaAdmissionAccess";
 import { navbarCountryDestinations } from "../data/navbarDestinations";
+import { kyrgyzstanUniversities } from "../data/kyrgyzstanUniversities";
 
 type SearchResult = GlobalSearchEntry & {
   score: number;
 };
 
-const categories = ["All", "Pages", "Destinations", "Blogs"];
+const categories = [
+  "All",
+  "Pages",
+  "Destinations",
+  "Kyrgyzstan",
+  "MBBS India",
+  "FMGE Data",
+  "Blogs",
+];
 const RECENT_SEARCH_KEY = "ilmalink-search-recent";
 const MAX_RESULTS = 30;
 const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
@@ -147,9 +156,60 @@ const mbbsIndiaCollegeSearchEntries: GlobalSearchEntry[] = mbbsIndiaColleges.map
   };
 });
 
+const kyrgyzstanUniversitySearchEntries: GlobalSearchEntry[] = kyrgyzstanUniversities.map((university) => {
+  const firstFee = university.feeRows[0];
+  const feeSummary =
+    firstFee && firstFee.totalCost !== "To be updated"
+      ? `${university.intake}: first listed total ${firstFee.totalCost}`
+      : "Fees: To be updated";
+  const fmgeSummary = university.fmgePerformance?.length
+    ? university.fmgePerformance
+        .map(
+          (item) =>
+            `${item.sourceName}: ${item.appeared} appeared, ${item.passed} passed, ${item.passRate} pass rate`
+        )
+        .join(" ")
+    : "FMGE 2025 match to be updated";
+
+  return {
+    id: `kyrgyzstan-university-${slugifySearchId(university.slug)}`,
+    title: university.name,
+    description: `${university.recommendationLevel}: ${university.accreditationLabel}. ${feeSummary}.`,
+    url: university.pageExists
+      ? `/mbbs-abroad/kyrgyzstan/${university.slug}/`
+      : `/mbbs-abroad/kyrgyzstan/?q=${encodeURIComponent(university.name)}#universities`,
+    category: "Kyrgyzstan Universities",
+    group: "Destinations",
+    type: "destination",
+    tags: [
+      "Kyrgyzstan",
+      "MBBS in Kyrgyzstan",
+      university.recommendationLevel,
+      university.accreditationLabel,
+      university.location,
+    ],
+    content: [
+      university.name,
+      university.location,
+      university.program,
+      university.intake,
+      university.accreditationStatus,
+      university.recommendationLevel,
+      university.recommendationMessage,
+      feeSummary,
+      fmgeSummary,
+      ...university.highlights,
+      ...university.entryRequirements,
+      ...university.documentChecklist,
+    ].join(" "),
+    priority: university.pageExists ? 101 : university.recommendationLevel.includes("Recommended") ? 98 : 91,
+  };
+});
+
 const siteSearchIndex: GlobalSearchEntry[] = [
   mbbsIndiaDirectorySearchEntry,
   ...navbarDropdownSearchEntries,
+  ...kyrgyzstanUniversitySearchEntries,
   ...mbbsIndiaStateSearchEntries,
   ...mbbsIndiaCollegeSearchEntries,
   ...globalSearchIndex,
@@ -253,7 +313,13 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
     let filtered = siteSearchIndex;
 
     if (selectedCategory !== "All") {
-      filtered = filtered.filter((result) => result.group === selectedCategory);
+      filtered = filtered.filter((result) => {
+        if (selectedCategory === "Pages") return result.group === "Pages";
+        if (selectedCategory === "Destinations") return result.group === "Destinations";
+        if (selectedCategory === "Blogs") return result.group === "Blogs";
+        if (selectedCategory === "Kyrgyzstan") return result.category === "Kyrgyzstan Universities";
+        return result.category === selectedCategory;
+      });
     }
 
     if (!searchTerms) {
@@ -413,7 +479,7 @@ export default function SearchModal({ isOpen, onClose }: { isOpen: boolean; onCl
                   className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 shadow-sm outline-none transition focus:border-[#00C896] focus:ring-2 focus:ring-[#00C896]/20"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              <div className="flex flex-wrap gap-2">
                 {categories.map((category) => (
                   <button
                     key={category}
