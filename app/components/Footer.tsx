@@ -1,7 +1,9 @@
- "use client";
+"use client";
 
-import { type MouseEvent, type ReactNode, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import { type MouseEvent, type ReactNode, useState } from "react";
+import { FaFacebookF, FaInstagram, FaTelegramPlane, FaYoutube } from "react-icons/fa";
 import {
   Banknote,
   BookOpen,
@@ -15,6 +17,7 @@ import {
   MessageCircle,
   Phone,
   Search,
+  ShieldCheck,
   Sparkles,
 } from "lucide-react";
 
@@ -33,8 +36,6 @@ const contact = {
 };
 
 const realPageLinks = {
-  home: "/",
-  about: "/about",
   blogs: "/blogs",
   mbbsIndia: "/mbbs-india",
   mbbsAbroad: "/mbbs-abroad",
@@ -42,97 +43,57 @@ const realPageLinks = {
   counselling: "/?counselling=open",
 };
 
-const mbbsAbroadLinks = [
-  { label: "MBBS Abroad", href: "/mbbs-abroad" },
-  { label: "MBBS in Kyrgyzstan", href: "/mbbs-abroad/kyrgyzstan" },
-  { label: "MBBS in Georgia", href: "/mbbs-abroad/georgia" },
-  { label: "MBBS in Russia", href: "/mbbs-abroad/russia" },
-  { label: "MBBS in Bangladesh", href: "/mbbs-abroad/bangladesh" },
-  { label: "MBBS in Uzbekistan", href: "/mbbs-abroad/uzbekistan" },
-  { label: "MBBS in Kazakhstan", href: "/mbbs-abroad/kazakhstan" },
-  { label: "MBBS in Tajikistan", href: "/mbbs-abroad/tajikistan" },
-  { label: "MBBS in Malaysia", href: "/mbbs-abroad/malaysia" },
-  { label: "MBBS in Egypt", href: "/mbbs-abroad/egypt" },
-  { label: "MBBS in UAE", href: "/mbbs-abroad/uae" },
-  { label: "MBBS in UK", href: "/mbbs-abroad/uk" },
-  { label: "MBBS in USA", href: "/mbbs-abroad/usa" },
-];
-
-const linkGroups = [
-  {
-    title: "Explore",
-    links: [
-      { label: "Home", href: realPageLinks.home },
-      { label: "About", href: realPageLinks.about },
-      { label: "Blogs", href: realPageLinks.blogs },
-      { label: "Official Advisories", href: realPageLinks.advisories },
-      { label: "Counselling", href: realPageLinks.counselling, counselling: true },
-    ],
-  },
-  {
-    title: "MBBS India",
-    links: [
-      { label: "MBBS India", href: realPageLinks.mbbsIndia },
-      { label: "Government Medical Colleges", href: realPageLinks.mbbsIndia },
-      { label: "Private Medical Colleges", href: realPageLinks.mbbsIndia },
-      { label: "State-wise MBBS Seats", href: realPageLinks.mbbsIndia },
-      { label: "NEET UG Guidance", href: realPageLinks.mbbsIndia },
-    ],
-  },
-  {
-    title: "MBBS Abroad",
-    links: mbbsAbroadLinks,
-  },
-  {
-    title: "Blogs & Advisories",
-    links: [
-      { label: "Blogs & Guides", href: realPageLinks.blogs },
-      { label: "Official Advisories", href: realPageLinks.advisories },
-      { label: "FMGE Guidance", href: realPageLinks.blogs },
-      { label: "NMC/FMGL Updates", href: realPageLinks.advisories },
-      { label: "Counselling Updates", href: realPageLinks.advisories },
-    ],
-  },
-];
-
 const offices = [
   {
-    title: "Headquarters - Bengaluru",
-    address: "Near Lalbagh Main Gate, Hosur Road, Bangalore-27",
+    label: "Headquarters",
+    city: "Bengaluru",
+    address: ["Near Lalbagh Main Gate,", "Hosur Road,", "Bangalore-27"],
+    accent: "#00F0A8",
+    markerClass: "bg-[#00DFA2] text-[#031525]",
+    image: "/footer-office-bengaluru.svg",
   },
   {
-    title: "Main Office - Kolkata, West Bengal",
-    address: "MUMTAZ Campus, Kamrbari, Basina, Rajarhat-Newtown, Kolkata-135",
+    label: "Main Office",
+    city: "Kolkata",
+    address: ["MUMTAZ Campus,", "Kamrbari, Basina,", "Rajarhat-Newtown,", "Kolkata-135"],
+    accent: "#A855F7",
+    markerClass: "bg-[#8B5CF6] text-white",
+    image: "/footer-office-kolkata.svg",
   },
   {
-    title: "R&D Branch - Mumbai",
-    address: "M.A.K Azad Road, Sector 8B, Belapur, Mumbai - 400614",
+    label: "R&D Branch",
+    city: "Mumbai",
+    address: ["M.A.K Azad Road,", "Sector 8B, Belapur,", "Mumbai - 400614"],
+    accent: "#F97316",
+    markerClass: "bg-[#F97316] text-white",
+    image: "/footer-office-mumbai.svg",
   },
 ];
 
-type BranchContact = {
-  district?: string;
-  city?: string;
-  address?: string;
-  phone?: string;
-  whatsapp?: string;
-  email?: string;
-  mapLink?: string;
-  status?: string;
-};
-
-const branchGroups: { title: string; branches: BranchContact[] }[] = [
-  { title: "West Bengal District Branches", branches: [] },
-  { title: "Karnataka District Branches", branches: [] },
-  { title: "Other India Branches", branches: [] },
-  { title: "Overseas Offices", branches: [] },
+const branchGroups = [
+  {
+    title: "West Bengal District Contact Points",
+    iconClass: "bg-[#00DFA2] text-[#031525]",
+  },
+  {
+    title: "Karnataka District Contact Points",
+    iconClass: "bg-[#FACC15] text-[#031525]",
+  },
+  {
+    title: "Other India Contact Points",
+    iconClass: "bg-[#38BDF8] text-[#031525]",
+  },
+  {
+    title: "Overseas Contact Points",
+    iconClass: "bg-[#A855F7] text-white",
+  },
 ];
 
-const footerLinkClass =
-  "inline-flex rounded-md text-xs font-medium leading-5 text-slate-300 transition hover:text-[#00C896] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#031525]";
+const actionCardClass =
+  "group flex min-h-[50px] w-full items-center gap-2 rounded-xl border border-cyan-300/25 bg-[#071B3E]/88 px-2.5 py-2 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_18px_rgba(0,0,0,0.22)] transition hover:-translate-y-0.5 hover:border-[#00F0A8]/70 hover:bg-[#092553] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0A8]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020B20] sm:min-h-[56px] sm:px-3";
 
-const cardClass =
-  "group block h-[68px] rounded-xl border border-white/10 bg-white/[0.055] px-3 py-2.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur transition hover:-translate-y-0.5 hover:border-[#00C896]/45 hover:bg-white/[0.085] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#031525]";
+const contactTileClass =
+  "group flex min-h-[56px] items-center gap-2 rounded-xl border border-cyan-300/35 bg-[#071B3E]/88 px-2.5 py-2 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_22px_rgba(0,0,0,0.22)] transition hover:-translate-y-0.5 hover:border-[#00F0A8]/70 hover:bg-[#092553] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0A8]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020B20] sm:min-h-[62px] sm:px-3";
 
 function CounsellingLink({
   children,
@@ -155,11 +116,57 @@ function CounsellingLink({
   );
 }
 
+function IconBadge({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className: string;
+}) {
+  return (
+    <span
+      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg shadow-[inset_0_1px_0_rgba(255,255,255,0.24),0_0_18px_rgba(0,240,168,0.14)] sm:h-10 sm:w-10 ${className}`}
+    >
+      {children}
+    </span>
+  );
+}
+
+function QuickActionContent({
+  icon,
+  iconClass,
+  title,
+  subtitle,
+}: {
+  icon: ReactNode;
+  iconClass: string;
+  title: string;
+  subtitle: string;
+}) {
+  return (
+    <>
+      <IconBadge className={iconClass}>{icon}</IconBadge>
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-[13px] font-extrabold leading-4 text-white sm:text-[15px]">
+          {title}
+        </span>
+        <span className="mt-0.5 block truncate text-[11px] font-medium leading-3 text-slate-300 sm:text-xs">
+          {subtitle}
+        </span>
+      </span>
+      <ChevronRight
+        size={18}
+        className="shrink-0 text-white transition group-hover:translate-x-0.5 group-hover:text-[#00F0A8]"
+      />
+    </>
+  );
+}
+
 export default function Footer() {
-  const [openLinkGroup, setOpenLinkGroup] = useState<string | null>(null);
-  const [officeOpen, setOfficeOpen] = useState(false);
-  const [openBranchGroup, setOpenBranchGroup] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [contactPointsOpen, setContactPointsOpen] = useState(true);
+  const [openBranchGroup, setOpenBranchGroup] = useState<string | null>(null);
+  const [activeOffice, setActiveOffice] = useState(1);
 
   const openCounselling = (event?: MouseEvent<HTMLAnchorElement>) => {
     event?.preventDefault();
@@ -196,485 +203,440 @@ export default function Footer() {
     }
   };
 
-  const renderFooterLink = (item: {
-    label: string;
-    href: string;
-    counselling?: boolean;
-  }) => {
-    if (item.counselling) {
-      return (
-        <CounsellingLink
-          key={item.label}
-          className={footerLinkClass}
-          onClick={openCounselling}
-        >
-          {item.label}
-        </CounsellingLink>
-      );
-    }
-
-    return (
-      <Link key={item.label} href={item.href} className={footerLinkClass}>
-        {item.label}
-      </Link>
-    );
+  const showPreviousOffice = () => {
+    setActiveOffice((current) => (current === 0 ? offices.length - 1 : current - 1));
   };
 
-  const renderQuickCard = (
-    title: string,
-    subtitle: string,
-    icon: ReactNode,
-    content: ReactNode
-  ) => (
-    <span className="flex h-full items-center gap-2.5">
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#00C896]/20 bg-[#00C896]/10 text-[#00C896]">
-        {icon}
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-semibold text-white">
-          {title}
-        </span>
-        <span className="mt-0.5 block truncate text-xs font-medium text-slate-400">
-          {subtitle}
-        </span>
-      </span>
-      {content}
-    </span>
-  );
+  const showNextOffice = () => {
+    setActiveOffice((current) => (current === offices.length - 1 ? 0 : current + 1));
+  };
 
   return (
-    <footer className="relative overflow-hidden bg-[#031525] text-white">
-      <div className="absolute inset-0 bg-[linear-gradient(145deg,#031525_0%,#061D3F_55%,#031525_100%)]" />
-      <div className="relative mx-auto max-w-7xl px-3 py-6 sm:px-4 md:px-6 md:py-8">
-        <section className="rounded-2xl border border-[#00C896]/25 bg-white/[0.065] p-4 shadow-[0_18px_55px_rgba(0,0,0,0.24)] backdrop-blur md:p-5">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="min-w-0">
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#00C896]">
-                Premium MBBS guidance
-              </p>
-              <h2 className="mt-1 text-xl font-extrabold tracking-normal text-white md:text-2xl">
-                Confused about MBBS?
-              </h2>
-              <p className="mt-1 text-sm font-medium leading-6 text-slate-300">
-                Get MBBS India & Abroad guidance.
-              </p>
-            </div>
-            <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap">
-              <CounsellingLink
-                onClick={openCounselling}
-                className="inline-flex min-h-9 items-center justify-center rounded-xl bg-[#00C896] px-3 text-xs font-extrabold text-[#031525] transition hover:bg-[#17dfad] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-              >
-                Let&apos;s Connect
-              </CounsellingLink>
-              <a
-                href={contact.callHref}
-                className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-white/15 bg-white/10 px-3 text-xs font-bold text-white transition hover:border-[#00C896]/45 hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70"
-                aria-label={`Call ILMALINK MEDIGO at ${contact.callText}`}
-              >
-                <Phone size={14} />
-                {contact.callText}
-              </a>
-              <a
-                href={contact.whatsappHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-[#00C896]/25 bg-[#00C896]/10 px-3 text-xs font-bold text-[#9fffe5] transition hover:border-[#00C896]/55 hover:bg-[#00C896]/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70"
-                aria-label={`WhatsApp ILMALINK MEDIGO at ${contact.whatsappText}`}
-              >
-                <MessageCircle size={14} />
-                {contact.whatsappText}
-              </a>
-            </div>
-          </div>
-        </section>
+    <footer className="relative overflow-hidden bg-[#020B20] px-1.5 py-2 text-white sm:px-3 sm:py-5">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_6%,rgba(0,240,168,0.22),transparent_28%),radial-gradient(circle_at_84%_12%,rgba(37,99,235,0.22),transparent_30%),linear-gradient(180deg,#031425_0%,#020B20_50%,#031226_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(0,240,168,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(0,240,168,0.04)_1px,transparent_1px)] bg-[size:28px_28px]" />
 
-        <div className="mt-4 grid gap-4 lg:grid-cols-[0.86fr_1.42fr]">
-          <section className="rounded-2xl border border-white/10 bg-white/[0.045] p-4 backdrop-blur">
-            <h2 className="text-lg font-extrabold tracking-normal text-white">
-              ILMALINK MEDIGO
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-slate-300">
-              Focused MBBS India & Abroad guidance with official updates,
-              counselling support, FMGE data, country comparison, scholarships
-              and loan guidance.
-            </p>
+      <div className="relative mx-auto max-w-[980px] overflow-hidden rounded-[24px] border border-cyan-300/20 bg-[#031226]/95 p-2 shadow-[0_22px_70px_rgba(0,0,0,0.48),inset_0_1px_0_rgba(255,255,255,0.08)] sm:p-3.5">
+        <section className="relative overflow-hidden rounded-[22px] border border-[#00F0A8]/70 bg-[#061A3A]/90 p-3 shadow-[0_0_28px_rgba(0,240,168,0.26),inset_0_1px_0_rgba(255,255,255,0.12)] sm:p-4">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_7%_8%,rgba(0,240,168,0.28),transparent_18%),radial-gradient(circle_at_92%_14%,rgba(0,200,255,0.24),transparent_24%),linear-gradient(135deg,rgba(0,240,168,0.09),rgba(37,99,235,0.08)_52%,transparent)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:24px_24px]" />
 
-            <div className="mt-4 hidden grid-cols-2 gap-2 lg:grid">
-              <a
-                href={contact.callHref}
-                className="rounded-xl border border-white/10 bg-white/[0.055] p-3 transition hover:border-[#00C896]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70"
-              >
-                <span className="flex items-center gap-2 text-xs font-semibold text-slate-400">
-                  <Phone size={14} className="text-[#00C896]" />
-                  Call
-                </span>
-                <span className="mt-1 block text-sm font-bold text-white">
-                  {contact.callText}
-                </span>
-              </a>
-              <a
-                href={contact.whatsappHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-xl border border-white/10 bg-white/[0.055] p-3 transition hover:border-[#00C896]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70"
-              >
-                <span className="flex items-center gap-2 text-xs font-semibold text-slate-400">
-                  <MessageCircle size={14} className="text-[#00C896]" />
-                  WhatsApp
-                </span>
-                <span className="mt-1 block text-sm font-bold text-white">
-                  {contact.whatsappText}
-                </span>
-              </a>
-              <a
-                href={contact.emailHref}
-                className="col-span-2 rounded-xl border border-white/10 bg-white/[0.055] p-3 transition hover:border-[#00C896]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70"
-              >
-                <span className="flex items-center gap-2 text-xs font-semibold text-slate-400">
-                  <Mail size={14} className="text-[#00C896]" />
-                  Email
-                </span>
-                <span className="mt-1 block break-all text-sm font-bold text-white">
-                  {contact.emailText}
-                </span>
-              </a>
-            </div>
-          </section>
-
-          <section aria-label="Footer quick actions">
-            <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-              <button
-                type="button"
-                onClick={openSearch}
-                className={cardClass}
-                aria-label="Open Ask ILMALINK search"
-              >
-                {renderQuickCard(
-                  "Explore ILMALINK",
-                  "Search anything",
-                  <Search size={15} />,
-                  <Search size={14} className="text-slate-400" />
-                )}
-              </button>
-              <Link href={realPageLinks.mbbsIndia} className={cardClass}>
-                {renderQuickCard(
-                  "MBBS India",
-                  "Seats & colleges",
-                  <GraduationCap size={15} />,
-                  <ChevronRight size={14} className="text-slate-500 transition group-hover:text-[#00C896]" />
-                )}
-              </Link>
-              <Link href={realPageLinks.mbbsAbroad} className={cardClass}>
-                {renderQuickCard(
-                  "MBBS Abroad",
-                  "Countries & universities",
-                  <Landmark size={15} />,
-                  <ChevronRight size={14} className="text-slate-500 transition group-hover:text-[#00C896]" />
-                )}
-              </Link>
-              <Link href={realPageLinks.blogs} className={cardClass}>
-                {renderQuickCard(
-                  "Blogs",
-                  "Guides & updates",
-                  <BookOpen size={15} />,
-                  <ChevronRight size={14} className="text-slate-500 transition group-hover:text-[#00C896]" />
-                )}
-              </Link>
-              <Link href={realPageLinks.advisories} className={cardClass}>
-                {renderQuickCard(
-                  "Advisories",
-                  "Official updates",
-                  <Sparkles size={15} />,
-                  <ChevronRight size={14} className="text-slate-500 transition group-hover:text-[#00C896]" />
-                )}
-              </Link>
-              <CounsellingLink
-                onClick={openCounselling}
-                className={cardClass}
-              >
-                {renderQuickCard(
-                  "Scholarships & Loans",
-                  "Coming soon",
-                  <Banknote size={15} />,
-                  <MessageCircle size={14} className="text-slate-400" />
-                )}
-              </CounsellingLink>
-              <button
-                type="button"
-                onClick={() => setOfficeOpen((current) => !current)}
-                className={cardClass}
-                aria-expanded={officeOpen}
-                aria-controls="footer-office-network"
-              >
-                {renderQuickCard(
-                  "Offices",
-                  "Branch network",
-                  <Building2 size={15} />,
-                  <ChevronDown
-                    size={14}
-                    className={`text-slate-400 transition ${officeOpen ? "rotate-180 text-[#00C896]" : ""}`}
-                  />
-                )}
-              </button>
-              <CounsellingLink
-                onClick={openCounselling}
-                className={cardClass}
-              >
-                {renderQuickCard(
-                  "Counselling",
-                  "Talk to ILMALINK",
-                  <MessageCircle size={15} />,
-                  <MessageCircle size={14} className="text-slate-400" />
-                )}
-              </CounsellingLink>
-            </div>
-          </section>
-        </div>
-
-        <section className="mt-4 grid grid-cols-2 gap-2 lg:hidden">
-          <a
-            href={contact.callHref}
-            className="rounded-xl border border-white/10 bg-white/[0.055] p-3 transition hover:border-[#00C896]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70"
-          >
-            <span className="flex items-center gap-2 text-xs font-semibold text-slate-400">
-              <Phone size={14} className="text-[#00C896]" />
-              Call
-            </span>
-            <span className="mt-1 block text-sm font-bold text-white">
-              {contact.callText}
-            </span>
-          </a>
-          <a
-            href={contact.whatsappHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-xl border border-white/10 bg-white/[0.055] p-3 transition hover:border-[#00C896]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70"
-          >
-            <span className="flex items-center gap-2 text-xs font-semibold text-slate-400">
-              <MessageCircle size={14} className="text-[#00C896]" />
-              WhatsApp
-            </span>
-            <span className="mt-1 block text-sm font-bold text-white">
-              {contact.whatsappText}
-            </span>
-          </a>
-          <a
-            href={contact.emailHref}
-            className="col-span-2 rounded-xl border border-white/10 bg-white/[0.055] p-3 transition hover:border-[#00C896]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70"
-          >
-            <span className="flex items-center gap-2 text-xs font-semibold text-slate-400">
-              <Mail size={14} className="text-[#00C896]" />
-              Email
-            </span>
-            <span className="mt-1 block break-all text-sm font-bold text-white">
-              {contact.emailText}
-            </span>
-          </a>
-        </section>
-
-        <section className="mt-4 hidden rounded-2xl border border-[#00C896]/20 bg-[#00C896]/[0.065] p-4 lg:block">
-          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-sm font-extrabold text-white">
-                  Scholarships & Loans
-                </h2>
-                <span className="rounded-full border border-[#00C896]/30 bg-[#00C896]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#9fffe5]">
-                  Coming Soon
-                </span>
+          <div className="relative grid gap-3 lg:grid-cols-[0.98fr_1.02fr] lg:items-end">
+            <div className="flex items-center gap-3">
+              <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-[18px] border border-[#00F0A8]/60 bg-[#021629] shadow-[0_0_26px_rgba(0,240,168,0.24)] sm:h-24 sm:w-24">
+                <Image
+                  src="/footer-confused-student.png"
+                  alt="Confused student thinking about MBBS admission choices"
+                  fill
+                  sizes="(max-width: 640px) 80px, 96px"
+                  className="object-cover"
+                />
               </div>
-              <p className="mt-1 text-xs leading-5 text-slate-300">
-                Scholarship guidance, education loan support, financial
-                planning, and document guidance for MBBS India and MBBS Abroad.
-              </p>
+              <div className="min-w-0">
+                <h2 className="text-[24px] font-black leading-tight text-white sm:text-3xl">
+                  Confused about <span className="text-[#00F0A8]">MBBS?</span>
+                </h2>
+                <p className="mt-1 text-[13px] font-semibold leading-5 text-slate-100 sm:text-base sm:leading-6">
+                  Get MBBS India & Abroad guidance
+                  <br />
+                  from <span className="text-[#00F0A8]">ILMALINK MEDIGO</span> experts.
+                </p>
+              </div>
             </div>
-            <CounsellingLink
-              onClick={openCounselling}
-              className="inline-flex min-h-9 items-center justify-center rounded-xl bg-white px-4 text-xs font-extrabold text-[#031525] transition hover:bg-[#dffcf3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70 md:w-auto"
-            >
-              Get Guidance
-            </CounsellingLink>
+
+            <div className="grid grid-cols-2 gap-2">
+              <CounsellingLink
+                onClick={openCounselling}
+                className="group col-span-2 flex min-h-[56px] items-center gap-2 rounded-xl border border-[#72FF70]/60 bg-gradient-to-br from-[#72FF70] via-[#00DFA2] to-[#00A86B] px-3 py-2 text-left text-[#032314] shadow-[0_14px_28px_rgba(0,240,120,0.25),inset_0_1px_0_rgba(255,255,255,0.38)] transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#031226] sm:min-h-[62px]"
+              >
+                <IconBadge className="bg-white/22 text-white">
+                  <MessageCircle size={21} />
+                </IconBadge>
+                <span className="flex-1 text-[18px] font-black sm:text-xl">Let&apos;s Connect</span>
+                <ChevronRight size={25} className="transition group-hover:translate-x-0.5" />
+              </CounsellingLink>
+
+              <a href={contact.emailHref} className={`${contactTileClass} col-span-2 sm:col-span-1`}>
+                <IconBadge className="bg-[#EAF3FF] text-[#2563EB]">
+                  <Mail size={21} />
+                </IconBadge>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[13px] font-extrabold leading-4 text-white sm:text-[15px]">
+                    Email
+                  </span>
+                  <span className="mt-0.5 block break-all text-[10px] font-medium leading-3 text-slate-200 sm:text-xs">
+                    {contact.emailText}
+                  </span>
+                </span>
+              </a>
+
+              <a href={contact.callHref} className={contactTileClass}>
+                <IconBadge className="bg-gradient-to-br from-[#5CFFB2] to-[#00B67A] text-white">
+                  <Phone size={21} />
+                </IconBadge>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[13px] font-extrabold leading-4 text-white sm:text-[15px]">
+                    Call Now
+                  </span>
+                  <span className="mt-0.5 block text-[11px] font-medium leading-3 text-slate-200 sm:text-xs">
+                    {contact.callText}
+                  </span>
+                </span>
+              </a>
+
+              <a
+                href={contact.whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={contactTileClass}
+              >
+                <IconBadge className="bg-gradient-to-br from-[#5CFF72] to-[#0BBF42] text-white">
+                  <MessageCircle size={21} />
+                </IconBadge>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[13px] font-extrabold leading-4 text-white sm:text-[15px]">
+                    WhatsApp
+                  </span>
+                  <span className="mt-0.5 block text-[11px] font-medium leading-3 text-slate-200 sm:text-xs">
+                    {contact.whatsappText}
+                  </span>
+                </span>
+                <ChevronRight size={18} className="text-white transition group-hover:translate-x-0.5" />
+              </a>
+            </div>
           </div>
         </section>
 
-        <section className="mt-4 lg:grid lg:grid-cols-[1.35fr_0.95fr] lg:gap-4">
-          <div className="lg:hidden">
-            {linkGroups.map((group) => {
-              const isOpen = openLinkGroup === group.title;
+        <section className="mt-3 flex items-center gap-3 px-1 sm:px-2">
+          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[18px] border border-[#00F0A8]/25 bg-[#052448] shadow-[0_0_24px_rgba(0,240,168,0.18)] sm:h-[72px] sm:w-[72px]">
+            <img src="/logoimage.svg" alt="ILMALINK MEDIGO logo" className="h-12 w-12 object-contain sm:h-14 sm:w-14" />
+          </div>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-[25px] font-black leading-none text-white sm:text-4xl">
+                ILMALINK <span className="text-[#00F0A8]">MEDIGO</span>
+              </h2>
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#00F0A8] text-[#031525] shadow-[0_0_20px_rgba(0,240,168,0.3)]">
+                <ShieldCheck size={17} />
+              </span>
+            </div>
+            <p className="mt-2 border-l-2 border-[#00F0A8] pl-3 text-[13px] font-medium leading-5 text-slate-200 sm:text-base sm:leading-6">
+              Guiding students for MBBS in India and MBBS abroad
+              <br className="hidden sm:block" />{" "}
+              with official updates, counselling support and trusted guidance.
+            </p>
+          </div>
+        </section>
+
+        <section className="mt-4">
+          <div className="flex items-center gap-2 px-1 sm:px-2">
+            <Sparkles size={20} className="text-[#00F0A8]" />
+            <h2 className="text-xl font-black text-white sm:text-2xl">Quick Links</h2>
+            <div className="h-px flex-1 bg-gradient-to-r from-cyan-300/25 to-transparent" />
+          </div>
+
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={openSearch}
+              className={actionCardClass}
+              aria-label="Open Ask ILMALINK search"
+            >
+              <QuickActionContent
+                icon={<Search size={20} />}
+                iconClass="bg-gradient-to-br from-[#16F2A5] to-[#087A5C] text-white"
+                title="Explore"
+                subtitle="Ask anything"
+              />
+            </button>
+
+            <Link href={realPageLinks.mbbsIndia} className={actionCardClass}>
+              <QuickActionContent
+                icon={<GraduationCap size={20} />}
+                iconClass="bg-gradient-to-br from-[#35F2A6] to-[#047857] text-white"
+                title="MBBS India"
+                subtitle="Seats & Colleges"
+              />
+            </Link>
+
+            <Link href={realPageLinks.mbbsAbroad} className={actionCardClass}>
+              <QuickActionContent
+                icon={<Landmark size={20} />}
+                iconClass="bg-gradient-to-br from-[#38BDF8] to-[#2563EB] text-white"
+                title="Abroad"
+                subtitle="Countries"
+              />
+            </Link>
+
+            <Link href={realPageLinks.blogs} className={actionCardClass}>
+              <QuickActionContent
+                icon={<BookOpen size={20} />}
+                iconClass="bg-gradient-to-br from-[#A855F7] to-[#6D28D9] text-white"
+                title="Blogs"
+                subtitle="Guides & News"
+              />
+            </Link>
+
+            <Link href={realPageLinks.advisories} className={actionCardClass}>
+              <QuickActionContent
+                icon={<Sparkles size={20} />}
+                iconClass="bg-gradient-to-br from-[#F59E0B] to-[#EA580C] text-white"
+                title="Updates"
+                subtitle="NMC, FMGE"
+              />
+            </Link>
+
+            <CounsellingLink onClick={openCounselling} className={actionCardClass}>
+              <QuickActionContent
+                icon={<Banknote size={20} />}
+                iconClass="bg-gradient-to-br from-[#FB923C] to-[#EA580C] text-white"
+                title="Scholarship"
+                subtitle="Loans help"
+              />
+            </CounsellingLink>
+
+            <CounsellingLink onClick={openCounselling} className={actionCardClass}>
+              <QuickActionContent
+                icon={<MessageCircle size={20} />}
+                iconClass="bg-gradient-to-br from-[#A855F7] to-[#7C3AED] text-white"
+                title="Counselling"
+                subtitle="Talk to experts"
+              />
+            </CounsellingLink>
+
+            <a href={contact.emailHref} className={actionCardClass}>
+              <QuickActionContent
+                icon={<Phone size={20} />}
+                iconClass="bg-gradient-to-br from-[#2DD4BF] to-[#0891B2] text-white"
+                title="Contact"
+                subtitle="Call, WhatsApp"
+              />
+            </a>
+          </div>
+        </section>
+
+        <section className="mt-4">
+          <div className="flex items-center gap-2 px-1 sm:px-2">
+            <MapPin size={22} className="text-[#00F0A8]" />
+            <h2 className="text-xl font-black text-white sm:text-2xl">Our Offices</h2>
+            <div className="h-px flex-1 bg-gradient-to-r from-cyan-300/25 to-transparent" />
+            <div className="hidden gap-2 sm:flex">
+              <button
+                type="button"
+                onClick={showPreviousOffice}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition hover:border-[#00F0A8]/60 hover:text-[#00F0A8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0A8]/70"
+                aria-label="Highlight previous office"
+              >
+                <ChevronRight size={20} className="rotate-180" />
+              </button>
+              <button
+                type="button"
+                onClick={showNextOffice}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition hover:border-[#00F0A8]/60 hover:text-[#00F0A8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0A8]/70"
+                aria-label="Highlight next office"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-2 flex snap-x gap-2 overflow-x-auto pb-1 lg:grid lg:grid-cols-3 lg:overflow-visible">
+            {offices.map((office, index) => (
+              <address
+                key={office.city}
+                className={`relative min-h-[168px] min-w-[252px] snap-center overflow-hidden rounded-xl border p-3 not-italic shadow-[0_12px_28px_rgba(0,0,0,0.26)] transition lg:min-w-0 ${
+                  activeOffice === index ? "scale-[1.01]" : ""
+                }`}
+                style={{
+                  borderColor: office.accent,
+                  backgroundImage: `linear-gradient(180deg, rgba(3, 10, 28, 0.12), rgba(3, 10, 28, 0.7) 48%, rgba(3, 10, 28, 0.96)), url("${office.image}")`,
+                  backgroundPosition: "center",
+                  backgroundSize: "cover",
+                  boxShadow:
+                    activeOffice === index
+                      ? `0 0 0 1px ${office.accent}66, 0 16px 34px rgba(0,0,0,0.32)`
+                      : "0 12px 28px rgba(0,0,0,0.26)",
+                }}
+              >
+                <div className="relative flex justify-end">
+                  <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${office.markerClass}`}>
+                    <MapPin size={23} />
+                  </span>
+                </div>
+                <div className="relative mt-6 text-center">
+                  <p className="text-sm font-bold leading-4 text-white">{office.label}</p>
+                  <h3 className="mt-0.5 text-2xl font-black leading-7" style={{ color: office.accent }}>
+                    {office.city}
+                  </h3>
+                  <div className="mx-auto mt-2 h-px w-4/5" style={{ backgroundColor: office.accent }} />
+                  <p className="mx-auto mt-2 max-w-[210px] text-left text-[13px] font-medium leading-5 text-white">
+                    {office.address.map((line) => (
+                      <span key={line} className="block">
+                        {line}
+                      </span>
+                    ))}
+                  </p>
+                </div>
+              </address>
+            ))}
+          </div>
+
+          <div className="mt-2 flex justify-center gap-2">
+            {offices.map((office, index) => (
+              <button
+                key={office.city}
+                type="button"
+                onClick={() => setActiveOffice(index)}
+                className={`h-2.5 w-2.5 rounded-full border transition ${
+                  activeOffice === index
+                    ? "border-[#00F0A8] bg-[#00F0A8]"
+                    : "border-cyan-200/70 bg-transparent"
+                }`}
+                aria-label={`Highlight ${office.city} office`}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-4 overflow-hidden rounded-xl border border-[#00F0A8]/45 bg-gradient-to-br from-[#0A7A48]/80 via-[#072950]/90 to-[#031226] shadow-[0_0_26px_rgba(0,240,168,0.18),inset_0_1px_0_rgba(255,255,255,0.12)]">
+          <button
+            type="button"
+            onClick={() => setContactPointsOpen((current) => !current)}
+            className="flex w-full items-center justify-between gap-2 px-3 py-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0A8]/70 sm:px-4"
+            aria-expanded={contactPointsOpen}
+            aria-controls="footer-contact-points"
+          >
+            <span className="flex min-w-0 flex-1 items-center gap-2 text-[15px] font-black leading-5 text-white sm:text-xl">
+              <Building2 size={22} className="shrink-0 text-[#B8FF73]" />
+              <span className="min-w-0">View Contact Points India & Overseas</span>
+            </span>
+            <ChevronDown
+              size={24}
+              className={`shrink-0 text-white transition ${contactPointsOpen ? "rotate-180" : ""}`}
+            />
+          </button>
+
+          <div id="footer-contact-points" className={`${contactPointsOpen ? "grid" : "hidden"} gap-1.5 px-2.5 pb-3 sm:px-3`}>
+            {branchGroups.map((group) => {
+              const isOpen = openBranchGroup === group.title;
 
               return (
-                <div
-                  key={group.title}
-                  className="border-b border-white/10 last:border-b-0"
-                >
+                <div key={group.title} className="overflow-hidden rounded-lg border border-cyan-200/20 bg-[#061A3A]/72">
                   <button
                     type="button"
-                    onClick={() => setOpenLinkGroup(isOpen ? null : group.title)}
-                    className="flex w-full items-center justify-between gap-3 py-3 text-left text-sm font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70"
+                    onClick={() => setOpenBranchGroup(isOpen ? null : group.title)}
+                    className="flex w-full items-center gap-2 px-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0A8]/70"
                     aria-expanded={isOpen}
                   >
-                    {group.title}
-                    <ChevronDown
-                      size={16}
-                      className={`text-slate-400 transition ${isOpen ? "rotate-180 text-[#00C896]" : ""}`}
+                    <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${group.iconClass}`}>
+                      <Building2 size={17} />
+                    </span>
+                    <span className="min-w-0 flex-1 truncate text-[14px] font-bold text-white sm:text-base">
+                      {group.title}
+                    </span>
+                    <ChevronRight
+                      size={20}
+                      className={`shrink-0 text-white transition ${isOpen ? "rotate-90 text-[#00F0A8]" : ""}`}
                     />
                   </button>
                   {isOpen ? (
-                    <div className="grid grid-cols-2 gap-x-3 gap-y-2 pb-3">
-                      {group.links.map((item) => renderFooterLink(item))}
+                    <div className="border-t border-cyan-200/15 px-3 py-2 text-xs font-medium leading-5 text-slate-300">
+                      Contact details will be updated soon. Use call, WhatsApp, or email for this region.
                     </div>
                   ) : null}
                 </div>
               );
             })}
-            <div className="mt-3 rounded-2xl border border-[#00C896]/20 bg-[#00C896]/[0.065] p-4">
-              <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-sm font-extrabold text-white">
-                  Scholarships & Loans
-                </h2>
-                <span className="rounded-full border border-[#00C896]/30 bg-[#00C896]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#9fffe5]">
-                  Coming Soon
-                </span>
-              </div>
-              <p className="mt-1 text-xs leading-5 text-slate-300">
-                Scholarship guidance, education loan support, financial
-                planning, and document guidance for MBBS India and MBBS Abroad.
-              </p>
-              <CounsellingLink
-                onClick={openCounselling}
-                className="mt-3 inline-flex min-h-9 w-full items-center justify-center rounded-xl bg-white px-4 text-xs font-extrabold text-[#031525] transition hover:bg-[#dffcf3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70"
-              >
-                Get Guidance
-              </CounsellingLink>
-            </div>
           </div>
+        </section>
 
-          <div className="hidden rounded-2xl border border-white/10 bg-white/[0.035] p-5 lg:grid lg:grid-cols-4 lg:gap-5">
-            {linkGroups.map((group) => (
-              <div key={group.title}>
-                <h2 className="text-sm font-extrabold text-white">{group.title}</h2>
-                <div className="mt-3 grid gap-2.5">
-                  {group.links.map((item) => renderFooterLink(item))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div
-            id="footer-office-network"
-            className="mt-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4 lg:mt-0"
-          >
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-              <div>
-                <h2 className="text-sm font-extrabold text-white">
-                  Office and branch network
-                </h2>
-                <p className="mt-1 text-xs font-medium leading-5 text-slate-400">
-                  HQ Bengaluru | Main Kolkata | R&amp;D Mumbai
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setOfficeOpen((current) => !current)}
-                className="inline-flex min-h-9 items-center justify-center gap-2 rounded-xl border border-[#00C896]/25 bg-[#00C896]/10 px-3 text-xs font-bold text-[#9fffe5] transition hover:border-[#00C896]/50 hover:bg-[#00C896]/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70"
-                aria-expanded={officeOpen}
-                aria-controls="footer-office-details"
-              >
-                {officeOpen ? "Hide office details" : "View office details"}
-                <ChevronDown
-                  size={14}
-                  className={`transition ${officeOpen ? "rotate-180" : ""}`}
-                />
-              </button>
-            </div>
-
-            <div
-              id="footer-office-details"
-              className={`${officeOpen ? "grid" : "hidden"} mt-4 gap-2 lg:grid`}
+        <section className="mt-4 grid gap-3 sm:grid-cols-[1fr_0.92fr] sm:items-center">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:justify-start">
+            <a
+              href="https://facebook.com/ilmalink"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="ILMALINK on Facebook"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#1877F2] text-xl text-white shadow-[0_0_18px_rgba(24,119,242,0.45)] transition hover:-translate-y-0.5"
             >
-              {offices.map((office) => (
-                <address
-                  key={office.title}
-                  className="not-italic rounded-xl border border-white/10 bg-white/[0.045] p-3"
-                >
-                  <p className="flex items-start gap-2 text-sm font-bold text-white">
-                    <MapPin size={15} className="mt-0.5 shrink-0 text-[#00C896]" />
-                    {office.title}
-                  </p>
-                  <p className="mt-1 text-xs leading-5 text-slate-300">
-                    {office.address}
-                  </p>
-                </address>
-              ))}
+              <FaFacebookF />
+            </a>
+            <a
+              href="https://instagram.com/ilmalink"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="ILMALINK on Instagram"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_110%,#FEDA75_0%,#FA7E1E_24%,#D62976_48%,#962FBF_72%,#4F5BD5_100%)] text-xl text-white shadow-[0_0_18px_rgba(214,41,118,0.42)] transition hover:-translate-y-0.5"
+            >
+              <FaInstagram />
+            </a>
+            <a
+              href="https://youtube.com/ilmalink"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="ILMALINK on YouTube"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#FF0000] text-xl text-white shadow-[0_0_18px_rgba(255,0,0,0.38)] transition hover:-translate-y-0.5"
+            >
+              <FaYoutube />
+            </a>
+            <a
+              href="https://x.com/ilmalink"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="ILMALINK on X"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-cyan-200/35 bg-black text-xl font-black text-white shadow-[0_0_18px_rgba(96,165,250,0.32)] transition hover:-translate-y-0.5"
+            >
+              X
+            </a>
+            <a
+              href="https://t.me/ilmalink"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="ILMALINK on Telegram"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#229ED9] text-xl text-white shadow-[0_0_18px_rgba(34,158,217,0.42)] transition hover:-translate-y-0.5"
+            >
+              <FaTelegramPlane />
+            </a>
+          </div>
 
-              <div className="mt-1 grid gap-2">
-                {branchGroups.map((group) => {
-                  const isOpen = openBranchGroup === group.title;
-
-                  return (
-                    <div
-                      key={group.title}
-                      className="rounded-xl border border-white/10 bg-white/[0.035]"
-                    >
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setOpenBranchGroup(isOpen ? null : group.title)
-                        }
-                        className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-xs font-bold text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00C896]/70"
-                        aria-expanded={isOpen}
-                      >
-                        {group.title}
-                        <ChevronDown
-                          size={14}
-                          className={`text-slate-500 transition ${isOpen ? "rotate-180 text-[#00C896]" : ""}`}
-                        />
-                      </button>
-                      {isOpen ? (
-                        <div className="border-t border-white/10 px-3 py-3">
-                          {group.branches.length ? (
-                            <div className="grid gap-2">
-                              {group.branches.map((branch) => (
-                                <div
-                                  key={`${branch.district ?? branch.city}-${branch.address}`}
-                                  className="rounded-lg bg-white/[0.04] p-2 text-xs text-slate-300"
-                                >
-                                  <p className="font-bold text-white">
-                                    {branch.district ?? branch.city}
-                                  </p>
-                                  {branch.address ? <p>{branch.address}</p> : null}
-                                  {branch.status ? <p>{branch.status}</p> : null}
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <p className="text-xs leading-5 text-slate-400">
-                              District-wise contacts will be updated soon.
-                            </p>
-                          )}
-                        </div>
-                      ) : null}
-                    </div>
-                  );
-                })}
-              </div>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex items-center gap-2 rounded-lg border border-cyan-200/20 bg-[#071B3E]/80 px-2.5 py-2">
+              <IconBadge className="bg-[#0B284E] text-[#DFFCF3]">
+                <ShieldCheck size={20} />
+              </IconBadge>
+              <p className="text-xs font-bold leading-4 text-white">
+                Trusted by
+                <br />
+                Thousands
+              </p>
+            </div>
+            <div className="flex items-center gap-2 rounded-lg border border-cyan-200/20 bg-[#071B3E]/80 px-2.5 py-2">
+              <IconBadge className="bg-[#00F0A8] text-[#031525]">
+                <GraduationCap size={20} />
+              </IconBadge>
+              <p className="text-xs font-bold leading-4 text-white">
+                Genuine &
+                <br />
+                Verified Info
+              </p>
             </div>
           </div>
         </section>
 
-        <section className="mt-4 rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-          <p className="text-xs leading-5 text-slate-400">
-            Information on ILMALINK MEDIGO is for student guidance only. Fees,
-            seats, counselling rules, scholarships, loan eligibility,
-            accreditation, FMGE data, NMC/FMGL compliance, university status,
-            and admission rules may change. Students must verify the latest
-            official source before final admission.
+        <section className="mt-3 flex items-center gap-3 rounded-lg border border-cyan-200/20 bg-[#061A3A]/80 px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+          <IconBadge className="bg-[#0B284E] text-[#DFFCF3]">
+            <ShieldCheck size={20} />
+          </IconBadge>
+          <p className="text-xs font-medium leading-5 text-slate-200 sm:text-sm">
+            Information is subject to change. Students are advised to verify details from official sources before making any decision.
           </p>
         </section>
 
-        <div className="mt-4 flex flex-col gap-2 border-t border-white/10 pt-4 text-xs font-medium text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-3 flex flex-col gap-1 px-2 text-center text-xs font-medium text-slate-300 sm:flex-row sm:items-center sm:justify-between sm:text-sm">
           <p>&copy; 2026 ILMALINK MEDIGO. All rights reserved.</p>
-          <p>Powered by ILMALINK.</p>
+          <p>
+            Powered by <span className="font-black text-[#00F0A8]">ILMALINK</span>
+          </p>
         </div>
       </div>
 

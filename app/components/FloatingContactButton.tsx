@@ -12,6 +12,7 @@ const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
  */
 export default function FloatingContactButton() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   useEffect(() => {
     const openPopup = () => setIsPopupOpen(true);
@@ -29,12 +30,29 @@ export default function FloatingContactButton() {
     return () => window.removeEventListener(OPEN_COUNSELLING_EVENT, openPopup);
   }, []);
 
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsFooterVisible(entry.isIntersecting),
+      { threshold: 0.08 }
+    );
+
+    observer.observe(footer);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       {/* Floating Button */}
       <button
         onClick={() => setIsPopupOpen(true)}
-        className="fixed right-0 top-1/2 -translate-y-1/2 z-50 group"
+        className={`fixed right-0 top-1/2 z-50 -translate-y-1/2 transition duration-300 group ${
+          isFooterVisible ? "pointer-events-none translate-x-full opacity-0" : "opacity-100"
+        }`}
         aria-label="Open contact counselling form"
       >
         {/* Button Container */}

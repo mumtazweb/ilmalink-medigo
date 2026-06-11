@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 280" role="img" aria-label="Kolkata office night bridge">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a1457"/>
+      <stop offset=".5" stop-color="#071f4a"/>
+      <stop offset="1" stop-color="#03091c"/>
+    </linearGradient>
+    <radialGradient id="moon" cx=".78" cy=".2" r=".45">
+      <stop offset="0" stop-color="#a855f7" stop-opacity=".65"/>
+      <stop offset=".55" stop-color="#22d3ee" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#020817" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#091936"/>
+      <stop offset=".5" stop-color="#142c67"/>
+      <stop offset="1" stop-color="#090f2b"/>
+    </linearGradient>
+  </defs>
+  <rect width="560" height="280" fill="url(#sky)"/>
+  <rect width="560" height="280" fill="url(#moon)"/>
+  <g fill="#d8b4fe" opacity=".7">
+    <circle cx="64" cy="52" r="1.8"/>
+    <circle cx="142" cy="32" r="2.2"/>
+    <circle cx="438" cy="72" r="1.7"/>
+    <circle cx="506" cy="48" r="2"/>
+  </g>
+  <path d="M0 188h560v92H0z" fill="url(#water)"/>
+  <path d="M0 208c73 8 114-10 178-1 49 7 68 21 129 15 76-8 122-32 253-4v62H0z" fill="#040b1f" opacity=".68"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M26 174h508" stroke="#60a5fa" stroke-width="4"/>
+    <path d="M78 174 214 62l138 112m0 0 126-96 56 96" stroke="#c084fc" stroke-width="5"/>
+    <path d="M214 62v112m138-112v112m126-96v96" stroke="#a855f7" stroke-width="4"/>
+    <path d="M78 174 214 62m-96 112 96-112m-56 112 56-112m40 112-40-112m98 112L214 62m138 112L478 78m-88 96 88-96m-48 96 48-96m22 96-22-96" stroke="#67e8f9" stroke-width="2.5" opacity=".82"/>
+    <path d="M42 194h476" stroke="#a855f7" stroke-width="3" opacity=".8"/>
+  </g>
+  <g opacity=".42">
+    <path d="M78 224h372" stroke="#a855f7" stroke-width="2"/>
+    <path d="M128 240h280" stroke="#22d3ee" stroke-width="2"/>
+  </g>
+</svg>
