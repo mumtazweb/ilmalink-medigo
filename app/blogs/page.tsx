@@ -11,13 +11,13 @@ export const metadata: Metadata = {
   description:
     "Medical education updates, MBBS guidance, NEET insights and career resources from ILMALINK MEDIGO.",
   alternates: {
-    canonical: "https://www.mbbs.ilmalink.com/blogs",
+    canonical: "https://ilmalink.com/blogs",
   },
   openGraph: {
     title: "ILMALINK MEDIGO Blogs",
     description:
       "Medical education updates, MBBS guidance, NEET insights and career resources.",
-    url: "https://www.mbbs.ilmalink.com/blogs",
+    url: "https://ilmalink.com/blogs",
     type: "website",
   },
   twitter: {
@@ -40,13 +40,13 @@ export default async function BlogsPage() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.mbbs.ilmalink.com",
+        item: "https://ilmalink.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Blogs",
-        item: "https://www.mbbs.ilmalink.com/blogs",
+        item: "https://ilmalink.com/blogs",
       },
     ],
   };

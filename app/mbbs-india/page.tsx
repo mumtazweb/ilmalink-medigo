@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description:
     "Explore the complete MBBS India medical college list with state-wise government and private colleges, MBBS seats, establishment year, and counselling guidance.",
   alternates: {
-    canonical: "https://www.mbbs.ilmalink.com/mbbs-india",
+    canonical: "https://ilmalink.com/mbbs-india",
   },
 };
 

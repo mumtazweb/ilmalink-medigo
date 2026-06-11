@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical:
-      "https://www.mbbs.ilmalink.com/mbbs-abroad/kyrgyzstan/international-higher-school-of-medicine",
+      "https://ilmalink.com/mbbs-abroad/kyrgyzstan/international-higher-school-of-medicine",
   },
 };
 

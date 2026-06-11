@@ -14,11 +14,11 @@ export default function HeroTyping() {
             "@context": "https://schema.org",
             "@type": "WebSite",
             name: "ILMALINK MEDIGO",
-            url: "https://www.mbbs.ilmalink.com",
+            url: "https://ilmalink.com",
             description: subtitle,
             potentialAction: {
               "@type": "SearchAction",
-              target: "https://www.mbbs.ilmalink.com/search?q={search_term_string}",
+              target: "https://ilmalink.com/search?q={search_term_string}",
               "query-input": "required name=search_term_string",
             },
           }),

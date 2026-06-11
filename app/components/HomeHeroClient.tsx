@@ -5,7 +5,6 @@ import Link from "next/link";
 import CounsellingPopup from "./CounsellingPopup";
 import FMGEExplorerModal from "./FMGEExplorerModal";
 import HeroGlobeV2 from "./HeroGlobeV2";
-import Footer from "./Footer";
 import NeetRankPredictorTool from "./NeetRankPredictorTool";
 
 const OPEN_FMGE_EVENT = "ilmalink:open-fmge-explorer";
@@ -879,9 +878,6 @@ export default function HomeHeroClient() {
               </div>
             </div>
           </section>
-
-      {/* FOOTER - ADDED HERE */}
-      <Footer />
 
       <NeetRankPredictorTool
         isOpen={showRankPredictor}

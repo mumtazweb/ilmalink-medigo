@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     "KSMA MBBS Admission for Indian Students",
   ],
   alternates: {
-    canonical: "https://www.mbbs.ilmalink.com/mbbs-abroad/kyrgyzstan",
+    canonical: "https://ilmalink.com/mbbs-abroad/kyrgyzstan",
   },
 };
 

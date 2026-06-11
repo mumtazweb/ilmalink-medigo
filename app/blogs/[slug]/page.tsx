@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     };
   }
 
-  const url = `https://www.mbbs.ilmalink.com/blogs/${post.slug}`;
+  const url = `https://ilmalink.com/blogs/${post.slug}`;
 
   return {
     title: post.seoTitle,
@@ -75,7 +75,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
 
   const related = await getRelatedBlogs(post);
   const adjacent = await getAdjacentBlogs(post);
-  const articleUrl = `https://www.mbbs.ilmalink.com/blogs/${post.slug}`;
+  const articleUrl = `https://ilmalink.com/blogs/${post.slug}`;
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -94,7 +94,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
       name: "ILMALINK MEDIGO",
       logo: {
         "@type": "ImageObject",
-        url: "https://www.mbbs.ilmalink.com/logoimage.svg",
+        url: "https://ilmalink.com/logoimage.svg",
       },
     },
     mainEntityOfPage: articleUrl,
@@ -108,13 +108,13 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://www.mbbs.ilmalink.com",
+        item: "https://ilmalink.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Blogs",
-        item: "https://www.mbbs.ilmalink.com/blogs",
+        item: "https://ilmalink.com/blogs",
       },
       {
         "@type": "ListItem",
