@@ -18,8 +18,25 @@ const componentUrls = new Map([
   ["navbar", "/"],
 ]);
 
+const publicSearchExcludedRoutes = [
+  "/admin",
+  "/api",
+  "/login",
+  "/logout",
+  "/dashboard",
+  "/private",
+];
+
 function toPosix(value) {
   return value.split(path.sep).join("/");
+}
+
+function isPublicSearchUrl(url) {
+  const pathname = url.split(/[?#]/, 1)[0] || "/";
+
+  return !publicSearchExcludedRoutes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  );
 }
 
 function slugify(value) {
@@ -486,12 +503,14 @@ function emitEntry(entry) {
 }
 
 async function main() {
-  const entries = dedupeEntries([
-    ...(await buildRouteEntries()),
-    ...(await buildComponentEntries()),
-    ...(await buildBlogEntries()),
-    ...(await buildFmgeEntries()),
-  ]);
+  const entries = dedupeEntries(
+    [
+      ...(await buildRouteEntries()),
+      ...(await buildComponentEntries()),
+      ...(await buildBlogEntries()),
+      ...(await buildFmgeEntries()),
+    ].filter((entry) => isPublicSearchUrl(entry.url))
+  );
 
   const output = `export type GlobalSearchEntry = {\n  id: string;\n  title: string;\n  description: string;\n  url: string;\n  category: string;\n  group: "Pages" | "Destinations" | "Blogs";\n  type: "page" | "destination" | "blog";\n  tags: string[];\n  content: string;\n  priority: number;\n};\n\nexport const globalSearchIndex: GlobalSearchEntry[] = [\n${entries.map(emitEntry).join("\n")}\n];\n`;
 
