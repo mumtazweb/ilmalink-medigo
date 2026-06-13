@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const oldAuthorUrl = /^\/author(\/|$)/i;
-const oldSearchUrl = /^\/(ar|bn|hi)?\/?search\/(search_term_string|\{search_term_string\})\/?$/i;
-const oldSearchQueryLocales = /^\/(ar|bn|hi)\/?$/i;
+
+const oldSearchUrl =
+  /^\/(ar|bn|hi)?\/?search(\/|$)/i;
+
+const oldSearchQueryLocales =
+  /^\/(ar|bn|hi)\/?$/i;
 
 export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
@@ -11,6 +15,15 @@ export function middleware(request: NextRequest) {
     searchParams.get("s") === "search_term_string" ||
     searchParams.get("s") === "{search_term_string}";
 
+  const hasVideoSpamQuery =
+    searchParams.has("playlist") ||
+    searchParams.has("mute") ||
+    searchParams.has("autoplay") ||
+    searchParams.has("loop") ||
+    searchParams.has("controls") ||
+    searchParams.has("start") ||
+    searchParams.has("end");
+
   const isOldAuthorPage = oldAuthorUrl.test(pathname);
 
   const isOldSearchPage =
@@ -18,7 +31,7 @@ export function middleware(request: NextRequest) {
     hasOldSearchQuery ||
     (oldSearchQueryLocales.test(pathname) && hasOldSearchQuery);
 
-  if (isOldAuthorPage || isOldSearchPage) {
+  if (isOldAuthorPage || isOldSearchPage || hasVideoSpamQuery) {
     return new NextResponse("Gone", {
       status: 410,
       headers: {
