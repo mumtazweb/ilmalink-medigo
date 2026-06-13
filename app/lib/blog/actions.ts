@@ -29,6 +29,16 @@ type ActionState = {
   message: string;
 };
 
+function isNextRedirectError(error: unknown): error is { digest: string } {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "digest" in error &&
+    typeof (error as { digest?: unknown }).digest === "string" &&
+    (error as { digest: string }).digest.startsWith("NEXT_REDIRECT")
+  );
+}
+
 export async function signInAction(
   _state: ActionState,
   formData: FormData
@@ -77,12 +87,8 @@ export async function signInAction(
     await setBlogSession(user.id);
 
     redirect("/dashboard");
-  } catch (error: any) {
-    if (
-      error?.digest?.startsWith(
-        "NEXT_REDIRECT"
-      )
-    ) {
+  } catch (error: unknown) {
+    if (isNextRedirectError(error)) {
       throw error;
     }
 
@@ -152,12 +158,8 @@ export async function createAccountAction(
     }
 
     redirect("/dashboard");
-  } catch (error: any) {
-    if (
-      error?.digest?.startsWith(
-        "NEXT_REDIRECT"
-      )
-    ) {
+  } catch (error: unknown) {
+    if (isNextRedirectError(error)) {
       throw error;
     }
 
@@ -252,7 +254,7 @@ export async function saveBlogAction(
     let images = [];
     try {
       images = JSON.parse(imagesJson);
-    } catch (e) {
+    } catch {
       // If JSON parsing fails, use empty array
       images = [];
     }

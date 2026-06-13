@@ -404,9 +404,13 @@ export default function KyrgyzstanUniversityExplorer({
     const nextFilter = normalizeFilter(params.get("filter"));
     const nextQuery = params.get("q")?.trim() ?? "";
 
-    setActiveFilter(nextFilter);
-    setQuery(nextQuery);
-    setSearchInput(nextQuery);
+    const initialStateTimer = window.setTimeout(() => {
+      setActiveFilter(nextFilter);
+      setQuery(nextQuery);
+      setSearchInput(nextQuery);
+    }, 0);
+
+    return () => window.clearTimeout(initialStateTimer);
   }, []);
 
   const filteredUniversities = useMemo(

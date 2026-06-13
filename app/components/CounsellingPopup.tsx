@@ -32,7 +32,8 @@ export default function CounsellingPopup({ isOpen, onClose }: PopupProps){
   const [mounted, setMounted] = useState(false);
 
 useEffect(() => {
-  setMounted(true);
+  const mountTimer = window.setTimeout(() => setMounted(true), 0);
+  return () => window.clearTimeout(mountTimer);
 }, []);
   const [formData, setFormData] = useState<FormData>({
     name: "",

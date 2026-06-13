@@ -480,6 +480,96 @@ async function buildFmgeEntries() {
   return entries;
 }
 
+function buildManualEntries() {
+  const entries = [
+    {
+      id: "page-bangladesh-gpa-calculator",
+      title: "Bangladesh MBBS GPA Eligibility Calculator",
+      description:
+        "Check Class 10 top five marks, Class 12 PCB marks, Biology GP 3.50, Combined GPA 7.00, Bangladesh gap rule and NEET qualification for Indian students.",
+      url: "/mbbs-abroad/bangladesh#bangladesh-gpa-calculator",
+      category: "Destinations",
+      group: "Destinations",
+      type: "destination",
+      tags: [
+        "Bangladesh MBBS GPA calculator",
+        "Bangladesh MBBS eligibility calculator",
+        "Bangladesh MBBS gap rule",
+        "Bangladesh MBBS GPA requirement",
+        "Bangladesh MBBS 2025 eligibility",
+        "Bangladesh MBBS 2026 eligibility",
+        "Bangladesh MBBS Biology GP 3.50",
+        "Bangladesh MBBS combined GPA 7",
+        "Bangladesh MBBS Class 10 GPA",
+        "Bangladesh MBBS Class 12 PCB GPA",
+        "Bangladesh MBBS NEET eligibility",
+        "Bangladesh MBBS eligibility for Indian students",
+        "BMDC eligibility calculator",
+        "DGME Bangladesh MBBS eligibility",
+        "MBBS abroad eligibility calculator",
+        "Class 10 top five GPA Bangladesh",
+        "Class 12 PCB GPA Bangladesh",
+      ],
+      content:
+        "Bangladesh MBBS GPA Eligibility Calculator Bangladesh MBBS eligibility for Indian students Class 10 top five marks Class 12 PCB marks Biology GP 3.50 Combined GPA 7.00 Bangladesh gap rule NEET qualification DGME BMDC eligibility calculator MBBS abroad eligibility calculator",
+      priority: 108,
+    },
+    {
+      id: "page-scholarships-loans-education-loans",
+      title: "Education Loans for MBBS Abroad",
+      description:
+        "Find MBBS abroad education loan, student loan, medical education loan and ILMALINK MEDIGO loan assistance routes.",
+      url: "/scholarships-loans#education-loans",
+      category: "Pages",
+      group: "Pages",
+      type: "page",
+      tags: [
+        "MBBS abroad education loan",
+        "MBBS abroad loan",
+        "student loan for MBBS abroad",
+        "education loan for medical study abroad",
+        "loan assistance for MBBS abroad",
+        "MBBS abroad financial support",
+        "medical education loan",
+        "study abroad loan India",
+        "ILMALINK MEDIGO loan assistance",
+      ],
+      content:
+        "Education loans for MBBS abroad MBBS abroad education loan MBBS abroad loan student loan for MBBS abroad education loan for medical study abroad loan assistance for MBBS abroad MBBS abroad financial support medical education loan study abroad loan India ILMALINK MEDIGO loan assistance PM Vidyalaxmi bank education loan student credit card",
+      priority: 97,
+    },
+    {
+      id: "page-scholarships-loans-scholarships",
+      title: "Scholarships for MBBS Abroad",
+      description:
+        "Find MBBS abroad scholarship, medical scholarship abroad, financial aid and ILMALINK MEDIGO scholarship support routes.",
+      url: "/scholarships-loans#scholarships",
+      category: "Pages",
+      group: "Pages",
+      type: "page",
+      tags: [
+        "MBBS abroad scholarship",
+        "scholarship for MBBS abroad",
+        "medical scholarship abroad",
+        "scholarship for Indian students MBBS abroad",
+        "MBBS scholarship assistance",
+        "study abroad scholarship",
+        "financial aid for MBBS abroad",
+        "ILMALINK MEDIGO scholarship support",
+        "G.D. Study Circle scholarship",
+      ],
+      content:
+        "Scholarships for MBBS abroad MBBS abroad scholarship scholarship for MBBS abroad medical scholarship abroad scholarship for Indian students MBBS abroad MBBS scholarship assistance study abroad scholarship financial aid for MBBS abroad ILMALINK MEDIGO scholarship support G.D. Study Circle scholarship National Scholarship Portal minority scholarship charitable support",
+      priority: 97,
+    },
+  ];
+
+  return entries.map((entry) => ({
+    ...entry,
+    content: normalizeText([entry.title, entry.description, entry.tags.join(" "), entry.content].join(" ")),
+  }));
+}
+
 function dedupeEntries(entries) {
   const seen = new Map();
 
@@ -509,6 +599,7 @@ async function main() {
       ...(await buildComponentEntries()),
       ...(await buildBlogEntries()),
       ...(await buildFmgeEntries()),
+      ...buildManualEntries(),
     ].filter((entry) => isPublicSearchUrl(entry.url))
   );
 

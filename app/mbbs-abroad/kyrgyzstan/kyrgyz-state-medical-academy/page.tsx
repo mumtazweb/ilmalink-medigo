@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import {
   getKyrgyzUniversityBySlug,
@@ -260,12 +261,12 @@ export default function KyrgyzStateMedicalAcademyPage() {
 
       <section className="bg-[#031525] px-4 pb-8 pt-28 text-white sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <a
+          <Link
             href="/mbbs-abroad/kyrgyzstan"
             className="inline-flex rounded-lg border border-white/15 px-3 py-2 text-xs font-extrabold text-slate-200 transition hover:border-[#00C896] hover:text-[#00C896]"
           >
             Explore other Kyrgyzstan universities
-          </a>
+          </Link>
           <div className="mt-5 grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
             <div>
               <SourceBadge />
@@ -568,12 +569,12 @@ export default function KyrgyzStateMedicalAcademyPage() {
             </p>
             <div className="mt-4 flex flex-col gap-2 sm:flex-row">
               <LetsConnectButton />
-              <a
+              <Link
                 href="/mbbs-abroad/kyrgyzstan"
                 className="inline-flex items-center justify-center rounded-lg border border-white/15 px-4 py-2.5 text-sm font-extrabold text-white transition hover:border-[#00C896] hover:text-[#00C896]"
               >
                 Explore other Kyrgyzstan universities
-              </a>
+              </Link>
             </div>
           </div>
         </div>

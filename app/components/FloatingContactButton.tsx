@@ -50,30 +50,30 @@ export default function FloatingContactButton() {
       {/* Floating Button */}
       <button
         onClick={() => setIsPopupOpen(true)}
-        className={`fixed right-0 top-1/2 z-50 -translate-y-1/2 transition duration-300 group ${
+        className={`group fixed right-0 top-1/2 z-50 hidden -translate-y-1/2 transition duration-300 md:block ${
           isFooterVisible ? "pointer-events-none translate-x-full opacity-0" : "opacity-100"
         }`}
         aria-label="Open contact counselling form"
       >
         {/* Button Container */}
-        <div className="relative h-64 md:h-72 w-14 md:w-16 flex items-center justify-center">
+        <div className="relative flex h-72 w-16 items-center justify-center">
           {/* Background Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0F4CFF] to-[#0b3fd6] rounded-l-3xl shadow-lg group-hover:shadow-xl transition-shadow duration-300" />
+          <div className="absolute inset-0 rounded-l-3xl bg-gradient-to-b from-[#0F4CFF] to-[#0b3fd6] shadow-lg transition-shadow duration-300 group-hover:shadow-xl" />
 
           {/* Glow Effect on Hover */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0F4CFF] to-[#0b3fd6] rounded-l-3xl opacity-0 group-hover:opacity-50 blur-lg transition-opacity duration-300" />
+          <div className="absolute inset-0 rounded-l-3xl bg-gradient-to-b from-[#0F4CFF] to-[#0b3fd6] opacity-0 blur-lg transition-opacity duration-300 group-hover:opacity-50" />
 
           {/* Premium Border */}
-          <div className="absolute inset-0 rounded-l-3xl border border-white/20 group-hover:border-white/40 transition-colors duration-300" />
+          <div className="absolute inset-0 rounded-l-3xl border border-white/20 transition-colors duration-300 group-hover:border-white/40" />
 
           {/* Floating Pulse Animation */}
-          <div className="absolute inset-0 rounded-l-3xl animate-pulse bg-white/5" />
+          <div className="absolute inset-0 animate-pulse rounded-l-3xl bg-white/5" />
 
           {/* Text Content - Vertical Writing Mode */}
           <div className="relative z-10 flex flex-col items-center justify-center h-full">
             {/* Vertical Text - Read from Bottom to Top */}
             <span
-              className="text-white font-bold text-xs md:text-sm leading-tight tracking-widest"
+              className="text-sm font-bold leading-tight tracking-widest text-white"
               style={{
                 writingMode: "vertical-rl",
                 textOrientation: "mixed",
@@ -84,11 +84,11 @@ export default function FloatingContactButton() {
             </span>
 
             {/* Decorative Dividers */}
-            <div className="w-0.5 h-2 bg-white/40 my-2 rounded-full" />
+            <div className="my-2 h-2 w-0.5 rounded-full bg-white/40" />
           </div>
 
           {/* Interactive Hover State */}
-          <div className="absolute inset-0 rounded-l-3xl bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 rounded-l-3xl bg-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         </div>
 
         {/* Hover Tooltip (Hidden on Mobile) */}

@@ -483,6 +483,7 @@ export default function Navbar() {
                     />
                   </button>
                 </div>
+                <Link href="/scholarships-loans" className="nav-link">Scholarships & Loans</Link>
                 <a href="https://www.mumtazeducation.com" target="_blank" rel="noopener noreferrer" className="nav-link">NEET</a>
                 <Link href="/blogs" className="nav-link">Blogs</Link>
               </nav>
@@ -745,6 +746,9 @@ export default function Navbar() {
                     </div>
                   )}
 
+                  <Link href="/scholarships-loans" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
+                    Scholarships & Loans
+                  </Link>
                   <a href="https://www.mumtazeducation.com" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
                     NEET
                   </a>

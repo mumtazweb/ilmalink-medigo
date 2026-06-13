@@ -1,11 +1,61 @@
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+
+type NetworkNode = { id: number; left: string; top: string; size: number; delay: number };
+type NetworkLine = { x1: number; y1: number; x2: number; y2: number };
 
 export default function HeroGlobeV2() {
   const globeWrapperRef = useRef<HTMLDivElement>(null);
   const [globeSize, setGlobeSize] = useState(520);
-  const [networkNodes, setNetworkNodes] = useState<Array<{ id: number; left: string; top: string; size: number; delay: number }>>([]);
-  const [networkLines, setNetworkLines] = useState<Array<{ x1: number; y1: number; x2: number; y2: number }>>([]);
+  const networkNodes = useMemo<NetworkNode[]>(() => {
+    const nodeCount = 55; // 50-60 range
+
+    return Array.from({ length: nodeCount }, (_, i) => {
+      const angle = (i / nodeCount) * Math.PI * 2;
+      const radius = 85;
+      const x = 50 + Math.cos(angle) * radius * 0.7;
+      const y = 60 + Math.sin(angle * 1.5) * 25;
+
+      return {
+        id: i,
+        left: `${Math.min(95, Math.max(5, x))}%`,
+        top: `${Math.min(85, Math.max(15, y))}%`,
+        size: 3 + (i % 6),
+        delay: (i % 5) * 0.4,
+      };
+    });
+  }, []);
+
+  const networkLines = useMemo<NetworkLine[]>(() => {
+    const lineCount = 25; // 20-30 range
+    const usedPairs = new Set<string>();
+    const lines: NetworkLine[] = [];
+
+    for (let i = 0; i < lineCount; i++) {
+      const idx1 = (i * 7) % networkNodes.length;
+      let idx2 = (i * 13 + 5) % networkNodes.length;
+      let key = `${Math.min(idx1, idx2)}-${Math.max(idx1, idx2)}`;
+
+      while (idx1 === idx2 || usedPairs.has(key)) {
+        idx2 = (idx2 + 11) % networkNodes.length;
+        key = `${Math.min(idx1, idx2)}-${Math.max(idx1, idx2)}`;
+      }
+
+      usedPairs.add(key);
+
+      const node1 = networkNodes[idx1];
+      const node2 = networkNodes[idx2];
+
+      lines.push({
+        x1: parseFloat(node1.left),
+        y1: parseFloat(node1.top),
+        x2: parseFloat(node2.left),
+        y2: parseFloat(node2.top),
+      });
+    }
+
+    return lines;
+  }, [networkNodes]);
 
   // Handle responsive globe size
   useEffect(() => {
@@ -22,70 +72,6 @@ export default function HeroGlobeV2() {
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
   }, []);
-
-  // Generate 50-60 nodes with varied positions, sizes, and pulse delays
-  useEffect(() => {
-    const nodeCount = 55; // 50-60 range
-    const nodes = [];
-    
-    for (let i = 0; i < nodeCount; i++) {
-      // Distribute nodes in a curved band below the globe
-      // Use sine/cosine to create natural distribution
-      const angle = (i / nodeCount) * Math.PI * 2;
-      const radius = 85; // percentage spread
-      const x = 50 + Math.cos(angle) * radius * 0.7;
-      const y = 60 + Math.sin(angle * 1.5) * 25;
-      
-      // Size variation: 3px to 8px
-      const size = 3 + (i % 6);
-      // Delay variation: 0s to 2s
-      const delay = (i % 5) * 0.4;
-      
-      nodes.push({
-        id: i,
-        left: `${Math.min(95, Math.max(5, x))}%`,
-        top: `${Math.min(85, Math.max(15, y))}%`,
-        size,
-        delay,
-      });
-    }
-    setNetworkNodes(nodes);
-  }, []);
-
-  // Generate 20-30 connecting lines between random nodes
-  useEffect(() => {
-    if (networkNodes.length === 0) return;
-    
-    const lineCount = 25; // 20-30 range
-    const lines = [];
-    const usedPairs = new Set<string>();
-    
-    for (let i = 0; i < lineCount; i++) {
-      let idx1 = Math.floor(Math.random() * networkNodes.length);
-      let idx2 = Math.floor(Math.random() * networkNodes.length);
-      
-      // Ensure different nodes and no duplicate connections
-      const key = `${Math.min(idx1, idx2)}-${Math.max(idx1, idx2)}`;
-      while (idx1 === idx2 || usedPairs.has(key)) {
-        idx1 = Math.floor(Math.random() * networkNodes.length);
-        idx2 = Math.floor(Math.random() * networkNodes.length);
-      }
-      usedPairs.add(key);
-      
-      // Parse percentage values to numbers for line calculation
-      const node1 = networkNodes[idx1];
-      const node2 = networkNodes[idx2];
-      
-      // Store positions as percentages for CSS-based lines
-      lines.push({
-        x1: parseFloat(node1.left),
-        y1: parseFloat(node1.top),
-        x2: parseFloat(node2.left),
-        y2: parseFloat(node2.top),
-      });
-    }
-    setNetworkLines(lines);
-  }, [networkNodes]);
 
   // Calculate line styles based on percentage positions
   const getLineStyle = (line: { x1: number; y1: number; x2: number; y2: number }) => {

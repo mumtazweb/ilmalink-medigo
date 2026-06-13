@@ -583,7 +583,7 @@ export default function AboutPage() {
             </p>
             
             <div className="flex flex-wrap justify-center gap-4 mt-3 text-xs text-gray-400">
-              <a href="/mbbs-abroad" className="hover:text-emerald-600 transition">MBBS Abroad</a>
+              <Link href="/mbbs-abroad" className="hover:text-emerald-600 transition">MBBS Abroad</Link>
               <span>•</span>
               <a href="/mbbs india" className="hover:text-emerald-600 transition">MBBS India</a>
               <span>•</span>
