@@ -4,7 +4,7 @@ import { useActionState, useMemo, useRef, useState } from "react";
 import { Eye, FileText, Heading2, ImageIcon, Italic, LinkIcon, List, Table2, Type } from "lucide-react";
 import { saveBlogAction } from "@/app/lib/blog/actions";
 import { blogCategories } from "@/app/lib/blog/seed";
-import type { BlogPost, BlogImage } from "@/app/lib/blog/types";
+import type { BlogPost, BlogImage, BlogStatus } from "@/app/lib/blog/types";
 import BlogContent from "./BlogContent";
 import ImageUploader from "./ImageUploader";
 
@@ -13,12 +13,16 @@ const initialState = {
   message: "",
 };
 
+const MAX_SLUG_LENGTH = 180;
+
 function slugify(value: string) {
   return value
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
+    .replace(/(^-|-$)/g, "")
+    .slice(0, MAX_SLUG_LENGTH)
+    .replace(/-+$/g, "");
 }
 
 function readTime(content: string) {
@@ -51,6 +55,7 @@ export default function BlogEditorForm({
   const [content, setContent] = useState(initialBlog?.content ?? "");
   const [preview, setPreview] = useState(false);
   const [images, setImages] = useState<BlogImage[]>(initialBlog?.images ?? []);
+  const [submitIntent, setSubmitIntent] = useState<BlogStatus | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const estimatedReadTime = useMemo(() => readTime(content), [content]);
@@ -95,6 +100,7 @@ export default function BlogEditorForm({
             name="slug"
             value={slug}
             onChange={(event) => setSlug(slugify(event.target.value))}
+            maxLength={MAX_SLUG_LENGTH}
             required
             className="mt-2 h-12 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
           />
@@ -249,27 +255,34 @@ export default function BlogEditorForm({
           type="submit"
           name="status"
           value="draft"
-          className="rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-[#0F172A] transition hover:border-[#0F4CFF]/30"
+          onClick={() => setSubmitIntent("draft")}
+          disabled={pending}
+          className="rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-[#0F172A] transition hover:border-[#0F4CFF]/30 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Save draft
+          {pending && submitIntent === "draft" ? "Saving..." : "Save draft"}
         </button>
         <button
           type="submit"
           name="status"
           value="pending"
-          className="rounded-full border border-[#16A34A]/30 bg-[#16A34A]/10 px-6 py-3 text-sm font-bold text-[#16A34A] transition hover:bg-[#16A34A] hover:text-white"
+          onClick={() => setSubmitIntent("pending")}
+          disabled={pending}
+          className="rounded-full border border-[#16A34A]/30 bg-[#16A34A]/10 px-6 py-3 text-sm font-bold text-[#16A34A] transition hover:bg-[#16A34A] hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Submit for approval
+          {pending && submitIntent === "pending"
+            ? "Submitting..."
+            : "Submit for approval"}
         </button>
         {canPublish && (
           <button
             type="submit"
             name="status"
             value="published"
+            onClick={() => setSubmitIntent("published")}
             disabled={pending}
-            className="rounded-full bg-[#0F4CFF] px-6 py-3 text-sm font-bold text-white shadow-[0_14px_28px_rgba(15,76,255,0.22)] transition hover:bg-[#0b3fd6]"
+            className="rounded-full bg-[#0F4CFF] px-6 py-3 text-sm font-bold text-white shadow-[0_14px_28px_rgba(15,76,255,0.22)] transition hover:bg-[#0b3fd6] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Publish
+            {pending && submitIntent === "published" ? "Publishing..." : "Publish"}
           </button>
         )}
       </div>

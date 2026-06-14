@@ -8,7 +8,7 @@ const oldSearchUrl =
 const oldSearchQueryLocales =
   /^\/(ar|bn|hi)\/?$/i;
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
 
   const hasOldSearchQuery =

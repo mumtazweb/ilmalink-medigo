@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "prisma generate",
     "predev": "npm run search:index",
     "dev": "next dev",
     "prebuild": "npm run search:index",
     "build": "next build",
     "start": "next start",
     "export": "next export",
+    "prisma:generate": "prisma generate",
     "search:index": "node scripts/generate-search-index.mjs",
     "lint": "eslint"
   },

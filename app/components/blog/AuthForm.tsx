@@ -44,7 +44,7 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
       } else {
         setResetMessage({ type: "error", text: result.message });
       }
-    } catch (error) {
+    } catch {
       setResetMessage({ type: "error", text: "Something went wrong" });
     } finally {
       setResetLoading(false);
@@ -105,7 +105,7 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
       } else {
         setResetMessage({ type: "error", text: result.message });
       }
-    } catch (error) {
+    } catch {
       setResetMessage({ type: "error", text: "Something went wrong" });
     } finally {
       setResetLoading(false);

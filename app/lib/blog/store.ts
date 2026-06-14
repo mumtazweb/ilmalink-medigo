@@ -58,6 +58,7 @@ type StoredBlogMetadata = {
 const BLOG_METADATA_PREFIX =
   "<!-- BLOG_METADATA:";
 const BLOG_METADATA_SUFFIX = " -->";
+const MAX_SLUG_LENGTH = 180;
 
 function isRole(value: string): value is BlogRole {
   return (
@@ -297,7 +298,20 @@ function addBlogToMap(
 async function readPrismaBlogs() {
   try {
     const records = await prisma.blog.findMany({
-      include: {
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        shortDescription: true,
+        content: true,
+        category: true,
+        country: true,
+        featuredImage: true,
+        status: true,
+        views: true,
+        createdAt: true,
+        updatedAt: true,
+        authorId: true,
         author: {
           select: {
             name: true,
@@ -474,12 +488,18 @@ async function writePrismaDatabase(
           id: existing.id,
         },
         data,
+        select: {
+          id: true,
+        },
       });
     } else {
       await prisma.blog.create({
         data: {
           id: blog.id,
           ...data,
+        },
+        select: {
+          id: true,
         },
       });
     }
@@ -749,7 +769,9 @@ export function createSlug(value: string) {
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
+    .replace(/(^-|-$)/g, "")
+    .slice(0, MAX_SLUG_LENGTH)
+    .replace(/-+$/g, "");
 }
 
 export function calculateReadTime(

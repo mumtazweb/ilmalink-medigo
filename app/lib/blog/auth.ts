@@ -6,6 +6,15 @@ import { getBlogUserById } from "./store";
 
 const SESSION_COOKIE = "ilmalink_blog_session";
 
+function isDynamicServerUsageError(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "digest" in error &&
+    (error as { digest?: unknown }).digest === "DYNAMIC_SERVER_USAGE"
+  );
+}
+
 export async function setBlogSession(
   userId: string
 ) {
@@ -43,6 +52,10 @@ export async function getCurrentBlogUser() {
 
     return user;
   } catch (error) {
+    if (isDynamicServerUsageError(error)) {
+      throw error;
+    }
+
     console.log(
       "Get current user error:",
       error

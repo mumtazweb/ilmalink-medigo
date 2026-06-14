@@ -22,13 +22,13 @@ model User {
 
 model Blog {
   id               String   @id @default(cuid())
-  title            String
+  title            String   @db.VarChar(512)
   slug             String   @unique
-  shortDescription String
+  shortDescription String   @db.Text
   content          String   @db.LongText
   category         String
-  country          String
-  featuredImage    String?
+  country          String   @db.VarChar(512)
+  featuredImage    String?  @db.LongText
   images           String?  @db.LongText
   status           String   @default("draft")
   views            Int      @default(0)
