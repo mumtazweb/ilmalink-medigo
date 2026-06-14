@@ -1,12 +1,17 @@
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import { getCurrentBlogUser } from "@/app/lib/blog/auth";
-import { ALLOWED_IMAGE_FORMATS, MAX_IMAGE_SIZE, generateFileName } from "@/app/lib/blog/imageValidation";
+import {
+  MAX_IMAGE_SIZE,
+  MAX_IMAGE_SIZE_LABEL,
+  generateFileName,
+  isImageFile,
+} from "@/app/lib/blog/imageValidation";
 
 /**
  * POST /api/blog/upload-image
  * Upload an editorial media image with validation
- * Supports .webp and .svg only, max 100KB
+ * Supports browser-recognized image files
  * Stores in public/uploads/blogs/
  */
 export async function POST(request: Request) {
@@ -22,9 +27,9 @@ export async function POST(request: Request) {
 
     // Get form data
     const formData = await request.formData();
-    const file = formData.get("file") as File;
+    const file = formData.get("file");
 
-    if (!file) {
+    if (!(file instanceof File)) {
       return Response.json(
         { error: "No file provided" },
         { status: 400 }
@@ -36,34 +41,31 @@ export async function POST(request: Request) {
       return Response.json(
         {
           error: "File too large",
-          message: `Maximum file size is 100 KB (received ${(file.size / 1024).toFixed(1)} KB)`,
+          message: `Maximum file size is ${MAX_IMAGE_SIZE_LABEL} (received ${(file.size / 1024 / 1024).toFixed(2)} MB)`,
         },
         { status: 400 }
       );
     }
 
-    // Validate file format
-    const fileName = file.name.toLowerCase();
-    const extension = fileName.split(".").pop() || "";
-
-    if (!ALLOWED_IMAGE_FORMATS.includes(extension)) {
+    // Validate image type
+    if (!isImageFile(file.name, file.type)) {
       return Response.json(
         {
           error: "Invalid format",
-          message: "Only .webp and .svg formats are allowed",
+          message: "Please upload an image file",
         },
         { status: 400 }
       );
     }
 
     // Generate unique filename
-    const uniqueName = generateFileName(fileName);
+    const uniqueName = generateFileName(file.name, file.type);
     const uploadDir = join(process.cwd(), "public", "uploads", "blogs");
 
     // Create directory if it doesn't exist
     try {
       await mkdir(uploadDir, { recursive: true });
-    } catch (e) {
+    } catch {
       // Directory might already exist
     }
 

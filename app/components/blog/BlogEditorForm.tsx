@@ -37,6 +37,17 @@ export default function BlogEditorForm({
   const [state, formAction, pending] = useActionState(saveBlogAction, initialState);
   const [title, setTitle] = useState(initialBlog?.title ?? "");
   const [slug, setSlug] = useState(initialBlog?.slug ?? "");
+  const [featuredImage, setFeaturedImage] = useState(initialBlog?.featuredImage ?? "");
+  const [category, setCategory] = useState<string>(initialBlog?.category ?? blogCategories[0]);
+  const [shortDescription, setShortDescription] = useState(
+    initialBlog?.shortDescription ?? ""
+  );
+  const [country, setCountry] = useState(initialBlog?.country ?? "");
+  const [seoTitle, setSeoTitle] = useState(initialBlog?.seoTitle ?? "");
+  const [keywords, setKeywords] = useState(initialBlog?.keywords.join(", ") ?? "");
+  const [metaDescription, setMetaDescription] = useState(
+    initialBlog?.metaDescription ?? ""
+  );
   const [content, setContent] = useState(initialBlog?.content ?? "");
   const [preview, setPreview] = useState(false);
   const [images, setImages] = useState<BlogImage[]>(initialBlog?.images ?? []);
@@ -60,7 +71,7 @@ export default function BlogEditorForm({
   }
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form action={formAction} className="space-y-6" noValidate>
       <input type="hidden" name="blogId" value={initialBlog?.id ?? ""} />
       <input type="hidden" name="images" value={JSON.stringify(images)} />
       <div className="grid gap-4 md:grid-cols-2">
@@ -92,11 +103,12 @@ export default function BlogEditorForm({
 
       <div className="grid gap-4 md:grid-cols-2">
         <label className="block">
-          <span className="text-sm font-bold text-[#0F172A]">Featured image upload</span>
+          <span className="text-sm font-bold text-[#0F172A]">Featured image URL (optional)</span>
           <input
             name="featuredImage"
-            defaultValue={initialBlog?.featuredImage}
-            placeholder="/blog/mbbs-india.svg or uploaded image URL"
+            value={featuredImage}
+            onChange={(event) => setFeaturedImage(event.target.value)}
+            placeholder="/uploads/blogs/image.jpg or leave blank for text-only"
             className="mt-2 h-12 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
           />
         </label>
@@ -105,7 +117,8 @@ export default function BlogEditorForm({
           <span className="text-sm font-bold text-[#0F172A]">Category</span>
           <select
             name="category"
-            defaultValue={initialBlog?.category}
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
             required
             className="mt-2 h-12 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
           >
@@ -122,7 +135,8 @@ export default function BlogEditorForm({
         <span className="text-sm font-bold text-[#0F172A]">Short description</span>
         <textarea
           name="shortDescription"
-          defaultValue={initialBlog?.shortDescription}
+          value={shortDescription}
+          onChange={(event) => setShortDescription(event.target.value)}
           required
           rows={3}
           className="mt-2 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-3 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
@@ -134,7 +148,8 @@ export default function BlogEditorForm({
           <span className="text-sm font-bold text-[#0F172A]">Country tags</span>
           <input
             name="country"
-            defaultValue={initialBlog?.country}
+            value={country}
+            onChange={(event) => setCountry(event.target.value)}
             placeholder="India, Kyrgyzstan, Global"
             className="mt-2 h-12 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
           />
@@ -143,7 +158,8 @@ export default function BlogEditorForm({
           <span className="text-sm font-bold text-[#0F172A]">SEO title</span>
           <input
             name="seoTitle"
-            defaultValue={initialBlog?.seoTitle}
+            value={seoTitle}
+            onChange={(event) => setSeoTitle(event.target.value)}
             className="mt-2 h-12 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
           />
         </label>
@@ -151,7 +167,8 @@ export default function BlogEditorForm({
           <span className="text-sm font-bold text-[#0F172A]">Keywords</span>
           <input
             name="keywords"
-            defaultValue={initialBlog?.keywords.join(", ")}
+            value={keywords}
+            onChange={(event) => setKeywords(event.target.value)}
             placeholder="MBBS, NEET, Admission"
             className="mt-2 h-12 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
           />
@@ -162,7 +179,8 @@ export default function BlogEditorForm({
         <span className="text-sm font-bold text-[#0F172A]">Meta description</span>
         <textarea
           name="metaDescription"
-          defaultValue={initialBlog?.metaDescription}
+          value={metaDescription}
+          onChange={(event) => setMetaDescription(event.target.value)}
           rows={2}
           className="mt-2 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-3 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
         />
@@ -228,6 +246,7 @@ export default function BlogEditorForm({
 
       <div className="flex flex-wrap items-center gap-3">
         <button
+          type="submit"
           name="status"
           value="draft"
           className="rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-bold text-[#0F172A] transition hover:border-[#0F4CFF]/30"
@@ -235,6 +254,7 @@ export default function BlogEditorForm({
           Save draft
         </button>
         <button
+          type="submit"
           name="status"
           value="pending"
           className="rounded-full border border-[#16A34A]/30 bg-[#16A34A]/10 px-6 py-3 text-sm font-bold text-[#16A34A] transition hover:bg-[#16A34A] hover:text-white"
@@ -243,6 +263,7 @@ export default function BlogEditorForm({
         </button>
         {canPublish && (
           <button
+            type="submit"
             name="status"
             value="published"
             disabled={pending}

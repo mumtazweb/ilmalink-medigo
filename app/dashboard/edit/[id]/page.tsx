@@ -44,7 +44,10 @@ export default async function EditBlogPage({ params }: EditBlogPageProps) {
             Update blog content, SEO fields, status and approval workflow.
           </p>
           <div className="mt-6">
-            <BlogEditorForm canPublish={user.role === "admin"} initialBlog={blog} />
+            <BlogEditorForm
+              canPublish={user.role === "admin" || user.role === "editor"}
+              initialBlog={blog}
+            />
           </div>
         </div>
       </section>

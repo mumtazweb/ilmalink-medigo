@@ -1,8 +1,23 @@
 // BLOG SYSTEM: Image validation for editorial media system.
-// Supports only .webp and .svg formats with 100KB max size.
+// Accepts browser-recognized image files with a practical upload size limit.
 
-export const ALLOWED_IMAGE_FORMATS = ["webp", "svg"];
-export const MAX_IMAGE_SIZE = 100 * 1024; // 100 KB
+export const COMMON_IMAGE_FORMATS = [
+  "avif",
+  "bmp",
+  "gif",
+  "heic",
+  "heif",
+  "ico",
+  "jpeg",
+  "jpg",
+  "png",
+  "svg",
+  "tif",
+  "tiff",
+  "webp",
+];
+export const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB
+export const MAX_IMAGE_SIZE_LABEL = "5 MB";
 export const UPLOAD_DIR = "uploads/blogs";
 
 export type ImageValidationError =
@@ -25,28 +40,65 @@ export function validateImageFile(file: File): ImageValidationResult {
     return { valid: false, error: "NO_FILE", message: "No file selected" };
   }
 
-  // Check file size
   if (file.size > MAX_IMAGE_SIZE) {
     return {
       valid: false,
       error: "FILE_TOO_LARGE",
-      message: `File must be smaller than 100 KB (currently ${(file.size / 1024).toFixed(1)} KB)`,
+      message: `File must be smaller than ${MAX_IMAGE_SIZE_LABEL} (currently ${formatFileSize(file.size)})`,
     };
   }
 
-  // Check file format
-  const fileName = file.name.toLowerCase();
-  const extension = fileName.split(".").pop() || "";
-
-  if (!ALLOWED_IMAGE_FORMATS.includes(extension)) {
+  if (!isImageFile(file.name, file.type)) {
     return {
       valid: false,
       error: "INVALID_FORMAT",
-      message: `Only .webp and .svg formats allowed. You uploaded .${extension}`,
+      message: "Please upload an image file.",
     };
   }
 
   return { valid: true };
+}
+
+export function getFileExtension(fileName: string, mimeType?: string): string {
+  const extensionMatch = fileName.toLowerCase().match(/\.([a-z0-9]+)$/);
+  const extension = extensionMatch?.[1] ?? "";
+
+  if (COMMON_IMAGE_FORMATS.includes(extension)) {
+    return extension;
+  }
+
+  return getExtensionFromMimeType(mimeType) ?? (extension || "img");
+}
+
+export function getExtensionFromMimeType(mimeType?: string): string | null {
+  if (!mimeType?.startsWith("image/")) {
+    return null;
+  }
+
+  const subtype = mimeType.split("/")[1]?.split("+")[0]?.toLowerCase();
+
+  if (!subtype) {
+    return null;
+  }
+
+  if (subtype === "jpeg") {
+    return "jpg";
+  }
+
+  if (subtype === "x-icon" || subtype === "vnd.microsoft.icon") {
+    return "ico";
+  }
+
+  return subtype;
+}
+
+export function isImageFile(fileName: string, mimeType?: string): boolean {
+  if (mimeType?.startsWith("image/")) {
+    return true;
+  }
+
+  const extension = getFileExtension(fileName);
+  return COMMON_IMAGE_FORMATS.includes(extension);
 }
 
 /**
@@ -54,6 +106,17 @@ export function validateImageFile(file: File): ImageValidationResult {
  */
 export function getMimeType(extension: string): string {
   const mimeTypes: Record<string, string> = {
+    avif: "image/avif",
+    bmp: "image/bmp",
+    gif: "image/gif",
+    heic: "image/heic",
+    heif: "image/heif",
+    ico: "image/x-icon",
+    jpeg: "image/jpeg",
+    jpg: "image/jpeg",
+    png: "image/png",
+    tif: "image/tiff",
+    tiff: "image/tiff",
     webp: "image/webp",
     svg: "image/svg+xml",
   };
@@ -63,8 +126,8 @@ export function getMimeType(extension: string): string {
 /**
  * Generate unique filename with timestamp
  */
-export function generateFileName(originalName: string): string {
-  const extension = originalName.split(".").pop() || "webp";
+export function generateFileName(originalName: string, mimeType?: string): string {
+  const extension = getFileExtension(originalName, mimeType);
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 8);
   return `${timestamp}-${random}.${extension}`;

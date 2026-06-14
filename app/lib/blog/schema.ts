@@ -13,7 +13,7 @@ export const blogDatabaseSchema = {
     id: "string primary key",
     title: "string",
     slug: "string unique seo_url",
-    featuredImage: "string",
+    featuredImage: "string optional_empty_for_text_only",
     imageAlt: "string",
     shortDescription: "text",
     category: "category_id",

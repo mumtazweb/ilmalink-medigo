@@ -54,10 +54,16 @@ export default function BlogContent({ content }: { content: string }) {
         const imageMatch = block.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
 
         if (imageMatch) {
+          const imageSrc = imageMatch[2].trim();
+
+          if (!imageSrc) {
+            return null;
+          }
+
           return (
             <div key={index} className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-[#EFF6FF]">
               <Image
-                src={imageMatch[2]}
+                src={imageSrc}
                 alt={imageMatch[1]}
                 fill
                 sizes="(min-width: 1024px) 860px, 90vw"

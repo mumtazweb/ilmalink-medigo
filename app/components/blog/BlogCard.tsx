@@ -4,22 +4,32 @@ import { CalendarDays, Clock, UserRound } from "lucide-react";
 import type { BlogPost } from "@/app/lib/blog/types";
 
 export default function BlogCard({ post }: { post: BlogPost }) {
+  const featuredImage = post.featuredImage?.trim();
+  const hasFeaturedImage = Boolean(featuredImage);
+
   return (
     <article className="group flex h-full min-h-[430px] flex-col overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_54px_rgba(15,23,42,0.12)]">
-      <div className="relative h-56 overflow-hidden bg-[var(--brand-blue-soft)]">
-        <Image
-          src={post.featuredImage}
-          alt={post.imageAlt}
-          fill
-          sizes="(min-width: 1024px) 360px, 88vw"
-          className="object-cover transition duration-500 group-hover:scale-105"
-        />
-        <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#0F4CFF] shadow-sm">
-          {post.category}
-        </span>
-      </div>
+      {hasFeaturedImage && (
+        <div className="relative h-56 overflow-hidden bg-[var(--brand-blue-soft)]">
+          <Image
+            src={featuredImage}
+            alt={post.imageAlt || post.title}
+            fill
+            sizes="(min-width: 1024px) 360px, 88vw"
+            className="object-cover transition duration-500 group-hover:scale-105"
+          />
+          <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#0F4CFF] shadow-sm">
+            {post.category}
+          </span>
+        </div>
+      )}
 
       <div className="flex flex-1 flex-col p-6">
+        {!hasFeaturedImage && (
+          <span className="mb-4 w-fit rounded-full bg-[#0F4CFF]/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#0F4CFF]">
+            {post.category}
+          </span>
+        )}
         <h3 className="line-clamp-2 text-2xl font-semibold leading-snug text-[#0F172A]">
           {post.title}
         </h3>

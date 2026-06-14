@@ -3,7 +3,11 @@
 import { useRef, useState } from "react";
 import { Upload, X, AlertCircle, CheckCircle2 } from "lucide-react";
 import type { BlogImage, ImagePosition } from "@/app/lib/blog/types";
-import { validateImageFile, formatFileSize } from "@/app/lib/blog/imageValidation";
+import {
+  MAX_IMAGE_SIZE_LABEL,
+  validateImageFile,
+  formatFileSize,
+} from "@/app/lib/blog/imageValidation";
 
 const IMAGE_POSITIONS: { label: string; value: ImagePosition }[] = [
   { label: "Top", value: "center top" },
@@ -73,6 +77,7 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
         alt: file.name.replace(/\.[^/.]+$/, ""),
         position: "center center",
         order: images.length,
+        size: data.size,
       };
 
       onImagesChange([...images, newImage]);
@@ -161,7 +166,7 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
         <input
           ref={fileInputRef}
           type="file"
-          accept=".webp,.svg"
+          accept="image/*"
           onChange={(e) => {
             if (e.target.files?.[0]) {
               handleFileUpload(e.target.files[0]);
@@ -185,7 +190,7 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
               {uploading ? "Uploading..." : "Drop images or click to upload"}
             </p>
             <p className="text-xs text-slate-600">
-              .webp or .svg • Max 100 KB each
+              JPG, PNG, GIF, WebP, SVG and more • Max {MAX_IMAGE_SIZE_LABEL} each
             </p>
           </div>
         </button>
@@ -275,7 +280,8 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
 
                   {/* File Info */}
                   <p className="text-xs text-slate-500 truncate">
-                    {formatFileSize(0)} • {image.url.split("/").pop()}
+                    {typeof image.size === "number" ? `${formatFileSize(image.size)} • ` : ""}
+                    {image.url.split("/").pop()}
                   </p>
                 </div>
 

@@ -31,6 +31,7 @@ export type BlogImage = {
   alt: string;
   position: ImagePosition;
   order: number;
+  size?: number;
 };
 
 export type BlogUser = {

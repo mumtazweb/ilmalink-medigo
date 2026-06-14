@@ -271,7 +271,7 @@ export async function saveBlogAction(
       return {
         ok: false,
         message:
-          "Title, description, category and content are required.",
+          "Title, short description, category and content are required.",
       };
     }
 
@@ -344,9 +344,7 @@ export async function saveBlogAction(
 
       slug,
 
-      featuredImage:
-        featuredImage ||
-        "/blog/mbbs-india.svg",
+      featuredImage,
 
       imageAlt: title,
 

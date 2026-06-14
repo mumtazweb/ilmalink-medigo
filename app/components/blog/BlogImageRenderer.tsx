@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import type { BlogImage } from "@/app/lib/blog/types";
 
 interface BlogImageRendererProps {
@@ -23,7 +22,9 @@ export default function BlogImageRenderer({
   }
 
   // Sort images by order
-  const sortedImages = [...images].sort((a, b) => a.order - b.order);
+  const sortedImages = images
+    .filter((image) => image.url.trim())
+    .sort((a, b) => a.order - b.order);
   const displayImages = showAll ? sortedImages : sortedImages.slice(0, 1);
 
   return (

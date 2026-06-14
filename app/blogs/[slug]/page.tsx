@@ -33,6 +33,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   }
 
   const url = `https://ilmalink.com/blogs/${post.slug}`;
+  const featuredImage = post.featuredImage?.trim();
 
   return {
     title: post.seoTitle,
@@ -49,18 +50,22 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
       publishedTime: post.publishDate,
       modifiedTime: post.updatedAt,
       authors: [post.authorName],
-      images: [
-        {
-          url: post.featuredImage,
-          alt: post.imageAlt,
-        },
-      ],
+      ...(featuredImage
+        ? {
+            images: [
+              {
+                url: featuredImage,
+                alt: post.imageAlt || post.title,
+              },
+            ],
+          }
+        : {}),
     },
     twitter: {
-      card: "summary_large_image",
+      card: featuredImage ? "summary_large_image" : "summary",
       title: post.seoTitle,
       description: post.metaDescription,
-      images: [post.featuredImage],
+      ...(featuredImage ? { images: [featuredImage] } : {}),
     },
   };
 }
@@ -76,13 +81,24 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
   const related = await getRelatedBlogs(post);
   const adjacent = await getAdjacentBlogs(post);
   const articleUrl = `https://ilmalink.com/blogs/${post.slug}`;
+  const featuredImage = post.featuredImage?.trim();
+  const imagePositionClass =
+    post.imagePosition === "top"
+      ? "object-top"
+      : post.imagePosition === "bottom"
+        ? "object-bottom"
+        : post.imagePosition === "left"
+          ? "object-left"
+          : post.imagePosition === "right"
+            ? "object-right"
+            : "object-center";
 
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
     description: post.metaDescription,
-    image: post.featuredImage,
+    ...(featuredImage ? { image: featuredImage } : {}),
     datePublished: post.publishDate,
     dateModified: post.updatedAt,
     author: {
@@ -140,26 +156,18 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
       {/* BLOG SYSTEM: Single blog article layout. */}
       <article className="mx-auto max-w-5xl px-4 pb-16 pt-36 sm:px-6 lg:px-8">
         <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_24px_64px_rgba(15,23,42,0.10)]">
-          <div className="relative h-[20vh] min-h-[140px] max-h-[220px] bg-[#EFF6FF] md:h-[22vh]">
-            <Image
-              src={post.featuredImage}
-              alt={post.imageAlt}
-              fill
-              priority
-              sizes="(min-width: 1024px) 960px, 100vw"
-              className={`object-cover ${
-  post.imagePosition === "top"
-    ? "object-top"
-    : post.imagePosition === "bottom"
-      ? "object-bottom"
-      : post.imagePosition === "left"
-        ? "object-left"
-        : post.imagePosition === "right"
-          ? "object-right"
-          : "object-center"
-}`}
-            />
-          </div>
+          {featuredImage && (
+            <div className="relative h-[20vh] min-h-[140px] max-h-[220px] bg-[#EFF6FF] md:h-[22vh]">
+              <Image
+                src={featuredImage}
+                alt={post.imageAlt || post.title}
+                fill
+                priority
+                sizes="(min-width: 1024px) 960px, 100vw"
+                className={`object-cover ${imagePositionClass}`}
+              />
+            </div>
+          )}
 
           <div className="p-6 md:p-10">
             <span className="rounded-full bg-[#0F4CFF]/10 px-3 py-1 text-xs font-bold text-[#0F4CFF]">
