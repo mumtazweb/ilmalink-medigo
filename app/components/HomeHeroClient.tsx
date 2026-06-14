@@ -1,111 +1,366 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight, Globe2, Search } from "lucide-react";
 import CounsellingPopup from "./CounsellingPopup";
 import FMGEExplorerModal from "./FMGEExplorerModal";
 import HeroGlobeV2 from "./HeroGlobeV2";
 import NeetRankPredictorTool from "./NeetRankPredictorTool";
+import { navbarCountryDestinations } from "../data/navbarDestinations";
 
 const OPEN_FMGE_EVENT = "ilmalink:open-fmge-explorer";
 const PENDING_FMGE_KEY = "ilmalink-pending-fmge-explorer";
 
-const destinationData = [
-  {
-    href: "/mbbs-abroad/kyrgyzstan",
-    label: "Kyrgyzstan",
-    flag: "kg",
-    fee: "₹1.5L/semester",
-    universities: 32,
-    language: "English",
-    recognition: "NMC, WHO",
+type DestinationCardData = {
+  href: string;
+  label: string;
+  flag: string;
+  detail: string;
+  cta: string;
+  fee?: string;
+  semesterFee?: string;
+  universityCount?: number;
+  badges: string[];
+};
+
+const destinationCardCopy = {
+  detail: "Fees and university guidance on the country page",
+  cta: "Open country",
+};
+
+const manualSemesterFeePlaceholder = "1.7L/sem";
+const manualUniversityCountPlaceholder = 32;
+
+// TODO: add verified semester fee/university count from country page where missing.
+const verifiedDestinationMeta: Partial<
+  Record<
+    string,
+    Pick<DestinationCardData, "fee" | "semesterFee" | "universityCount" | "badges">
+  >
+> = {
+  "/mbbs-india": {
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "English"],
   },
-  {
-    href: "/mbbs-abroad/georgia",
-    label: "Georgia",
-    flag: "ge",
-    fee: "₹2L/semester",
-    universities: 39,
-    language: "English",
-    recognition: "NMC, WHO",
+  "/mbbs-abroad/kyrgyzstan": {
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "WHO", "English"],
   },
-  {
-    href: "/mbbs-abroad/russia",
-    label: "Russia",
-    flag: "ru",
-    fee: "₹1.5L/semester",
-    universities: 102,
-    language: "English",
-    recognition: "NMC, WHO",
+  "/mbbs-abroad/georgia": {
+    fee: "Rs. 35-45 Lakhs Total",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "WHO", "English"],
   },
-  {
-    href: "/mbbs-abroad/kazakhstan",
-    label: "Kazakhstan",
-    flag: "kz",
-    fee: "₹1.6L/semester",
-    universities: 15,
-    language: "English",
-    recognition: "NMC, WHO",
+  "/mbbs-abroad/russia": {
+    fee: "Rs. 28-45 Lakhs Total",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "WHO", "English"],
   },
-  {
-    href: "/mbbs-abroad/uzbekistan",
-    label: "Uzbekistan",
-    flag: "uz",
-    fee: "₹1.7L/semester",
-    universities: 39,
-    language: "English",
-    recognition: "NMC, WHO",
+  "/mbbs-abroad/bangladesh": {
+    fee: "Rs. 25-40 Lakhs Total",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "English"],
   },
-  {
-    href: "/mbbs-abroad/usa",
-    label: "USA",
-    flag: "us",
-    fee: "₹10L/semester",
-    universities: 12,
-    language: "English",
-    recognition: "NMC, WHO",
+  "/mbbs-abroad/uzbekistan": {
+    fee: "Rs. 20-35 Lakhs Total",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "WHO", "English"],
   },
-  {
-    href: "/mbbs-abroad/bangladesh",
-    label: "Bangladesh",
-    flag: "bd",
-    fee: "₹2.7L/semester",
-    universities: 110,
-    language: "English",
-    recognition: "NMC, WHO",
+  "/mbbs-abroad/kazakhstan": {
+    fee: "Rs. 22-35 Lakhs Total",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "WHO", "English"],
   },
+  "/mbbs-abroad/tajikistan": {
+    fee: "Rs. 18-30 Lakhs Total",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "WHO", "English"],
+  },
+  "/mbbs-abroad/malaysia": {
+    semesterFee: manualSemesterFeePlaceholder,
+    badges: ["NMC", "English"],
+  },
+  "/mbbs-abroad/egypt": {
+    fee: "Rs. 18-30 Lakhs Total",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "English"],
+  },
+  "/mbbs-abroad/saudi-arabia": {
+    fee: "Rs. 60 Lakhs-1.2 Crores+",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "English"],
+  },
+  "/mbbs-abroad/qatar": {
+    fee: "Rs. 1.5-3+ Crores",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "English"],
+  },
+  "/mbbs-abroad/uae": {
+    fee: "Rs. 60 Lakhs-1.2 Crore+",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "English"],
+  },
+  "/mbbs-abroad/iran": {
+    fee: "Rs. 35-55 Lakhs Total",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "WHO", "English"],
+  },
+  "/mbbs-abroad/usa": {
+    fee: "Rs. 45-65 Lakhs/year",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "English"],
+  },
+  "/mbbs-abroad/canada": {
+    fee: "Rs. 35-55 Lakhs/year",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "English"],
+  },
+  "/mbbs-abroad/australia": {
+    fee: "Rs. 40-60 Lakhs/year",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "English"],
+  },
+  "/mbbs-abroad/new-zealand": {
+    fee: "Rs. 28-35 Lakhs/year",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "English"],
+  },
+  "/mbbs-abroad/uk": {
+    fee: "Rs. 45-60 Lakhs/year",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "English"],
+  },
+  "/mbbs-abroad/vietnam": {
+    fee: "Rs. 30-45 Lakhs Total",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "WHO", "English"],
+  },
+  "/mbbs-abroad/singapore": {
+    fee: "Rs. 1.5-3+ Crores",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "English"],
+  },
+  "/mbbs-abroad/barbados": {
+    fee: "Rs. 30-50 Lakhs Total",
+    semesterFee: manualSemesterFeePlaceholder,
+    universityCount: manualUniversityCountPlaceholder,
+    badges: ["NMC", "WHO", "English"],
+  },
+  "/mbbs-abroad/china": {
+    semesterFee: manualSemesterFeePlaceholder,
+    badges: ["FMGE"],
+  },
+};
+
+const localDestinationRoutes = [
+  { href: "/mbbs-india", label: "India", flag: "in" },
 ];
+
+const extraDestinationRoutes = [
+  { href: "/mbbs-abroad/armenia", label: "Armenia", flag: "am" },
+  { href: "/mbbs-abroad/azerbaijan", label: "Azerbaijan", flag: "az" },
+  { href: "/mbbs-abroad/belarus", label: "Belarus", flag: "by" },
+  { href: "/mbbs-abroad/belize", label: "Belize", flag: "bz" },
+  { href: "/mbbs-abroad/bulgaria", label: "Bulgaria", flag: "bg" },
+  { href: "/mbbs-abroad/china", label: "China", flag: "cn" },
+  { href: "/mbbs-abroad/curacao", label: "Curacao", flag: "cw" },
+  { href: "/mbbs-abroad/czech-republic", label: "Czech Republic", flag: "cz" },
+  { href: "/mbbs-abroad/grenada", label: "Grenada", flag: "gd" },
+  { href: "/mbbs-abroad/guyana", label: "Guyana", flag: "gy" },
+  { href: "/mbbs-abroad/hungary", label: "Hungary", flag: "hu" },
+  { href: "/mbbs-abroad/ireland", label: "Ireland", flag: "ie" },
+  { href: "/mbbs-abroad/italy", label: "Italy", flag: "it" },
+  { href: "/mbbs-abroad/jamaica", label: "Jamaica", flag: "jm" },
+  { href: "/mbbs-abroad/latvia", label: "Latvia", flag: "lv" },
+  { href: "/mbbs-abroad/lithuania", label: "Lithuania", flag: "lt" },
+  { href: "/mbbs-abroad/mauritius", label: "Mauritius", flag: "mu" },
+  { href: "/mbbs-abroad/nepal", label: "Nepal", flag: "np" },
+  { href: "/mbbs-abroad/netherlands", label: "Netherlands", flag: "nl" },
+  { href: "/mbbs-abroad/oman", label: "Oman", flag: "om" },
+  { href: "/mbbs-abroad/pakistan", label: "Pakistan", flag: "pk" },
+  { href: "/mbbs-abroad/papua-new-guinea", label: "Papua New Guinea", flag: "pg" },
+  { href: "/mbbs-abroad/philippines", label: "Philippines", flag: "ph" },
+  { href: "/mbbs-abroad/poland", label: "Poland", flag: "pl" },
+  { href: "/mbbs-abroad/republic-of-moldova", label: "Republic of Moldova", flag: "md" },
+  { href: "/mbbs-abroad/romania", label: "Romania", flag: "ro" },
+  { href: "/mbbs-abroad/saba", label: "Saba", flag: "bq" },
+  { href: "/mbbs-abroad/saint-kitts-and-nevis", label: "Saint Kitts and Nevis", flag: "kn" },
+  { href: "/mbbs-abroad/saint-lucia", label: "Saint Lucia", flag: "lc" },
+  { href: "/mbbs-abroad/serbia", label: "Serbia", flag: "rs" },
+  { href: "/mbbs-abroad/ukraine", label: "Ukraine", flag: "ua" },
+  { href: "/mbbs-abroad/united-republic-of-tanzania", label: "Tanzania", flag: "tz" },
+  { href: "/mbbs-abroad/vietnam", label: "Vietnam", flag: "vn" },
+  { href: "/mbbs-abroad/singapore", label: "Singapore", flag: "sg" },
+  { href: "/mbbs-abroad/barbados", label: "Barbados", flag: "bb" },
+  { href: "/mbbs-abroad/antigua-and-barbuda", label: "Antigua and Barbuda", flag: "ag" },
+  { href: "/mbbs-abroad/aruba", label: "Aruba", flag: "aw" },
+];
+
+const destinationSourceData: DestinationCardData[] = [
+  ...localDestinationRoutes.map((destination) => ({
+    ...destination,
+    ...(verifiedDestinationMeta[destination.href] ?? { badges: [] }),
+    ...destinationCardCopy,
+  })),
+  ...navbarCountryDestinations.map(({ href, label, flag }) => ({
+    href,
+    label,
+    flag,
+    ...(verifiedDestinationMeta[href] ?? { badges: [] }),
+    ...destinationCardCopy,
+  })),
+  ...extraDestinationRoutes.map((destination) => ({
+    ...destination,
+    ...(verifiedDestinationMeta[destination.href] ?? { badges: ["FMGE"] }),
+    ...destinationCardCopy,
+  })),
+];
+
+const destinationOrder = [
+  "/mbbs-india",
+  "/mbbs-abroad/kyrgyzstan",
+  "/mbbs-abroad/georgia",
+  "/mbbs-abroad/bangladesh",
+  "/mbbs-abroad/tajikistan",
+  "/mbbs-abroad/china",
+  "/mbbs-abroad/russia",
+  "/mbbs-abroad/uzbekistan",
+  "/mbbs-abroad/armenia",
+  "/mbbs-abroad/kazakhstan",
+  "/mbbs-abroad/malaysia",
+  "/mbbs-abroad/egypt",
+  "/mbbs-abroad/saudi-arabia",
+  "/mbbs-abroad/qatar",
+  "/mbbs-abroad/uae",
+  "/mbbs-abroad/iran",
+  "/mbbs-abroad/usa",
+  "/mbbs-abroad/canada",
+  "/mbbs-abroad/australia",
+  "/mbbs-abroad/new-zealand",
+  "/mbbs-abroad/uk",
+  "/mbbs-abroad/vietnam",
+  "/mbbs-abroad/singapore",
+  "/mbbs-abroad/barbados",
+  "/mbbs-abroad/antigua-and-barbuda",
+  "/mbbs-abroad/aruba",
+  "/mbbs-abroad/azerbaijan",
+  "/mbbs-abroad/belarus",
+  "/mbbs-abroad/belize",
+  "/mbbs-abroad/bulgaria",
+  "/mbbs-abroad/curacao",
+  "/mbbs-abroad/czech-republic",
+  "/mbbs-abroad/grenada",
+  "/mbbs-abroad/guyana",
+  "/mbbs-abroad/hungary",
+  "/mbbs-abroad/ireland",
+  "/mbbs-abroad/italy",
+  "/mbbs-abroad/jamaica",
+  "/mbbs-abroad/latvia",
+  "/mbbs-abroad/lithuania",
+  "/mbbs-abroad/mauritius",
+  "/mbbs-abroad/nepal",
+  "/mbbs-abroad/netherlands",
+  "/mbbs-abroad/oman",
+  "/mbbs-abroad/pakistan",
+  "/mbbs-abroad/papua-new-guinea",
+  "/mbbs-abroad/philippines",
+  "/mbbs-abroad/poland",
+  "/mbbs-abroad/republic-of-moldova",
+  "/mbbs-abroad/romania",
+  "/mbbs-abroad/saba",
+  "/mbbs-abroad/saint-kitts-and-nevis",
+  "/mbbs-abroad/saint-lucia",
+  "/mbbs-abroad/serbia",
+  "/mbbs-abroad/ukraine",
+  "/mbbs-abroad/united-republic-of-tanzania",
+];
+
+const firstMarketplaceRows = [
+  ["/mbbs-india", "/mbbs-abroad/kyrgyzstan", "/mbbs-abroad/georgia"],
+  ["/mbbs-abroad/bangladesh", "/mbbs-abroad/tajikistan", "/mbbs-abroad/china"],
+];
+
+const destinationData = destinationOrder
+  .map((href) => destinationSourceData.find((destination) => destination.href === href))
+  .filter((destination): destination is DestinationCardData => Boolean(destination));
+
+const buildDestinationRows = (destinations: DestinationCardData[]) => {
+  const rows = firstMarketplaceRows.map((row) =>
+    row
+      .map((href) => destinations.find((destination) => destination.href === href))
+      .filter((destination): destination is DestinationCardData => Boolean(destination))
+  );
+  const pinnedHrefs = new Set(firstMarketplaceRows.flat());
+
+  destinations
+    .filter((destination) => !pinnedHrefs.has(destination.href))
+    .forEach((destination, index) => rows[index % 2].push(destination));
+
+  return rows;
+};
+
+const splitDestinationsIntoRows = (destinations: DestinationCardData[]) =>
+  destinations.reduce<[DestinationCardData[], DestinationCardData[]]>(
+    (rows, destination, index) => {
+      rows[index % 2].push(destination);
+      return rows;
+    },
+    [[], []]
+  );
+
+const destinationRows = buildDestinationRows(destinationData);
 
 const heroCountryCards = [
   {
     href: "/mbbs-abroad/kyrgyzstan",
     label: "Kyrgyzstan",
     flag: "kg",
-    universities: 32,
+    hint: "View country",
   },
   {
     href: "/mbbs-abroad/georgia",
     label: "Georgia",
     flag: "ge",
-    universities: 39,
+    hint: "View country",
   },
   {
     href: "/mbbs-abroad/bangladesh",
     label: "Bangladesh",
     flag: "bd",
-    universities: 110,
+    hint: "View country",
   },
   {
     href: "/mbbs-abroad/russia",
     label: "Russia",
     flag: "ru",
-    universities: 102,
+    hint: "View country",
   },
   {
     href: "/mbbs-abroad/uzbekistan",
     label: "Uzbekistan",
     flag: "uz",
-    universities: 39,
+    hint: "View country",
   },
 ];
 
@@ -251,12 +506,64 @@ function ArrowRightIcon() {
   );
 }
 
+function DestinationMarketplaceCard({
+  destination,
+}: {
+  destination: DestinationCardData;
+}) {
+  const semesterFeeText = destination.semesterFee ?? manualSemesterFeePlaceholder;
+  const universityText =
+    typeof destination.universityCount === "number"
+      ? `${destination.universityCount} universities`
+      : `${manualUniversityCountPlaceholder} universities`;
+  return (
+    <Link
+      href={destination.href}
+      aria-label={`Explore MBBS in ${destination.label}`}
+      className="group relative isolate h-[116px] w-[calc((100vw-3rem)/2.55)] min-w-[132px] max-w-[152px] shrink-0 overflow-hidden rounded-[18px] border border-cyan-100/90 bg-[linear-gradient(145deg,#ffffff_0%,#f6fdff_48%,#ddfbf8_100%)] p-2.5 text-slate-950 shadow-[0_16px_34px_rgba(8,47,73,0.18),inset_0_1px_0_rgba(255,255,255,0.95)] transition duration-300 hover:-translate-y-1 hover:border-cyan-300 hover:shadow-[0_20px_44px_rgba(8,145,178,0.24)] active:scale-[0.98] sm:h-[132px] sm:w-44 sm:max-w-none sm:p-3 md:w-52"
+    >
+      <span className="pointer-events-none absolute -right-10 -bottom-10 h-28 w-28 rounded-full border border-cyan-300/20" />
+      <span className="pointer-events-none absolute -right-3 bottom-5 h-16 w-16 rounded-full border border-teal-300/20 [transform:rotateX(68deg)_rotateZ(-18deg)]" />
+      <span className="pointer-events-none absolute inset-x-3 top-12 h-px bg-[linear-gradient(90deg,rgba(14,116,144,0.08),rgba(14,116,144,0.28),transparent)]" />
+
+      <div className="relative flex min-w-0 items-center gap-1.5">
+        <span className="flex h-6 w-7 shrink-0 overflow-hidden rounded-md border border-white bg-white shadow-[0_5px_12px_rgba(8,47,73,0.16)] sm:h-7 sm:w-8">
+          <img
+            src={`https://flagcdn.com/w80/${destination.flag}.png`}
+            alt={`${destination.label} flag`}
+            className="h-full w-full object-cover"
+            loading="lazy"
+          />
+        </span>
+        <h3
+          className="min-w-0 truncate whitespace-nowrap text-[13px] font-black leading-none text-[#06203f] sm:text-base"
+          title={destination.label}
+        >
+          {destination.label}
+        </h3>
+      </div>
+
+      <div className="relative mt-2 space-y-0.5 rounded-xl bg-white/70 px-2 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+        <p className="truncate text-[12px] font-black leading-tight text-[#06203f] sm:text-sm">
+          {semesterFeeText}
+        </p>
+        <p className="truncate text-[11px] font-extrabold leading-tight text-cyan-800 sm:text-xs">
+          {universityText}
+        </p>
+      </div>
+    </Link>
+  );
+}
+
 export default function HomeHeroClient() {
   const [showPopup, setShowPopup] = useState(false);
   const [showFMGEExplorer, setShowFMGEExplorer] = useState(false);
   const [showRankPredictor, setShowRankPredictor] = useState(false);
+  const [isDestinationSearchOpen, setIsDestinationSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [neetScore, setNeetScore] = useState("");
+  const topMarketplaceScrollRef = useRef<HTMLDivElement | null>(null);
+  const bottomMarketplaceScrollRef = useRef<HTMLDivElement | null>(null);
 
   const filteredDestinations = useMemo(
     () =>
@@ -265,6 +572,19 @@ export default function HomeHeroClient() {
       ),
     [searchQuery]
   );
+  const marketplaceRows = searchQuery.trim()
+    ? splitDestinationsIntoRows(filteredDestinations)
+    : destinationRows;
+
+  const scrollDestinationRow = (rowIndex: 0 | 1, direction: -1 | 1) => {
+    const target =
+      rowIndex === 0 ? topMarketplaceScrollRef.current : bottomMarketplaceScrollRef.current;
+
+    target?.scrollBy({
+      left: direction * Math.max(target.clientWidth * 0.78, 190),
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     const openExplorer = () => setShowFMGEExplorer(true);
@@ -427,7 +747,7 @@ export default function HomeHeroClient() {
 
             {/* Country card */}
             <div className="relative z-30 mx-auto w-full max-w-[320px] lg:mx-0">
-              <div className="block rounded-[20px] border border-white/20 bg-[#143967]/[0.82] p-2.5 shadow-[0_35px_85px_rgba(0,0,0,0.38)] backdrop-blur-2xl md:hidden">
+              <div className="hidden rounded-[20px] border border-white/20 bg-[#143967]/[0.82] p-2.5 shadow-[0_35px_85px_rgba(0,0,0,0.38)] backdrop-blur-2xl md:hidden">
                 <div className="grid grid-cols-2 gap-1.5">
                   {heroCountryCards.slice(0, 3).map((country) => (
                     <Link
@@ -449,7 +769,7 @@ export default function HomeHeroClient() {
                           {country.label}
                         </p>
                         <p className="mt-0.5 text-[9px] leading-tight text-white/70">
-                          {country.universities}+ Universities
+                          {country.hint}
                         </p>
                       </div>
                     </Link>
@@ -494,7 +814,7 @@ export default function HomeHeroClient() {
                           {country.label}
                         </p>
                         <p className="mt-0.5 text-[11px] text-white/75">
-                          {country.universities}+ Universities
+                          {country.hint}
                         </p>
                       </div>
                     </Link>
@@ -576,83 +896,160 @@ export default function HomeHeroClient() {
               background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M0 20h200M0 40h200M0 60h200M0 80h200M0 100h200M0 120h200M0 140h200M0 160h200M0 180h200M20 0v200M40 0v200M60 0v200M80 0v200M100 0v200M120 0v200M140 0v200M160 0v200M180 0v200' fill='none' stroke='rgba(255,255,255,0.14)' stroke-width='0.8'/%3E%3C/svg%3E");
               background-size: cover;
             }
+
+            .destination-white-globe {
+              border-radius: 9999px;
+              border: 1px solid rgba(14, 116, 144, 0.08);
+              background:
+                radial-gradient(circle at 38% 34%, rgba(255, 255, 255, 0.96), transparent 18%),
+                repeating-radial-gradient(circle, transparent 0 23px, rgba(14, 116, 144, 0.10) 24px 25px),
+                linear-gradient(90deg, transparent 46%, rgba(14, 116, 144, 0.12) 48%, transparent 51%),
+                linear-gradient(0deg, transparent 46%, rgba(20, 184, 166, 0.10) 48%, transparent 51%),
+                radial-gradient(circle, rgba(236, 254, 255, 0.96), rgba(255, 255, 255, 0.55) 58%, transparent 72%);
+              box-shadow:
+                inset -28px -28px 70px rgba(8, 47, 73, 0.08),
+                0 0 70px rgba(255, 255, 255, 0.90),
+                0 26px 80px rgba(8, 145, 178, 0.16);
+              transform: rotate(-12deg);
+            }
+
+            .destination-marketplace-scroll {
+              -ms-overflow-style: none;
+              overscroll-behavior-x: contain;
+              scrollbar-width: none;
+            }
+
+            .destination-marketplace-scroll::-webkit-scrollbar {
+              display: none;
+            }
           `}</style>
 
-          <div className="relative z-20 mt-8 grid gap-8 xl:grid-cols-[1.2fr_0.8fr]">
-            <div className="space-y-8">
-              <section className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_18px_44px_rgba(15,23,42,0.08)]">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-sm uppercase tracking-[0.24em] text-[#0B1D39]">
-                      Top destinations
-                    </p>
-                    <h2 className="mt-3 text-2xl font-semibold text-[#081B35]">
-                      Marketplace for premier MBBS countries
-                    </h2>
-                  </div>
-                  <Link
-                    href="/mbbs-abroad"
-                    className="text-sm font-semibold text-[#0F4CFF] transition hover:text-[#0B1D39]"
-                  >
-                    View all countries →
-                  </Link>
-                </div>
+          <div className="relative z-[70] mt-2 grid min-w-0 gap-8 xl:grid-cols-[1.2fr_0.8fr]">
+            <div className="min-w-0 space-y-8">
+              <section className="relative -mt-6 min-w-0 overflow-hidden rounded-t-[14px] border border-white bg-white/95 p-1 text-[#06203f] shadow-[0_-12px_45px_rgba(255,255,255,0.48),0_24px_70px_rgba(8,47,73,0.18)] backdrop-blur-xl sm:-mt-6 sm:p-4">
+                <div className="destination-white-globe pointer-events-none absolute -right-20 -top-24 h-80 w-80 opacity-80 md:-right-12 md:-top-28 md:h-[420px] md:w-[420px]" />
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0))]" />
 
-                <div className="mt-6">
-                  <label className="block">
-                    <span className="sr-only">Search countries</span>
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search destination..."
-                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#0F4CFF] focus:ring-2 focus:ring-[#0F4CFF]/15"
-                    />
-                  </label>
-                </div>
+                <div className="relative flex w-full flex-col items-center">
+                  <div className="flex w-full items-center justify-center px-2">
+                    <div className="flex max-w-full items-center justify-center gap-2.5 text-[#06203f]">
+                      <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cyan-100 bg-[linear-gradient(145deg,#ffffff_0%,#e8fdff_48%,#bdf4ee_100%)] text-cyan-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.95),inset_-5px_-7px_14px_rgba(8,145,178,0.14),0_10px_22px_rgba(8,145,178,0.20)] [transform:perspective(480px)_rotateX(10deg)_rotateY(-14deg)] sm:h-10 sm:w-10">
+                        <span className="pointer-events-none absolute left-2 top-1.5 h-2 w-3 rounded-full bg-white/80 blur-[1px]" />
+                        <span className="pointer-events-none absolute inset-1 rounded-full border border-white/70" />
+                        <Globe2
+                          className="relative h-5 w-5 drop-shadow-[0_2px_2px_rgba(8,47,73,0.22)] sm:h-[22px] sm:w-[22px]"
+                          strokeWidth={2.4}
+                        />
+                      </span>
 
-                <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                  {filteredDestinations.map((destination) => (
-                    <Link
-                      key={destination.href}
-                      href={destination.href}
-                      className="group rounded-[24px] border border-slate-200 bg-[#f8fafc] p-5 transition hover:-translate-y-1 hover:border-[#0F4CFF]"
-                    >
-                      <div className="flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                          <img
-                            src={`https://flagcdn.com/w40/${destination.flag}.png`}
-                            alt={`${destination.label} Flag`}
-                            className="h-5 w-6 rounded-sm"
-                            loading="lazy"
-                          />
-                          <div>
-                            <h3 className="text-lg font-semibold text-[#081B35]">
-                              {destination.label}
-                            </h3>
-                            <p className="text-sm text-slate-500">
-                              {destination.recognition}
-                            </p>
-                          </div>
-                        </div>
-                        <span className="rounded-full bg-[#0F4CFF]/10 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#0F4CFF]">
-                          {destination.language}
-                        </span>
-                      </div>
-                      <div className="mt-5 grid gap-3 text-sm text-slate-600">
-                        <p>
-                          Starting from{" "}
-                          <span className="font-semibold text-[#081B35]">
-                            {destination.fee}
-                          </span>
+                      <div className="min-w-0 text-center">
+                        <h2 className="truncate text-[18px] font-black tracking-tight text-[#06203f] sm:text-2xl">
+                          Top MBBS Destinations
+                        </h2>
+                        <p className="truncate text-[10px] font-semibold text-cyan-800/75 sm:text-xs">
+                          (NMC, WHO approved & English Curriculum)
                         </p>
-                        <p>{destination.universities} universities</p>
                       </div>
-                    </Link>
-                  ))}
+
+                      <button
+                        type="button"
+                        aria-label="Search destinations"
+                        aria-expanded={isDestinationSearchOpen}
+                        onClick={() => setIsDestinationSearchOpen((open) => !open)}
+                        className="group/search relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cyan-100 bg-[linear-gradient(145deg,#ffffff_0%,#eefcff_52%,#c9f7ee_100%)] p-0 text-cyan-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.96),inset_-5px_-7px_14px_rgba(8,145,178,0.12),0_10px_22px_rgba(8,145,178,0.18)] transition duration-300 [transform:perspective(480px)_rotateX(10deg)_rotateY(14deg)] hover:-translate-y-0.5 hover:text-cyan-950 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.96),inset_-5px_-7px_14px_rgba(8,145,178,0.15),0_14px_28px_rgba(8,145,178,0.26)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 active:translate-y-0 active:scale-95 sm:h-10 sm:w-10"
+                      >
+                        <span className="pointer-events-none absolute left-2 top-1.5 h-2 w-3 rounded-full bg-white/85 blur-[1px]" />
+                        <span className="pointer-events-none absolute inset-1 rounded-full border border-white/70 transition group-hover/search:border-cyan-100" />
+                        <Search
+                          className="relative h-[18px] w-[18px] drop-shadow-[0_2px_2px_rgba(8,47,73,0.22)] transition duration-300 group-hover/search:scale-110 sm:h-5 sm:w-5"
+                          strokeWidth={2.6}
+                        />
+                      </button>
+                    </div>
+                  </div>
+
+                  {(isDestinationSearchOpen || searchQuery) ? (
+                    <label className="mx-auto mt-3 block w-full max-w-sm px-1">
+                      <span className="sr-only">Search countries</span>
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Search country"
+                        className="w-full rounded-2xl border border-cyan-100 bg-white px-3 py-2.5 text-sm text-[#06203f] outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_10px_24px_rgba(8,47,73,0.08)] transition placeholder:text-slate-400 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-200/60"
+                      />
+                    </label>
+                  ) : null}
+
+                  <div className="mt-2 w-full space-y-2">
+                    <div className="relative">
+                      <button
+                        type="button"
+                        aria-label="Scroll top destination row left"
+                        onClick={() => scrollDestinationRow(0, -1)}
+                        className="absolute left-0 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-cyan-100 bg-white/95 text-cyan-800 shadow-[0_10px_24px_rgba(8,47,73,0.18)] transition hover:border-cyan-300 hover:bg-cyan-50"
+                      >
+                        <ChevronLeft className="h-4 w-4" strokeWidth={2.4} />
+                      </button>
+
+                      <div
+                        ref={topMarketplaceScrollRef}
+                        className="destination-marketplace-scroll flex max-w-full snap-x snap-mandatory gap-2 overflow-x-auto px-5 pb-1 pt-1 sm:gap-3"
+                      >
+                        {marketplaceRows[0].map((destination) => (
+                          <DestinationMarketplaceCard
+                            key={destination.href}
+                            destination={destination}
+                          />
+                        ))}
+                      </div>
+
+                      <button
+                        type="button"
+                        aria-label="Scroll top destination row right"
+                        onClick={() => scrollDestinationRow(0, 1)}
+                        className="absolute right-0 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-cyan-100 bg-white/95 text-cyan-800 shadow-[0_10px_24px_rgba(8,47,73,0.18)] transition hover:border-cyan-300 hover:bg-cyan-50"
+                      >
+                        <ChevronRight className="h-4 w-4" strokeWidth={2.4} />
+                      </button>
+                    </div>
+
+                    <div className="mx-4 h-px bg-[linear-gradient(90deg,transparent,rgba(8,145,178,0.28),transparent)]" />
+
+                    <div className="relative">
+                      <button
+                        type="button"
+                        aria-label="Scroll bottom destination row left"
+                        onClick={() => scrollDestinationRow(1, -1)}
+                        className="absolute left-0 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-cyan-100 bg-white/95 text-cyan-800 shadow-[0_10px_24px_rgba(8,47,73,0.18)] transition hover:border-cyan-300 hover:bg-cyan-50"
+                      >
+                        <ChevronLeft className="h-4 w-4" strokeWidth={2.4} />
+                      </button>
+
+                      <div
+                        ref={bottomMarketplaceScrollRef}
+                        className="destination-marketplace-scroll flex max-w-full snap-x snap-mandatory gap-2 overflow-x-auto px-5 pb-2 pt-1 sm:gap-3"
+                      >
+                        {marketplaceRows[1].map((destination) => (
+                          <DestinationMarketplaceCard
+                            key={destination.href}
+                            destination={destination}
+                          />
+                        ))}
+                      </div>
+
+                      <button
+                        type="button"
+                        aria-label="Scroll bottom destination row right"
+                        onClick={() => scrollDestinationRow(1, 1)}
+                        className="absolute right-0 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-cyan-100 bg-white/95 text-cyan-800 shadow-[0_10px_24px_rgba(8,47,73,0.18)] transition hover:border-cyan-300 hover:bg-cyan-50"
+                      >
+                        <ChevronRight className="h-4 w-4" strokeWidth={2.4} />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </section>
-
               <section className="rounded-[32px] border border-slate-200 bg-[#0B1D39] p-6 text-white shadow-[0_18px_44px_rgba(15,23,42,0.18)]">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
@@ -825,19 +1222,23 @@ export default function HomeHeroClient() {
                           <h3 className="text-base font-semibold text-[#081B35]">
                             {destination.label}
                           </h3>
-                          <p className="text-sm text-slate-500">{destination.recognition}</p>
+                          <p className="text-sm text-slate-500">{destination.detail}</p>
                         </div>
                       </div>
                       <span className="text-sm font-semibold text-[#0F4CFF]">
-                        {destination.language}
+                        Explore
                       </span>
                     </div>
                     <div className="mt-4 grid gap-2 text-sm text-slate-600">
-                      <p>
-                        Estimated fees:{" "}
-                        <span className="font-semibold text-[#081B35]">{destination.fee}</span>
-                      </p>
-                      <p>{destination.universities} medical universities</p>
+                      <p>Country-wise guidance, fees and university details are on the destination page.</p>
+                      <Link
+                        href={destination.href}
+                        aria-label={`Explore MBBS in ${destination.label}`}
+                        className="inline-flex items-center gap-1 font-semibold text-[#0F4CFF] transition hover:text-[#081B35]"
+                      >
+                        {destination.cta}
+                        <ArrowRightIcon />
+                      </Link>
                     </div>
                   </div>
                 ))}
