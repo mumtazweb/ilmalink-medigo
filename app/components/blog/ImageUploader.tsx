@@ -1,12 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Upload, X, AlertCircle, CheckCircle2 } from "lucide-react";
+import { ArrowDown, ArrowUp, Upload, X, AlertCircle, CheckCircle2 } from "lucide-react";
 import type { BlogImage, ImagePosition } from "@/app/lib/blog/types";
 import {
-  MAX_IMAGE_SIZE_LABEL,
   validateImageFile,
   formatFileSize,
+  isImageFile,
+  isVideoFile,
 } from "@/app/lib/blog/imageValidation";
 
 const IMAGE_POSITIONS: { label: string; value: ImagePosition }[] = [
@@ -78,10 +79,12 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
         position: "center center",
         order: images.length,
         size: data.size,
+        type: data.type || file.type,
+        fileName: data.fileName || file.name,
       };
 
       onImagesChange([...images, newImage]);
-      setUploadSuccess(`Image uploaded successfully`);
+      setUploadSuccess(data.message || "Media uploaded successfully");
 
       // Clear input
       if (fileInputRef.current) {
@@ -166,7 +169,6 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
         <input
           ref={fileInputRef}
           type="file"
-          accept="image/*"
           onChange={(e) => {
             if (e.target.files?.[0]) {
               handleFileUpload(e.target.files[0]);
@@ -187,10 +189,10 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
           </div>
           <div>
             <p className="text-sm font-bold text-[#0F172A]">
-              {uploading ? "Uploading..." : "Drop images or click to upload"}
+              {uploading ? "Uploading..." : "Drop media or click to upload"}
             </p>
             <p className="text-xs text-slate-600">
-              JPG, PNG, GIF, WebP, SVG and more • Max {MAX_IMAGE_SIZE_LABEL} each
+              Images, videos and files allowed
             </p>
           </div>
         </button>
@@ -214,7 +216,7 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
       {/* Image Gallery */}
       {images.length > 0 && (
         <div className="space-y-3">
-          <h3 className="text-sm font-bold text-[#0F172A]">Uploaded Images ({images.length})</h3>
+          <h3 className="text-sm font-bold text-[#0F172A]">Uploaded Media ({images.length})</h3>
 
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {images.map((image, idx) => (
@@ -224,12 +226,34 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
               >
                 {/* Preview */}
                 <div className="relative aspect-[16/9] overflow-hidden bg-[#F8FAFC]">
-                  <img
-                    src={image.url}
-                    alt={image.alt}
-                    className="w-full h-full object-cover"
+                  {isVideoFile(image.url, image.type) ? (
+                    <video
+                      src={image.url}
+                      className="h-full w-full object-cover"
+                      style={{ objectPosition: image.position }}
+                      controls
+                      muted
+                    />
+                  ) : isImageFile(image.url, image.type) ? (
+                    <img
+                      src={image.url}
+                      alt={image.alt}
+                      className="w-full h-full object-cover"
+                      style={{ objectPosition: image.position }}
+                    />
+                  ) : (
+                    <a
+                      href={image.url}
+                      download={image.fileName}
+                      className="flex h-full w-full items-center justify-center px-4 text-center text-sm font-bold text-[#0F4CFF]"
+                    >
+                      {image.fileName || image.alt || "Download file"}
+                    </a>
+                  )}
+                  <div
+                    className="pointer-events-none absolute inset-0"
+                    style={{ objectPosition: image.position }}
                   />
-                  <div className="absolute inset-0" style={{ objectPosition: image.position }} />
 
                   {/* Remove Button */}
                   <button
@@ -250,7 +274,7 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
                 <div className="p-3 space-y-2">
                   {/* Alt Text */}
                   <label className="block">
-                    <span className="text-xs font-bold text-slate-700">Alt text</span>
+                    <span className="text-xs font-bold text-slate-700">Label / alt text</span>
                     <input
                       type="text"
                       value={image.alt}
@@ -280,8 +304,8 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
 
                   {/* File Info */}
                   <p className="text-xs text-slate-500 truncate">
-                    {typeof image.size === "number" ? `${formatFileSize(image.size)} • ` : ""}
-                    {image.url.split("/").pop()}
+                    {typeof image.size === "number" ? `${formatFileSize(image.size)} - ` : ""}
+                    {image.fileName || image.url.split("/").pop()}
                   </p>
                 </div>
 
@@ -293,7 +317,7 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
                     disabled={idx === 0}
                     className="flex-1 h-7 rounded text-xs font-bold text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition"
                   >
-                    ↑
+                    <ArrowUp aria-label="Move up" className="mx-auto" size={14} />
                   </button>
                   <button
                     type="button"
@@ -301,7 +325,7 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
                     disabled={idx === images.length - 1}
                     className="flex-1 h-7 rounded text-xs font-bold text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:cursor-not-allowed transition"
                   >
-                    ↓
+                    <ArrowDown aria-label="Move down" className="mx-auto" size={14} />
                   </button>
                 </div>
               </div>

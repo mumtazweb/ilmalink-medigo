@@ -6,6 +6,8 @@ import { CalendarDays, ChevronLeft, ChevronRight, Clock, Share2, UserRound } fro
 import Navbar from "@/app/components/navbar";
 import BlogCard from "@/app/components/blog/BlogCard";
 import BlogContent from "@/app/components/blog/BlogContent";
+import BlogImageRenderer from "@/app/components/blog/BlogImageRenderer";
+import { isImageFile, isVideoFile } from "@/app/lib/blog/imageValidation";
 import {
   getAdjacentBlogs,
   getBlogBySlug,
@@ -34,6 +36,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
 
   const url = `https://ilmalink.com/blogs/${post.slug}`;
   const featuredImage = post.featuredImage?.trim();
+  const hasSocialImage = Boolean(featuredImage && isImageFile(featuredImage));
 
   return {
     title: post.seoTitle,
@@ -50,7 +53,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
       publishedTime: post.publishDate,
       modifiedTime: post.updatedAt,
       authors: [post.authorName],
-      ...(featuredImage
+      ...(hasSocialImage && featuredImage
         ? {
             images: [
               {
@@ -62,10 +65,10 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
         : {}),
     },
     twitter: {
-      card: featuredImage ? "summary_large_image" : "summary",
+      card: hasSocialImage ? "summary_large_image" : "summary",
       title: post.seoTitle,
       description: post.metaDescription,
-      ...(featuredImage ? { images: [featuredImage] } : {}),
+      ...(hasSocialImage && featuredImage ? { images: [featuredImage] } : {}),
     },
   };
 }
@@ -82,6 +85,8 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
   const adjacent = await getAdjacentBlogs(post);
   const articleUrl = `https://ilmalink.com/blogs/${post.slug}`;
   const featuredImage = post.featuredImage?.trim();
+  const hasFeaturedVideo = featuredImage ? isVideoFile(featuredImage) : false;
+  const hasFeaturedImage = featuredImage ? isImageFile(featuredImage) : false;
   const imagePositionClass =
     post.imagePosition === "top"
       ? "object-top"
@@ -98,7 +103,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
     "@type": "Article",
     headline: post.title,
     description: post.metaDescription,
-    ...(featuredImage ? { image: featuredImage } : {}),
+    ...(hasFeaturedImage && featuredImage ? { image: featuredImage } : {}),
     datePublished: post.publishDate,
     dateModified: post.updatedAt,
     author: {
@@ -156,16 +161,25 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
       {/* BLOG SYSTEM: Single blog article layout. */}
       <article className="mx-auto max-w-5xl px-4 pb-16 pt-36 sm:px-6 lg:px-8">
         <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_24px_64px_rgba(15,23,42,0.10)]">
-          {featuredImage && (
+          {featuredImage && (hasFeaturedImage || hasFeaturedVideo) && (
             <div className="relative h-[20vh] min-h-[140px] max-h-[220px] bg-[#EFF6FF] md:h-[22vh]">
-              <Image
-                src={featuredImage}
-                alt={post.imageAlt || post.title}
-                fill
-                priority
-                sizes="(min-width: 1024px) 960px, 100vw"
-                className={`object-cover ${imagePositionClass}`}
-              />
+              {hasFeaturedVideo ? (
+                <video
+                  src={featuredImage}
+                  className={`h-full w-full object-cover ${imagePositionClass}`}
+                  controls
+                  preload="metadata"
+                />
+              ) : (
+                <Image
+                  src={featuredImage}
+                  alt={post.imageAlt || post.title}
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 960px, 100vw"
+                  className={`object-cover ${imagePositionClass}`}
+                />
+              )}
             </div>
           )}
 
@@ -222,6 +236,11 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
             </div>
 
             <div className="mt-10 border-t border-slate-200 pt-8">
+              {post.images && post.images.length > 0 && (
+                <div className="mb-8 space-y-5">
+                  <BlogImageRenderer images={post.images} />
+                </div>
+              )}
               <BlogContent content={post.content} />
             </div>
           </div>

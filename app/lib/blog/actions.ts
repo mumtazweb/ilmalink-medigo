@@ -16,6 +16,7 @@ import {
   calculateReadTime,
   createBlogUser,
   createSlug,
+  deleteStoredBlog,
   getBlogUser,
   getFreshBlogDatabase,
   isBlogCategory,
@@ -458,9 +459,10 @@ export async function approveBlogAction(
     const database =
       await getFreshBlogDatabase();
 
-    const blog = database.blogs.find(
-      (item) => item.id === blogId
-    );
+    const blog = [
+      ...database.blogs,
+      ...database.drafts,
+    ].find((item) => item.id === blogId);
 
     if (!blog) {
       return;
@@ -474,6 +476,18 @@ export async function approveBlogAction(
 
     blog.updatedAt =
       new Date().toISOString();
+
+    database.blogs =
+      database.blogs.filter(
+        (item) => item.id !== blog.id
+      );
+
+    database.drafts =
+      database.drafts.filter(
+        (item) => item.id !== blog.id
+      );
+
+    database.blogs.push(blog);
 
     await saveBlogDatabase(database);
 
@@ -497,9 +511,10 @@ export async function deleteBlogAction(
     const database =
       await getFreshBlogDatabase();
 
-    const blog = database.blogs.find(
-      (item) => item.id === blogId
-    );
+    const blog = [
+      ...database.blogs,
+      ...database.drafts,
+    ].find((item) => item.id === blogId);
 
     if (!user || !blog) {
       return;
@@ -523,6 +538,7 @@ export async function deleteBlogAction(
       );
 
     await saveBlogDatabase(database);
+    await deleteStoredBlog(blogId, blog.slug);
 
     revalidatePath("/blogs");
     revalidatePath("/dashboard");

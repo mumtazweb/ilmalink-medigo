@@ -1,28 +1,9 @@
-// BLOG SYSTEM: Image validation for editorial media system.
-// Accepts browser-recognized image files with a practical upload size limit.
+// BLOG SYSTEM: Upload helpers for editorial media.
+// The app does not enforce a file size or type cap; hosting/database limits may still apply.
 
-export const COMMON_IMAGE_FORMATS = [
-  "avif",
-  "bmp",
-  "gif",
-  "heic",
-  "heif",
-  "ico",
-  "jpeg",
-  "jpg",
-  "png",
-  "svg",
-  "tif",
-  "tiff",
-  "webp",
-];
-export const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB
-export const MAX_IMAGE_SIZE_LABEL = "5 MB";
 export const UPLOAD_DIR = "uploads/blogs";
 
 export type ImageValidationError =
-  | "INVALID_FORMAT"
-  | "FILE_TOO_LARGE"
   | "NO_FILE"
   | "UNKNOWN_ERROR";
 
@@ -33,27 +14,11 @@ export interface ImageValidationResult {
 }
 
 /**
- * Validate image file on client side
+ * Validate upload selection on client side.
  */
 export function validateImageFile(file: File): ImageValidationResult {
   if (!file) {
     return { valid: false, error: "NO_FILE", message: "No file selected" };
-  }
-
-  if (file.size > MAX_IMAGE_SIZE) {
-    return {
-      valid: false,
-      error: "FILE_TOO_LARGE",
-      message: `File must be smaller than ${MAX_IMAGE_SIZE_LABEL} (currently ${formatFileSize(file.size)})`,
-    };
-  }
-
-  if (!isImageFile(file.name, file.type)) {
-    return {
-      valid: false,
-      error: "INVALID_FORMAT",
-      message: "Please upload an image file.",
-    };
   }
 
   return { valid: true };
@@ -63,7 +28,7 @@ export function getFileExtension(fileName: string, mimeType?: string): string {
   const extensionMatch = fileName.toLowerCase().match(/\.([a-z0-9]+)$/);
   const extension = extensionMatch?.[1] ?? "";
 
-  if (COMMON_IMAGE_FORMATS.includes(extension)) {
+  if (extension) {
     return extension;
   }
 
@@ -71,7 +36,7 @@ export function getFileExtension(fileName: string, mimeType?: string): string {
 }
 
 export function getExtensionFromMimeType(mimeType?: string): string | null {
-  if (!mimeType?.startsWith("image/")) {
+  if (!mimeType?.includes("/")) {
     return null;
   }
 
@@ -92,13 +57,20 @@ export function getExtensionFromMimeType(mimeType?: string): string | null {
   return subtype;
 }
 
-export function isImageFile(fileName: string, mimeType?: string): boolean {
-  if (mimeType?.startsWith("image/")) {
-    return true;
-  }
+export function isVideoFile(urlOrName: string, mimeType?: string): boolean {
+  return (
+    mimeType?.startsWith("video/") === true ||
+    /\.(mp4|m4v|mov|webm|ogg|ogv|avi|mkv)$/i.test(urlOrName) ||
+    urlOrName.startsWith("data:video/")
+  );
+}
 
-  const extension = getFileExtension(fileName);
-  return COMMON_IMAGE_FORMATS.includes(extension);
+export function isImageFile(urlOrName: string, mimeType?: string): boolean {
+  return (
+    mimeType?.startsWith("image/") === true ||
+    /\.(avif|bmp|gif|heic|heif|ico|jpe?g|png|svg|tiff?|webp)$/i.test(urlOrName) ||
+    urlOrName.startsWith("data:image/")
+  );
 }
 
 /**
@@ -114,9 +86,16 @@ export function getMimeType(extension: string): string {
     ico: "image/x-icon",
     jpeg: "image/jpeg",
     jpg: "image/jpeg",
+    m4v: "video/mp4",
+    mkv: "video/x-matroska",
+    mov: "video/quicktime",
+    mp4: "video/mp4",
+    ogg: "video/ogg",
+    ogv: "video/ogg",
     png: "image/png",
     tif: "image/tiff",
     tiff: "image/tiff",
+    webm: "video/webm",
     webp: "image/webp",
     svg: "image/svg+xml",
   };
@@ -139,7 +118,7 @@ export function generateFileName(originalName: string, mimeType?: string): strin
 export function formatFileSize(bytes: number): string {
   if (bytes === 0) return "0 Bytes";
   const k = 1024;
-  const sizes = ["Bytes", "KB", "MB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const sizes = ["Bytes", "KB", "MB", "GB"];
+  const i = Math.min(Math.floor(Math.log(bytes) / Math.log(k)), sizes.length - 1);
   return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
 }

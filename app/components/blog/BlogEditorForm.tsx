@@ -103,12 +103,12 @@ export default function BlogEditorForm({
 
       <div className="grid gap-4 md:grid-cols-2">
         <label className="block">
-          <span className="text-sm font-bold text-[#0F172A]">Featured image URL (optional)</span>
+          <span className="text-sm font-bold text-[#0F172A]">Featured media URL (optional)</span>
           <input
             name="featuredImage"
             value={featuredImage}
             onChange={(event) => setFeaturedImage(event.target.value)}
-            placeholder="/uploads/blogs/image.jpg or leave blank for text-only"
+            placeholder="/uploads/blogs/media.jpg, video URL, or leave blank"
             className="mt-2 h-12 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
           />
         </label>
@@ -188,7 +188,7 @@ export default function BlogEditorForm({
 
       {/* Editorial Media System */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6">
-        <h3 className="mb-4 text-lg font-bold text-[#0F172A]">Editorial Images</h3>
+        <h3 className="mb-4 text-lg font-bold text-[#0F172A]">Editorial Media</h3>
         <ImageUploader images={images} onImagesChange={setImages} />
       </div>
 

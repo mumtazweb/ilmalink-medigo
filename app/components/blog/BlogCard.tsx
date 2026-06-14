@@ -2,22 +2,35 @@ import Image from "next/image";
 import Link from "next/link";
 import { CalendarDays, Clock, UserRound } from "lucide-react";
 import type { BlogPost } from "@/app/lib/blog/types";
+import { isImageFile, isVideoFile } from "@/app/lib/blog/imageValidation";
 
 export default function BlogCard({ post }: { post: BlogPost }) {
   const featuredImage = post.featuredImage?.trim();
-  const hasFeaturedImage = Boolean(featuredImage);
+  const hasFeaturedMedia = Boolean(featuredImage);
+  const hasFeaturedVideo = featuredImage ? isVideoFile(featuredImage) : false;
+  const hasFeaturedImage = featuredImage ? isImageFile(featuredImage) : false;
 
   return (
     <article className="group flex h-full min-h-[430px] flex-col overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_54px_rgba(15,23,42,0.12)]">
-      {hasFeaturedImage && (
+      {hasFeaturedMedia && (hasFeaturedImage || hasFeaturedVideo) && (
         <div className="relative h-56 overflow-hidden bg-[var(--brand-blue-soft)]">
-          <Image
-            src={featuredImage}
-            alt={post.imageAlt || post.title}
-            fill
-            sizes="(min-width: 1024px) 360px, 88vw"
-            className="object-cover transition duration-500 group-hover:scale-105"
-          />
+          {hasFeaturedVideo ? (
+            <video
+              src={featuredImage}
+              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              muted
+              playsInline
+              preload="metadata"
+            />
+          ) : (
+            <Image
+              src={featuredImage}
+              alt={post.imageAlt || post.title}
+              fill
+              sizes="(min-width: 1024px) 360px, 88vw"
+              className="object-cover transition duration-500 group-hover:scale-105"
+            />
+          )}
           <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#0F4CFF] shadow-sm">
             {post.category}
           </span>
@@ -25,7 +38,7 @@ export default function BlogCard({ post }: { post: BlogPost }) {
       )}
 
       <div className="flex flex-1 flex-col p-6">
-        {!hasFeaturedImage && (
+        {(!hasFeaturedMedia || (!hasFeaturedImage && !hasFeaturedVideo)) && (
           <span className="mb-4 w-fit rounded-full bg-[#0F4CFF]/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#0F4CFF]">
             {post.category}
           </span>

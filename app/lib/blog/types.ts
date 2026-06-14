@@ -32,6 +32,8 @@ export type BlogImage = {
   position: ImagePosition;
   order: number;
   size?: number;
+  type?: string;
+  fileName?: string;
 };
 
 export type BlogUser = {

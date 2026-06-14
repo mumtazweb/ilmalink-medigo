@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { isImageFile, isVideoFile } from "@/app/lib/blog/imageValidation";
 
 function renderInline(text: string) {
   const parts = text.split(/(\*\*[^*]+\*\*|_[^_]+_|\[[^\]]+\]\([^)]+\))/g);
@@ -62,13 +63,29 @@ export default function BlogContent({ content }: { content: string }) {
 
           return (
             <div key={index} className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-[#EFF6FF]">
-              <Image
-                src={imageSrc}
-                alt={imageMatch[1]}
-                fill
-                sizes="(min-width: 1024px) 860px, 90vw"
-                className="object-cover"
-              />
+              {isVideoFile(imageSrc) ? (
+                <video
+                  src={imageSrc}
+                  className="h-full w-full object-cover"
+                  controls
+                  preload="metadata"
+                />
+              ) : isImageFile(imageSrc) ? (
+                <Image
+                  src={imageSrc}
+                  alt={imageMatch[1]}
+                  fill
+                  sizes="(min-width: 1024px) 860px, 90vw"
+                  className="object-cover"
+                />
+              ) : (
+                <a
+                  href={imageSrc}
+                  className="flex h-full w-full items-center justify-center px-4 text-center text-sm font-bold text-[#0F4CFF]"
+                >
+                  {imageMatch[1] || "Open media"}
+                </a>
+              )}
             </div>
           );
         }
