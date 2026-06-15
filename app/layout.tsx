@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Inter, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import Footer from "./components/Footer";
 import FloatingContactButton from "./components/FloatingContactButton";
@@ -23,7 +24,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ilmalink.com"),
+  metadataBase: new URL("https://www.ilmalink.com"),
   title: "ILMALINK MEDIGO | Global Medical Education Platform",
   description:
     "ILMALINK MEDIGO is a premium medical education platform for MBBS admissions, university discovery, NEET intelligence, and global student support.",
@@ -44,6 +45,15 @@ export const metadata: Metadata = {
     "MBBS education loan guidance",
     "scholarship guidance for MBBS",
   ],
+  openGraph: {
+    title: "ILMALINK MEDIGO | Global Medical Education Platform",
+    description:
+      "Premium MBBS admission guidance, NEET intelligence, university discovery, FMGE data, scholarships and student support.",
+    url: "https://www.ilmalink.com",
+    siteName: "ILMALINK MEDIGO",
+    type: "website",
+    locale: "en_IN",
+  },
   other: {
     "geo.region": "IN",
     "geo.placename": "Kolkata, Bengaluru, Mumbai",
@@ -52,10 +62,10 @@ export const metadata: Metadata = {
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
-  "@id": "https://ilmalink.com/#organization",
+  "@id": "https://www.ilmalink.com/#organization",
   "@type": ["EducationalOrganization", "LocalBusiness"],
   name: "ILMALINK MEDIGO",
-  url: "https://ilmalink.com",
+  url: "https://www.ilmalink.com",
   email: "middya@ilmalink.com",
   telephone: "+91 9330155576",
   address: [
@@ -133,27 +143,20 @@ const organizationJsonLd = {
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "@id": "https://ilmalink.com/#website",
+  "@id": "https://www.ilmalink.com/#website",
   name: "ILMALINK MEDIGO",
-  url: "https://ilmalink.com",
+  url: "https://www.ilmalink.com",
   publisher: {
-    "@id": "https://ilmalink.com/#organization",
+    "@id": "https://www.ilmalink.com/#organization",
   },
   inLanguage: "en-IN",
-  potentialAction: {
-    "@type": "SearchAction",
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: "https://ilmalink.com/search?q={search_term_string}",
-    },
-    "query-input": "required name=search_term_string",
-  },
 };
 
 const organizationJsonLdString = JSON.stringify(organizationJsonLd).replace(
   /</g,
   "\\u003c"
 );
+
 const websiteJsonLdString = JSON.stringify(websiteJsonLd).replace(
   /</g,
   "\\u003c"
@@ -162,7 +165,7 @@ const websiteJsonLdString = JSON.stringify(websiteJsonLd).replace(
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html
@@ -172,14 +175,17 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}
         <Footer />
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: organizationJsonLdString }}
         />
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: websiteJsonLdString }}
         />
+
         <FloatingContactButton />
         <div id="modal-root" />
       </body>

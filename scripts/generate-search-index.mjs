@@ -358,41 +358,73 @@ function isUsefulLiteral(value, before) {
   return true;
 }
 
+function stripNonVisibleSource(source) {
+  return source
+    .replace(/^\s*["']use\s+(client|server)["'];?\s*$/gm, " ")
+    .replace(/^\s*import\s+["'][^"']+["'];?\s*$/gm, " ")
+    .replace(/^\s*import[\s\S]*?from\s+["'][^"']+["'];?\s*$/gm, " ")
+    .replace(/^\s*export\s+type\s+[\s\S]*?;\s*$/gm, " ")
+    .replace(/^\s*export\s+interface\s+[\s\S]*?}\s*$/gm, " ");
+}
 function extractVisibleText(source) {
   const textParts = [];
+
   const withoutComments = source
     .replace(/\/\*[\s\S]*?\*\//g, " ")
-    .replace(/\/\/[^\n\r]*/g, " ");
+    .replace(/\/\/[^\n\r]*/g, " ")
+    .replace(/^\s*["']use\s+(client|server)["'];?\s*$/gm, " ")
+    .replace(/^\s*import[\s\S]*?from\s+["'][^"']+["'];?\s*$/gm, " ")
+    .replace(/^\s*import\s+["'][^"']+["'];?\s*$/gm, " ")
+    .replace(/^\s*export\s+const\s+metadata[\s\S]*?;\s*$/gm, " ")
+    .replace(/^\s*export\s+const\s+dynamic[\s\S]*?;\s*$/gm, " ")
+    .replace(/^\s*const\s+[a-zA-Z0-9_]+\s*=[\s\S]*?;\s*$/gm, " ");
 
-  const jsxText = withoutComments
+  const returnMatch = withoutComments.match(/return\s*\(([\s\S]*)\)\s*;?\s*}/);
+  const visibleSource = returnMatch?.[1] ?? withoutComments;
+
+  const jsxText = visibleSource
+    .replace(/\bclassName\s*=\s*(?:"[^"]*"|'[^']*'|\{[^}]*\})/g, " ")
+    .replace(/\b(?:href|src|style|width|height|fill|stroke|viewBox|d)\s*=\s*(?:"[^"]*"|'[^']*'|\{[^}]*\})/g, " ")
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<[^>]*>/g, " ")
     .replace(/\{[^{}]*\}/g, " ");
 
   textParts.push(jsxText);
 
-  const attributePattern = /\b(?:placeholder|aria-label|title|alt)\s*=\s*(?:"([^"]+)"|'([^']+)')/g;
+  const attributePattern =
+    /\b(?:placeholder|aria-label|title|alt)\s*=\s*(?:"([^"]+)"|'([^']+)')/g;
   let attributeMatch;
 
-  while ((attributeMatch = attributePattern.exec(withoutComments))) {
+  while ((attributeMatch = attributePattern.exec(visibleSource))) {
     textParts.push(attributeMatch[1] ?? attributeMatch[2]);
   }
 
   const literalPattern = /(["'`])((?:\\.|(?!\1)[\s\S])*?)\1/g;
   let match;
 
-  while ((match = literalPattern.exec(withoutComments))) {
+  while ((match = literalPattern.exec(visibleSource))) {
     const literal = match[2];
-    if (isUsefulLiteral(literal, withoutComments.slice(Math.max(0, match.index - 80), match.index))) {
+
+    if (
+      isUsefulLiteral(
+        literal,
+        visibleSource.slice(Math.max(0, match.index - 80), match.index)
+      )
+    ) {
       textParts.push(literal);
     }
   }
 
-  return normalizeText(textParts.join(" "));
+  return normalizeText(textParts.join(" "))
+    .replace(/\b(className|export const|const|function|return|metadata|dangerouslySetInnerHTML|JSON.stringify)\b/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function extractMetadataField(source, field) {
   const pattern = new RegExp(`${field}\\s*:\\s*["'\`]([\\s\\S]*?)["'\`]`);
   const match = source.match(pattern);
+
   return match ? normalizeText(match[1]) : "";
 }
 
@@ -440,10 +472,9 @@ async function walkFiles(dir, predicate, files = []) {
 }
 
 async function buildRouteEntries() {
-  const files = await walkFiles(
-    appDir,
-    (filePath) => /(?:^|[\\/])(page|layout)\.tsx$/.test(filePath)
-  );
+ const files = await walkFiles(appDir, (filePath) =>
+   /(?:^|[\\/])page\.tsx$/.test(filePath),
+ );
 
   return Promise.all(
     files.map(async (filePath) => {
@@ -481,10 +512,9 @@ async function buildRouteEntries() {
 }
 
 async function buildComponentEntries() {
-  const files = await walkFiles(
-    path.join(appDir, "components"),
-    (filePath) => filePath.endsWith(".tsx") && !filePath.endsWith(`${path.sep}SearchModal.tsx`)
-  );
+ const files = await walkFiles(appDir, (filePath) =>
+   /(?:^|[\\/])page\.tsx$/.test(filePath),
+ );
 
   return Promise.all(
     files.map(async (filePath) => {
@@ -767,7 +797,6 @@ async function main() {
   const entries = dedupeEntries(
     [
       ...(await buildRouteEntries()),
-      ...(await buildComponentEntries()),
       ...(await buildBlogEntries()),
       ...(await buildFmgeEntries()),
       ...buildManualEntries(),

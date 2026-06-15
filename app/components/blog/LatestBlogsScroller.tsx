@@ -5,11 +5,11 @@ import Link from "next/link";
 import type { BlogPost } from "@/app/lib/blog/types";
 import BlogCard from "./BlogCard";
 
-// BLOG SYSTEM: Homepage latest blogs strip with smooth infinite auto-scroll and hover pause.
+// BLOG SYSTEM: Homepage latest blogs strip with smooth auto-scroll and hover pause.
+// SEO note: renders each blog only once to avoid duplicate visible/DOM content.
 export default function LatestBlogsScroller({ posts }: { posts: BlogPost[] }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
-  const loopPosts = [...posts, ...posts];
 
   useEffect(() => {
     const scroller = scrollerRef.current;
@@ -21,9 +21,15 @@ export default function LatestBlogsScroller({ posts }: { posts: BlogPost[] }) {
     let frame = 0;
 
     const scroll = () => {
+      const maxScrollLeft = scroller.scrollWidth - scroller.clientWidth;
+
+      if (maxScrollLeft <= 0) {
+        return;
+      }
+
       scroller.scrollLeft += 0.45;
 
-      if (scroller.scrollLeft >= scroller.scrollWidth / 2) {
+      if (scroller.scrollLeft >= maxScrollLeft - 2) {
         scroller.scrollLeft = 0;
       }
 
@@ -31,8 +37,13 @@ export default function LatestBlogsScroller({ posts }: { posts: BlogPost[] }) {
     };
 
     frame = requestAnimationFrame(scroll);
+
     return () => cancelAnimationFrame(frame);
   }, [paused, posts.length]);
+
+  if (posts.length === 0) {
+    return null;
+  }
 
   return (
     <section className="bg-white py-16 md:py-20">
@@ -46,6 +57,7 @@ export default function LatestBlogsScroller({ posts }: { posts: BlogPost[] }) {
               Explore recent MBBS, NEET, admission and medical education insights
             </p>
           </div>
+
           <Link
             href="/blogs"
             className="inline-flex w-fit items-center rounded-full border border-[#0F4CFF]/20 bg-[#F8FAFC] px-5 py-2.5 text-sm font-bold text-[#0F4CFF] transition hover:border-[#0F4CFF] hover:bg-white"
@@ -62,9 +74,9 @@ export default function LatestBlogsScroller({ posts }: { posts: BlogPost[] }) {
           onTouchEnd={() => setPaused(false)}
           className="-mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-4 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-          {loopPosts.map((post, index) => (
+          {posts.map((post) => (
             <div
-              key={`${post.id}-${index}`}
+              key={post.id}
               className="w-[86vw] flex-none snap-start sm:w-[390px]"
             >
               <BlogCard post={post} />

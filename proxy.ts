@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const oldAuthorUrl = /^\/author(\/|$)/i;
 
-const oldSearchUrl = /^\/(ar|bn|hi)?\/?search(\/|$)/i;
+const oldLocalizedSearchUrl = /^\/(ar|bn|hi)\/search(\/|$)/i;
 
 const oldSearchQueryLocales = /^\/(ar|bn|hi)\/?$/i;
 
@@ -25,8 +25,8 @@ export function proxy(request: NextRequest) {
   const isOldAuthorPage = oldAuthorUrl.test(pathname);
 
   const isOldSearchPage =
-    oldSearchUrl.test(pathname) ||
     hasOldSearchQuery ||
+    oldLocalizedSearchUrl.test(pathname) ||
     (oldSearchQueryLocales.test(pathname) && hasOldSearchQuery);
 
   if (isOldAuthorPage || isOldSearchPage) {
