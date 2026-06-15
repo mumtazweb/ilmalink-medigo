@@ -10,9 +10,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "ILMALINK MEDIGO | Expert Medical Education Counselling",
     description: "Navigate your medical career journey with confidence. Comprehensive guidance for MBBS admissions in India and abroad.",
-    url: "https://ilmalink.com/about",
+    url: "https://www.ilmalink.com/about",
     siteName: "ILMALINK MEDIGO",
-    images: [{ url: "https://ilmalink.com/og-about.jpg", width: 1200, height: 630 }],
+    images: [{ url: "https://www.ilmalink.com/og-about.jpg", width: 1200, height: 630 }],
     locale: "en_IN",
     type: "website",
   },
@@ -20,30 +20,33 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "ILMALINK MEDIGO | Medical Education Consultant",
     description: "Expert guidance for MBBS admissions and medical education pathways.",
-    images: ["https://ilmalink.com/twitter-about.jpg"],
+    images: ["https://www.ilmalink.com/twitter-about.jpg"],
     site: "@middyaofficial",
     creator: "@middyaofficial",
   },
-  alternates: { canonical: "https://ilmalink.com/about" },
+  alternates: { canonical: "https://www.ilmalink.com/about" },
   robots: { index: true, follow: true },
 };
+
+const officialSocialProfiles = [
+  "https://www.facebook.com/ilmalinkeduprise/",
+  "https://www.instagram.com/ilmalinkmbbs/",
+  "https://www.youtube.com/@ilmaLinkFoundation",
+  "https://www.threads.com/@ilmalinkmbbs",
+];
 
 // --- JSON-LD Structured Data ---
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "EducationalOrganization",
   name: "ILMALINK MEDIGO",
-  url: "https://ilmalink.com",
-  logo: "https://ilmalink.com/logoimage.svg",
+  alternateName: ["ilmaLink", "ilmalink", "ILMALINK", "ilmalink.com"],
+  url: "https://www.ilmalink.com",
+  logo: "https://www.ilmalink.com/logoimage.svg",
   description: "Medical education consultancy providing career guidance for MBBS admissions in India and abroad.",
   foundingDate: "2020",
   founder: { "@type": "Person", name: "Injamul Hoque Middya" },
-  sameAs: [
-    "https://www.facebook.com/share/1Edsb6dJwu/",
-    "https://www.instagram.com/injamul_bin_ebrahim_middya",
-    "https://www.youtube.com/@injamul.h.middya",
-    "https://x.com/middyaofficial",
-  ],
+  sameAs: officialSocialProfiles,
   contactPoint: [
     { "@type": "ContactPoint", telephone: "+919330155576", contactType: "customer service" },
     { "@type": "ContactPoint", telephone: "+919563910223", contactType: "customer support", contactOption: "WhatsApp" },
@@ -91,6 +94,10 @@ export default function AboutPage() {
                 <strong className="text-emerald-700">ILMALINK MEDIGO</strong> is a unit of ilmaLink Foundation, 
                 a societal enterprise specializing in education. Through the voluntary engagement of top Indian 
                 and international education experts, we bridge the gap between dreams and reality for medical aspirants.
+              </p>
+
+              <p className="text-gray-700 leading-relaxed mb-4">
+                ilmaLink is the parent education guidance ecosystem, and ILMALINK MEDIGO is its dedicated medical education platform for MBBS Abroad, MBBS India, NEET counselling, scholarships and student support.
               </p>
               
               <p className="text-gray-700 leading-relaxed mb-4">

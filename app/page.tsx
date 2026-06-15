@@ -6,8 +6,20 @@ import type { BlogCardPost } from "./components/blog/BlogCard";
 import { getLatestBlogs } from "./lib/blog/store";
 
 export const metadata: Metadata = {
+  title: "ILMALINK MEDIGO by ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
+  description:
+    "Official medical education platform of ilmaLink for MBBS Abroad, MBBS India, NEET counselling, scholarships and university guidance.",
   alternates: {
     canonical: "https://www.ilmalink.com/",
+  },
+  openGraph: {
+    title: "ILMALINK MEDIGO by ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
+    description:
+      "Official medical education platform of ilmaLink for MBBS Abroad, MBBS India, NEET counselling, scholarships and university guidance.",
+    url: "https://www.ilmalink.com/",
+    siteName: "ILMALINK MEDIGO",
+    locale: "en_IN",
+    type: "website",
   },
 };
 
@@ -28,7 +40,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <h1 className="sr-only">
-        MBBS Admission & NEET Counselling Guidance for India and Abroad
+        ILMALINK MEDIGO by ilmaLink - MBBS Admission and NEET Counselling Guidance
       </h1>
       <Navbar />
       <HomeHeroClient />

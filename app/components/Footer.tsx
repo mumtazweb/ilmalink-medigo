@@ -338,6 +338,9 @@ export default function Footer() {
                 MBBS admission guidance for India, Nepal, Bangladesh, Kyrgyzstan and trusted abroad
                 options.
               </p>
+              <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500">
+                ILMALINK MEDIGO is a medical education initiative by ilmaLink.
+              </p>
             </div>
           </div>
 

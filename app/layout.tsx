@@ -60,14 +60,23 @@ export const metadata: Metadata = {
   },
 };
 
+const officialSocialProfiles = [
+  "https://www.facebook.com/ilmalinkeduprise/",
+  "https://www.instagram.com/ilmalinkmbbs/",
+  "https://www.youtube.com/@ilmaLinkFoundation",
+  "https://www.threads.com/@ilmalinkmbbs",
+];
+
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@id": "https://www.ilmalink.com/#organization",
   "@type": ["EducationalOrganization", "LocalBusiness"],
   name: "ILMALINK MEDIGO",
+  alternateName: ["ilmaLink", "ilmalink", "ILMALINK", "ilmalink.com"],
   url: "https://www.ilmalink.com",
   email: "middya@ilmalink.com",
   telephone: "+91 9330155576",
+  sameAs: officialSocialProfiles,
   address: [
     {
       "@type": "PostalAddress",
