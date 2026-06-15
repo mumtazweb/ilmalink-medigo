@@ -10,6 +10,7 @@ export const navbarCountryDestinations: NavbarCountryDestination[] = [
   { href: "/mbbs-abroad/kyrgyzstan", label: "Kyrgyzstan", flag: "kg", badge: "Top", insight: "Affordable fees and NMC-friendly options" },
   { href: "/mbbs-abroad/georgia", label: "Georgia", flag: "ge", badge: "Top", insight: "European-style campuses and English programs" },
   { href: "/mbbs-abroad/bangladesh", label: "Bangladesh", flag: "bd", badge: "Top", insight: "Nearby destination with strong clinical exposure" },
+  { href: "/mbbs-abroad/nepal", label: "Nepal", flag: "np", badge: "Strict", insight: "Strict MEC route | Individual PCB 50% | MECEE-BL priority | Limited seats" },
   { href: "/mbbs-abroad/russia", label: "Russia", flag: "ru", badge: "Top", insight: "Established public universities and global recognition" },
   { href: "/mbbs-abroad/kazakhstan", label: "Kazakhstan", flag: "kz", insight: "Balanced tuition with modern medical universities" },
   { href: "/mbbs-abroad/uzbekistan", label: "Uzbekistan", flag: "uz", insight: "Growing choice for budget-focused students" },

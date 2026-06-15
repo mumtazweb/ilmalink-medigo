@@ -1,657 +1,571 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { type MouseEvent, type ReactNode, useState } from "react";
 import { FaFacebookF, FaInstagram, FaTelegramPlane, FaYoutube } from "react-icons/fa";
+import { FaThreads, FaXTwitter } from "react-icons/fa6";
 import {
-  Banknote,
-  BookOpen,
-  Building2,
+  ArrowRight,
   ChevronDown,
-  ChevronRight,
-  GraduationCap,
-  Landmark,
+  ExternalLink,
+  LocateFixed,
   Mail,
   MapPin,
   MessageCircle,
   Phone,
   Search,
-  ShieldCheck,
-  Sparkles,
+  Send,
 } from "lucide-react";
-
 import SearchModal from "./SearchModal";
 
-const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
-const OPEN_SEARCH_EVENT = "open-ilmalink-search";
+const OPEN_SEARCH_EVENT = "ilmalink:open-search";
 
 const contact = {
+  call: "+91 93301 55576",
   callHref: "tel:+919330155576",
-  callText: "9330155576",
+  whatsapp: "+91 95639 10223",
   whatsappHref: "https://wa.me/919563910223",
-  whatsappText: "9563910223",
+  email: "middya@ilmalink.com",
   emailHref: "mailto:middya@ilmalink.com",
-  emailText: "middya@ilmalink.com",
 };
 
-const realPageLinks = {
-  blogs: "/blogs",
-  mbbsIndia: "/mbbs-india",
-  mbbsAbroad: "/mbbs-abroad",
-  advisories: "/official-advisories",
-  counselling: "/?counselling=open",
-};
+const footerLinks = [
+  {
+    title: "Study",
+    links: [
+      { label: "MBBS in India", href: "/mbbs-india" },
+      { label: "MBBS Abroad", href: "/mbbs-abroad" },
+      { label: "MBBS in Nepal", href: "/mbbs-abroad/nepal" },
+      { label: "MBBS in Kyrgyzstan", href: "/mbbs-abroad/kyrgyzstan" },
+      { label: "MBBS in Bangladesh", href: "/mbbs-abroad/bangladesh" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "Blogs", href: "/blogs" },
+      { label: "Official Advisories", href: "/official-advisories" },
+      { label: "Scholarships & Loans", href: "/scholarships-loans" },
+      { label: "About", href: "/about" },
+    ],
+  },
+  {
+    title: "Support",
+    links: [
+      { label: "Book Counselling", href: "/?counselling=open", counselling: true },
+      { label: "WhatsApp Support", href: contact.whatsappHref, external: true },
+      { label: "Call Admission Team", href: contact.callHref },
+      { label: "Email Us", href: contact.emailHref },
+    ],
+  },
+];
 
 const offices = [
   {
     label: "Headquarters",
     city: "Bengaluru",
-    address: ["Near Lalbagh Main Gate,", "Hosur Road,", "Bangalore-27"],
-    accent: "#00F0A8",
-    markerClass: "bg-[#00DFA2] text-[#031525]",
-    image: "/footer-office-bengaluru.svg",
+    address: "Near Lalbagh Main Gate, Hosur Road, Bangalore - 27",
   },
   {
     label: "Main Office",
     city: "Kolkata",
-    address: ["MUMTAZ Campus,", "Kamrbari, Basina,", "Rajarhat-Newtown,", "Kolkata-135"],
-    accent: "#A855F7",
-    markerClass: "bg-[#8B5CF6] text-white",
-    image: "/footer-office-kolkata.svg",
+    address: "MUMTAZ Campus, Kamrbari, Basina, Rajarhat-Newtown, Kolkata - 135",
   },
   {
-    label: "R&D Branch",
+    label: "R&D Office",
     city: "Mumbai",
-    address: ["M.A.K Azad Road,", "Sector 8B, Belapur,", "Mumbai - 400614"],
-    accent: "#F97316",
-    markerClass: "bg-[#F97316] text-white",
-    image: "/footer-office-mumbai.svg",
+    address: "M.A.K Azad Road, Sector 8B, Belapur, Mumbai - 400614",
   },
 ];
 
-const branchGroups = [
+const contactPointGroups = [
   {
-    title: "West Bengal District Contact Points",
-    iconClass: "bg-[#00DFA2] text-[#031525]",
+    state: "West Bengal",
+    note: "District contact points",
+    points: [
+      "Kolkata",
+      "North 24 Parganas",
+      "South 24 Parganas",
+      "Howrah",
+      "Hooghly",
+      "Murshidabad",
+      "Malda",
+      "North Bengal",
+    ],
   },
   {
-    title: "Karnataka District Contact Points",
-    iconClass: "bg-[#FACC15] text-[#031525]",
+    state: "Karnataka",
+    note: "District contact points",
+    points: [
+      "Bengaluru Urban",
+      "Bengaluru Rural",
+      "Mysuru",
+      "Mangaluru",
+      "Hubballi-Dharwad",
+      "Belagavi",
+      "Kalaburagi",
+      "Shivamogga",
+    ],
   },
   {
-    title: "Other India Contact Points",
-    iconClass: "bg-[#38BDF8] text-[#031525]",
+    state: "Maharashtra",
+    note: "State desk",
+    points: ["Mumbai", "Pune", "Nagpur"],
   },
   {
-    title: "Overseas Contact Points",
-    iconClass: "bg-[#A855F7] text-white",
+    state: "Kerala",
+    note: "State desk",
+    points: ["Kochi", "Kozhikode", "Thiruvananthapuram"],
+  },
+  {
+    state: "Telangana",
+    note: "State desk",
+    points: ["Hyderabad", "Warangal"],
+  },
+  {
+    state: "International",
+    note: "Country desks",
+    points: ["Nepal", "Bangladesh", "Kyrgyzstan", "Russia", "Georgia", "Kazakhstan"],
   },
 ];
 
-const actionCardClass =
-  "group flex min-h-[50px] w-full items-center gap-2 rounded-xl border border-cyan-300/25 bg-[#071B3E]/88 px-2.5 py-2 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_8px_18px_rgba(0,0,0,0.22)] transition hover:-translate-y-0.5 hover:border-[#00F0A8]/70 hover:bg-[#092553] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0A8]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020B20] sm:min-h-[56px] sm:px-3";
+const socialLinks = [
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/ilmalinkeduprise/",
+    icon: FaFacebookF,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/ilmalinkmbbs/",
+    icon: FaInstagram,
+  },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/@ilmaLinkFoundation",
+    icon: FaYoutube,
+  },
+  {
+    label: "Threads",
+    href: "https://www.threads.com/@ilmalinkmbbs",
+    icon: FaThreads,
+  },
+  {
+    label: "X",
+    href: "https://x.com/middyaofficial",
+    icon: FaXTwitter,
+  },
+  {
+    label: "Telegram",
+    href: "https://t.me/+919563910223",
+    icon: FaTelegramPlane,
+  },
+];
 
-const contactTileClass =
-  "group flex min-h-[56px] items-center gap-2 rounded-xl border border-cyan-300/35 bg-[#071B3E]/88 px-2.5 py-2 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_10px_22px_rgba(0,0,0,0.22)] transition hover:-translate-y-0.5 hover:border-[#00F0A8]/70 hover:bg-[#092553] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0A8]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#020B20] sm:min-h-[62px] sm:px-3";
+function openCounselling(event?: MouseEvent<HTMLAnchorElement>) {
+  event?.preventDefault();
+  if (typeof window === "undefined") return;
+
+  window.dispatchEvent(new CustomEvent("ilmalink:open-counselling"));
+}
 
 function CounsellingLink({
+  href,
   children,
   className,
-  onClick,
 }: {
+  href: string;
   children: ReactNode;
   className: string;
-  onClick: (event: MouseEvent<HTMLAnchorElement>) => void;
 }) {
   return (
-    <Link
-      href={realPageLinks.counselling}
-      data-open-counselling
-      onClick={onClick}
-      className={className}
-    >
+    <Link href={href} onClick={openCounselling} className={className}>
       {children}
     </Link>
   );
 }
 
-function IconBadge({
-  children,
-  className,
+function FooterLink({
+  link,
 }: {
-  children: ReactNode;
-  className: string;
+  link: {
+    label: string;
+    href: string;
+    external?: boolean;
+    counselling?: boolean;
+  };
 }) {
+  const className =
+    "group inline-flex items-center gap-1.5 text-sm text-slate-300 transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300";
+
+  if (link.counselling) {
+    return (
+      <CounsellingLink href={link.href} className={className}>
+        <span>{link.label}</span>
+        <ArrowRight className="h-3.5 w-3.5 opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100" />
+      </CounsellingLink>
+    );
+  }
+
+  const content = (
+    <>
+      <span>{link.label}</span>
+      {link.external ? (
+        <ExternalLink className="h-3.5 w-3.5 opacity-60" />
+      ) : (
+        <ArrowRight className="h-3.5 w-3.5 opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100" />
+      )}
+    </>
+  );
+
+  if (link.external) {
+    return (
+      <a href={link.href} target="_blank" rel="noopener noreferrer" className={className}>
+        {content}
+      </a>
+    );
+  }
+
   return (
-    <span
-      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg shadow-[inset_0_1px_0_rgba(255,255,255,0.24),0_0_18px_rgba(0,240,168,0.14)] sm:h-10 sm:w-10 ${className}`}
-    >
-      {children}
-    </span>
+    <Link href={link.href} className={className}>
+      {content}
+    </Link>
   );
 }
 
-function QuickActionContent({
+function ContactAction({
+  href,
   icon,
-  iconClass,
-  title,
-  subtitle,
+  label,
+  value,
+  external = false,
 }: {
+  href: string;
   icon: ReactNode;
-  iconClass: string;
-  title: string;
-  subtitle: string;
+  label: string;
+  value: string;
+  external?: boolean;
 }) {
-  return (
+  const className =
+    "flex min-w-0 items-center gap-2 rounded-md border border-white/10 bg-white/[0.03] px-2.5 py-2 text-left transition hover:border-emerald-300/40 hover:bg-emerald-300/10";
+  const content = (
     <>
-      <IconBadge className={iconClass}>{icon}</IconBadge>
-      <span className="min-w-0 flex-1">
-        <span className="block truncate text-[13px] font-extrabold leading-4 text-white sm:text-[15px]">
-          {title}
-        </span>
-        <span className="mt-0.5 block truncate text-[11px] font-medium leading-3 text-slate-300 sm:text-xs">
-          {subtitle}
-        </span>
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-emerald-300/10 text-emerald-200">
+        {icon}
       </span>
-      <ChevronRight
-        size={18}
-        className="shrink-0 text-white transition group-hover:translate-x-0.5 group-hover:text-[#00F0A8]"
-      />
+      <span className="min-w-0">
+        <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+          {label}
+        </span>
+        <span className="block truncate text-xs font-semibold text-white sm:text-sm">{value}</span>
+      </span>
     </>
+  );
+
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <a href={href} className={className}>
+      {content}
+    </a>
   );
 }
 
 export default function Footer() {
   const [searchOpen, setSearchOpen] = useState(false);
-  const [contactPointsOpen, setContactPointsOpen] = useState(true);
-  const [openBranchGroup, setOpenBranchGroup] = useState<string | null>(null);
-  const [activeOffice, setActiveOffice] = useState(1);
+  const [contactPointsOpen, setContactPointsOpen] = useState(false);
+  const [nearbyState, setNearbyState] = useState(contactPointGroups[0].state);
+  const [nearbyPoint, setNearbyPoint] = useState(contactPointGroups[0].points[0]);
 
-  const openCounselling = (event?: MouseEvent<HTMLAnchorElement>) => {
-    event?.preventDefault();
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(new Event(OPEN_COUNSELLING_EVENT));
-    }
-  };
+  const selectedGroup =
+    contactPointGroups.find((group) => group.state === nearbyState) ?? contactPointGroups[0];
+  const selectedPoint = selectedGroup.points.includes(nearbyPoint)
+    ? nearbyPoint
+    : selectedGroup.points[0];
+  const pointLabel = nearbyState === "International" ? "Country desk" : "District / city";
+  const nearbyWhatsappHref = `${contact.whatsappHref}?text=${encodeURIComponent(
+    [
+      "Nearby contact point request",
+      `Selected state/region: ${nearbyState}`,
+      `${pointLabel}: ${selectedPoint}`,
+      "Student name:",
+      "Student phone:",
+      "Current city:",
+      "Course interest: MBBS",
+      "NEET status/score:",
+    ].join("\n"),
+  )}`;
 
   const openSearch = () => {
-    if (typeof window === "undefined") return;
-
-    window.dispatchEvent(new CustomEvent(OPEN_SEARCH_EVENT));
-
-    const navbarSearchButton = document.querySelector<HTMLButtonElement>(
-      'button[aria-label="Search"][title="Search (Ctrl+K)"]'
-    );
-
-    if (navbarSearchButton) {
-      navbarSearchButton.click();
-      return;
-    }
-
-    const shortcutEvent = new KeyboardEvent("keydown", {
-      key: "k",
-      code: "KeyK",
-      ctrlKey: true,
-      bubbles: true,
-      cancelable: true,
-    });
-    const shortcutHandled = !window.dispatchEvent(shortcutEvent);
-
-    if (!shortcutHandled) {
-      setSearchOpen(true);
+    setSearchOpen(true);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent(OPEN_SEARCH_EVENT));
     }
   };
 
-  const showPreviousOffice = () => {
-    setActiveOffice((current) => (current === 0 ? offices.length - 1 : current - 1));
+  const choosePoint = (state: string, point: string) => {
+    setNearbyState(state);
+    setNearbyPoint(point);
   };
 
-  const showNextOffice = () => {
-    setActiveOffice((current) => (current === offices.length - 1 ? 0 : current + 1));
+  const handleStateChange = (state: string) => {
+    const nextGroup = contactPointGroups.find((group) => group.state === state);
+    setNearbyState(state);
+    setNearbyPoint(nextGroup?.points[0] ?? "");
   };
 
   return (
-    <footer className="relative overflow-hidden bg-[#020B20] px-1.5 py-2 text-white sm:px-3 sm:py-5">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_6%,rgba(0,240,168,0.22),transparent_28%),radial-gradient(circle_at_84%_12%,rgba(37,99,235,0.22),transparent_30%),linear-gradient(180deg,#031425_0%,#020B20_50%,#031226_100%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(0,240,168,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(0,240,168,0.04)_1px,transparent_1px)] bg-[size:28px_28px]" />
-
-      <div className="relative mx-auto max-w-[980px] overflow-hidden rounded-[24px] border border-cyan-300/20 bg-[#031226]/95 p-2 shadow-[0_22px_70px_rgba(0,0,0,0.48),inset_0_1px_0_rgba(255,255,255,0.08)] sm:p-3.5">
-        <section className="relative overflow-hidden rounded-[22px] border border-[#00F0A8]/70 bg-[#061A3A]/90 p-3 shadow-[0_0_28px_rgba(0,240,168,0.26),inset_0_1px_0_rgba(255,255,255,0.12)] sm:p-4">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_7%_8%,rgba(0,240,168,0.28),transparent_18%),radial-gradient(circle_at_92%_14%,rgba(0,200,255,0.24),transparent_24%),linear-gradient(135deg,rgba(0,240,168,0.09),rgba(37,99,235,0.08)_52%,transparent)]" />
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:24px_24px]" />
-
-          <div className="relative grid gap-3 lg:grid-cols-[0.98fr_1.02fr] lg:items-end">
-            <div className="flex items-center gap-3">
-              <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-[18px] border border-[#00F0A8]/60 bg-[#021629] shadow-[0_0_26px_rgba(0,240,168,0.24)] sm:h-24 sm:w-24">
-                <Image
-                  src="/footer-confused-student.png"
-                  alt="Confused student thinking about MBBS admission choices"
-                  fill
-                  sizes="(max-width: 640px) 80px, 96px"
-                  className="object-cover"
-                />
-              </div>
-              <div className="min-w-0">
-                <h2 className="text-[24px] font-black leading-tight text-white sm:text-3xl">
-                  Confused about <span className="text-[#00F0A8]">MBBS?</span>
-                </h2>
-                <p className="mt-1 text-[13px] font-semibold leading-5 text-slate-100 sm:text-base sm:leading-6">
-                  Get MBBS India & Abroad guidance
-                  <br />
-                  from <span className="text-[#00F0A8]">ILMALINK MEDIGO</span> experts.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              <CounsellingLink
-                onClick={openCounselling}
-                className="group col-span-2 flex min-h-[56px] items-center gap-2 rounded-xl border border-[#72FF70]/60 bg-gradient-to-br from-[#72FF70] via-[#00DFA2] to-[#00A86B] px-3 py-2 text-left text-[#032314] shadow-[0_14px_28px_rgba(0,240,120,0.25),inset_0_1px_0_rgba(255,255,255,0.38)] transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#031226] sm:min-h-[62px]"
-              >
-                <IconBadge className="bg-white/22 text-white">
-                  <MessageCircle size={21} />
-                </IconBadge>
-                <span className="flex-1 text-[18px] font-black sm:text-xl">Let&apos;s Connect</span>
-                <ChevronRight size={25} className="transition group-hover:translate-x-0.5" />
-              </CounsellingLink>
-
-              <a href={contact.emailHref} className={`${contactTileClass} col-span-2 sm:col-span-1`}>
-                <IconBadge className="bg-[#EAF3FF] text-[#2563EB]">
-                  <Mail size={21} />
-                </IconBadge>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-[13px] font-extrabold leading-4 text-white sm:text-[15px]">
-                    Email
-                  </span>
-                  <span className="mt-0.5 block break-all text-[10px] font-medium leading-3 text-slate-200 sm:text-xs">
-                    {contact.emailText}
-                  </span>
-                </span>
-              </a>
-
-              <a href={contact.callHref} className={contactTileClass}>
-                <IconBadge className="bg-gradient-to-br from-[#5CFFB2] to-[#00B67A] text-white">
-                  <Phone size={21} />
-                </IconBadge>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-[13px] font-extrabold leading-4 text-white sm:text-[15px]">
-                    Call Now
-                  </span>
-                  <span className="mt-0.5 block text-[11px] font-medium leading-3 text-slate-200 sm:text-xs">
-                    {contact.callText}
-                  </span>
-                </span>
-              </a>
-
-              <a
-                href={contact.whatsappHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={contactTileClass}
-              >
-                <IconBadge className="bg-gradient-to-br from-[#5CFF72] to-[#0BBF42] text-white">
-                  <MessageCircle size={21} />
-                </IconBadge>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-[13px] font-extrabold leading-4 text-white sm:text-[15px]">
-                    WhatsApp
-                  </span>
-                  <span className="mt-0.5 block text-[11px] font-medium leading-3 text-slate-200 sm:text-xs">
-                    {contact.whatsappText}
-                  </span>
-                </span>
-                <ChevronRight size={18} className="text-white transition group-hover:translate-x-0.5" />
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-3 flex items-center gap-3 px-1 sm:px-2">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[18px] border border-[#00F0A8]/25 bg-[#052448] shadow-[0_0_24px_rgba(0,240,168,0.18)] sm:h-[72px] sm:w-[72px]">
-            <img src="/logoimage.svg" alt="ILMALINK MEDIGO logo" className="h-12 w-12 object-contain sm:h-14 sm:w-14" />
-          </div>
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-[25px] font-black leading-none text-white sm:text-4xl">
-                ILMALINK <span className="text-[#00F0A8]">MEDIGO</span>
-              </h2>
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#00F0A8] text-[#031525] shadow-[0_0_20px_rgba(0,240,168,0.3)]">
-                <ShieldCheck size={17} />
-              </span>
-            </div>
-            <p className="mt-2 border-l-2 border-[#00F0A8] pl-3 text-[13px] font-medium leading-5 text-slate-200 sm:text-base sm:leading-6">
-              Guiding students for MBBS in India and MBBS abroad
-              <br className="hidden sm:block" />{" "}
-              with official updates, counselling support and trusted guidance.
-            </p>
-          </div>
-        </section>
-
-        <section className="mt-4">
-          <div className="flex items-center gap-2 px-1 sm:px-2">
-            <Sparkles size={20} className="text-[#00F0A8]" />
-            <h2 className="text-xl font-black text-white sm:text-2xl">Quick Links</h2>
-            <div className="h-px flex-1 bg-gradient-to-r from-cyan-300/25 to-transparent" />
-          </div>
-
-          <div className="mt-2 grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={openSearch}
-              className={actionCardClass}
-              aria-label="Open Ask ILMALINK search"
+    <footer className="max-h-[1500px] overflow-y-auto bg-[#07111f] text-slate-200 sm:max-h-none">
+      <div className="mx-auto max-w-[1500px] border-t border-white/10 px-3 py-4 sm:px-6 sm:py-7 lg:px-8">
+        <div className="grid gap-4 border-b border-white/10 pb-4 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="flex min-w-0 gap-3">
+            <Link
+              href="/"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white p-1.5 shadow-sm"
+              aria-label="ILMALINK MEDIGO home"
             >
-              <QuickActionContent
-                icon={<Search size={20} />}
-                iconClass="bg-gradient-to-br from-[#16F2A5] to-[#087A5C] text-white"
-                title="Explore"
-                subtitle="Ask anything"
-              />
-            </button>
-
-            <Link href={realPageLinks.mbbsIndia} className={actionCardClass}>
-              <QuickActionContent
-                icon={<GraduationCap size={20} />}
-                iconClass="bg-gradient-to-br from-[#35F2A6] to-[#047857] text-white"
-                title="MBBS India"
-                subtitle="Seats & Colleges"
-              />
+              <img src="/logoimage.svg" alt="" className="h-full w-full object-contain" />
             </Link>
-
-            <Link href={realPageLinks.mbbsAbroad} className={actionCardClass}>
-              <QuickActionContent
-                icon={<Landmark size={20} />}
-                iconClass="bg-gradient-to-br from-[#38BDF8] to-[#2563EB] text-white"
-                title="Abroad"
-                subtitle="Countries"
-              />
-            </Link>
-
-            <Link href={realPageLinks.blogs} className={actionCardClass}>
-              <QuickActionContent
-                icon={<BookOpen size={20} />}
-                iconClass="bg-gradient-to-br from-[#A855F7] to-[#6D28D9] text-white"
-                title="Blogs"
-                subtitle="Guides & News"
-              />
-            </Link>
-
-            <Link href={realPageLinks.advisories} className={actionCardClass}>
-              <QuickActionContent
-                icon={<Sparkles size={20} />}
-                iconClass="bg-gradient-to-br from-[#F59E0B] to-[#EA580C] text-white"
-                title="Updates"
-                subtitle="NMC, FMGE"
-              />
-            </Link>
-
-            <CounsellingLink onClick={openCounselling} className={actionCardClass}>
-              <QuickActionContent
-                icon={<Banknote size={20} />}
-                iconClass="bg-gradient-to-br from-[#FB923C] to-[#EA580C] text-white"
-                title="Scholarship"
-                subtitle="Loans help"
-              />
-            </CounsellingLink>
-
-            <CounsellingLink onClick={openCounselling} className={actionCardClass}>
-              <QuickActionContent
-                icon={<MessageCircle size={20} />}
-                iconClass="bg-gradient-to-br from-[#A855F7] to-[#7C3AED] text-white"
-                title="Counselling"
-                subtitle="Talk to experts"
-              />
-            </CounsellingLink>
-
-            <a href={contact.emailHref} className={actionCardClass}>
-              <QuickActionContent
-                icon={<Phone size={20} />}
-                iconClass="bg-gradient-to-br from-[#2DD4BF] to-[#0891B2] text-white"
-                title="Contact"
-                subtitle="Call, WhatsApp"
-              />
-            </a>
-          </div>
-        </section>
-
-        <section className="mt-4">
-          <div className="flex items-center gap-2 px-1 sm:px-2">
-            <MapPin size={22} className="text-[#00F0A8]" />
-            <h2 className="text-xl font-black text-white sm:text-2xl">Our Offices</h2>
-            <div className="h-px flex-1 bg-gradient-to-r from-cyan-300/25 to-transparent" />
-            <div className="hidden gap-2 sm:flex">
-              <button
-                type="button"
-                onClick={showPreviousOffice}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition hover:border-[#00F0A8]/60 hover:text-[#00F0A8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0A8]/70"
-                aria-label="Highlight previous office"
-              >
-                <ChevronRight size={20} className="rotate-180" />
-              </button>
-              <button
-                type="button"
-                onClick={showNextOffice}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition hover:border-[#00F0A8]/60 hover:text-[#00F0A8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0A8]/70"
-                aria-label="Highlight next office"
-              >
-                <ChevronRight size={20} />
-              </button>
+            <div className="min-w-0">
+              <p className="text-base font-semibold tracking-wide text-white">ILMALINK MEDIGO</p>
+              <p className="mt-1 max-w-xl text-sm leading-5 text-slate-400">
+                MBBS admission guidance for India, Nepal, Bangladesh, Kyrgyzstan and trusted abroad
+                options.
+              </p>
             </div>
-          </div>
-
-          <div className="mt-2 flex snap-x gap-2 overflow-x-auto pb-1 lg:grid lg:grid-cols-3 lg:overflow-visible">
-            {offices.map((office, index) => (
-              <address
-                key={office.city}
-                className={`relative min-h-[168px] min-w-[252px] snap-center overflow-hidden rounded-xl border p-3 not-italic shadow-[0_12px_28px_rgba(0,0,0,0.26)] transition lg:min-w-0 ${
-                  activeOffice === index ? "scale-[1.01]" : ""
-                }`}
-                style={{
-                  borderColor: office.accent,
-                  backgroundImage: `linear-gradient(180deg, rgba(3, 10, 28, 0.12), rgba(3, 10, 28, 0.7) 48%, rgba(3, 10, 28, 0.96)), url("${office.image}")`,
-                  backgroundPosition: "center",
-                  backgroundSize: "cover",
-                  boxShadow:
-                    activeOffice === index
-                      ? `0 0 0 1px ${office.accent}66, 0 16px 34px rgba(0,0,0,0.32)`
-                      : "0 12px 28px rgba(0,0,0,0.26)",
-                }}
-              >
-                <div className="relative flex justify-end">
-                  <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${office.markerClass}`}>
-                    <MapPin size={23} />
-                  </span>
-                </div>
-                <div className="relative mt-6 text-center">
-                  <p className="text-sm font-bold leading-4 text-white">{office.label}</p>
-                  <h3 className="mt-0.5 text-2xl font-black leading-7" style={{ color: office.accent }}>
-                    {office.city}
-                  </h3>
-                  <div className="mx-auto mt-2 h-px w-4/5" style={{ backgroundColor: office.accent }} />
-                  <p className="mx-auto mt-2 max-w-[210px] text-left text-[13px] font-medium leading-5 text-white">
-                    {office.address.map((line) => (
-                      <span key={line} className="block">
-                        {line}
-                      </span>
-                    ))}
-                  </p>
-                </div>
-              </address>
-            ))}
-          </div>
-
-          <div className="mt-2 flex justify-center gap-2">
-            {offices.map((office, index) => (
-              <button
-                key={office.city}
-                type="button"
-                onClick={() => setActiveOffice(index)}
-                className={`h-2.5 w-2.5 rounded-full border transition ${
-                  activeOffice === index
-                    ? "border-[#00F0A8] bg-[#00F0A8]"
-                    : "border-cyan-200/70 bg-transparent"
-                }`}
-                aria-label={`Highlight ${office.city} office`}
-              />
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-4 overflow-hidden rounded-xl border border-[#00F0A8]/45 bg-gradient-to-br from-[#0A7A48]/80 via-[#072950]/90 to-[#031226] shadow-[0_0_26px_rgba(0,240,168,0.18),inset_0_1px_0_rgba(255,255,255,0.12)]">
-          <button
-            type="button"
-            onClick={() => setContactPointsOpen((current) => !current)}
-            className="flex w-full items-center justify-between gap-2 px-3 py-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0A8]/70 sm:px-4"
-            aria-expanded={contactPointsOpen}
-            aria-controls="footer-contact-points"
-          >
-            <span className="flex min-w-0 flex-1 items-center gap-2 text-[15px] font-black leading-5 text-white sm:text-xl">
-              <Building2 size={22} className="shrink-0 text-[#B8FF73]" />
-              <span className="min-w-0">View Contact Points India & Overseas</span>
-            </span>
-            <ChevronDown
-              size={24}
-              className={`shrink-0 text-white transition ${contactPointsOpen ? "rotate-180" : ""}`}
-            />
-          </button>
-
-          <div id="footer-contact-points" className={`${contactPointsOpen ? "grid" : "hidden"} gap-1.5 px-2.5 pb-3 sm:px-3`}>
-            {branchGroups.map((group) => {
-              const isOpen = openBranchGroup === group.title;
-
-              return (
-                <div key={group.title} className="overflow-hidden rounded-lg border border-cyan-200/20 bg-[#061A3A]/72">
-                  <button
-                    type="button"
-                    onClick={() => setOpenBranchGroup(isOpen ? null : group.title)}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0A8]/70"
-                    aria-expanded={isOpen}
-                  >
-                    <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${group.iconClass}`}>
-                      <Building2 size={17} />
-                    </span>
-                    <span className="min-w-0 flex-1 truncate text-[14px] font-bold text-white sm:text-base">
-                      {group.title}
-                    </span>
-                    <ChevronRight
-                      size={20}
-                      className={`shrink-0 text-white transition ${isOpen ? "rotate-90 text-[#00F0A8]" : ""}`}
-                    />
-                  </button>
-                  {isOpen ? (
-                    <div className="border-t border-cyan-200/15 px-3 py-2 text-xs font-medium leading-5 text-slate-300">
-                      Contact details will be updated soon. Use call, WhatsApp, or email for this region.
-                    </div>
-                  ) : null}
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="mt-4 grid gap-3 sm:grid-cols-[1fr_0.92fr] sm:items-center">
-          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:justify-start">
-            <a
-              href="https://facebook.com/ilmalink"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="ILMALINK on Facebook"
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#1877F2] text-xl text-white shadow-[0_0_18px_rgba(24,119,242,0.45)] transition hover:-translate-y-0.5"
-            >
-              <FaFacebookF />
-            </a>
-            <a
-              href="https://instagram.com/ilmalink"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="ILMALINK on Instagram"
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_110%,#FEDA75_0%,#FA7E1E_24%,#D62976_48%,#962FBF_72%,#4F5BD5_100%)] text-xl text-white shadow-[0_0_18px_rgba(214,41,118,0.42)] transition hover:-translate-y-0.5"
-            >
-              <FaInstagram />
-            </a>
-            <a
-              href="https://youtube.com/ilmalink"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="ILMALINK on YouTube"
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#FF0000] text-xl text-white shadow-[0_0_18px_rgba(255,0,0,0.38)] transition hover:-translate-y-0.5"
-            >
-              <FaYoutube />
-            </a>
-            <a
-              href="https://x.com/ilmalink"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="ILMALINK on X"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-cyan-200/35 bg-black text-xl font-black text-white shadow-[0_0_18px_rgba(96,165,250,0.32)] transition hover:-translate-y-0.5"
-            >
-              X
-            </a>
-            <a
-              href="https://t.me/ilmalink"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="ILMALINK on Telegram"
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#229ED9] text-xl text-white shadow-[0_0_18px_rgba(34,158,217,0.42)] transition hover:-translate-y-0.5"
-            >
-              <FaTelegramPlane />
-            </a>
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            <div className="flex items-center gap-2 rounded-lg border border-cyan-200/20 bg-[#071B3E]/80 px-2.5 py-2">
-              <IconBadge className="bg-[#0B284E] text-[#DFFCF3]">
-                <ShieldCheck size={20} />
-              </IconBadge>
-              <p className="text-xs font-bold leading-4 text-white">
-                Trusted by
-                <br />
-                Thousands
-              </p>
+            <ContactAction
+              href={contact.callHref}
+              icon={<Phone className="h-3.5 w-3.5" />}
+              label="Call"
+              value={contact.call}
+            />
+            <ContactAction
+              href={contact.emailHref}
+              icon={<Mail className="h-3.5 w-3.5" />}
+              label="Email"
+              value={contact.email}
+            />
+            <ContactAction
+              href={contact.whatsappHref}
+              icon={<MessageCircle className="h-3.5 w-3.5" />}
+              label="WhatsApp"
+              value={contact.whatsapp}
+              external
+            />
+            <button
+              type="button"
+              onClick={() => setContactPointsOpen(true)}
+              className="flex min-w-0 items-center gap-2 rounded-md border border-white/10 bg-white/[0.03] px-2.5 py-2 text-left transition hover:border-emerald-300/40 hover:bg-emerald-300/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200"
+            >
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-emerald-300/10 text-emerald-200">
+                <LocateFixed className="h-3.5 w-3.5" />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                  Nearby
+                </span>
+                <span className="block truncate text-xs font-semibold text-white sm:text-sm">
+                  Contact point
+                </span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <section aria-labelledby="footer-offices" className="border-b border-white/10 py-4">
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <h2
+              id="footer-offices"
+              className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500"
+            >
+              Offices
+            </h2>
+            <button
+              type="button"
+              onClick={() => setContactPointsOpen((open) => !open)}
+              className="inline-flex items-center gap-1.5 rounded-md border border-white/10 px-2.5 py-1.5 text-xs font-semibold text-slate-200 transition hover:border-emerald-300/40 hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200"
+              aria-expanded={contactPointsOpen}
+            >
+              View India and International Contact Points
+              <ChevronDown
+                className={`h-3.5 w-3.5 transition ${contactPointsOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2">
+            {offices.map((office) => (
+              <article
+                key={`${office.label}-${office.city}`}
+                className="min-w-0 rounded-md border border-white/10 bg-white/[0.025] p-2"
+              >
+                <div className="flex items-center gap-1.5 text-emerald-200">
+                  <MapPin className="h-3.5 w-3.5 shrink-0" />
+                  <p className="truncate text-[11px] font-semibold uppercase tracking-[0.12em]">
+                    {office.label}
+                  </p>
+                </div>
+                <p className="mt-1 text-sm font-semibold text-white">{office.city}</p>
+                <p className="mt-1 text-[11px] leading-4 text-slate-400">{office.address}</p>
+              </article>
+            ))}
+          </div>
+
+          {contactPointsOpen && (
+            <div className="mt-3 rounded-md border border-white/10 bg-white/[0.025] p-3">
+              <div className="grid grid-cols-2 gap-2">
+                {contactPointGroups.map((group) => (
+                  <div key={group.state} className="rounded-md border border-white/10 p-2">
+                    <p className="text-sm font-semibold text-white">{group.state}</p>
+                    <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-slate-500">
+                      {group.note}
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {group.points.map((point) => (
+                        <button
+                          type="button"
+                          key={`${group.state}-${point}`}
+                          onClick={() => choosePoint(group.state, point)}
+                          className={`rounded-full border px-2 py-1 text-[11px] font-semibold transition ${
+                            nearbyState === group.state && selectedPoint === point
+                              ? "border-emerald-300 bg-emerald-300 text-slate-950"
+                              : "border-white/10 text-slate-300 hover:border-emerald-300/50 hover:text-white"
+                          }`}
+                        >
+                          {point}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <label className="block min-w-0">
+                  <span className="mb-1 block text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                    State / region
+                  </span>
+                  <select
+                    value={nearbyState}
+                    onChange={(event) => handleStateChange(event.target.value)}
+                    className="h-10 w-full rounded-md border border-white/10 bg-[#07111f] px-2 text-sm font-semibold text-white outline-none focus:border-emerald-300"
+                  >
+                    {contactPointGroups.map((group) => (
+                      <option key={group.state} value={group.state}>
+                        {group.state}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="block min-w-0">
+                  <span className="mb-1 block text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                    {pointLabel}
+                  </span>
+                  <select
+                    value={selectedPoint}
+                    onChange={(event) => setNearbyPoint(event.target.value)}
+                    className="h-10 w-full rounded-md border border-white/10 bg-[#07111f] px-2 text-sm font-semibold text-white outline-none focus:border-emerald-300"
+                  >
+                    {selectedGroup.points.map((point) => (
+                      <option key={point} value={point}>
+                        {point}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+
+              <a
+                href={nearbyWhatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md bg-emerald-300 px-4 text-sm font-bold text-slate-950 transition hover:bg-emerald-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-100 sm:w-auto"
+              >
+                <Send className="h-4 w-4" />
+                Send student details on WhatsApp
+              </a>
             </div>
-            <div className="flex items-center gap-2 rounded-lg border border-cyan-200/20 bg-[#071B3E]/80 px-2.5 py-2">
-              <IconBadge className="bg-[#00F0A8] text-[#031525]">
-                <GraduationCap size={20} />
-              </IconBadge>
-              <p className="text-xs font-bold leading-4 text-white">
-                Genuine &
-                <br />
-                Verified Info
-              </p>
+          )}
+        </section>
+
+        <div className="grid gap-4 border-b border-white/10 py-4 md:grid-cols-[1.1fr_0.9fr]">
+          <nav aria-label="Footer navigation" className="grid grid-cols-3 gap-3">
+            {footerLinks.map((group) => (
+              <div key={group.title}>
+                <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  {group.title}
+                </h2>
+                <ul className="mt-2 space-y-1.5">
+                  {group.links.map((link) => (
+                    <li key={link.label}>
+                      <FooterLink link={link} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </nav>
+
+          <div className="flex flex-wrap items-start justify-start gap-2 md:justify-end">
+            <CounsellingLink
+              href="/?counselling=open"
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-emerald-300 px-3 text-sm font-bold text-slate-950 transition hover:bg-emerald-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-100"
+            >
+              Book counselling
+              <ArrowRight className="h-4 w-4" />
+            </CounsellingLink>
+            <button
+              type="button"
+              onClick={openSearch}
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-white/12 px-3 text-sm font-semibold text-white transition hover:border-emerald-300/50 hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200"
+            >
+              <Search className="h-4 w-4" />
+              Search site
+            </button>
+            <div className="flex flex-wrap items-center gap-1.5">
+              {socialLinks.map((social) => {
+                const Icon = social.icon;
+                return (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Follow ILMALINK on ${social.label}`}
+                    className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/[0.03] text-slate-300 transition hover:border-emerald-300/50 hover:bg-emerald-300/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200"
+                  >
+                    <Icon className="h-4 w-4" />
+                  </a>
+                );
+              })}
             </div>
           </div>
-        </section>
+        </div>
 
-        <section className="mt-3 flex items-center gap-3 rounded-lg border border-cyan-200/20 bg-[#061A3A]/80 px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-          <IconBadge className="bg-[#0B284E] text-[#DFFCF3]">
-            <ShieldCheck size={20} />
-          </IconBadge>
-          <p className="text-xs font-medium leading-5 text-slate-200 sm:text-sm">
-            Information is subject to change. Students are advised to verify details from official sources before making any decision.
-          </p>
-        </section>
-
-        <div className="mt-3 flex flex-col gap-1 px-2 text-center text-xs font-medium text-slate-300 sm:flex-row sm:items-center sm:justify-between sm:text-sm">
-          <p>&copy; 2026 ILMALINK MEDIGO. All rights reserved.</p>
-          <p>
-            Powered by <span className="font-black text-[#00F0A8]">ILMALINK</span>
+        <div className="flex flex-col gap-1.5 pt-3 text-xs leading-5 text-slate-500 lg:flex-row lg:items-center lg:justify-between">
+          <p>Copyright {new Date().getFullYear()} ILMALINK MEDIGO. All rights reserved.</p>
+          <p className="max-w-3xl">
+            Verify admission rules, fees, recognition and counselling updates from official sources
+            before final decisions.
           </p>
         </div>
       </div>
 
-      {searchOpen ? (
-        <SearchModal
-          isOpen={searchOpen}
-          onClose={() => setSearchOpen(false)}
-          onOpenCounselling={() => {
-            setSearchOpen(false);
-            if (typeof window !== "undefined") {
-              window.dispatchEvent(new Event(OPEN_COUNSELLING_EVENT));
-            }
-          }}
-        />
-      ) : null}
+      <SearchModal
+        isOpen={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        onOpenCounselling={() => openCounselling()}
+      />
     </footer>
   );
 }

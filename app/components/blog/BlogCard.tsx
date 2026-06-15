@@ -4,7 +4,20 @@ import { ArrowRight, CalendarDays } from "lucide-react";
 import type { BlogPost } from "@/app/lib/blog/types";
 import { isImageFile, isVideoFile } from "@/app/lib/blog/imageValidation";
 
-export default function BlogCard({ post }: { post: BlogPost }) {
+export type BlogCardPost = Pick<
+  BlogPost,
+  | "id"
+  | "title"
+  | "slug"
+  | "featuredImage"
+  | "imageAlt"
+  | "shortDescription"
+  | "category"
+  | "tags"
+  | "publishDate"
+>;
+
+export default function BlogCard({ post }: { post: BlogCardPost }) {
   const featuredImage = post.featuredImage?.trim();
   const hasFeaturedMedia = Boolean(featuredImage);
   const hasFeaturedVideo = featuredImage ? isVideoFile(featuredImage) : false;

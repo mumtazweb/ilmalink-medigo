@@ -7,6 +7,8 @@ const appDir = path.join(rootDir, "app");
 const blogDbPath = path.join(rootDir, "data", "blog-db.json");
 const fmgeDataPath = path.join(rootDir, "app", "data", "fmgeData.ts");
 const outputPath = path.join(rootDir, "app", "data", "searchIndex.ts");
+const BLOG_METADATA_PREFIX = "<!-- BLOG_METADATA:";
+const BLOG_METADATA_SUFFIX = " -->";
 
 const componentUrls = new Map([
   ["CounsellingPopup", "/?counselling=open"],
@@ -78,6 +80,7 @@ const countryRoutes = [
   ["Kyrgyzstan", "/mbbs-abroad/kyrgyzstan"],
   ["Georgia", "/mbbs-abroad/georgia"],
   ["Bangladesh", "/mbbs-abroad/bangladesh"],
+  ["Nepal", "/mbbs-abroad/nepal"],
   ["Russia", "/mbbs-abroad/russia"],
   ["Kazakhstan", "/mbbs-abroad/kazakhstan"],
   ["Uzbekistan", "/mbbs-abroad/uzbekistan"],
@@ -176,7 +179,15 @@ function sentenceExcerpt(value, maxLength = 190) {
 }
 
 function stripJsxExpressions(value) {
-  return value.replace(/\{[^{}]*\}/g, " ");
+  let current = value;
+  let previous = "";
+
+  while (current !== previous) {
+    previous = current;
+    current = current.replace(/\{[^{}]*\}/g, " ");
+  }
+
+  return current;
 }
 
 function extractHeadingText(value) {
@@ -345,11 +356,14 @@ function isUsefulLiteral(value, before) {
   if (!/[a-zA-Z]/.test(clean)) return false;
   if (/^(use client|use server)$/i.test(clean)) return false;
   if (/^(className|style|src|href|width|height|fill|stroke|viewBox)$/i.test(clean)) return false;
+  if (/^@/.test(value)) return false;
+  if (/^(application\/ld\+json|_blank|noopener|noreferrer|button|submit|force-static|summary_large_image|article|en_in)$/i.test(clean)) return false;
   if (/^(https?:|data:image|mailto:|tel:|wa\.me|\/|\.\/|\.\.\/|@\/|node:)/i.test(clean)) return false;
   if (/\.(svg|png|jpe?g|webp|gif|css|mjs|tsx?|jsx?|json)$/i.test(clean)) return false;
 
   const context = before.slice(-45);
-  if (/\b(className|style|src|href|import|from|fill|stroke|viewBox|d)\s*=\s*$/i.test(context)) return false;
+  if (/\b(className|style|src|href|import|from|fill|stroke|viewBox|type|rel|target|d)\s*=\s*\{?\s*$/i.test(context)) return false;
+  if (/"@(?:context|type|id)"\s*:\s*$/i.test(context)) return false;
 
   const tokens = clean.split(/\s+/);
   const utilityTokens = tokens.filter((token) => /[:\[\]{}]|^(sm|md|lg|xl|hover|focus|group|rounded|border|bg|text|flex|grid|px|py|mt|mb|mx|my|h|w|z)-/i.test(token));
@@ -366,6 +380,47 @@ function stripNonVisibleSource(source) {
     .replace(/^\s*export\s+type\s+[\s\S]*?;\s*$/gm, " ")
     .replace(/^\s*export\s+interface\s+[\s\S]*?}\s*$/gm, " ");
 }
+
+function extractReturnSource(source) {
+  const returnPattern = /return\s*\(/g;
+  let match;
+  let lastReturnIndex = -1;
+  let lastReturnLength = 0;
+
+  while ((match = returnPattern.exec(source))) {
+    lastReturnIndex = match.index;
+    lastReturnLength = match[0].length;
+  }
+
+  if (lastReturnIndex === -1) return source;
+
+  const afterReturn = source.slice(lastReturnIndex + lastReturnLength);
+  const endIndex = afterReturn.lastIndexOf(");");
+
+  return endIndex === -1 ? afterReturn : afterReturn.slice(0, endIndex);
+}
+
+function collectUsefulLiterals(source) {
+  const literals = [];
+  const literalPattern = /(["`])((?:\\.|(?!\1)[\s\S])*?)\1/g;
+  let match;
+
+  while ((match = literalPattern.exec(source))) {
+    const literal = match[2];
+
+    if (
+      isUsefulLiteral(
+        literal,
+        source.slice(Math.max(0, match.index - 80), match.index)
+      )
+    ) {
+      literals.push(literal);
+    }
+  }
+
+  return literals;
+}
+
 function extractVisibleText(source) {
   const textParts = [];
 
@@ -379,17 +434,16 @@ function extractVisibleText(source) {
     .replace(/^\s*export\s+const\s+dynamic[\s\S]*?;\s*$/gm, " ")
     .replace(/^\s*const\s+[a-zA-Z0-9_]+\s*=[\s\S]*?;\s*$/gm, " ");
 
-  const returnMatch = withoutComments.match(/return\s*\(([\s\S]*)\)\s*;?\s*}/);
-  const visibleSource = returnMatch?.[1] ?? withoutComments;
+  const visibleSource = extractReturnSource(withoutComments);
 
   const jsxText = visibleSource
     .replace(/\bclassName\s*=\s*(?:"[^"]*"|'[^']*'|\{[^}]*\})/g, " ")
     .replace(/\b(?:href|src|style|width|height|fill|stroke|viewBox|d)\s*=\s*(?:"[^"]*"|'[^']*'|\{[^}]*\})/g, " ")
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<[^>]*>/g, " ")
-    .replace(/\{[^{}]*\}/g, " ");
+    .replace(/<\/?[a-z][^>\s]*\b[^>]*>/gi, " ");
 
-  textParts.push(jsxText);
+  textParts.push(stripJsxExpressions(jsxText));
 
   const attributePattern =
     /\b(?:placeholder|aria-label|title|alt)\s*=\s*(?:"([^"]+)"|'([^']+)')/g;
@@ -399,24 +453,13 @@ function extractVisibleText(source) {
     textParts.push(attributeMatch[1] ?? attributeMatch[2]);
   }
 
-  const literalPattern = /(["'`])((?:\\.|(?!\1)[\s\S])*?)\1/g;
-  let match;
-
-  while ((match = literalPattern.exec(visibleSource))) {
-    const literal = match[2];
-
-    if (
-      isUsefulLiteral(
-        literal,
-        visibleSource.slice(Math.max(0, match.index - 80), match.index)
-      )
-    ) {
-      textParts.push(literal);
-    }
-  }
+  textParts.push(...collectUsefulLiterals(stripNonVisibleSource(source)));
 
   return normalizeText(textParts.join(" "))
-    .replace(/\b(className|export const|const|function|return|metadata|dangerouslySetInnerHTML|JSON.stringify)\b/gi, " ")
+    .replace(/\b([a-zA-Z0-9_]+)\.(map|filter|reduce|slice|join|replace|toLowerCase|toUpperCase)\b/gi, " ")
+    .replace(/\b(className|export const|const|function|return|metadata|dangerouslySetInnerHTML|JSON.stringify|target|rel|noopener|noreferrer|_blank|application\/ld\+json|SectionHeading|VerificationCounsellingCard|CtaLink|Link|source|item|college|tag|key|eyebrow|buttonLabel|countryName)\b/gi, " ")
+    .replace(/\b(?:section|div|span|ul|li|href|title|description|size|class)\b/gi, " ")
+    .replace(/\b(?:inline-flex|items-center|justify-center|flex-shrink-0|rounded[-:\w/.[\]#]*|border[-:\w/.[\]#]*|bg[-:\w/.[\]#]*|text[-:\w/.[\]#]*|font[-:\w/.[\]#]*|shadow[-:\w/.[\]#]*|leading[-:\w/.[\]#]*|tracking[-:\w/.[\]#]*|grid[-:\w/.[\]#]*|gap[-:\w/.[\]#]*|px[-:\w/.[\]#]*|py[-:\w/.[\]#]*|pt[-:\w/.[\]#]*|pb[-:\w/.[\]#]*|mt[-:\w/.[\]#]*|mb[-:\w/.[\]#]*|mx[-:\w/.[\]#]*|my[-:\w/.[\]#]*|sm:[-:\w/.[\]#]+|md:[-:\w/.[\]#]+|lg:[-:\w/.[\]#]+|xl:[-:\w/.[\]#]+|h-\S+|w-\S+|max-w-\S+|min-h-\S+)\b/gi, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -426,6 +469,43 @@ function extractMetadataField(source, field) {
   const match = source.match(pattern);
 
   return match ? normalizeText(match[1]) : "";
+}
+
+function splitBlogContent(value = "") {
+  const markerIndex = value.lastIndexOf(BLOG_METADATA_PREFIX);
+
+  if (markerIndex === -1) {
+    return {
+      content: value,
+      metadata: {},
+    };
+  }
+
+  const markerEnd = value.indexOf(BLOG_METADATA_SUFFIX, markerIndex);
+
+  if (markerEnd === -1) {
+    return {
+      content: value,
+      metadata: {},
+    };
+  }
+
+  const encoded = value.slice(
+    markerIndex + BLOG_METADATA_PREFIX.length,
+    markerEnd
+  );
+
+  try {
+    return {
+      content: value.slice(0, markerIndex).trimEnd(),
+      metadata: JSON.parse(Buffer.from(encoded, "base64").toString("utf8")),
+    };
+  } catch {
+    return {
+      content: value,
+      metadata: {},
+    };
+  }
 }
 
 function routeFromPageFile(filePath) {
@@ -547,7 +627,7 @@ async function buildComponentEntries() {
   );
 }
 
-async function buildBlogEntries() {
+async function readFileBlogs() {
   let database;
 
   try {
@@ -558,40 +638,131 @@ async function buildBlogEntries() {
 
   if (!Array.isArray(database.blogs)) return [];
 
-  return database.blogs
-    .filter((blog) => blog.status === "published")
-    .map((blog) => ({
-      id: `blog-${slugify(blog.slug || blog.id || blog.title)}`,
-      title: blog.title,
-      description: blog.metaDescription || blog.shortDescription || blog.title,
-      url: `/blogs/${blog.slug}`,
-      category: "Blogs",
-      group: "Blogs",
-      type: "blog",
-      tags: [
-        ...(Array.isArray(blog.tags) ? blog.tags : []),
-        ...(Array.isArray(blog.keywords) ? blog.keywords : []),
+  return database.blogs.filter((blog) => blog.status === "published");
+}
+
+async function readPrismaBlogs() {
+  try {
+    const { PrismaClient } = await import("@prisma/client");
+    const prisma = new PrismaClient();
+
+    try {
+      const records = await prisma.blog.findMany({
+        where: {
+          status: "published",
+        },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          shortDescription: true,
+          content: true,
+          category: true,
+          country: true,
+          status: true,
+          views: true,
+          createdAt: true,
+          updatedAt: true,
+          author: {
+            select: {
+              name: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      return records.map((record) => {
+        const parsed = splitBlogContent(record.content);
+        const metadata = parsed.metadata;
+        const keywords = Array.isArray(metadata.keywords)
+          ? metadata.keywords.filter(Boolean)
+          : [];
+        const tags = Array.isArray(metadata.tags)
+          ? metadata.tags.filter(Boolean)
+          : keywords;
+
+        return {
+          id: record.id,
+          title: record.title,
+          slug: record.slug,
+          shortDescription: record.shortDescription,
+          category: record.category,
+          country: record.country || "India",
+          tags: tags.length ? tags : [record.category],
+          authorName: record.author?.name ?? "ILMALINK Editorial Team",
+          publishDate:
+            metadata.publishDate ?? record.createdAt.toISOString().slice(0, 10),
+          updatedAt: record.updatedAt.toISOString(),
+          readTime: metadata.readTime,
+          status: record.status,
+          seoTitle: metadata.seoTitle ?? record.title,
+          metaDescription: metadata.metaDescription ?? record.shortDescription,
+          keywords,
+          content: parsed.content,
+          views: record.views,
+        };
+      });
+    } finally {
+      await prisma.$disconnect();
+    }
+  } catch (error) {
+    console.warn(
+      `Skipping Prisma blog search records: ${error instanceof Error ? error.message : String(error)}`
+    );
+    return [];
+  }
+}
+
+function blogToSearchEntry(blog) {
+  return {
+    id: `blog-${slugify(blog.slug || blog.id || blog.title)}`,
+    title: blog.title,
+    description: blog.metaDescription || blog.shortDescription || blog.title,
+    url: `/blogs/${blog.slug}`,
+    category: "Blogs",
+    group: "Blogs",
+    type: "blog",
+    tags: [
+      ...(Array.isArray(blog.tags) ? blog.tags : []),
+      ...(Array.isArray(blog.keywords) ? blog.keywords : []),
+      blog.category,
+      blog.country,
+    ].filter(Boolean),
+    content: normalizeText(
+      [
+        blog.title,
+        blog.seoTitle,
+        blog.metaDescription,
+        blog.shortDescription,
         blog.category,
         blog.country,
-      ].filter(Boolean),
-      content: normalizeText(
-        [
-          blog.title,
-          blog.seoTitle,
-          blog.metaDescription,
-          blog.shortDescription,
-          blog.category,
-          blog.country,
-          blog.authorName,
-          ...(Array.isArray(blog.tags) ? blog.tags : []),
-          ...(Array.isArray(blog.keywords) ? blog.keywords : []),
-          blog.content,
-        ]
-          .filter(Boolean)
-          .join(" ")
-      ),
-      priority: 90 + Math.min(Number(blog.views) || 0, 5000) / 1000,
-    }));
+        blog.authorName,
+        ...(Array.isArray(blog.tags) ? blog.tags : []),
+        ...(Array.isArray(blog.keywords) ? blog.keywords : []),
+        blog.content,
+      ]
+        .filter(Boolean)
+        .join(" ")
+    ),
+    priority: 90 + Math.min(Number(blog.views) || 0, 5000) / 1000,
+  };
+}
+
+async function buildBlogEntries() {
+  const blogsBySlug = new Map();
+
+  for (const blog of await readFileBlogs()) {
+    blogsBySlug.set(blog.slug || blog.id || blog.title, blog);
+  }
+
+  for (const blog of await readPrismaBlogs()) {
+    blogsBySlug.set(blog.slug || blog.id || blog.title, blog);
+  }
+
+  return Array.from(blogsBySlug.values()).map(blogToSearchEntry);
 }
 
 async function buildFmgeEntries() {
@@ -803,7 +974,7 @@ async function main() {
     ].filter((entry) => isPublicSearchUrl(entry.url))
   );
 
-  const output = `export type GlobalSearchEntry = {\n  id: string;\n  title: string;\n  description: string;\n  url: string;\n  category: string;\n  group: "Pages" | "Destinations" | "Blogs";\n  type: "page" | "destination" | "blog";\n  subType?: "section";\n  tags: string[];\n  content: string;\n  priority: number;\n};\n\nexport const globalSearchIndex: GlobalSearchEntry[] = [\n${entries.map(emitEntry).join("\n")}\n];\n`;
+  const output = `// AUTO-GENERATED by npm run search:index.\n// Includes public pages, page sections, FMGE data, manual search entries,\n// and all published blog posts available from Prisma and data/blog-db.json.\n// npm run dev and npm run build regenerate this file before Next.js starts/builds.\nexport type GlobalSearchEntry = {\n  id: string;\n  title: string;\n  description: string;\n  url: string;\n  category: string;\n  group: "Pages" | "Destinations" | "Blogs";\n  type: "page" | "destination" | "blog";\n  subType?: "section";\n  tags: string[];\n  content: string;\n  priority: number;\n};\n\nexport const globalSearchIndex: GlobalSearchEntry[] = [\n${entries.map(emitEntry).join("\n")}\n];\n`;
 
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
   await fs.writeFile(outputPath, output, "utf8");

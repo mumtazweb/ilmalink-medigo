@@ -13,6 +13,7 @@ const staticRoutes = [
   "/blogs",
   "/mbbs-abroad",
   "/mbbs-abroad/bangladesh",
+  "/mbbs-abroad/nepal",
   "/mbbs-abroad/kyrgyzstan",
   "/mbbs-abroad/georgia",
   "/mbbs-abroad/russia",

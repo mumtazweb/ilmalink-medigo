@@ -2,12 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import type { BlogPost } from "@/app/lib/blog/types";
-import BlogCard from "./BlogCard";
+import BlogCard, { type BlogCardPost } from "./BlogCard";
 
 // BLOG SYSTEM: Homepage latest blogs strip with smooth auto-scroll and hover pause.
 // SEO note: renders each blog only once to avoid duplicate visible/DOM content.
-export default function LatestBlogsScroller({ posts }: { posts: BlogPost[] }) {
+export default function LatestBlogsScroller({ posts }: { posts: BlogCardPost[] }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
 

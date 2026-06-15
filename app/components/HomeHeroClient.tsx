@@ -20,6 +20,7 @@ type DestinationCardData = {
   cta: string;
   fee?: string;
   semesterFee?: string;
+  secondaryText?: string;
   universityCount?: number;
   badges: string[];
 };
@@ -36,7 +37,10 @@ const manualUniversityCountPlaceholder = 32;
 const verifiedDestinationMeta: Partial<
   Record<
     string,
-    Pick<DestinationCardData, "fee" | "semesterFee" | "universityCount" | "badges">
+    Pick<
+      DestinationCardData,
+      "fee" | "semesterFee" | "secondaryText" | "universityCount" | "badges"
+    >
   >
 > = {
   "/mbbs-india": {
@@ -66,6 +70,11 @@ const verifiedDestinationMeta: Partial<
     semesterFee: manualSemesterFeePlaceholder,
     universityCount: manualUniversityCountPlaceholder,
     badges: ["NMC", "English"],
+  },
+  "/mbbs-abroad/nepal": {
+    semesterFee: "Strict MEC route",
+    secondaryText: "MECEE-BL priority",
+    badges: ["PCB 50%", "Limited"],
   },
   "/mbbs-abroad/uzbekistan": {
     fee: "Rs. 20-35 Lakhs Total",
@@ -195,7 +204,6 @@ const extraDestinationRoutes = [
   { href: "/mbbs-abroad/latvia", label: "Latvia", flag: "lv" },
   { href: "/mbbs-abroad/lithuania", label: "Lithuania", flag: "lt" },
   { href: "/mbbs-abroad/mauritius", label: "Mauritius", flag: "mu" },
-  { href: "/mbbs-abroad/nepal", label: "Nepal", flag: "np" },
   { href: "/mbbs-abroad/netherlands", label: "Netherlands", flag: "nl" },
   { href: "/mbbs-abroad/oman", label: "Oman", flag: "om" },
   { href: "/mbbs-abroad/pakistan", label: "Pakistan", flag: "pk" },
@@ -223,12 +231,13 @@ const destinationSourceData: DestinationCardData[] = [
     ...(verifiedDestinationMeta[destination.href] ?? { badges: [] }),
     ...destinationCardCopy,
   })),
-  ...navbarCountryDestinations.map(({ href, label, flag }) => ({
+  ...navbarCountryDestinations.map(({ href, label, flag, insight }) => ({
     href,
     label,
     flag,
     ...(verifiedDestinationMeta[href] ?? { badges: [] }),
-    ...destinationCardCopy,
+    detail: insight,
+    cta: destinationCardCopy.cta,
   })),
   ...extraDestinationRoutes.map((destination) => ({
     ...destination,
@@ -242,6 +251,7 @@ const destinationOrder = [
   "/mbbs-abroad/kyrgyzstan",
   "/mbbs-abroad/georgia",
   "/mbbs-abroad/bangladesh",
+  "/mbbs-abroad/nepal",
   "/mbbs-abroad/tajikistan",
   "/mbbs-abroad/china",
   "/mbbs-abroad/russia",
@@ -279,7 +289,6 @@ const destinationOrder = [
   "/mbbs-abroad/latvia",
   "/mbbs-abroad/lithuania",
   "/mbbs-abroad/mauritius",
-  "/mbbs-abroad/nepal",
   "/mbbs-abroad/netherlands",
   "/mbbs-abroad/oman",
   "/mbbs-abroad/pakistan",
@@ -513,9 +522,10 @@ function DestinationMarketplaceCard({
 }) {
   const semesterFeeText = destination.semesterFee ?? manualSemesterFeePlaceholder;
   const universityText =
-    typeof destination.universityCount === "number"
+    destination.secondaryText ??
+    (typeof destination.universityCount === "number"
       ? `${destination.universityCount} universities`
-      : `${manualUniversityCountPlaceholder} universities`;
+      : `${manualUniversityCountPlaceholder} universities`);
   return (
     <Link
       href={destination.href}
