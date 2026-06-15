@@ -9,7 +9,15 @@ function renderLink(key: number, linkText: string, linkHref: string) {
     <a
       key={key}
       href={cleanHref}
-      className="font-extrabold text-red-600 underline decoration-red-400 decoration-2 underline-offset-4 transition hover:text-red-700 hover:decoration-red-700"
+      className="!font-extrabold !text-red-600 !underline !decoration-red-500 !decoration-2 !underline-offset-4 transition hover:!text-red-700 hover:!decoration-red-700"
+      style={{
+        color: "#dc2626",
+        fontWeight: 800,
+        textDecorationLine: "underline",
+        textDecorationColor: "#ef4444",
+        textDecorationThickness: "2px",
+        textUnderlineOffset: "4px",
+      }}
       target={cleanHref.startsWith("http") ? "_blank" : undefined}
       rel={cleanHref.startsWith("http") ? "noopener noreferrer" : undefined}
     >
@@ -100,6 +108,14 @@ export default function BlogContent({ content }: { content: string }) {
                 <a
                   href={imageSrc}
                   className="flex h-full w-full items-center justify-center px-4 text-center text-sm font-bold text-red-600 underline decoration-red-400 decoration-2 underline-offset-4"
+                  style={{
+                    color: "#dc2626",
+                    fontWeight: 800,
+                    textDecorationLine: "underline",
+                    textDecorationColor: "#ef4444",
+                    textDecorationThickness: "2px",
+                    textUnderlineOffset: "4px",
+                  }}
                 >
                   {imageMatch[1] || "Open media"}
                 </a>
