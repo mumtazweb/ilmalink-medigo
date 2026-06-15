@@ -11,7 +11,6 @@ const staticRoutes = [
   "",
   "/about",
   "/blogs",
-  "/search",
   "/mbbs-abroad",
   "/mbbs-abroad/bangladesh",
   "/mbbs-abroad/kyrgyzstan",
@@ -42,13 +41,28 @@ const staticRoutes = [
   "/official-advisories",
 ];
 
+const excludedRoutes = [
+  "/login",
+  "/create-account",
+  "/forgot-password",
+  "/reset-password",
+  "/dashboard",
+  "/admin",
+  "/api",
+  "/search",
+];
+
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
 function cleanRoute(url: string) {
   if (/^https?:\/\//.test(url)) {
     try {
       const parsed = new URL(url);
-      if (parsed.hostname !== "ilmalink.com" && parsed.hostname !== "www.ilmalink.com") {
+
+      if (
+        parsed.hostname !== "ilmalink.com" &&
+        parsed.hostname !== "www.ilmalink.com"
+      ) {
         return "";
       }
 
@@ -59,15 +73,29 @@ function cleanRoute(url: string) {
   }
 
   const pathOnly = url.split(/[?#]/, 1)[0] || "/";
-  if (!pathOnly.startsWith("/")) return "";
+
+  if (!pathOnly.startsWith("/")) {
+    return "";
+  }
 
   return pathOnly === "/" ? "" : pathOnly.replace(/\/$/, "");
+}
+
+function shouldIncludeRoute(route: string) {
+  if (route === "") {
+    return true;
+  }
+
+  return !excludedRoutes.some(
+    (blockedRoute) =>
+      route === blockedRoute || route.startsWith(`${blockedRoute}/`)
+  );
 }
 
 function routePriority(route: string, priorityHint?: number) {
   if (route === "") return 1;
   if (route.startsWith("/blogs/")) return 0.82;
-  if (route === "/blogs" || route === "/search") return 0.78;
+  if (route === "/blogs") return 0.78;
   if (route.includes("bangladesh") || route.includes("kyrgyzstan")) return 0.9;
   if (route.includes("mbbs-abroad") || route.includes("scholarships-loans")) return 0.8;
   if (priorityHint) return Math.max(0.5, Math.min(0.86, priorityHint / 115));
@@ -92,15 +120,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const routes = new Map<string, { priority: number; lastModified: Date }>();
 
-  for (const route of staticRoutes) {
-    routes.set(cleanRoute(route), { priority: routePriority(route), lastModified: now });
+  for (const rawRoute of staticRoutes) {
+    const route = cleanRoute(rawRoute);
+
+    if (!shouldIncludeRoute(route)) continue;
+
+    routes.set(route, {
+      priority: routePriority(route),
+      lastModified: now,
+    });
   }
 
   for (const entry of globalSearchIndex) {
     const route = cleanRoute(entry.url);
+
     if (!route && entry.url !== "/") continue;
+    if (!shouldIncludeRoute(route)) continue;
 
     const existing = routes.get(route);
+
     if (!existing || entry.priority > existing.priority) {
       routes.set(route, {
         priority: entry.priority,
