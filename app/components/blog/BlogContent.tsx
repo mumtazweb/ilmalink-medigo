@@ -16,15 +16,18 @@ function renderInline(text: string) {
     const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
 
     if (linkMatch) {
+      const linkText = linkMatch[1];
+      const linkHref = linkMatch[2];
+
       return (
         <a
           key={index}
-          href={linkMatch[2]}
-          className="font-bold text-[#0F4CFF] underline underline-offset-4"
-          target={linkMatch[2].startsWith("http") ? "_blank" : undefined}
-          rel={linkMatch[2].startsWith("http") ? "noopener noreferrer" : undefined}
+          href={linkHref}
+          className="mx-1 inline-flex items-center justify-center rounded-full bg-red-600 px-3 py-1.5 text-sm font-extrabold text-white no-underline shadow-[0_8px_20px_rgba(220,38,38,0.28)] ring-1 ring-red-500/30 transition hover:-translate-y-0.5 hover:bg-red-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+          target={linkHref.startsWith("http") ? "_blank" : undefined}
+          rel={linkHref.startsWith("http") ? "noopener noreferrer" : undefined}
         >
-          {linkMatch[1]}
+          {linkText}
         </a>
       );
     }

@@ -159,7 +159,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
       />
 
       {/* BLOG SYSTEM: Single blog article layout. */}
-      <article className="mx-auto max-w-5xl px-4 pb-16 pt-36 sm:px-6 lg:px-8">
+      <article className="mx-auto max-w-5xl px-4 pb-16 pt-6 sm:px-6 md:pt-8 lg:px-8">
         <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_24px_64px_rgba(15,23,42,0.10)]">
           {featuredImage && (hasFeaturedImage || hasFeaturedVideo) && (
             <div className="relative h-[20vh] min-h-[140px] max-h-[220px] bg-[#EFF6FF] md:h-[22vh]">

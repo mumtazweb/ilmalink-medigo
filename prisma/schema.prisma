@@ -14,6 +14,7 @@ model User {
   password  String
   role      String   @default("author")
   createdAt DateTime @default(now())
+
   resetOtp       String?
   resetOtpExpiry DateTime?
 
@@ -26,7 +27,7 @@ model Blog {
   slug             String   @unique
   shortDescription String   @db.Text
   content          String   @db.LongText
-  category         String
+  category         String   @db.VarChar(191)
   country          String   @db.VarChar(512)
   featuredImage    String?  @db.LongText
   images           String?  @db.LongText
@@ -37,4 +38,10 @@ model Blog {
 
   authorId String
   author   User @relation(fields: [authorId], references: [id])
+
+  @@index([authorId])
+  @@index([status])
+  @@index([category])
+  @@index([createdAt])
+  @@index([status, createdAt])
 }
