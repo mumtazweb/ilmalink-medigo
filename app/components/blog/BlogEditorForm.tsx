@@ -79,6 +79,7 @@ export default function BlogEditorForm({
     <form action={formAction} className="space-y-6" noValidate>
       <input type="hidden" name="blogId" value={initialBlog?.id ?? ""} />
       <input type="hidden" name="images" value={JSON.stringify(images)} />
+
       <div className="grid gap-4 md:grid-cols-2">
         <label className="block">
           <span className="text-sm font-bold text-[#0F172A]">Title</span>
@@ -160,6 +161,7 @@ export default function BlogEditorForm({
             className="mt-2 h-12 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
           />
         </label>
+
         <label className="block">
           <span className="text-sm font-bold text-[#0F172A]">SEO title</span>
           <input
@@ -169,6 +171,7 @@ export default function BlogEditorForm({
             className="mt-2 h-12 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
           />
         </label>
+
         <label className="block">
           <span className="text-sm font-bold text-[#0F172A]">Keywords</span>
           <input
@@ -206,7 +209,7 @@ export default function BlogEditorForm({
             { label: "Italic", icon: Italic, snippet: "_Italic text_" },
             { label: "List", icon: List, snippet: "\n- List item\n- List item\n" },
             { label: "Image", icon: ImageIcon, snippet: "\n![Image alt](/blog/mbbs-india.svg)\n" },
-            { label: "Link", icon: LinkIcon, snippet: "[Link text](https://example.com)" },
+            { label: "Link", icon: LinkIcon, snippet: "[[link text | link url]]" },
             { label: "Table", icon: Table2, snippet: "\n| Column | Value |\n| --- | --- |\n| Item | Detail |\n" },
           ].map((tool) => (
             <button
@@ -218,6 +221,7 @@ export default function BlogEditorForm({
               <tool.icon size={14} /> {tool.label}
             </button>
           ))}
+
           <button
             type="button"
             onClick={() => setPreview((current) => !current)}
@@ -225,6 +229,26 @@ export default function BlogEditorForm({
           >
             <Eye size={14} /> Preview
           </button>
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-800">
+          <p className="font-extrabold">How to insert clickable link inside blog:</p>
+
+          <p className="mt-1">
+            Use this format wherever you want to insert a link:
+          </p>
+
+          <code className="mt-2 block rounded-lg bg-white px-3 py-2 text-xs font-bold text-red-700">
+            [[link text | link url]]
+          </code>
+
+          <p className="mt-2 text-xs font-semibold text-red-700">
+            Example: [[Download Admit Card Here | https://example.com]]
+          </p>
+
+          <p className="mt-1 text-xs font-semibold text-red-700">
+            Website will show only the link text. The full URL will stay hidden.
+          </p>
         </div>
 
         <textarea
@@ -261,6 +285,7 @@ export default function BlogEditorForm({
         >
           {pending && submitIntent === "draft" ? "Saving..." : "Save draft"}
         </button>
+
         <button
           type="submit"
           name="status"
@@ -273,6 +298,7 @@ export default function BlogEditorForm({
             ? "Submitting..."
             : "Submit for approval"}
         </button>
+
         {canPublish && (
           <button
             type="submit"

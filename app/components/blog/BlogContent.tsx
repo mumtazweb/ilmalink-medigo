@@ -1,8 +1,27 @@
 import Image from "next/image";
 import { isImageFile, isVideoFile } from "@/app/lib/blog/imageValidation";
 
+function renderLink(key: number, linkText: string, linkHref: string) {
+  const cleanText = linkText.trim();
+  const cleanHref = linkHref.trim();
+
+  return (
+    <a
+      key={key}
+      href={cleanHref}
+      className="font-extrabold text-red-600 underline decoration-red-400 decoration-2 underline-offset-4 transition hover:text-red-700 hover:decoration-red-700"
+      target={cleanHref.startsWith("http") ? "_blank" : undefined}
+      rel={cleanHref.startsWith("http") ? "noopener noreferrer" : undefined}
+    >
+      {cleanText}
+    </a>
+  );
+}
+
 function renderInline(text: string) {
-  const parts = text.split(/(\*\*[^*]+\*\*|_[^_]+_|\[[^\]]+\]\([^)]+\))/g);
+  const parts = text.split(
+    /(\*\*[^*]+\*\*|_[^_]+_|\[\[[^\]|]+\|[^\]]+\]\]|\[[^\]]+\]\([^)]+\))/g
+  );
 
   return parts.map((part, index) => {
     if (part.startsWith("**") && part.endsWith("**")) {
@@ -13,23 +32,16 @@ function renderInline(text: string) {
       return <em key={index}>{part.slice(1, -1)}</em>;
     }
 
-    const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    const easyLinkMatch = part.match(/^\[\[([^|]+)\|(.+)\]\]$/);
 
-    if (linkMatch) {
-      const linkText = linkMatch[1];
-      const linkHref = linkMatch[2];
+    if (easyLinkMatch) {
+      return renderLink(index, easyLinkMatch[1], easyLinkMatch[2]);
+    }
 
-      return (
-        <a
-          key={index}
-          href={linkHref}
-          className="mx-1 inline-flex items-center justify-center rounded-full bg-red-600 px-3 py-1.5 text-sm font-extrabold text-white no-underline shadow-[0_8px_20px_rgba(220,38,38,0.28)] ring-1 ring-red-500/30 transition hover:-translate-y-0.5 hover:bg-red-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-          target={linkHref.startsWith("http") ? "_blank" : undefined}
-          rel={linkHref.startsWith("http") ? "noopener noreferrer" : undefined}
-        >
-          {linkText}
-        </a>
-      );
+    const markdownLinkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+
+    if (markdownLinkMatch) {
+      return renderLink(index, markdownLinkMatch[1], markdownLinkMatch[2]);
     }
 
     return part;
@@ -65,7 +77,10 @@ export default function BlogContent({ content }: { content: string }) {
           }
 
           return (
-            <div key={index} className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-[#EFF6FF]">
+            <div
+              key={index}
+              className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-[#EFF6FF]"
+            >
               {isVideoFile(imageSrc) ? (
                 <video
                   src={imageSrc}
@@ -84,7 +99,7 @@ export default function BlogContent({ content }: { content: string }) {
               ) : (
                 <a
                   href={imageSrc}
-                  className="flex h-full w-full items-center justify-center px-4 text-center text-sm font-bold text-[#0F4CFF]"
+                  className="flex h-full w-full items-center justify-center px-4 text-center text-sm font-bold text-red-600 underline decoration-red-400 decoration-2 underline-offset-4"
                 >
                   {imageMatch[1] || "Open media"}
                 </a>
@@ -109,7 +124,10 @@ export default function BlogContent({ content }: { content: string }) {
               <table className="w-full text-left text-sm">
                 <tbody>
                   {rows.map((row, rowIndex) => (
-                    <tr key={`${row.join("-")}-${rowIndex}`} className="border-b border-slate-200 last:border-b-0">
+                    <tr
+                      key={`${row.join("-")}-${rowIndex}`}
+                      className="border-b border-slate-200 last:border-b-0"
+                    >
                       {row.map((cell) => (
                         <td key={cell} className="px-4 py-3 font-medium text-slate-700">
                           {renderInline(cell)}
