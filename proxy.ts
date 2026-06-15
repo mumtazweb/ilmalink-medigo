@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 const oldAuthorUrl = /^\/author(\/|$)/i;
 
+const oldLegacyUrls = /^\/(russianmarket|courses|key-function|area-of-operations)(\/|$)/i;
+
 const oldLocalizedSearchUrl = /^\/(ar|bn|hi)\/search(\/|$)/i;
 
 const oldSearchQueryLocales = /^\/(ar|bn|hi)\/?$/i;
@@ -24,12 +26,14 @@ export function proxy(request: NextRequest) {
 
   const isOldAuthorPage = oldAuthorUrl.test(pathname);
 
+  const isOldLegacyPage = oldLegacyUrls.test(pathname);
+
   const isOldSearchPage =
     hasOldSearchQuery ||
     oldLocalizedSearchUrl.test(pathname) ||
     (oldSearchQueryLocales.test(pathname) && hasOldSearchQuery);
 
-  if (isOldAuthorPage || isOldSearchPage) {
+  if (isOldAuthorPage || isOldSearchPage || isOldLegacyPage) {
     return new NextResponse("Gone", {
       status: 410,
       headers: {
