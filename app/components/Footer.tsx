@@ -45,6 +45,7 @@ const footerLinks = [
     links: [
       { label: "Blogs", href: "/blogs" },
       { label: "Official Advisories", href: "/official-advisories" },
+      { label: "Official Links", href: "/official-links/" },
       { label: "Scholarships & Loans", href: "/scholarships-loans" },
       { label: "About", href: "/about" },
     ],

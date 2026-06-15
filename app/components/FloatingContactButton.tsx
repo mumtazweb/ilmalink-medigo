@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import CounsellingPopup from "./CounsellingPopup";
 
 const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
@@ -13,6 +14,8 @@ const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
 export default function FloatingContactButton() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
+  const pathname = usePathname?.() ?? (typeof window !== "undefined" ? window.location.pathname : "");
+  const isAlertPage = pathname?.startsWith?.("/alert");
 
   useEffect(() => {
     const openPopup = () => setIsPopupOpen(true);
@@ -58,10 +61,10 @@ export default function FloatingContactButton() {
         {/* Button Container */}
         <div className="relative flex h-72 w-16 items-center justify-center">
           {/* Background Gradient */}
-          <div className="absolute inset-0 rounded-l-3xl bg-gradient-to-b from-[#0F4CFF] to-[#0b3fd6] shadow-lg transition-shadow duration-300 group-hover:shadow-xl" />
+          <div className={`absolute inset-0 rounded-l-3xl shadow-lg transition-shadow duration-300 group-hover:shadow-xl ${isAlertPage ? 'bg-gradient-to-b from-[#D72626] to-[#8B1A1A]' : 'bg-gradient-to-b from-[#0F4CFF] to-[#0b3fd6]'}`} />
 
           {/* Glow Effect on Hover */}
-          <div className="absolute inset-0 rounded-l-3xl bg-gradient-to-b from-[#0F4CFF] to-[#0b3fd6] opacity-0 blur-lg transition-opacity duration-300 group-hover:opacity-50" />
+          <div className={`absolute inset-0 rounded-l-3xl ${isAlertPage ? 'bg-gradient-to-b from-[#D72626] to-[#8B1A1A]' : 'bg-gradient-to-b from-[#0F4CFF] to-[#0b3fd6]'} opacity-0 blur-lg transition-opacity duration-300 group-hover:opacity-50`} />
 
           {/* Premium Border */}
           <div className="absolute inset-0 rounded-l-3xl border border-white/20 transition-colors duration-300 group-hover:border-white/40" />
@@ -92,9 +95,9 @@ export default function FloatingContactButton() {
         </div>
 
         {/* Hover Tooltip (Hidden on Mobile) */}
-        <div className="absolute right-full mr-2 top-1/2 -translate-y-1/2 bg-[#0F4CFF] text-white px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none hidden md:block shadow-lg">
-          Get Expert Guidance
-          <div className="absolute left-full top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0F4CFF] rounded-sm transform -rotate-45" />
+        <div className={`absolute right-full mr-2 top-1/2 -translate-y-1/2 text-white px-3 py-1 rounded-lg text-xs font-semibold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none hidden md:block shadow-lg ${isAlertPage ? 'bg-[#D72626]' : 'bg-[#0F4CFF]'}`}>
+          {isAlertPage ? 'Report Fraud / Contact' : 'Get Expert Guidance'}
+          <div className={`absolute left-full top-1/2 -translate-y-1/2 w-2 h-2 rounded-sm transform -rotate-45 ${isAlertPage ? 'bg-[#D72626]' : 'bg-[#0F4CFF]'}`} />
         </div>
       </button>
 

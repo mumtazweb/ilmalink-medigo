@@ -6,6 +6,49 @@ import AnnouncementTicker from "./AnnouncementTicker";
 import CounsellingPopup from "./CounsellingPopup";
 import SearchModal from "./SearchModal";
 import { Phone, Menu, X, ChevronDown, Search, Send, MessageSquare } from "lucide-react";
+
+// Small inline SVG icons (under 100kb, minimal, optimized for UI)
+function IconHome() {
+  return (
+    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+      <path d="M3 10.5L12 4l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V10.5z" fill="#081B35" />
+    </svg>
+  );
+}
+
+function IconInfo() {
+  return (
+    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+      <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm.75 6.5a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM11 11h2v6h-2v-6z" fill="#475569" />
+    </svg>
+  );
+}
+
+function IconScholarships() {
+  return (
+    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+      <path d="M12 2l7 4v6c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-4z" fill="#00C896" />
+    </svg>
+  );
+}
+
+function IconBlog() {
+  return (
+    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+      <path d="M4 6h16v10H8l-4 4V6z" fill="#475569" />
+    </svg>
+  );
+}
+
+function IconAlert() {
+  return (
+    <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+      <path d="M12 2L2 20h20L12 2z" fill="#FF6B6B" />
+      <rect x="11" y="8" width="2" height="6" fill="#fff" />
+      <rect x="11" y="15" width="2" height="2" fill="#fff" />
+    </svg>
+  );
+}
 import { mbbsIndiaCollegesByState, type MBBSIndiaCollege, type MBBSIndiaStateGroup } from "../data/mbbsIndiaColleges";
 import { getMBBSIndiaAdmissionAccess } from "../data/mbbsIndiaAdmissionAccess";
 import { navbarCountryDestinations } from "../data/navbarDestinations";
@@ -441,8 +484,8 @@ export default function Navbar() {
                   }
                 `}</style>
 
-                <Link href="/" className="nav-link">Home</Link>
-                <Link href="/about/" className="nav-link">About</Link>
+                <Link href="/" className="nav-link flex items-center gap-2"><IconHome /> <span>Home</span></Link>
+                <Link href="/about/" className="nav-link flex items-center gap-2"><IconInfo /> <span>About</span></Link>
 
                 <div className="relative">
                   <button
@@ -483,9 +526,9 @@ export default function Navbar() {
                     />
                   </button>
                 </div>
-                <Link href="/scholarships-loans" className="nav-link">Scholarships & Loans</Link>
+                <Link href="/scholarships-loans" className="nav-link flex items-center gap-2"><IconScholarships /> <span>Scholarships & Loans</span></Link>
                 <a href="https://www.mumtazeducation.com" target="_blank" rel="noopener noreferrer" className="nav-link">NEET</a>
-                <Link href="/blogs" className="nav-link">Blogs</Link>
+                <Link href="/blogs" className="nav-link flex items-center gap-2"><IconBlog /> <span>Blogs</span></Link>
               </nav>
 
               {/* RIGHT SECTION: SEARCH + CTA */}
@@ -654,10 +697,10 @@ export default function Navbar() {
               <div className="flex-1 overflow-y-auto px-4 py-4">
                 <div className="space-y-1 text-sm font-semibold text-slate-900">
                   <Link href="/" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
-                    Home
+                    <div className="flex items-center gap-3"><IconHome /> <span>Home</span></div>
                   </Link>
                   <Link href="/about/" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
-                    About Us
+                    <div className="flex items-center gap-3"><IconInfo /> <span>About Us</span></div>
                   </Link>
                   <button
                     type="button"
@@ -747,16 +790,16 @@ export default function Navbar() {
                   )}
 
                   <Link href="/scholarships-loans" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
-                    Scholarships & Loans
+                    <div className="flex items-center gap-3"><IconScholarships /> <span>Scholarships & Loans</span></div>
                   </Link>
                   <a href="https://www.mumtazeducation.com" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
-                    NEET
+                    <div className="flex items-center gap-3"><IconScholarships /> <span>NEET</span></div>
                   </a>
                   <Link href="/blogs" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
-                    Blogs
+                    <div className="flex items-center gap-3"><IconBlog /> <span>Blogs</span></div>
                   </Link>
                   <Link href="/alert/" onClick={closeMobileMenu} className="block rounded-lg bg-red-50 px-3.5 py-3 text-xs font-bold text-red-700 transition hover:bg-red-100">
-                    Alerts
+                    <div className="flex items-center gap-3"><IconAlert /> <span>Alerts</span></div>
                   </Link>
                 </div>
               </div>

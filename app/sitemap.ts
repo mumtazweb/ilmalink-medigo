@@ -10,6 +10,7 @@ export const revalidate = 3600;
 const staticRoutes = [
   "",
   "/about",
+  "/official-links",
   "/blogs",
   "/mbbs-abroad",
   "/mbbs-abroad/bangladesh",
