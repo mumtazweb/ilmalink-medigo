@@ -84,6 +84,9 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
   const related = await getRelatedBlogs(post);
   const adjacent = await getAdjacentBlogs(post);
   const articleUrl = `https://ilmalink.com/blogs/${post.slug}`;
+  const encodedArticleUrl = encodeURIComponent(articleUrl);
+  const encodedShareText = encodeURIComponent(`${post.title} - ${post.shortDescription}`);
+
   const featuredImage = post.featuredImage?.trim();
   const hasFeaturedVideo = featuredImage ? isVideoFile(featuredImage) : false;
   const hasFeaturedImage = featuredImage ? isImageFile(featuredImage) : false;
@@ -97,6 +100,56 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
           : post.imagePosition === "right"
             ? "object-right"
             : "object-center";
+
+  const shareLinks = [
+    {
+      label: "Facebook",
+      href: `https://www.facebook.com/sharer/sharer.php?u=${encodedArticleUrl}`,
+    },
+    {
+      label: "X",
+      href: `https://twitter.com/intent/tweet?text=${encodedShareText}&url=${encodedArticleUrl}`,
+    },
+    {
+      label: "WhatsApp",
+      href: `https://api.whatsapp.com/send?text=${encodedShareText}%20${encodedArticleUrl}`,
+    },
+    {
+      label: "Telegram",
+      href: `https://t.me/share/url?url=${encodedArticleUrl}&text=${encodedShareText}`,
+    },
+    {
+      label: "Threads",
+      href: `https://www.threads.net/intent/post?text=${encodedShareText}%20${encodedArticleUrl}`,
+    },
+  ];
+
+  const followLinks = [
+    {
+      label: "Facebook",
+      href: "https://www.facebook.com/ilmalinkeduprise/",
+    },
+    {
+      label: "Instagram",
+      href: "https://www.instagram.com/ilmalinkmbbs/",
+    },
+    {
+      label: "YouTube",
+      href: "https://www.youtube.com/@ilmaLinkFoundation",
+    },
+    {
+      label: "Threads",
+      href: "https://www.threads.com/@ilmalinkmbbs",
+    },
+    {
+      label: "X",
+      href: "https://x.com/middyaofficial",
+    },
+    {
+      label: "Telegram",
+      href: "https://t.me/+919563910223",
+    },
+  ];
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -187,6 +240,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
             <span className="rounded-full bg-[#0F4CFF]/10 px-3 py-1 text-xs font-bold text-[#0F4CFF]">
               {post.category}
             </span>
+
             <h1 className="mt-5 text-3xl font-bold leading-tight text-[#0F172A] md:text-5xl">
               {post.title}
             </h1>
@@ -195,6 +249,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
               <span className="flex items-center gap-2">
                 <UserRound size={16} /> {post.authorName}
               </span>
+
               <span className="flex items-center gap-2">
                 <CalendarDays size={16} />{" "}
                 {new Date(post.publishDate).toLocaleDateString("en-IN", {
@@ -203,36 +258,53 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
                   year: "numeric",
                 })}
               </span>
+
               <span className="flex items-center gap-2">
                 <Clock size={16} /> {post.readTime}
               </span>
             </div>
 
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${articleUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-bold text-[#0F4CFF] transition hover:border-[#0F4CFF]/30"
-              >
-                <Share2 size={15} /> Facebook
-              </a>
-              <a
-                href={`https://twitter.com/intent/tweet?url=${articleUrl}&text=${post.title}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-bold text-[#0F4CFF] transition hover:border-[#0F4CFF]/30"
-              >
-                <Share2 size={15} /> X
-              </a>
-              <a
-                href={`https://wa.me/?text=${post.title}%20${articleUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-bold text-[#16A34A] transition hover:border-[#16A34A]/30"
-              >
-                <Share2 size={15} /> WhatsApp
-              </a>
+            <div className="mt-8 rounded-3xl border border-red-100 bg-red-50/70 p-5">
+              <div className="flex items-center gap-2">
+                <Share2 size={17} className="text-red-600" />
+                <p className="text-sm font-black uppercase tracking-[0.18em] text-red-600">
+                  Share this blog
+                </p>
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {shareLinks.map((item) => (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-white px-4 py-2 text-sm font-extrabold text-red-600 underline decoration-red-400 decoration-2 underline-offset-4 transition hover:border-red-500 hover:bg-red-600 hover:text-white hover:decoration-white"
+                  >
+                    <Share2 size={15} /> {item.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-5 rounded-3xl border border-[#0F4CFF]/10 bg-[#EFF6FF] p-5">
+              <p className="text-sm font-black uppercase tracking-[0.18em] text-[#0F4CFF]">
+                Follow ILMALINK
+              </p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {followLinks.map((item) => (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center rounded-full border border-[#0F4CFF]/20 bg-white px-4 py-2 text-sm font-extrabold text-[#0F4CFF] underline decoration-[#0F4CFF]/50 decoration-2 underline-offset-4 transition hover:border-[#0F4CFF] hover:bg-[#0F4CFF] hover:text-white hover:decoration-white"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </div>
             </div>
 
             <div className="mt-10 border-t border-slate-200 pt-8">
@@ -241,6 +313,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
                   <BlogImageRenderer images={post.images} />
                 </div>
               )}
+
               <BlogContent content={post.content} />
             </div>
           </div>
@@ -257,9 +330,11 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
               <span className="flex items-center gap-2 text-sm font-bold text-slate-500">
                 <ChevronLeft size={16} /> Previous article
               </span>
+
               <p className="mt-2 font-bold text-[#0F172A]">{adjacent.previous.title}</p>
             </Link>
           )}
+
           {adjacent.next && (
             <Link
               href={`/blogs/${adjacent.next.slug}`}
@@ -268,6 +343,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
               <span className="flex items-center justify-end gap-2 text-sm font-bold text-slate-500">
                 Next article <ChevronRight size={16} />
               </span>
+
               <p className="mt-2 font-bold text-[#0F172A]">{adjacent.next.title}</p>
             </Link>
           )}
@@ -275,6 +351,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
 
         <div className="mt-10 rounded-2xl border border-dashed border-slate-300 bg-white p-6">
           <h2 className="text-xl font-bold text-[#0F172A]">Comments</h2>
+
           <p className="mt-2 text-sm leading-6 text-slate-600">
             Comment section placeholder for moderated student questions and counsellor replies.
           </p>
@@ -283,6 +360,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
         {related.length > 0 && (
           <div className="mt-12">
             <h2 className="text-2xl font-bold text-[#0F172A]">Related blogs</h2>
+
             <div className="mt-6 grid gap-6 md:grid-cols-3">
               {related.map((item) => (
                 <BlogCard key={item.id} post={item} />
