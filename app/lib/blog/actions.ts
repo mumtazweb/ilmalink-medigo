@@ -20,10 +20,11 @@ import {
   getBlogUser,
   getFreshBlogDatabase,
   isBlogCategory,
+  saveBlogComment,
   saveBlogDatabase,
 } from "./store";
 
-import type { BlogPost, BlogStatus } from "./types";
+import type { BlogDatabase, BlogPost, BlogStatus } from "./types";
 
 type ActionState = {
   ok: boolean;
@@ -38,6 +39,129 @@ function isNextRedirectError(error: unknown): error is { digest: string } {
     typeof (error as { digest?: unknown }).digest === "string" &&
     (error as { digest: string }).digest.startsWith("NEXT_REDIRECT")
   );
+}
+
+function parseTickerText(value: FormDataEntryValue | null) {
+  return String(value ?? "")
+    .trim()
+    .slice(0, 100);
+}
+
+function parseTickerOrder(value: FormDataEntryValue | null) {
+  const order = Number.parseInt(
+    String(value ?? "").trim(),
+    10
+  );
+
+  return Number.isFinite(order) && order > 0
+    ? order
+    : 999;
+}
+
+function normalizeTickerOrderValue(value: number | undefined) {
+  return Number.isFinite(value) && value && value > 0
+    ? value
+    : 999;
+}
+
+function shouldReserveTickerOrder(
+  blog: BlogPost,
+  existingBlog?: BlogPost
+) {
+  if (
+    blog.status !== "published" ||
+    blog.showInTicker !== true
+  ) {
+    return false;
+  }
+
+  return !(
+    existingBlog?.status === "published" &&
+    existingBlog.showInTicker === true &&
+    normalizeTickerOrderValue(existingBlog.tickerOrder) ===
+      normalizeTickerOrderValue(blog.tickerOrder)
+  );
+}
+
+function adjustTickerOrdersForBlog(
+  database: BlogDatabase,
+  blog: BlogPost,
+  existingBlog?: BlogPost
+) {
+  if (!shouldReserveTickerOrder(blog, existingBlog)) {
+    return;
+  }
+
+  const requestedOrder = normalizeTickerOrderValue(
+    blog.tickerOrder
+  );
+  const usedOrders = new Set<number>([
+    requestedOrder,
+  ]);
+  const tickerBlogs = [
+    ...database.blogs,
+    ...database.drafts,
+  ]
+    .filter(
+      (item) =>
+        item.id !== blog.id &&
+        item.status === "published" &&
+        item.showInTicker === true
+    )
+    .sort((a, b) => {
+      const orderDifference =
+        normalizeTickerOrderValue(a.tickerOrder) -
+        normalizeTickerOrderValue(b.tickerOrder);
+
+      if (orderDifference !== 0) {
+        return orderDifference;
+      }
+
+      return (
+        Date.parse(b.publishDate || b.updatedAt) -
+        Date.parse(a.publishDate || a.updatedAt)
+      );
+    });
+
+  blog.tickerOrder = requestedOrder;
+
+  for (const tickerBlog of tickerBlogs) {
+    let nextOrder = normalizeTickerOrderValue(
+      tickerBlog.tickerOrder
+    );
+
+    if (nextOrder >= requestedOrder) {
+      nextOrder += 1;
+    }
+
+    while (usedOrders.has(nextOrder)) {
+      nextOrder += 1;
+    }
+
+    tickerBlog.tickerOrder = nextOrder;
+    usedOrders.add(nextOrder);
+  }
+}
+
+function parseBlogCategory(
+  categoryValue: FormDataEntryValue | null,
+  customCategoryValue: FormDataEntryValue | null
+) {
+  if (!isBlogCategory(categoryValue)) {
+    return null;
+  }
+
+  const selectedCategory = categoryValue.trim();
+
+  if (selectedCategory !== "Other") {
+    return selectedCategory;
+  }
+
+  const customCategory = String(customCategoryValue ?? "")
+    .trim()
+    .slice(0, 191);
+
+  return customCategory || null;
 }
 
 export async function signInAction(
@@ -219,6 +343,17 @@ export async function saveBlogAction(
       formData.get("shortDescription") ?? ""
     ).trim();
 
+    const tickerText = parseTickerText(
+      formData.get("tickerText")
+    );
+
+    const showInTicker =
+      formData.get("showInTicker") === "on";
+
+    const tickerOrder = parseTickerOrder(
+      formData.get("tickerOrder")
+    );
+
     const country = String(
       formData.get("country") ?? ""
     ).trim();
@@ -260,14 +395,16 @@ export async function saveBlogAction(
       images = [];
     }
 
-    const category =
-      formData.get("category");
+    const category = parseBlogCategory(
+      formData.get("category"),
+      formData.get("customCategory")
+    );
 
     if (
       !title ||
       !shortDescription ||
       !content ||
-      !isBlogCategory(category)
+      !category
     ) {
       return {
         ok: false,
@@ -351,6 +488,12 @@ export async function saveBlogAction(
 
       shortDescription,
 
+      tickerText: tickerText || null,
+
+      showInTicker,
+
+      tickerOrder,
+
       category,
 
       country:
@@ -398,6 +541,12 @@ export async function saveBlogAction(
 
       images,
     };
+
+    adjustTickerOrdersForBlog(
+      database,
+      blog,
+      existingBlog
+    );
 
     database.blogs =
       database.blogs.filter(
@@ -468,6 +617,10 @@ export async function approveBlogAction(
       return;
     }
 
+    const previousBlogState = {
+      ...blog,
+    };
+
     blog.status = "published";
 
     blog.publishDate = new Date()
@@ -476,6 +629,12 @@ export async function approveBlogAction(
 
     blog.updatedAt =
       new Date().toISOString();
+
+    adjustTickerOrdersForBlog(
+      database,
+      blog,
+      previousBlogState
+    );
 
     database.blogs =
       database.blogs.filter(
@@ -549,6 +708,58 @@ export async function deleteBlogAction(
     );
   }
 }
+
+export async function submitBlogCommentAction(
+  formData: FormData
+) {
+  const blogId = String(
+    formData.get("blogId") ?? ""
+  ).trim();
+  const blogSlug = String(
+    formData.get("blogSlug") ?? ""
+  ).trim();
+  const authorName = String(
+    formData.get("authorName") ?? ""
+  )
+    .trim()
+    .slice(0, 80);
+  const message = String(
+    formData.get("message") ?? ""
+  )
+    .trim()
+    .slice(0, 1000);
+
+  if (!blogId || !blogSlug || !authorName || !message) {
+    redirect(`/blogs/${blogSlug}#comments`);
+  }
+
+  const database = await getFreshBlogDatabase();
+  const blog = database.blogs.find(
+    (item) =>
+      item.id === blogId &&
+      item.slug === blogSlug &&
+      item.status === "published"
+  );
+
+  if (!blog) {
+    redirect("/blogs");
+  }
+
+  await saveBlogComment({
+    id: `comment-${Date.now()}-${Math.random()
+      .toString(36)
+      .slice(2, 8)}`,
+    blogId: blog.id,
+    authorName,
+    message,
+    status: "approved",
+    createdAt: new Date().toISOString(),
+  });
+
+  revalidatePath(`/blogs/${blog.slug}`);
+  redirect(`/blogs/${blog.slug}?comment=submitted#comments`);
+}
+
 export async function forgotPasswordAction(
   _state: ActionState,
   formData: FormData

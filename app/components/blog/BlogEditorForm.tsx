@@ -14,6 +14,7 @@ const initialState = {
 };
 
 const MAX_SLUG_LENGTH = 180;
+const OTHER_CATEGORY_OPTION = "Other";
 
 function slugify(value: string) {
   return value
@@ -38,13 +39,27 @@ export default function BlogEditorForm({
   canPublish: boolean;
   initialBlog?: BlogPost;
 }) {
+  const savedCategory = initialBlog?.category ?? blogCategories[0];
+  const savedCategoryIsOption = blogCategories.includes(
+    savedCategory as (typeof blogCategories)[number]
+  );
   const [state, formAction, pending] = useActionState(saveBlogAction, initialState);
   const [title, setTitle] = useState(initialBlog?.title ?? "");
   const [slug, setSlug] = useState(initialBlog?.slug ?? "");
   const [featuredImage, setFeaturedImage] = useState(initialBlog?.featuredImage ?? "");
-  const [category, setCategory] = useState<string>(initialBlog?.category ?? blogCategories[0]);
+  const [category, setCategory] = useState<string>(
+    savedCategoryIsOption ? savedCategory : OTHER_CATEGORY_OPTION
+  );
+  const [customCategory, setCustomCategory] = useState(
+    savedCategoryIsOption ? "" : savedCategory
+  );
   const [shortDescription, setShortDescription] = useState(
     initialBlog?.shortDescription ?? ""
+  );
+  const [showInTicker, setShowInTicker] = useState(initialBlog?.showInTicker ?? false);
+  const [tickerText, setTickerText] = useState(initialBlog?.tickerText ?? "");
+  const [tickerOrder, setTickerOrder] = useState(
+    String(initialBlog?.tickerOrder ?? 999)
   );
   const [country, setCountry] = useState(initialBlog?.country ?? "");
   const [seoTitle, setSeoTitle] = useState(initialBlog?.seoTitle ?? "");
@@ -125,7 +140,15 @@ export default function BlogEditorForm({
           <select
             name="category"
             value={category}
-            onChange={(event) => setCategory(event.target.value)}
+            onChange={(event) => {
+              const nextCategory = event.target.value;
+
+              setCategory(nextCategory);
+
+              if (nextCategory !== OTHER_CATEGORY_OPTION) {
+                setCustomCategory("");
+              }
+            }}
             required
             className="mt-2 h-12 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
           >
@@ -138,6 +161,24 @@ export default function BlogEditorForm({
         </label>
       </div>
 
+      {category === OTHER_CATEGORY_OPTION && (
+        <label className="block">
+          <span className="text-sm font-bold text-[#0F172A]">Manual category</span>
+          <input
+            name="customCategory"
+            value={customCategory}
+            onChange={(event) => setCustomCategory(event.target.value)}
+            placeholder="MBBS India Updates"
+            maxLength={191}
+            required
+            className="mt-2 h-12 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
+          />
+          <span className="mt-2 block text-xs font-semibold leading-5 text-slate-500">
+            Choose Other when the category is not listed, then write the exact category name here.
+          </span>
+        </label>
+      )}
+
       <label className="block">
         <span className="text-sm font-bold text-[#0F172A]">Short description</span>
         <textarea
@@ -149,6 +190,60 @@ export default function BlogEditorForm({
           className="mt-2 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-3 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
         />
       </label>
+
+      <section className="rounded-2xl border border-slate-200 bg-white p-5">
+        <h3 className="text-lg font-bold text-[#0F172A]">Top Announcement Ticker</h3>
+
+        <p className="mt-2 rounded-xl border border-[#0F4CFF]/10 bg-[#EFF6FF] px-4 py-3 text-sm font-semibold leading-6 text-[#0F4CFF]">
+          Top ticker example: write &quot;RE-NEET Admit Card&quot; and set order &quot;1&quot;. This text will scroll on the top bar and open this blog when clicked.
+        </p>
+
+        <label className="mt-5 flex items-start gap-3 rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 py-3">
+          <input
+            type="checkbox"
+            name="showInTicker"
+            checked={showInTicker}
+            onChange={(event) => setShowInTicker(event.target.checked)}
+            className="mt-1 h-4 w-4 rounded border-slate-300 text-[#0F4CFF] accent-[#0F4CFF]"
+          />
+          <span className="text-sm font-bold leading-6 text-[#0F172A]">
+            Show this blog in top scrolling announcement bar
+          </span>
+        </label>
+
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <label className="block">
+            <span className="text-sm font-bold text-[#0F172A]">Ticker short text</span>
+            <input
+              name="tickerText"
+              value={tickerText}
+              onChange={(event) => setTickerText(event.target.value)}
+              placeholder="RE-NEET Admit Card"
+              maxLength={100}
+              className="mt-2 h-12 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
+            />
+            <span className="mt-2 block text-xs font-semibold leading-5 text-slate-500">
+              Write 3-4 words. This text will scroll at the top of the website and open this blog when clicked.
+            </span>
+          </label>
+
+          <label className="block">
+            <span className="text-sm font-bold text-[#0F172A]">Ticker order</span>
+            <input
+              type="number"
+              name="tickerOrder"
+              value={tickerOrder}
+              onChange={(event) => setTickerOrder(event.target.value)}
+              placeholder="1"
+              min={1}
+              className="mt-2 h-12 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-4 text-sm outline-none transition focus:border-[#0F4CFF] focus:bg-white"
+            />
+            <span className="mt-2 block text-xs font-semibold leading-5 text-slate-500">
+              Lower number appears first. If another published ticker blog already uses this number, existing ticker blogs move down automatically.
+            </span>
+          </label>
+        </div>
+      </section>
 
       <div className="grid gap-4 md:grid-cols-3">
         <label className="block">

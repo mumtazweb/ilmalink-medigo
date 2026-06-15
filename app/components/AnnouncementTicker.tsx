@@ -1,37 +1,174 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { BellRing, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 
-const announcements = [
+type AnnouncementItem = {
+  id: string;
+  title: string;
+  href: string;
+  tickerText?: string | null;
+};
+
+const MARQUEE_DURATION_SECONDS = 52;
+
+const fallbackAnnouncements: AnnouncementItem[] = [
   {
-    title: "NEET 2026 Updates",
-    href: "https://www.mumtazeducation.com",
+    id: "fallback-latest-mbbs",
+    title: "Latest MBBS Updates",
+    href: "/blogs",
   },
   {
-    title: "Admissions Open in 20+ Countries",
-    href: "/mbbs-abroad",
+    id: "fallback-neet-alerts",
+    title: "NEET & MBBS Alerts",
+    href: "/blogs",
   },
   {
-    title: "Scholarship Updates",
-    href: "/blogs/scholarships-for-medical-students-what-to-prepare",
-  },
-  {
-    title: "Counselling Updates",
-    href: "/?counselling=open",
-  },
-  {
-    title: "MBBS Abroad Admission Alerts",
-    href: "/alert",
+    id: "fallback-admission-news",
+    title: "Admission News Live",
+    href: "/blogs",
   },
 ];
 
+function getFirstWords(value: string, count = 4) {
+  return value.trim().split(/\s+/).filter(Boolean).slice(0, count).join(" ");
+}
+
+function getTickerLabel(item: AnnouncementItem) {
+  const tickerText = item.tickerText?.trim();
+
+  return tickerText || getFirstWords(item.title);
+}
+
+function repeatForMarquee(items: AnnouncementItem[]) {
+  const minimumItems = 8;
+  const repeated = [...items];
+
+  while (repeated.length > 0 && repeated.length < minimumItems) {
+    repeated.push(...items);
+  }
+
+  return repeated.slice(0, Math.max(minimumItems, items.length));
+}
+
+function TickerItems({
+  items,
+  prefix,
+}: {
+  items: AnnouncementItem[];
+  prefix: string;
+}) {
+  return (
+    <div className="flex items-center gap-4 px-3 py-1.5 text-sm font-semibold text-white/95 md:text-base lg:text-[13px]">
+      <div className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#00F0A8]/35 bg-[linear-gradient(135deg,rgba(0,240,168,0.24),rgba(15,76,255,0.18))] shadow-[0_0_18px_rgba(0,240,168,0.28)]">
+        <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border border-[#081B35] bg-[#FFD166]" />
+        <BellRing size={14} className="text-[#BFFFF0]" aria-hidden="true" />
+      </div>
+
+      <div className="flex items-center gap-4">
+        {items.map((item, index) => (
+          <span key={`${prefix}-${item.id}-${index}`} className="flex items-center gap-4">
+            <Link
+              href={item.href}
+              prefetch={item.href.startsWith("/") ? undefined : false}
+              className="shrink-0 transition-colors duration-300 hover:text-[#00C896]"
+            >
+              {getTickerLabel(item)}
+            </Link>
+            {index < items.length - 1 && (
+              <span className="shrink-0 text-white/50">&bull;</span>
+            )}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function AnnouncementTicker() {
   const [isPaused, setIsPaused] = useState(false);
+  const [items, setItems] = useState<AnnouncementItem[]>(fallbackAnnouncements);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadTickerBlogs() {
+      try {
+        const response = await fetch("/api/blog/ticker", {
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          return;
+        }
+
+        const data = (await response.json()) as {
+          items?: AnnouncementItem[];
+        };
+
+        if (active && Array.isArray(data.items) && data.items.length > 0) {
+          setItems(
+            data.items.map((item) => ({
+              ...item,
+              tickerText: item.tickerText?.trim() || null,
+              href: item.href || `/blogs/${item.id}`,
+            }))
+          );
+        }
+      } catch {
+        // Keep the safe fallback announcements if live ticker data is unavailable.
+      }
+    }
+
+    loadTickerBlogs();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const marqueeItems = useMemo(() => repeatForMarquee(items), [items]);
+
+  useEffect(() => {
+    return () => {
+      if (resumeTimerRef.current) {
+        clearTimeout(resumeTimerRef.current);
+      }
+    };
+  }, []);
+
+  function pauseThenResume() {
+    setIsPaused(true);
+
+    if (resumeTimerRef.current) {
+      clearTimeout(resumeTimerRef.current);
+    }
+
+    resumeTimerRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 2800);
+  }
+
+  function scrollTicker(direction: -1 | 1) {
+    const container = scrollContainerRef.current;
+
+    if (!container) {
+      return;
+    }
+
+    pauseThenResume();
+    container.scrollBy({
+      left: direction * Math.min(320, container.clientWidth * 0.72),
+      behavior: "smooth",
+    });
+  }
 
   return (
     <nav
-      className="w-full bg-[#081B35]"
+      className="w-full border-b border-white/10 bg-[linear-gradient(90deg,#061733_0%,#081B35_46%,#06284A_100%)] shadow-[0_8px_24px_rgba(2,11,32,0.18)]"
       aria-label="Announcement ticker"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
@@ -47,56 +184,57 @@ export default function AnnouncementTicker() {
         }
 
         .ticker-content {
-          animation: ticker-scroll 60s linear infinite;
+          animation: ticker-scroll ${MARQUEE_DURATION_SECONDS}s linear infinite;
           animation-play-state: ${isPaused ? "paused" : "running"};
         }
 
         .ticker-content:hover {
           animation-play-state: paused;
         }
+
+        .ticker-scrollbar {
+          scrollbar-width: none;
+        }
+
+        .ticker-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
       `}</style>
 
-      <div className="overflow-hidden">
-        <div className="ticker-content flex whitespace-nowrap">
-          {/* First iteration */}
-          <div className="flex items-center gap-4 px-4 py-1.5 text-sm font-medium text-white/95 md:text-base lg:text-[13px]">
-            <span className="shrink-0 text-lg">🔔</span>
-            <div className="flex items-center gap-4">
-              {announcements.map((announcement, index) => (
-                <span key={`first-${index}`} className="flex items-center gap-4">
-                  <Link
-                    href={announcement.href}
-                    className="shrink-0 transition-colors duration-300 hover:text-[#00C896]"
-                  >
-                    {announcement.title}
-                  </Link>
-                  {index < announcements.length - 1 && (
-                    <span className="shrink-0 text-white/50">•</span>
-                  )}
-                </span>
-              ))}
-            </div>
-          </div>
+      <div className="flex items-center">
+        <button
+          type="button"
+          aria-label="Scroll announcements left"
+          onClick={() => scrollTicker(-1)}
+          className="group flex h-8 w-8 shrink-0 items-center justify-center border-r border-white/10 bg-white/5 text-white/75 transition hover:bg-white/12 hover:text-[#00F0A8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0A8]"
+        >
+          <ChevronLeft size={16} className="transition group-hover:-translate-x-0.5" />
+        </button>
 
-          {/* Second iteration for seamless loop */}
-          <div className="flex items-center gap-4 px-4 py-1.5 text-sm font-medium text-white/95 md:text-base lg:text-[13px]">
-            <span className="shrink-0 text-lg">🔔</span>
-            <div className="flex items-center gap-4">
-              {announcements.map((announcement, index) => (
-                <span key={`second-${index}`} className="flex items-center gap-4">
-                  <Link
-                    href={announcement.href}
-                    className="shrink-0 transition-colors duration-300 hover:text-[#00C896]"
-                  >
-                    {announcement.title}
-                  </Link>
-                  {index < announcements.length - 1 && (
-                    <span className="shrink-0 text-white/50">•</span>
-                  )}
-                </span>
-              ))}
-            </div>
+        <div
+          ref={scrollContainerRef}
+          className="ticker-scrollbar flex-1 overflow-x-auto overflow-y-hidden"
+          onTouchStart={pauseThenResume}
+          onWheel={pauseThenResume}
+        >
+          <div className="ticker-content flex w-max whitespace-nowrap">
+            <TickerItems items={marqueeItems} prefix="first" />
+            <TickerItems items={marqueeItems} prefix="second" />
           </div>
+        </div>
+
+        <button
+          type="button"
+          aria-label="Scroll announcements right"
+          onClick={() => scrollTicker(1)}
+          className="group flex h-8 w-8 shrink-0 items-center justify-center border-l border-white/10 bg-white/5 text-white/75 transition hover:bg-white/12 hover:text-[#00F0A8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0A8]"
+        >
+          <ChevronRight size={16} className="transition group-hover:translate-x-0.5" />
+        </button>
+
+        <div className="hidden h-8 items-center gap-1 border-l border-white/10 bg-white/[0.04] px-3 text-[10px] font-black uppercase tracking-[0.14em] text-[#BFFFF0] md:flex">
+          <Sparkles size={12} aria-hidden="true" />
+          Live
         </div>
       </div>
     </nav>

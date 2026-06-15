@@ -1,11 +1,15 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = "https://www.ilmalink.com";
+import { globalSearchIndex } from "./data/searchIndex";
+import { getPublishedBlogs } from "./lib/blog/store";
+
+const SITE_URL = "https://ilmalink.com";
 
 const staticRoutes = [
   "",
   "/about",
   "/blogs",
+  "/search",
   "/mbbs-abroad",
   "/mbbs-abroad/bangladesh",
   "/mbbs-abroad/kyrgyzstan",
@@ -36,30 +40,88 @@ const staticRoutes = [
   "/official-advisories",
 ];
 
-const blogRoutes = [
-  "/blogs/patient-doctor-ratio-in-india-comparison-to-worls",
-  "/blogs/mbbs-in-kyrgyzstan-guide",
-  "/blogs/neet-counselling-checklist-before-choice-filling",
-];
+type SitemapEntry = MetadataRoute.Sitemap[number];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+function cleanRoute(url: string) {
+  if (/^https?:\/\//.test(url)) {
+    try {
+      const parsed = new URL(url);
+      if (parsed.hostname !== "ilmalink.com" && parsed.hostname !== "www.ilmalink.com") {
+        return "";
+      }
+
+      return parsed.pathname === "/" ? "" : parsed.pathname.replace(/\/$/, "");
+    } catch {
+      return "";
+    }
+  }
+
+  const pathOnly = url.split(/[?#]/, 1)[0] || "/";
+  if (!pathOnly.startsWith("/")) return "";
+
+  return pathOnly === "/" ? "" : pathOnly.replace(/\/$/, "");
+}
+
+function routePriority(route: string, priorityHint?: number) {
+  if (route === "") return 1;
+  if (route.startsWith("/blogs/")) return 0.82;
+  if (route === "/blogs" || route === "/search") return 0.78;
+  if (route.includes("bangladesh") || route.includes("kyrgyzstan")) return 0.9;
+  if (route.includes("mbbs-abroad") || route.includes("scholarships-loans")) return 0.8;
+  if (priorityHint) return Math.max(0.5, Math.min(0.86, priorityHint / 115));
+
+  return 0.6;
+}
+
+function buildSitemapEntry(
+  route: string,
+  lastModified: Date,
+  priorityHint?: number
+): SitemapEntry {
+  return {
+    url: `${SITE_URL}${route}`,
+    lastModified,
+    changeFrequency: route.startsWith("/blogs/") ? "weekly" : "monthly",
+    priority: routePriority(route, priorityHint),
+  };
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const routes = new Map<string, { priority: number; lastModified: Date }>();
 
-  return [...staticRoutes, ...blogRoutes].map((route) => {
-    const cleanRoute = route === "" ? "" : route.replace(/\/$/, "");
+  for (const route of staticRoutes) {
+    routes.set(cleanRoute(route), { priority: routePriority(route), lastModified: now });
+  }
 
-    return {
-      url: `${SITE_URL}${cleanRoute}/`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority:
-        route === ""
-          ? 1
-          : route.includes("bangladesh") || route.includes("kyrgyzstan")
-            ? 0.9
-            : route.includes("mbbs-abroad") || route.includes("scholarships-loans")
-              ? 0.8
-              : 0.6,
-    };
-  });
+  for (const entry of globalSearchIndex) {
+    const route = cleanRoute(entry.url);
+    if (!route && entry.url !== "/") continue;
+
+    const existing = routes.get(route);
+    if (!existing || entry.priority > existing.priority) {
+      routes.set(route, {
+        priority: entry.priority,
+        lastModified: now,
+      });
+    }
+  }
+
+  const posts = await getPublishedBlogs();
+
+  for (const post of posts) {
+    const route = cleanRoute(`/blogs/${post.slug}`);
+    const lastModified = new Date(post.updatedAt || post.publishDate || now);
+
+    routes.set(route, {
+      priority: 95,
+      lastModified: Number.isNaN(lastModified.getTime()) ? now : lastModified,
+    });
+  }
+
+  return [...routes.entries()]
+    .sort(([firstRoute], [secondRoute]) => firstRoute.localeCompare(secondRoute))
+    .map(([route, value]) =>
+      buildSitemapEntry(route, value.lastModified, value.priority)
+    );
 }

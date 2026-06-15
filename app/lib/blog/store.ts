@@ -6,10 +6,12 @@ import { seedDatabase } from "./seed";
 
 import type {
   BlogCategory,
+  BlogComment,
   BlogDatabase,
   BlogPost,
   BlogRole,
   BlogSort,
+  BlogTickerPost,
   BlogUser,
 } from "./types";
 
@@ -34,6 +36,9 @@ type PrismaBlogRecord = {
   category: string;
   country: string;
   featuredImage: string | null;
+  tickerText?: string | null;
+  showInTicker?: boolean | null;
+  tickerOrder?: number | null;
   status: string;
   views: number;
   createdAt: Date;
@@ -42,6 +47,36 @@ type PrismaBlogRecord = {
   author?: {
     name: string;
   } | null;
+};
+
+type PrismaBlogCommentRecord = {
+  id: string;
+  blogId: string;
+  authorName: string;
+  message: string;
+  status: string;
+  createdAt: Date;
+};
+
+type PrismaBlogCommentModel = {
+  findMany: (args: {
+    orderBy: {
+      createdAt: "desc";
+    };
+  }) => Promise<PrismaBlogCommentRecord[]>;
+  create: (args: {
+    data: {
+      id: string;
+      blogId: string;
+      authorName: string;
+      message: string;
+      status: string;
+      createdAt: Date;
+    };
+    select: {
+      id: true;
+    };
+  }) => Promise<{ id: string }>;
 };
 
 type StoredBlogMetadata = {
@@ -59,6 +94,71 @@ const BLOG_METADATA_PREFIX =
   "<!-- BLOG_METADATA:";
 const BLOG_METADATA_SUFFIX = " -->";
 const MAX_SLUG_LENGTH = 180;
+const DEFAULT_TICKER_ORDER = 999;
+
+function normalizeTickerText(
+  value: unknown
+) {
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const trimmed = value.trim().slice(0, 100);
+
+  return trimmed || null;
+}
+
+function normalizeTickerOrder(
+  value: unknown
+) {
+  const order =
+    typeof value === "number"
+      ? value
+      : Number.parseInt(String(value ?? ""), 10);
+
+  return Number.isFinite(order) && order > 0
+    ? order
+    : DEFAULT_TICKER_ORDER;
+}
+
+function normalizeBlogPost(
+  blog: BlogPost
+): BlogPost {
+  return {
+    ...blog,
+    createdAt:
+      blog.createdAt ??
+      blog.publishDate ??
+      blog.updatedAt,
+    tickerText: normalizeTickerText(
+      blog.tickerText
+    ),
+    showInTicker: blog.showInTicker ?? false,
+    tickerOrder: normalizeTickerOrder(
+      blog.tickerOrder
+    ),
+  };
+}
+
+function normalizeBlogDatabase(
+  database: BlogDatabase
+): BlogDatabase {
+  return {
+    ...database,
+    blogs: database.blogs.map(normalizeBlogPost),
+    drafts: database.drafts.map(normalizeBlogPost),
+    comments: database.comments ?? [],
+    views: database.views ?? [],
+  };
+}
+
+function getPrismaBlogCommentModel() {
+  return (
+    prisma as unknown as {
+      blogComment?: PrismaBlogCommentModel;
+    }
+  ).blogComment;
+}
 
 function isRole(value: string): value is BlogRole {
   return (
@@ -127,9 +227,11 @@ async function readFileDatabase(): Promise<BlogDatabase> {
   try {
     const file = await fs.readFile(databasePath, "utf8");
 
-    return JSON.parse(file) as BlogDatabase;
+    return normalizeBlogDatabase(
+      JSON.parse(file) as BlogDatabase
+    );
   } catch {
-    return seedDatabase;
+    return normalizeBlogDatabase(seedDatabase);
   }
 }
 
@@ -208,11 +310,9 @@ function joinBlogContent(
 }
 
 function toBlogCategory(value: string): BlogCategory {
-  return seedDatabase.categories.includes(
-    value as BlogCategory
-  )
-    ? (value as BlogCategory)
-    : "MBBS India";
+  const category = value.trim();
+
+  return category || "MBBS India";
 }
 
 function toBlogStatus(value: string) {
@@ -250,9 +350,17 @@ function mapPrismaBlog(
     id: record.id,
     title: record.title,
     slug: record.slug,
+    createdAt: record.createdAt.toISOString(),
     featuredImage: record.featuredImage ?? "",
     imageAlt: metadata.imageAlt ?? record.title,
     shortDescription: record.shortDescription,
+    tickerText: normalizeTickerText(
+      record.tickerText
+    ),
+    showInTicker: record.showInTicker ?? false,
+    tickerOrder: normalizeTickerOrder(
+      record.tickerOrder
+    ),
     category,
     country: record.country || "India",
     tags: tags.length ? tags : [category],
@@ -297,7 +405,14 @@ function addBlogToMap(
 
 async function readPrismaBlogs() {
   try {
-    const records = await prisma.blog.findMany({
+    const findManyBlogs = prisma.blog.findMany as unknown as (args: {
+      select: Record<string, unknown>;
+      orderBy: {
+        createdAt: "desc";
+      };
+    }) => Promise<PrismaBlogRecord[]>;
+
+    const records = await findManyBlogs({
       select: {
         id: true,
         title: true,
@@ -307,6 +422,9 @@ async function readPrismaBlogs() {
         category: true,
         country: true,
         featuredImage: true,
+        tickerText: true,
+        showInTicker: true,
+        tickerOrder: true,
         status: true,
         views: true,
         createdAt: true,
@@ -323,9 +441,7 @@ async function readPrismaBlogs() {
       },
     });
 
-    return records.map((record) =>
-      mapPrismaBlog(record)
-    );
+    return records.map((record) => mapPrismaBlog(record));
   } catch (error) {
     console.log(
       "Read blog database error:",
@@ -336,12 +452,75 @@ async function readPrismaBlogs() {
   }
 }
 
+async function readPrismaComments() {
+  const commentModel = getPrismaBlogCommentModel();
+
+  if (!commentModel) {
+    return [];
+  }
+
+  try {
+    const records = await commentModel.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return records.map((record) => ({
+      id: record.id,
+      blogId: record.blogId,
+      authorName: record.authorName,
+      message: record.message,
+      status:
+        record.status === "approved"
+          ? "approved"
+          : "pending",
+      createdAt: record.createdAt.toISOString(),
+    })) satisfies BlogComment[];
+  } catch (error) {
+    console.log(
+      "Read blog comments error:",
+      error
+    );
+
+    return [];
+  }
+}
+
+function mergeBlogComments(
+  fileComments: BlogComment[],
+  prismaComments: BlogComment[]
+) {
+  const comments = new Map<string, BlogComment>();
+
+  for (const comment of fileComments) {
+    comments.set(comment.id, comment);
+  }
+
+  for (const comment of prismaComments) {
+    comments.set(comment.id, comment);
+  }
+
+  return Array.from(comments.values()).sort(
+    (a, b) =>
+      Date.parse(b.createdAt) -
+      Date.parse(a.createdAt)
+  );
+}
+
 async function readDatabase(): Promise<BlogDatabase> {
   const fileDatabase = await readFileDatabase();
   const prismaBlogs = await readPrismaBlogs();
+  const prismaComments = await readPrismaComments();
 
   if (prismaBlogs.length === 0) {
-    return fileDatabase;
+    return {
+      ...fileDatabase,
+      comments: mergeBlogComments(
+        fileDatabase.comments,
+        prismaComments
+      ),
+    };
   }
 
   const blogs = new Map<string, BlogPost>();
@@ -367,6 +546,10 @@ async function readDatabase(): Promise<BlogDatabase> {
     ...fileDatabase,
     blogs: Array.from(blogs.values()),
     drafts: Array.from(drafts.values()),
+    comments: mergeBlogComments(
+      fileDatabase.comments,
+      prismaComments
+    ),
   };
 }
 
@@ -460,6 +643,13 @@ async function writePrismaDatabase(
       country: blog.country || "India",
       featuredImage:
         blog.featuredImage || null,
+      tickerText: normalizeTickerText(
+        blog.tickerText
+      ),
+      showInTicker: blog.showInTicker ?? false,
+      tickerOrder: normalizeTickerOrder(
+        blog.tickerOrder
+      ),
       status: blog.status,
       views: blog.views,
       createdAt: safeDate(blog.publishDate),
@@ -547,6 +737,63 @@ export async function saveBlogDatabase(
   }
 }
 
+export async function saveBlogComment(
+  comment: BlogComment
+) {
+  let databaseSaved = false;
+  let fileSaved = false;
+  let databaseError: unknown = null;
+  let fileError: unknown = null;
+  const commentModel = getPrismaBlogCommentModel();
+
+  if (commentModel) {
+    try {
+      await commentModel.create({
+        data: {
+          id: comment.id,
+          blogId: comment.blogId,
+          authorName: comment.authorName,
+          message: comment.message,
+          status: comment.status,
+          createdAt: safeDate(comment.createdAt),
+        },
+        select: {
+          id: true,
+        },
+      });
+      databaseSaved = true;
+    } catch (error) {
+      databaseError = error;
+      console.log(
+        "Save blog comment error:",
+        error
+      );
+    }
+  }
+
+  try {
+    const database = await readFileDatabase();
+    database.comments = [
+      comment,
+      ...database.comments.filter(
+        (item) => item.id !== comment.id
+      ),
+    ];
+    await writeFileDatabase(database);
+    fileSaved = true;
+  } catch (error) {
+    fileError = error;
+    console.log(
+      "Save blog comment backup error:",
+      error
+    );
+  }
+
+  if (!databaseSaved && !fileSaved) {
+    throw databaseError ?? fileError;
+  }
+}
+
 export async function deleteStoredBlog(
   blogId: string,
   slug?: string
@@ -592,6 +839,80 @@ export async function getLatestBlogs(limit = 8) {
   const blogs = await getPublishedBlogs();
 
   return blogs.slice(0, limit);
+}
+
+export async function getTickerBlogs(
+  limit = 12
+): Promise<BlogTickerPost[]> {
+  const database = await readDatabase();
+
+  return database.blogs
+    .filter(
+      (blog) =>
+        blog.status === "published" &&
+        blog.showInTicker === true
+    )
+    .sort((a, b) => {
+      const orderDifference =
+        normalizeTickerOrder(a.tickerOrder) -
+        normalizeTickerOrder(b.tickerOrder);
+
+      if (orderDifference !== 0) {
+        return orderDifference;
+      }
+
+      const aDate = Date.parse(
+        a.publishDate ||
+          a.createdAt ||
+          a.updatedAt
+      );
+      const bDate = Date.parse(
+        b.publishDate ||
+          b.createdAt ||
+          b.updatedAt
+      );
+
+      return (
+        (Number.isNaN(bDate) ? 0 : bDate) -
+        (Number.isNaN(aDate) ? 0 : aDate)
+      );
+    })
+    .slice(0, limit)
+    .map((blog) => ({
+      id: blog.id,
+      title: blog.title,
+      slug: blog.slug,
+      tickerText: normalizeTickerText(
+        blog.tickerText
+      ),
+      shortDescription: blog.shortDescription,
+      publishDate: blog.publishDate,
+      createdAt:
+        blog.createdAt ??
+        blog.publishDate ??
+        blog.updatedAt,
+      tickerOrder: normalizeTickerOrder(
+        blog.tickerOrder
+      ),
+    }));
+}
+
+export async function getApprovedBlogComments(
+  blogId: string
+) {
+  const database = await readDatabase();
+
+  return database.comments
+    .filter(
+      (comment) =>
+        comment.blogId === blogId &&
+        comment.status === "approved"
+    )
+    .sort(
+      (a, b) =>
+        Date.parse(b.createdAt) -
+        Date.parse(a.createdAt)
+    );
 }
 
 export async function getBlogBySlug(slug: string) {
@@ -803,8 +1124,6 @@ export function isBlogCategory(
 ): value is BlogCategory {
   return (
     typeof value === "string" &&
-    seedDatabase.categories.includes(
-      value as BlogCategory
-    )
+    Boolean(value.trim())
   );
 }

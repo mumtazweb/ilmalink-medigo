@@ -9,6 +9,7 @@ export const blogCategories = [
   "Career",
   "Loans",
   "University Reviews",
+  "Other",
 ] as const;
 
 const baseContent = (country: string, focus: string) => `
@@ -138,6 +139,9 @@ export const seedBlogs: BlogPost[] = [
     id: "blog-vijay-neet-abolition-history",
     title: "Vijay's NEET Abolition Demand: Know the Entire History of NEET and Tamil Nadu's Long Battle",
     slug: "vijay-neet-abolition-demand-entire-history-of-neet",
+    tickerText: "Vijay NEET Debate",
+    showInTicker: true,
+    tickerOrder: 2,
     featuredImage: "/blog/mbbs-india.svg",
     imageAlt: "Vijay NEET abolition demand and entire history of NEET",
     shortDescription:
@@ -183,6 +187,9 @@ export const seedBlogs: BlogPost[] = [
     id: "blog-001",
     title: "MBBS in Kyrgyzstan Guide for Indian Students",
     slug: "mbbs-in-kyrgyzstan-guide",
+    tickerText: "Kyrgyzstan MBBS 2026",
+    showInTicker: true,
+    tickerOrder: 4,
     featuredImage: "/blog/mbbs-kyrgyzstan.svg",
     imageAlt: "Medical university campus illustration for Kyrgyzstan MBBS guide",
     shortDescription:
@@ -210,6 +217,9 @@ export const seedBlogs: BlogPost[] = [
     id: "blog-002",
     title: "NEET Counselling Checklist Before Choice Filling",
     slug: "neet-counselling-checklist-before-choice-filling",
+    tickerText: "NEET Counselling Guide",
+    showInTicker: true,
+    tickerOrder: 6,
     featuredImage: "/blog/neet-counselling.svg",
     imageAlt: "NEET counselling checklist illustration",
     shortDescription:
@@ -237,6 +247,9 @@ export const seedBlogs: BlogPost[] = [
     id: "blog-003",
     title: "MBBS India Admission Planning After NEET",
     slug: "mbbs-india-admission-planning-after-neet",
+    tickerText: "MBBS India Guide",
+    showInTicker: true,
+    tickerOrder: 3,
     featuredImage: "/blog/mbbs-india.svg",
     imageAlt: "Indian medical admission planning illustration",
     shortDescription:
@@ -264,6 +277,9 @@ export const seedBlogs: BlogPost[] = [
     id: "blog-004",
     title: "Scholarships for Medical Students: What to Prepare",
     slug: "scholarships-for-medical-students-what-to-prepare",
+    tickerText: "Scholarship Loan Help",
+    showInTicker: true,
+    tickerOrder: 5,
     featuredImage: "/blog/scholarships.svg",
     imageAlt: "Scholarship planning for medical students illustration",
     shortDescription:
@@ -372,6 +388,9 @@ export const seedBlogs: BlogPost[] = [
     id: "blog-008",
     title: "MBBS Abroad Documents Indian Students Should Keep Ready",
     slug: "mbbs-abroad-documents-indian-students-should-keep-ready",
+    tickerText: "MBBS Abroad Documents",
+    showInTicker: true,
+    tickerOrder: 7,
     featuredImage: "/blog/documents.svg",
     imageAlt: "MBBS abroad document checklist illustration",
     shortDescription:

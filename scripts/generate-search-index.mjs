@@ -175,6 +175,170 @@ function sentenceExcerpt(value, maxLength = 190) {
   return `${shortened.slice(0, lastSpace > 80 ? lastSpace : maxLength).trim()}...`;
 }
 
+function stripJsxExpressions(value) {
+  return value.replace(/\{[^{}]*\}/g, " ");
+}
+
+function extractHeadingText(value) {
+  return normalizeText(
+    stripJsxExpressions(value)
+      .replace(/<[^>]*>/g, " ")
+      .replace(/\s+/g, " ")
+  );
+}
+
+function isUsefulSectionHeading(value, pageTitle) {
+  const clean = normalizeText(value);
+  if (clean.length < 4 || clean.length > 120) return false;
+  if (!/[a-zA-Z]/.test(clean)) return false;
+  if (clean === pageTitle) return false;
+  if (/[{}$]/.test(clean)) return false;
+  if (/^(home|open|close|search|submit|connect|whatsapp)$/i.test(clean)) return false;
+
+  return true;
+}
+
+function routeContextLabel(url, pageTitle) {
+  const parts = url.split("/").filter(Boolean);
+  const lastPart = parts.at(-1);
+  if (!lastPart) return "Home";
+
+  if (parts.includes("mbbs-abroad")) {
+    return titleCase(lastPart.replace(/^country$/, "MBBS Abroad"));
+  }
+
+  if (parts.includes("blogs")) return "Blogs";
+  if (parts.includes("mbbs-india")) return "MBBS India";
+
+  return titleCase(lastPart) || pageTitle;
+}
+
+function titleContainsContext(title, context) {
+  const titleTerms = new Set(normalizeLookupKey(title).split(" "));
+  return normalizeLookupKey(context)
+    .split(" ")
+    .filter((term) => term.length > 2)
+    .some((term) => titleTerms.has(term));
+}
+
+function sectionTitleForHeading(heading, pageTitle, url) {
+  const context = routeContextLabel(url, pageTitle);
+  if (titleContainsContext(heading, context)) return heading;
+
+  return `${context}: ${heading}`;
+}
+
+function findAnchorNearHeading(source, headingIndex, headingTagSource) {
+  const headingTagId = headingTagSource.match(/\bid\s*=\s*["']([^"']+)["']/);
+  if (headingTagId?.[1]) return headingTagId[1];
+
+  const beforeHeading = source.slice(Math.max(0, headingIndex - 1400), headingIndex);
+  const idPattern = /\bid\s*=\s*["']([^"']+)["']/g;
+  let match;
+  let lastId = "";
+
+  while ((match = idPattern.exec(beforeHeading))) {
+    lastId = match[1];
+  }
+
+  return lastId;
+}
+
+function sectionPriorityForHeading(heading, group) {
+  const normalizedHeading = normalizeLookupKey(heading);
+  const basePriority = group === "Destinations" ? 78 : group === "Blogs" ? 84 : 62;
+  const highIntentBoosts = [
+    "eligibility",
+    "admission",
+    "requirements",
+    "fees",
+    "fee",
+    "fmge",
+    "nmc",
+    "fmgl",
+    "scholarship",
+    "loan",
+    "colleges",
+    "universities",
+    "faq",
+  ];
+
+  return (
+    basePriority +
+    highIntentBoosts.reduce(
+      (score, term) => score + (normalizedHeading.includes(term) ? 4 : 0),
+      0
+    )
+  );
+}
+
+function sectionTagsForHeading({ heading, pageTitle, url, group }) {
+  const context = routeContextLabel(url, pageTitle);
+  const routeTerms = url
+    .split(/[/?#-]+/)
+    .filter(Boolean)
+    .map(titleCase);
+
+  return [
+    group,
+    "Section",
+    "Page Section",
+    context,
+    pageTitle,
+    heading,
+    ...routeTerms,
+  ].filter(Boolean);
+}
+
+function extractSectionEntries({ source, url, pageTitle, group }) {
+  const sectionEntries = [];
+  const seenHeadings = new Set();
+  const headingPattern = /<(h2|h3)([^>]*)>([\s\S]*?)<\/\1>/g;
+  let match;
+
+  while ((match = headingPattern.exec(source))) {
+    const [, level, attributes, children] = match;
+    const heading = extractHeadingText(children);
+
+    if (!isUsefulSectionHeading(heading, pageTitle)) continue;
+
+    const headingKey = normalizeLookupKey(heading);
+    if (seenHeadings.has(headingKey)) continue;
+    seenHeadings.add(headingKey);
+
+    const anchor = findAnchorNearHeading(source, match.index, `<${level}${attributes}>`);
+    const sectionUrl = anchor ? `${url}#${anchor}` : url;
+    const sectionSlice = source.slice(match.index, match.index + 2400);
+    const context = routeContextLabel(url, pageTitle);
+    const title = sectionTitleForHeading(heading, pageTitle, url);
+    const content = normalizeText(
+      [
+        title,
+        heading,
+        pageTitle,
+        context,
+        extractVisibleText(sectionSlice),
+      ].join(" ")
+    );
+
+    sectionEntries.push({
+      id: `section-${slugify(url || "home") || "home"}-${slugify(heading)}`,
+      title,
+      description: sentenceExcerpt(content),
+      url: sectionUrl,
+      category: group === "Destinations" ? "Destination Sections" : "Page Sections",
+      group,
+      type: entryTypeForGroup(group),
+      subType: "section",
+      tags: sectionTagsForHeading({ heading, pageTitle, url, group }),
+      content,
+      priority: sectionPriorityForHeading(heading, group),
+    });
+  }
+
+  return sectionEntries.slice(0, 18);
+}
+
 function isUsefulLiteral(value, before) {
   const clean = normalizeText(value);
   if (clean.length < 2) return false;
@@ -295,8 +459,7 @@ async function buildRouteEntries() {
       const description =
         extractMetadataField(source, "description") ||
         sentenceExcerpt(content);
-
-      return {
+      const pageEntry = {
         id: `page-${slugify(url || "home") || "home"}`,
         title,
         description,
@@ -308,8 +471,13 @@ async function buildRouteEntries() {
         content,
         priority: group === "Destinations" ? 70 : 55,
       };
+
+      return [
+        pageEntry,
+        ...extractSectionEntries({ source, url, pageTitle: title, group }),
+      ];
     })
-  ).then((entries) => entries.filter(Boolean));
+  ).then((entries) => entries.filter(Boolean).flat());
 }
 
 async function buildComponentEntries() {
@@ -491,6 +659,7 @@ function buildManualEntries() {
       category: "Destinations",
       group: "Destinations",
       type: "destination",
+      subType: "section",
       tags: [
         "Bangladesh MBBS GPA calculator",
         "Bangladesh MBBS eligibility calculator",
@@ -523,6 +692,7 @@ function buildManualEntries() {
       category: "Pages",
       group: "Pages",
       type: "page",
+      subType: "section",
       tags: [
         "MBBS abroad education loan",
         "MBBS abroad loan",
@@ -547,6 +717,7 @@ function buildManualEntries() {
       category: "Pages",
       group: "Pages",
       type: "page",
+      subType: "section",
       tags: [
         "MBBS abroad scholarship",
         "scholarship for MBBS abroad",
@@ -603,7 +774,7 @@ async function main() {
     ].filter((entry) => isPublicSearchUrl(entry.url))
   );
 
-  const output = `export type GlobalSearchEntry = {\n  id: string;\n  title: string;\n  description: string;\n  url: string;\n  category: string;\n  group: "Pages" | "Destinations" | "Blogs";\n  type: "page" | "destination" | "blog";\n  tags: string[];\n  content: string;\n  priority: number;\n};\n\nexport const globalSearchIndex: GlobalSearchEntry[] = [\n${entries.map(emitEntry).join("\n")}\n];\n`;
+  const output = `export type GlobalSearchEntry = {\n  id: string;\n  title: string;\n  description: string;\n  url: string;\n  category: string;\n  group: "Pages" | "Destinations" | "Blogs";\n  type: "page" | "destination" | "blog";\n  subType?: "section";\n  tags: string[];\n  content: string;\n  priority: number;\n};\n\nexport const globalSearchIndex: GlobalSearchEntry[] = [\n${entries.map(emitEntry).join("\n")}\n];\n`;
 
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
   await fs.writeFile(outputPath, output, "utf8");

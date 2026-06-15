@@ -34,6 +34,7 @@ export type SiteQuestionIntent =
 
 export type SiteSearchDataType =
   | "Page"
+  | "Page Section"
   | "Country Page"
   | "University"
   | "University Fee"
@@ -224,6 +225,7 @@ const coreVocabulary = [
   "domicile",
   "education",
   "eligibility",
+  "criteria",
   "embassy",
   "fee",
   "fees",
@@ -248,6 +250,7 @@ const coreVocabulary = [
   "quota",
   "recognition",
   "recommended",
+  "requirements",
   "reporting",
   "result",
   "round",
@@ -983,7 +986,9 @@ function buildBaseRecords() {
 
   for (const entry of globalSearchIndex) {
     const dataType: SiteSearchDataType =
-      entry.group === "Blogs"
+      entry.subType === "section"
+        ? "Page Section"
+        : entry.group === "Blogs"
         ? "Blog"
         : entry.category === "FMGE Data"
           ? "FMGE Country"
@@ -992,7 +997,21 @@ function buildBaseRecords() {
             : "Page";
 
     records.push(
-      createRecord(entry, dataType, "ILMALINK MEDIGO website data")
+      createRecord(
+        entry,
+        dataType,
+        entry.subType === "section"
+          ? "ILMALINK MEDIGO page section"
+          : "ILMALINK MEDIGO website data",
+        entry.subType === "section"
+          ? {
+              keyFacts: ["Specific page section", `Open: ${entry.url}`],
+              data: {
+                kind: "page-section",
+              },
+            }
+          : undefined
+      )
     );
   }
 

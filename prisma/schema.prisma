@@ -31,6 +31,9 @@ model Blog {
   country          String   @db.VarChar(512)
   featuredImage    String?  @db.LongText
   images           String?  @db.LongText
+  tickerText       String?  @db.VarChar(100)
+  showInTicker     Boolean  @default(false)
+  tickerOrder      Int      @default(999)
   status           String   @default("draft")
   views            Int      @default(0)
   createdAt        DateTime @default(now())
@@ -39,9 +42,25 @@ model Blog {
   authorId String
   author   User @relation(fields: [authorId], references: [id])
 
+  comments BlogComment[]
+
   @@index([authorId])
   @@index([status])
   @@index([category])
   @@index([createdAt])
   @@index([status, createdAt])
+  @@index([showInTicker, status, tickerOrder, createdAt])
+}
+
+model BlogComment {
+  id         String   @id @default(cuid())
+  blogId     String
+  authorName String   @db.VarChar(191)
+  message    String   @db.Text
+  status     String   @default("pending")
+  createdAt  DateTime @default(now())
+
+  blog Blog @relation(fields: [blogId], references: [id], onDelete: Cascade)
+
+  @@index([blogId, status, createdAt])
 }

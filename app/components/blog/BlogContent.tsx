@@ -9,12 +9,12 @@ function renderLink(key: number, linkText: string, linkHref: string) {
     <a
       key={key}
       href={cleanHref}
-      className="!font-extrabold !text-red-600 !underline !decoration-red-500 !decoration-2 !underline-offset-4 transition hover:!text-red-700 hover:!decoration-red-700"
+      className="!font-extrabold !text-[#0F4CFF] !underline !decoration-[#00C896] !decoration-2 !underline-offset-4 transition hover:!text-[#0B2244] hover:!decoration-[#0F4CFF]"
       style={{
-        color: "#dc2626",
+        color: "#0F4CFF",
         fontWeight: 800,
         textDecorationLine: "underline",
-        textDecorationColor: "#ef4444",
+        textDecorationColor: "#00C896",
         textDecorationThickness: "2px",
         textUnderlineOffset: "4px",
       }}
@@ -65,13 +65,15 @@ export default function BlogContent({ content }: { content: string }) {
     .filter(Boolean);
 
   return (
-    <div className="space-y-6 text-slate-700">
+    <div className="space-y-7 text-slate-700">
       {blocks.map((block, index) => {
         if (block.startsWith("## ")) {
           return (
-            <h2 key={index} className="pt-3 text-2xl font-bold text-[#0F172A]">
-              {renderInline(block.replace("## ", ""))}
-            </h2>
+            <div key={index} className="pt-4">
+              <h2 className="border-l-4 border-[#00C896] pl-4 text-2xl font-black leading-tight text-[#0B2244] md:text-3xl">
+                {renderInline(block.replace("## ", ""))}
+              </h2>
+            </div>
           );
         }
 
@@ -87,7 +89,7 @@ export default function BlogContent({ content }: { content: string }) {
           return (
             <div
               key={index}
-              className="relative aspect-[16/9] overflow-hidden rounded-2xl bg-[#EFF6FF]"
+              className="relative aspect-[16/9] overflow-hidden rounded-[1.5rem] border border-slate-200 bg-[#EFF6FF] shadow-[0_20px_45px_rgba(15,23,42,0.10)]"
             >
               {isVideoFile(imageSrc) ? (
                 <video
@@ -107,12 +109,12 @@ export default function BlogContent({ content }: { content: string }) {
               ) : (
                 <a
                   href={imageSrc}
-                  className="flex h-full w-full items-center justify-center px-4 text-center text-sm font-bold text-red-600 underline decoration-red-400 decoration-2 underline-offset-4"
+                  className="flex h-full w-full items-center justify-center px-4 text-center text-sm font-bold text-[#0F4CFF] underline decoration-[#00C896] decoration-2 underline-offset-4"
                   style={{
-                    color: "#dc2626",
+                    color: "#0F4CFF",
                     fontWeight: 800,
                     textDecorationLine: "underline",
-                    textDecorationColor: "#ef4444",
+                    textDecorationColor: "#00C896",
                     textDecorationThickness: "2px",
                     textUnderlineOffset: "4px",
                   }}
@@ -136,7 +138,7 @@ export default function BlogContent({ content }: { content: string }) {
             );
 
           return (
-            <div key={index} className="overflow-hidden rounded-2xl border border-slate-200">
+            <div key={index} className="overflow-hidden rounded-[1.5rem] border border-slate-200 shadow-sm">
               <table className="w-full text-left text-sm">
                 <tbody>
                   {rows.map((row, rowIndex) => (
@@ -145,7 +147,7 @@ export default function BlogContent({ content }: { content: string }) {
                       className="border-b border-slate-200 last:border-b-0"
                     >
                       {row.map((cell) => (
-                        <td key={cell} className="px-4 py-3 font-medium text-slate-700">
+                        <td key={cell} className="bg-white px-4 py-3 font-semibold text-slate-700 odd:bg-[#F8FAFC]">
                           {renderInline(cell)}
                         </td>
                       ))}
@@ -159,10 +161,14 @@ export default function BlogContent({ content }: { content: string }) {
 
         if (block.startsWith("- ")) {
           return (
-            <ul key={index} className="space-y-3 pl-5">
+            <ul key={index} className="space-y-3">
               {block.split("\n").map((item) => (
-                <li key={item} className="list-disc leading-8">
-                  {renderInline(item.replace("- ", ""))}
+                <li
+                  key={item}
+                  className="flex gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base font-medium leading-7 shadow-sm"
+                >
+                  <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#00C896]" />
+                  <span>{renderInline(item.replace("- ", ""))}</span>
                 </li>
               ))}
             </ul>
@@ -170,7 +176,7 @@ export default function BlogContent({ content }: { content: string }) {
         }
 
         return (
-          <p key={index} className="text-base leading-8 md:text-lg">
+          <p key={index} className="text-[1rem] font-medium leading-8 text-slate-700 md:text-lg md:leading-9">
             {renderInline(block)}
           </p>
         );

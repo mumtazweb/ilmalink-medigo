@@ -52,6 +52,7 @@ export const metadata: Metadata = {
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
+  "@id": "https://ilmalink.com/#organization",
   "@type": ["EducationalOrganization", "LocalBusiness"],
   name: "ILMALINK MEDIGO",
   url: "https://ilmalink.com",
@@ -101,9 +102,59 @@ const organizationJsonLd = {
       availableLanguage: ["English", "Hindi", "Bengali"],
     },
   ],
+  areaServed: [
+    "India",
+    "Bangladesh",
+    "Kyrgyzstan",
+    "Georgia",
+    "Russia",
+    "Kazakhstan",
+    "Uzbekistan",
+    "Tajikistan",
+    "Malaysia",
+    "Egypt",
+    "UAE",
+    "USA",
+    "Canada",
+    "Australia",
+  ],
+  knowsAbout: [
+    "MBBS Abroad",
+    "MBBS India",
+    "NEET UG counselling",
+    "FMGE data",
+    "NMC FMGL compliance",
+    "Medical university selection",
+    "Scholarships for medical students",
+    "Education loans for MBBS",
+  ],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://ilmalink.com/#website",
+  name: "ILMALINK MEDIGO",
+  url: "https://ilmalink.com",
+  publisher: {
+    "@id": "https://ilmalink.com/#organization",
+  },
+  inLanguage: "en-IN",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: "https://ilmalink.com/search?q={search_term_string}",
+    },
+    "query-input": "required name=search_term_string",
+  },
 };
 
 const organizationJsonLdString = JSON.stringify(organizationJsonLd).replace(
+  /</g,
+  "\\u003c"
+);
+const websiteJsonLdString = JSON.stringify(websiteJsonLd).replace(
   /</g,
   "\\u003c"
 );
@@ -124,6 +175,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: organizationJsonLdString }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: websiteJsonLdString }}
         />
         <FloatingContactButton />
         <div id="modal-root" />

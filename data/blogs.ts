@@ -4,6 +4,9 @@ export const blogs = [
     title: "MBBS in Kyrgyzstan 2026 Complete Guide",
 
     slug: "mbbs-in-kyrgyzstan-2026",
+    tickerText: "Kyrgyzstan MBBS 2026",
+    showInTicker: true,
+    tickerOrder: 4,
 
     excerpt:
       "Complete guide for Indian students planning MBBS in Kyrgyzstan including fees, eligibility, hostel and admission process.",

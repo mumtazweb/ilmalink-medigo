@@ -50,24 +50,71 @@ export default async function BlogsPage() {
       },
     ],
   };
+  const collectionSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "ILMALINK MEDIGO Blogs",
+    description:
+      "Published ILMALINK MEDIGO medical education updates, MBBS guidance, NEET insights and career resources.",
+    url: "https://ilmalink.com/blogs",
+    inLanguage: "en-IN",
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: posts.slice(0, 50).map((post, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: post.title,
+        description: post.metaDescription || post.shortDescription,
+        url: `https://ilmalink.com/blogs/${post.slug}`,
+      })),
+    },
+  };
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] text-[#0F172A]">
+    <main className="min-h-screen bg-[#F5F8FC] text-[#0F172A]">
       <Navbar />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c"),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(collectionSchema).replace(/</g, "\\u003c"),
+        }}
       />
 
       {/* BLOG SYSTEM: Dedicated blog listing hero. */}
-      <section className="bg-[linear-gradient(180deg,#eff6ff_0%,#ffffff_100%)] px-4 pb-12 pt-36 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl text-center">
-          <h1 className="text-4xl font-bold tracking-normal text-[#0F172A] md:text-6xl">
-            ILMALINK MEDIGO Blogs
-          </h1>
-          <p className="mx-auto mt-5 max-w-3xl text-base font-medium leading-7 text-slate-600 md:text-xl md:leading-8">
-            Medical education updates, MBBS guidance, NEET insights and career resources
-          </p>
+      <section className="border-b border-[#0B2244]/20 bg-[#061733] px-4 py-7 text-white sm:px-6 md:py-9 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="max-w-3xl">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#00C896]">
+              Medical education insights
+            </p>
+
+            <h1 className="mt-2 text-3xl font-black tracking-normal md:text-5xl">
+              ILMALINK MEDIGO Blogs
+            </h1>
+
+            <p className="mt-3 max-w-2xl text-sm font-semibold leading-6 text-slate-200 md:text-base md:leading-7">
+              Trusted MBBS, NEET, admission and career updates for students planning medical education in India and abroad.
+              Read concise guidance, official-alert explainers and practical planning notes.
+            </p>
+          </div>
+
+          <div className="mt-5 flex flex-wrap gap-2 text-[11px] font-black uppercase tracking-[0.12em]">
+            <span className="rounded-full border border-[#00C896]/35 bg-[#00C896]/10 px-3 py-1.5 text-[#BFFFF0]">
+              Verified guidance
+            </span>
+            <span className="rounded-full border border-white/15 bg-white/[0.08] px-3 py-1.5 text-slate-100">
+              MBBS India & abroad
+            </span>
+            <span className="rounded-full border border-white/15 bg-white/[0.08] px-3 py-1.5 text-slate-100">
+              NEET updates
+            </span>
+          </div>
         </div>
       </section>
 

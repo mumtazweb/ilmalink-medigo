@@ -3,16 +3,7 @@ export type BlogRole = "admin" |"editor" | "author";
 
 export type BlogStatus = "draft" | "pending" | "published" | "rejected";
 
-export type BlogCategory =
-  | "MBBS India"
-  | "MBBS Abroad"
-  | "NEET"
-  | "Medical Entrance Exams"
-  | "Medical Colleges"
-  | "Scholarships"
-  | "Career"
-  | "Loans"
-  | "University Reviews";
+export type BlogCategory = string;
 
 export type ImagePosition =
   | "center top"
@@ -70,9 +61,13 @@ export type BlogPost = {
   id: string;
   title: string;
   slug: string;
+  createdAt?: string;
   featuredImage: string;
   imageAlt: string;
   shortDescription: string;
+  tickerText?: string | null;
+  showInTicker?: boolean;
+  tickerOrder?: number;
   category: BlogCategory;
   country: string;
   tags: string[];
@@ -94,6 +89,17 @@ export type BlogPost = {
   | "bottom"
   | "left"
   | "right";
+};
+
+export type BlogTickerPost = {
+  id: string;
+  title: string;
+  slug: string;
+  tickerText: string | null;
+  shortDescription: string;
+  publishDate: string;
+  createdAt: string;
+  tickerOrder: number;
 };
 
 export type BlogDatabase = {
