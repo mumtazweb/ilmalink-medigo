@@ -3,7 +3,9 @@ import type { MetadataRoute } from "next";
 import { globalSearchIndex } from "./data/searchIndex";
 import { getPublishedBlogs } from "./lib/blog/store";
 
-const SITE_URL = "https://ilmalink.com";
+const SITE_URL = "https://www.ilmalink.com";
+
+export const revalidate = 3600;
 
 const staticRoutes = [
   "",

@@ -568,6 +568,7 @@ export async function saveBlogAction(
 
     revalidatePath("/blogs");
     revalidatePath("/dashboard");
+    revalidatePath("/sitemap.xml");
 
     return {
       ok: true,
@@ -652,6 +653,7 @@ export async function approveBlogAction(
 
     revalidatePath("/blogs");
     revalidatePath("/dashboard");
+    revalidatePath("/sitemap.xml");
   } catch (error) {
     console.log(
       "Approve blog error:",
@@ -699,8 +701,9 @@ export async function deleteBlogAction(
     await saveBlogDatabase(database);
     await deleteStoredBlog(blogId, blog.slug);
 
-    revalidatePath("/blogs");
-    revalidatePath("/dashboard");
+   revalidatePath("/blogs");
+   revalidatePath("/dashboard");
+   revalidatePath("/sitemap.xml");
   } catch (error) {
     console.log(
       "Delete blog error:",
