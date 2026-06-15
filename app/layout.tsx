@@ -197,7 +197,6 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: websiteJsonLdString }}
         />
 
-        <UniversalTranslator />
         <FloatingContactButton />
         <div id="modal-root" />
       </body>

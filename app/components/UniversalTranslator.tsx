@@ -207,7 +207,7 @@ export default function UniversalTranslator() {
           });
           if (!resp.ok) {
             const body = await resp.json().catch(() => ({}));
-            throw new Error(body?.message || 'Translation provider error');
+            throw new Error(body?.error || body?.message || 'Translation provider error');
           }
           const data = await resp.json();
           const { translations } = data;
@@ -235,8 +235,9 @@ export default function UniversalTranslator() {
 
       setLoading(false);
     } catch (err: any) {
+      console.error(err?.message || err);
       setLoading(false);
-      setError(err?.message || 'Translation failed');
+      setError("Translation unavailable now");
     }
   }
 
@@ -266,6 +267,8 @@ export default function UniversalTranslator() {
   }
 
   const showEnglishRestore = !!lang;
+  const showBanglaButton = !lang || lang === "hi";
+  const showHindiButton = !lang || lang === "bn";
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     if (!position) return;
@@ -338,21 +341,21 @@ export default function UniversalTranslator() {
             </button>
           </div>
         </div>
-        <div className="grid gap-2">
-          {!showEnglishRestore && (
+        <div className="grid grid-cols-2 gap-2">
+          {showBanglaButton && (
             <button
               aria-label="বাংলায় পড়ুন"
               onClick={() => handleSelect('bn')}
-              className="w-full rounded-2xl bg-[#00C896]/10 px-3 py-2 text-sm font-semibold text-[#065f4b] transition hover:bg-[#00C896]/20"
+              className="whitespace-nowrap rounded-2xl bg-[#00C896]/10 px-3 py-2 text-sm font-semibold text-[#065f4b] transition hover:bg-[#00C896]/20"
             >
               বাংলা পড়ুন
             </button>
           )}
-          {!showEnglishRestore && (
+          {showHindiButton && (
             <button
               aria-label="हिंदी में पढ़ें"
               onClick={() => handleSelect('hi')}
-              className="w-full rounded-2xl bg-[#0EA5A4]/10 px-3 py-2 text-sm font-semibold text-[#064e3b] transition hover:bg-[#0EA5A4]/20"
+              className="whitespace-nowrap rounded-2xl bg-[#0EA5A4]/10 px-3 py-2 text-sm font-semibold text-[#064e3b] transition hover:bg-[#0EA5A4]/20"
             >
               हिंदी में पढ़ें
             </button>
@@ -361,7 +364,7 @@ export default function UniversalTranslator() {
             <button
               aria-label="Read in English"
               onClick={() => handleSelect('en')}
-              className="w-full rounded-2xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-200"
+              className="col-span-2 rounded-2xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-200"
             >
               Read in English
             </button>
@@ -371,7 +374,9 @@ export default function UniversalTranslator() {
           <div className="mt-3 rounded-2xl bg-slate-50 px-3 py-2 text-xs font-medium text-slate-600">Translating...</div>
         )}
         {error && (
-          <div className="mt-3 rounded-2xl bg-red-50 px-3 py-2 text-xs font-medium text-red-700">Translation unavailable now</div>
+          <div className="mt-3 rounded-2xl bg-red-50 px-3 py-2 text-xs font-medium text-red-700">
+            Translation unavailable now
+          </div>
         )}
       </div>
     </div>
