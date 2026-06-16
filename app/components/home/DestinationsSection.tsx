@@ -44,6 +44,8 @@ export default function DestinationsSection({
         <label className="block">
           <span className="sr-only">Search countries</span>
           <input
+            id="home-destinations-search"
+            name="homeDestinationsSearch"
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchQueryChange(e.target.value)}

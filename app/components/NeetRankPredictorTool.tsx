@@ -278,6 +278,8 @@ export default function NeetRankPredictorTool({
                   NEET Score
                 </span>
                 <input
+                  id="neet-rank-score-input"
+                  name="neetRankScore"
                   type="number"
                   inputMode="numeric"
                   value={scoreValue}
@@ -293,6 +295,8 @@ export default function NeetRankPredictorTool({
                   <span>720</span>
                 </div>
                 <input
+                  id="neet-rank-score-range"
+                  name="neetRankScoreRange"
                   type="range"
                   min={0}
                   max={720}

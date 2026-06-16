@@ -167,6 +167,8 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
         }`}
       >
         <input
+          id="blog-image-upload"
+          name="blogImageUpload"
           ref={fileInputRef}
           type="file"
           onChange={(e) => {
@@ -276,6 +278,8 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
                   <label className="block">
                     <span className="text-xs font-bold text-slate-700">Label / alt text</span>
                     <input
+                      id={`blog-image-alt-${image.id}`}
+                      name={`blogImageAlt-${image.id}`}
                       type="text"
                       value={image.alt}
                       onChange={(e) => handleAltChange(image.id, e.target.value)}
@@ -288,6 +292,8 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
                   <label className="block">
                     <span className="text-xs font-bold text-slate-700">Position</span>
                     <select
+                      id={`blog-image-position-${image.id}`}
+                      name={`blogImagePosition-${image.id}`}
                       value={image.position}
                       onChange={(e) =>
                         handlePositionChange(image.id, e.target.value as ImagePosition)

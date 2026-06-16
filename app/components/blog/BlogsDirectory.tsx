@@ -77,6 +77,8 @@ export default function BlogsDirectory({
               aria-hidden="true"
             />
             <input
+              id="blog-directory-search"
+              name="blogDirectorySearch"
               value={query}
               onChange={(event) => {
                 setQuery(event.target.value);
@@ -124,6 +126,8 @@ export default function BlogsDirectory({
         {filtersOpen && (
           <div className="mt-2 grid gap-2 border-t border-slate-100 bg-[linear-gradient(180deg,#FFFFFF_0%,#F8FBFF_100%)] pt-2 md:grid-cols-[1fr_1fr_1fr_auto]">
             <select
+              id="blog-directory-category"
+              name="blogDirectoryCategory"
               value={category}
               onChange={(event) => {
                 setCategory(event.target.value);
@@ -140,6 +144,8 @@ export default function BlogsDirectory({
             </select>
 
             <select
+              id="blog-directory-country"
+              name="blogDirectoryCountry"
               value={country}
               onChange={(event) => {
                 setCountry(event.target.value);
@@ -156,6 +162,8 @@ export default function BlogsDirectory({
             </select>
 
             <select
+              id="blog-directory-sort"
+              name="blogDirectorySort"
               value={sort}
               onChange={(event) => {
                 setSort(event.target.value as BlogSort);

@@ -25,6 +25,8 @@ export default function NeetCalculatorSection({
         <label className="space-y-2 text-sm text-slate-600">
           NEET Score
           <input
+            id="home-neet-score"
+            name="homeNeetScore"
             type="number"
             min={1}
             max={720}

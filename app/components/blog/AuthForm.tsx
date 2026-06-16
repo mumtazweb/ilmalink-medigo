@@ -142,6 +142,8 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
             <label className="block">
               <span className="text-sm font-bold text-[#0F172A]">Enter your email</span>
               <input
+                id="blog-reset-email"
+                name="blogResetEmail"
                 type="email"
                 value={resetEmail}
                 onChange={(e) => setResetEmail(e.target.value)}
@@ -183,6 +185,8 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
             <label className="block">
               <span className="text-sm font-bold text-[#0F172A]">Enter OTP code</span>
               <input
+                id="blog-reset-otp"
+                name="blogResetOtp"
                 type="text"
                 value={resetOtp}
                 onChange={(e) => setResetOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
@@ -238,6 +242,8 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
             <label className="block">
               <span className="text-sm font-bold text-[#0F172A]">New password</span>
               <input
+                id="blog-reset-password"
+                name="blogResetPassword"
                 type="password"
                 value={resetPassword}
                 onChange={(e) => setResetPassword(e.target.value)}
@@ -250,6 +256,8 @@ export default function AuthForm({ mode }: { mode: "login" | "signup" }) {
             <label className="block">
               <span className="text-sm font-bold text-[#0F172A]">Confirm password</span>
               <input
+                id="blog-reset-password-confirm"
+                name="blogResetPasswordConfirm"
                 type="password"
                 value={resetPasswordConfirm}
                 onChange={(e) => setResetPasswordConfirm(e.target.value)}

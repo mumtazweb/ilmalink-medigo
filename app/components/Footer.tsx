@@ -459,6 +459,8 @@ export default function Footer() {
                     State / region
                   </span>
                   <select
+                    id="footer-nearby-state"
+                    name="footerNearbyState"
                     value={nearbyState}
                     onChange={(event) => handleStateChange(event.target.value)}
                     className="h-10 w-full rounded-md border border-white/10 bg-[#07111f] px-2 text-sm font-semibold text-white outline-none focus:border-emerald-300"
@@ -476,6 +478,8 @@ export default function Footer() {
                     {pointLabel}
                   </span>
                   <select
+                    id="footer-nearby-contact-point"
+                    name="footerNearbyContactPoint"
                     value={selectedPoint}
                     onChange={(event) => setNearbyPoint(event.target.value)}
                     className="h-10 w-full rounded-md border border-white/10 bg-[#07111f] px-2 text-sm font-semibold text-white outline-none focus:border-emerald-300"

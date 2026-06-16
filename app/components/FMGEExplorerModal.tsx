@@ -167,6 +167,8 @@ export default function FMGEExplorerModal({ isOpen, onClose, onConnect }: FMGEEx
         className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
       />
       <select
+        id="fmge-college-sort"
+        name="fmgeCollegeSort"
         value={collegeSort}
         onChange={(event) => setCollegeSort(event.target.value as SortOption)}
         className="w-full appearance-none rounded-2xl border border-slate-200 bg-white py-2 pl-9 pr-8 text-sm font-semibold text-[#0B1D39] outline-none transition focus:border-[#16C784] focus:ring-2 focus:ring-[#16C784]/20 sm:w-[190px]"
@@ -323,6 +325,8 @@ export default function FMGEExplorerModal({ isOpen, onClose, onConnect }: FMGEEx
                     className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
                   />
                   <input
+                    id="fmge-country-college-search"
+                    name="fmgeCountryCollegeSearch"
                     type="search"
                     value={searchQuery}
                     onChange={(event) => setSearchQuery(event.target.value)}
@@ -338,6 +342,8 @@ export default function FMGEExplorerModal({ isOpen, onClose, onConnect }: FMGEEx
                     className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
                   />
                   <select
+                    id="fmge-country-sort"
+                    name="fmgeCountrySort"
                     value={countrySort}
                     onChange={(event) => setCountrySort(event.target.value as SortOption)}
                     className="w-full appearance-none rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-9 pr-8 text-sm font-semibold text-[#0B1D39] outline-none transition focus:border-[#16C784] focus:bg-white focus:ring-2 focus:ring-[#16C784]/20"

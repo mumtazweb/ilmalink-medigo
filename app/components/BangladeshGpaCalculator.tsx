@@ -262,6 +262,8 @@ export default function BangladeshGpaCalculator() {
         <label className="space-y-2 text-sm text-gray-300">
           Class 10 / SSC / O-Level Passing Year
           <input
+            id="bangladesh-class-10-year"
+            name="bangladeshClass10Year"
             type="number"
             value={class10Year}
             onChange={(e) => {
@@ -276,6 +278,8 @@ export default function BangladeshGpaCalculator() {
         <label className="space-y-2 text-sm text-gray-300">
           Class 12 / HSC / A-Level Passing Year
           <input
+            id="bangladesh-class-12-year"
+            name="bangladeshClass12Year"
             type="number"
             value={class12Year}
             onChange={(e) => {
@@ -302,6 +306,8 @@ export default function BangladeshGpaCalculator() {
             <label key={index} className="space-y-2 text-sm text-gray-300">
               Subject {index + 1}
               <input
+                id={`bangladesh-class-10-subject-${index + 1}`}
+                name={`bangladeshClass10Subject${index + 1}`}
                 type="number"
                 min="0"
                 max="100"
@@ -328,6 +334,8 @@ export default function BangladeshGpaCalculator() {
           <label className="space-y-2 text-sm text-gray-300">
             Physics Marks
             <input
+              id="bangladesh-physics-marks"
+              name="bangladeshPhysicsMarks"
               type="number"
               min="0"
               max="100"
@@ -344,6 +352,8 @@ export default function BangladeshGpaCalculator() {
           <label className="space-y-2 text-sm text-gray-300">
             Chemistry Marks
             <input
+              id="bangladesh-chemistry-marks"
+              name="bangladeshChemistryMarks"
               type="number"
               min="0"
               max="100"
@@ -360,6 +370,8 @@ export default function BangladeshGpaCalculator() {
           <label className="space-y-2 text-sm text-gray-300">
             Biology Marks
             <input
+              id="bangladesh-biology-marks"
+              name="bangladeshBiologyMarks"
               type="number"
               min="0"
               max="100"
@@ -379,6 +391,8 @@ export default function BangladeshGpaCalculator() {
         <label className="space-y-2 text-sm text-gray-300">
           NEET Qualified?
           <select
+            id="bangladesh-neet-qualified"
+            name="bangladeshNeetQualified"
             value={neetQualified}
             onChange={(e) => {
               setHasChecked(false);

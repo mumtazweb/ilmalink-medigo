@@ -592,6 +592,8 @@ export default function Navbar() {
               <label className="mt-4 flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 shadow-sm transition focus-within:border-[#00C896]/70 focus-within:ring-4 focus-within:ring-[#00C896]/10">
                 <Search size={16} className="text-slate-400" />
                 <input
+                  id="navbar-desktop-country-search"
+                  name="navbarDesktopCountrySearch"
                   type="search"
                   value={countrySearch}
                   onChange={(event) => setCountrySearch(event.target.value)}
@@ -641,6 +643,8 @@ export default function Navbar() {
               <label className="mt-4 flex items-center gap-2 rounded-2xl border border-white/15 bg-white px-3 py-2.5 text-slate-900 shadow-sm transition focus-within:border-[#00C896] focus-within:ring-4 focus-within:ring-[#00C896]/20">
                 <Search size={16} className="text-slate-400" />
                 <input
+                  id="navbar-desktop-india-search"
+                  name="navbarDesktopIndiaSearch"
                   type="search"
                   value={indiaSearch}
                   onChange={(event) => setIndiaSearch(event.target.value)}
@@ -724,6 +728,8 @@ export default function Navbar() {
                         <label className="mt-3 flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5 shadow-sm transition focus-within:border-[#00C896]/70 focus-within:ring-4 focus-within:ring-[#00C896]/10">
                           <Search size={15} className="text-slate-400" />
                           <input
+                            id="navbar-mobile-country-search"
+                            name="navbarMobileCountrySearch"
                             type="search"
                             value={countrySearch}
                             onChange={(event) => setCountrySearch(event.target.value)}
@@ -766,6 +772,8 @@ export default function Navbar() {
                         <label className="mt-3 flex items-center gap-2 rounded-lg border border-white/15 bg-white px-3 py-2.5 text-slate-900 shadow-sm transition focus-within:border-[#00C896] focus-within:ring-4 focus-within:ring-[#00C896]/20">
                           <Search size={15} className="text-slate-400" />
                           <input
+                            id="navbar-mobile-india-search"
+                            name="navbarMobileIndiaSearch"
                             type="search"
                             value={indiaSearch}
                             onChange={(event) => setIndiaSearch(event.target.value)}

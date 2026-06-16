@@ -985,6 +985,8 @@ export default function HomeHeroClient() {
                     <label className="mx-auto mt-3 block w-full max-w-sm px-1">
                       <span className="sr-only">Search countries</span>
                       <input
+                        id="home-hero-destination-search"
+                        name="homeHeroDestinationSearch"
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -1111,6 +1113,8 @@ export default function HomeHeroClient() {
                   <label className="space-y-2 text-sm text-slate-600">
                     NEET Score
                     <input
+                      id="home-hero-neet-score"
+                      name="homeHeroNeetScore"
                       type="number"
                       min={1}
                       max={720}

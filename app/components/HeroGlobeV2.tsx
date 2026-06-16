@@ -4,6 +4,15 @@ import { useEffect, useMemo, useRef, useState } from "react";
 type NetworkNode = { id: number; left: string; top: string; size: number; delay: number };
 type NetworkLine = { x1: number; y1: number; x2: number; y2: number };
 
+function formatCssNumber(value: number, decimals = 4) {
+  const rounded = Number(value.toFixed(decimals));
+  return Object.is(rounded, -0) ? "0" : String(rounded);
+}
+
+function formatPercent(value: number) {
+  return `${formatCssNumber(value)}%`;
+}
+
 export default function HeroGlobeV2() {
   const globeWrapperRef = useRef<HTMLDivElement>(null);
   const [globeSize, setGlobeSize] = useState(520);
@@ -18,8 +27,8 @@ export default function HeroGlobeV2() {
 
       return {
         id: i,
-        left: `${Math.min(95, Math.max(5, x))}%`,
-        top: `${Math.min(85, Math.max(15, y))}%`,
+        left: formatPercent(Math.min(95, Math.max(5, x))),
+        top: formatPercent(Math.min(85, Math.max(15, y))),
         size: 3 + (i % 6),
         delay: (i % 5) * 0.4,
       };
@@ -81,10 +90,10 @@ export default function HeroGlobeV2() {
     const angle = Math.atan2(dy, dx) * (180 / Math.PI);
     
     return {
-      width: `${length}%`,
-      transform: `rotate(${angle}deg)`,
-      left: `${line.x1}%`,
-      top: `${line.y1}%`,
+      width: formatPercent(length),
+      transform: `rotate(${formatCssNumber(angle)}deg)`,
+      left: formatPercent(line.x1),
+      top: formatPercent(line.y1),
     };
   };
 

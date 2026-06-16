@@ -1,33 +1,67 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { Languages, Globe2, ChevronUp, Check, X } from "lucide-react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const CACHE_KEY = "ilm_translate_cache_v1";
-const POSITION_KEY = "ilm_translate_position_v1";
+const POSITION_KEY = "ilm_translate_position_v4";
 const SUPPORTED = ["bn", "hi"] as const;
 type Lang = (typeof SUPPORTED)[number];
 type Position = { left: number; top: number };
+type TextSegment = { text: string; protected: boolean };
 
 const PROTECTED_TERMS = [
-  "ILMALINK",
   "ILMALINK MEDIGO",
   "ilmaLink",
+  "ILMALINK",
+  "ilmalink",
   "ilmalink.com",
-  "NEET",
+  "www.ilmalink.com",
   "NEET-UG",
-  "NMC",
+  "NEET UG",
   "MCC",
-  "FMGE",
+  "NMC",
+  "FMGE/NExT",
   "NExT",
+  "FMGE",
+  "FMGL",
   "WDOMS",
   "MECEE-BL",
+  "NBEMS",
+  "NTA",
+  "DGME",
+  "BM&DC",
+  "BMDC",
   "MEC",
   "MBBS",
   "BDS",
+  "AYUSH",
   "AIQ",
+  "NRI",
+  "PCB",
+  "GPA",
+  "INR",
+  "WBMDFC",
+  "NMDFC",
+  "MILAN",
   "UG",
+  "PG",
+  "WHO",
 ];
+
+const PROTECTED_PATTERN = new RegExp(
+  [
+    ...PROTECTED_TERMS.sort((a, b) => b.length - a.length).map((term) =>
+      term.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")
+    ),
+    "\\b[A-Z][A-Z0-9&./+-]{1,}\\b",
+  ].join("|"),
+  "g"
+);
+
+const CONTROL_HEIGHT = 42;
+const CONTROL_MARGIN = 6;
+const MOBILE_BREAKPOINT = 640;
 
 function isVisible(node: Node) {
   if (!(node instanceof Text)) return false;
@@ -38,6 +72,13 @@ function isVisible(node: Node) {
   const tag = parent.tagName.toLowerCase();
   const excluded = new Set(["script", "style", "noscript", "textarea", "input", "code", "pre", "svg"]);
   if (excluded.has(tag)) return false;
+  if (
+    parent.closest(
+      "[data-ilm-translator], [data-no-translate], [translate='no'], .notranslate, [contenteditable='true']"
+    )
+  ) {
+    return false;
+  }
   const style = window.getComputedStyle(parent);
   if (style && (style.display === "none" || style.visibility === "hidden")) return false;
   // don't translate pure URLs, emails, phones
@@ -47,26 +88,30 @@ function isVisible(node: Node) {
   return true;
 }
 
-function makePlaceholderMap(text: string) {
-  const map: Record<string, string> = {};
-  let i = 0;
-  let out = text;
-  for (const term of PROTECTED_TERMS) {
-    const re = new RegExp(term.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&"), "g");
-    if (re.test(out)) {
-      const key = `[[__PRT_${i}__]]`;
-      out = out.replace(re, key);
-      map[key] = term;
-      i++;
-    }
-  }
-  return { text: out, map };
+function shouldTranslateSegment(text: string) {
+  return /[A-Za-z]/.test(text) && text.trim().length > 1;
 }
 
-function restorePlaceholders(text: string, map: Record<string, string>) {
-  let out = text;
-  for (const k of Object.keys(map)) out = out.replaceAll(k, map[k]);
-  return out;
+function splitProtectedText(text: string): TextSegment[] {
+  const segments: TextSegment[] = [];
+  let lastIndex = 0;
+  PROTECTED_PATTERN.lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = PROTECTED_PATTERN.exec(text))) {
+    if (match.index > lastIndex) {
+      segments.push({ text: text.slice(lastIndex, match.index), protected: false });
+    }
+
+    segments.push({ text: match[0], protected: true });
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    segments.push({ text: text.slice(lastIndex), protected: false });
+  }
+
+  return segments.length ? segments : [{ text, protected: false }];
 }
 
 function readCache(): Record<string, string> {
@@ -86,12 +131,39 @@ function writeCache(cache: Record<string, string>) {
   }
 }
 
-function readPosition(): Position {
+function getControlWidth() {
+  if (typeof window === "undefined") return 360;
+  return window.innerWidth < 640
+    ? window.innerWidth
+    : Math.min(360, window.innerWidth - CONTROL_MARGIN * 2);
+}
+
+function getDefaultPosition(): Position {
+  const width = getControlWidth();
+  const sideMargin = window.innerWidth < MOBILE_BREAKPOINT ? 0 : CONTROL_MARGIN;
+
+  return {
+    left: Math.max(sideMargin, (window.innerWidth - width) / 2),
+    top: window.innerHeight - CONTROL_HEIGHT,
+  };
+}
+
+function clampPosition(position: Position): Position {
+  const width = getControlWidth();
+  const sideMargin = window.innerWidth < MOBILE_BREAKPOINT ? 0 : CONTROL_MARGIN;
+
+  return {
+    left: Math.max(sideMargin, Math.min(position.left, window.innerWidth - width - sideMargin)),
+    top: Math.max(0, Math.min(position.top, window.innerHeight - CONTROL_HEIGHT)),
+  };
+}
+
+function readSavedPosition(): Position | null {
   try {
     const raw = localStorage.getItem(POSITION_KEY);
-    return raw ? JSON.parse(raw) : { left: 24, top: window.innerHeight - 180 };
+    return raw ? clampPosition(JSON.parse(raw)) : null;
   } catch (e) {
-    return { left: 24, top: window.innerHeight - 180 };
+    return null;
   }
 }
 
@@ -106,6 +178,7 @@ function writePosition(position: Position) {
 export default function UniversalTranslator() {
   const pathname = usePathname();
   const [position, setPosition] = useState<Position | null>(null);
+  const [hasManualPosition, setHasManualPosition] = useState(false);
   const [lang, setLang] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -114,14 +187,39 @@ export default function UniversalTranslator() {
   const nodeOriginals = useRef(new WeakMap<Node, string>());
   const debounceRef = useRef<number | null>(null);
   const dragRef = useRef(false);
+  const dragMovedRef = useRef(false);
+  const suppressClickRef = useRef(false);
+  const latestPositionRef = useRef<Position | null>(null);
+  const hasManualPositionRef = useRef(false);
   const pointerOriginRef = useRef<{ x: number; y: number; left: number; top: number } | null>(null);
+  const isTranslatingRef = useRef(false);
 
   // init from localStorage
   useEffect(() => {
     const active = localStorage.getItem("ilm_active_lang");
     if (active && (active === "bn" || active === "hi")) setLang(active);
-    setPosition(readPosition());
+    const savedPosition = readSavedPosition();
+    setHasManualPosition(!!savedPosition);
+    hasManualPositionRef.current = !!savedPosition;
+    setPosition(savedPosition ?? getDefaultPosition());
+
+    const handleResize = () => {
+      setPosition((current) =>
+        hasManualPositionRef.current ? clampPosition(current ?? getDefaultPosition()) : getDefaultPosition()
+      );
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    latestPositionRef.current = position;
+  }, [position]);
+
+  useEffect(() => {
+    hasManualPositionRef.current = hasManualPosition;
+  }, [hasManualPosition]);
 
   // observe route changes and re-run translation if needed
   useEffect(() => {
@@ -143,6 +241,7 @@ export default function UniversalTranslator() {
     // observe DOM mutations to translate dynamic content
     const obs = new MutationObserver((mutations) => {
       if (!lang) return;
+      if (isTranslatingRef.current) return;
       if (debounceRef.current) window.clearTimeout(debounceRef.current);
       debounceRef.current = window.setTimeout(() => runTranslate(lang as Lang), 350);
     });
@@ -155,6 +254,7 @@ export default function UniversalTranslator() {
   async function runTranslate(target: Lang) {
     setError(null);
     setLoading(true);
+    isTranslatingRef.current = true;
     try {
       const nodes: Text[] = [];
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
@@ -164,38 +264,63 @@ export default function UniversalTranslator() {
         n = walker.nextNode();
       }
 
-      // prepare texts and placeholders
-      const texts: string[] = [];
-      const placeholderMaps: Record<number, Record<string, string>> = {};
-      const nodeIndex: Node[] = [];
-      nodes.forEach((node, idx) => {
-        const original = node.textContent ?? "";
-        nodeOriginals.current.set(node, original);
-        const { text, map } = makePlaceholderMap(original);
-        texts.push(text);
-        if (Object.keys(map).length) placeholderMaps[idx] = map;
-        nodeIndex.push(node);
+      const nodePlans: { node: Text; segments: TextSegment[]; jobIndexes: (number | null)[] }[] = [];
+      const jobs: string[] = [];
+
+      nodes.forEach((node) => {
+        if (!nodeOriginals.current.has(node)) {
+          nodeOriginals.current.set(node, node.textContent ?? "");
+        }
+
+        const original = nodeOriginals.current.get(node) ?? node.textContent ?? "";
+        const segments = splitProtectedText(original);
+        const jobIndexes = segments.map((segment) => {
+          if (segment.protected || !shouldTranslateSegment(segment.text)) return null;
+
+          const jobIndex = jobs.length;
+          jobs.push(segment.text);
+          return jobIndex;
+        });
+
+        if (jobIndexes.some((jobIndex) => jobIndex !== null)) {
+          nodePlans.push({ node, segments, jobIndexes });
+        }
       });
 
       // chunk texts into batches
-      const BATCH = 60;
+      const BATCH_ITEMS = 60;
+      const BATCH_CHARACTERS = 7000;
       const cache = readCache();
-      const results: (string | null)[] = new Array(texts.length).fill(null);
+      const results: (string | null)[] = new Array(jobs.length).fill(null);
 
-      for (let i = 0; i < texts.length; i += BATCH) {
-        const chunk = texts.slice(i, i + BATCH);
-        const chunkIndices = Array.from({ length: chunk.length }, (_, k) => i + k);
+      for (let i = 0; i < jobs.length;) {
+        const chunk: string[] = [];
+        const chunkIndices: number[] = [];
+        let chunkCharacters = 0;
+
+        while (i < jobs.length && chunk.length < BATCH_ITEMS) {
+          const next = jobs[i];
+          const nextLength = next.length;
+
+          if (chunk.length && chunkCharacters + nextLength > BATCH_CHARACTERS) break;
+
+          chunk.push(next);
+          chunkIndices.push(i);
+          chunkCharacters += nextLength;
+          i++;
+        }
 
         // check cache
         const toFetch: string[] = [];
         const toFetchIdx: number[] = [];
         chunk.forEach((t, k) => {
           const key = `${target}::${t}`;
+          const jobIndex = chunkIndices[k];
           if (cache[key]) {
-            results[i + k] = cache[key];
+            results[jobIndex] = cache[key];
           } else {
             toFetch.push(t);
-            toFetchIdx.push(i + k);
+            toFetchIdx.push(jobIndex);
           }
         });
 
@@ -222,14 +347,18 @@ export default function UniversalTranslator() {
       writeCache(cache);
 
       // apply translations
-      results.forEach((translated, idx) => {
-        if (!translated) return;
-        const node = nodeIndex[idx] as Text;
-        const map = placeholderMaps[idx] || {};
-        const restored = restorePlaceholders(translated, map);
-        if (node && node.parentElement) {
-          node.nodeValue = restored;
-          node.parentElement.setAttribute('data-ilm-translated', target);
+      nodePlans.forEach((plan) => {
+        const translated = plan.segments
+          .map((segment, segmentIndex) => {
+            if (segment.protected) return segment.text;
+            const jobIndex = plan.jobIndexes[segmentIndex];
+            return jobIndex === null ? segment.text : results[jobIndex] ?? segment.text;
+          })
+          .join("");
+
+        if (plan.node.parentElement) {
+          plan.node.nodeValue = translated;
+          plan.node.parentElement.setAttribute('data-ilm-translated', target);
         }
       });
 
@@ -238,6 +367,8 @@ export default function UniversalTranslator() {
       console.error(err?.message || err);
       setLoading(false);
       setError("Translation unavailable now");
+    } finally {
+      isTranslatingRef.current = false;
     }
   }
 
@@ -245,19 +376,13 @@ export default function UniversalTranslator() {
     setError(null);
     if (!t) return;
     if (t === 'en') {
-      // restore originals
-      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
-      let n: Node | null = walker.nextNode();
-      while (n) {
-        const original = nodeOriginals.current.get(n) as string | undefined;
-        if (original && n.parentElement) {
-          n.nodeValue = original;
-          n.parentElement.removeAttribute('data-ilm-translated');
-        }
-        n = walker.nextNode();
-      }
+      if (debounceRef.current) window.clearTimeout(debounceRef.current);
       localStorage.removeItem('ilm_active_lang');
+      localStorage.removeItem(POSITION_KEY);
+      isTranslatingRef.current = false;
+      setLoading(false);
       setLang(null);
+      window.location.reload();
       return;
     }
 
@@ -267,18 +392,27 @@ export default function UniversalTranslator() {
   }
 
   const showEnglishRestore = !!lang;
-  const showBanglaButton = !lang || lang === "hi";
-  const showHindiButton = !lang || lang === "bn";
+  const leftAction = lang === "hi" ? "en" : "hi";
+  const rightAction = lang === "bn" ? "en" : "bn";
+  const leftLabel = lang === "hi" ? "Read in English" : "हिन्दी में पढ़ें";
+  const rightLabel = lang === "bn" ? "Read in English" : "বাংলায় পড়ুন";
+
+  const consumeSuppressedClick = () => {
+    if (!suppressClickRef.current) return false;
+    suppressClickRef.current = false;
+    return true;
+  };
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!position) return;
+    const rect = event.currentTarget.getBoundingClientRect();
     event.currentTarget.setPointerCapture(event.pointerId);
     dragRef.current = true;
+    dragMovedRef.current = false;
     pointerOriginRef.current = {
       x: event.clientX,
       y: event.clientY,
-      left: position.left,
-      top: position.top,
+      left: rect.left,
+      top: rect.top,
     };
   };
 
@@ -288,28 +422,47 @@ export default function UniversalTranslator() {
     const origin = pointerOriginRef.current;
     const nextLeft = origin.left + (event.clientX - origin.x);
     const nextTop = origin.top + (event.clientY - origin.y);
-    const clampedLeft = Math.max(12, Math.min(nextLeft, window.innerWidth - 320));
-    const clampedTop = Math.max(12, Math.min(nextTop, window.innerHeight - 120));
-    setPosition({ left: clampedLeft, top: clampedTop });
+    const hasMoved = Math.abs(event.clientX - origin.x) > 4 || Math.abs(event.clientY - origin.y) > 4;
+    if (!hasMoved && !dragMovedRef.current) return;
+    dragMovedRef.current = true;
+    if (!hasManualPositionRef.current) {
+      hasManualPositionRef.current = true;
+      setHasManualPosition(true);
+    }
+    setPosition(clampPosition({ left: nextLeft, top: nextTop }));
   };
 
   const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
     if (!dragRef.current) return;
+    const moved = dragMovedRef.current;
     dragRef.current = false;
+    dragMovedRef.current = false;
     pointerOriginRef.current = null;
     event.currentTarget.releasePointerCapture(event.pointerId);
-    if (position) writePosition(position);
+    if (moved && latestPositionRef.current) writePosition(latestPositionRef.current);
+    if (moved) {
+      suppressClickRef.current = true;
+      window.setTimeout(() => {
+        suppressClickRef.current = false;
+      }, 50);
+    }
   };
 
   if (!position) return null;
+  const translatorStyle: CSSProperties = hasManualPosition
+    ? { left: position.left, top: position.top, width: getControlWidth() }
+    : { bottom: 0, left: "50%", transform: "translateX(-50%)", width: getControlWidth() };
+
   if (!visible) {
     return (
       <button
         type="button"
         onClick={() => setVisible(true)}
-        className="fixed left-4 bottom-24 z-[2147483647] rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-slate-800 shadow-2xl ring-1 ring-slate-200 backdrop-blur-sm transition hover:bg-slate-100"
+        translate="no"
+        data-ilm-translator
+        className="fixed bottom-0 left-1/2 z-[2147483647] origin-bottom -translate-x-1/2 scale-[0.78] rounded-t-full bg-slate-950/90 px-2 py-0.5 text-[9px] font-bold text-white shadow-xl ring-1 ring-white/15 backdrop-blur-sm transition hover:bg-slate-800"
       >
-        Open Translator
+        Translator/অনুবাদক
       </button>
     );
   }
@@ -317,68 +470,58 @@ export default function UniversalTranslator() {
   return (
     <div
       aria-hidden={false}
-      className="fixed z-[2147483647] max-w-[calc(100vw-2rem)]"
-      style={{ left: position.left, top: position.top }}
+      translate="no"
+      data-ilm-translator
+      className="fixed z-[2147483647] touch-none select-none"
+      style={translatorStyle}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
     >
-      <div className="w-[min(22rem,calc(100vw-2rem))] rounded-3xl border border-slate-200 bg-white/95 p-3 shadow-2xl backdrop-blur-sm">
-        <div
-          className="mb-3 flex cursor-grab items-center justify-between rounded-2xl bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-700 shadow-inner"
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerUp}
+      <div className="grid h-[42px] grid-cols-[2rem_1fr_1fr] overflow-hidden rounded-t-2xl border border-slate-200 bg-white/95 text-xs font-extrabold shadow-2xl backdrop-blur-sm sm:rounded-2xl">
+        <button
+          type="button"
+          aria-label="Close translator"
+          onClick={(event) => {
+            if (consumeSuppressedClick()) return;
+            event.stopPropagation();
+            setVisible(false);
+          }}
+          className="flex h-full items-center justify-center border-r border-slate-200 bg-slate-100 text-slate-600 transition hover:bg-slate-200 hover:text-slate-900"
         >
-          <span>Drag to move</span>
-          <div className="flex items-center gap-2">
-            <span className="rounded-full bg-slate-200 px-2 py-0.5 text-[11px] text-slate-600">Translator</span>
-            <button
-              type="button"
-              aria-label="Close translator"
-              onClick={() => setVisible(false)}
-              className="rounded-full p-1 text-slate-500 transition hover:bg-slate-200 hover:text-slate-800"
-            >
-              <X size={14} />
-            </button>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          {showBanglaButton && (
-            <button
-              aria-label="বাংলায় পড়ুন"
-              onClick={() => handleSelect('bn')}
-              className="whitespace-nowrap rounded-2xl bg-[#00C896]/10 px-3 py-2 text-sm font-semibold text-[#065f4b] transition hover:bg-[#00C896]/20"
-            >
-              বাংলা পড়ুন
-            </button>
-          )}
-          {showHindiButton && (
-            <button
-              aria-label="हिंदी में पढ़ें"
-              onClick={() => handleSelect('hi')}
-              className="whitespace-nowrap rounded-2xl bg-[#0EA5A4]/10 px-3 py-2 text-sm font-semibold text-[#064e3b] transition hover:bg-[#0EA5A4]/20"
-            >
-              हिंदी में पढ़ें
-            </button>
-          )}
-          {showEnglishRestore && (
-            <button
-              aria-label="Read in English"
-              onClick={() => handleSelect('en')}
-              className="col-span-2 rounded-2xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-200"
-            >
-              Read in English
-            </button>
-          )}
-        </div>
-        {loading && (
-          <div className="mt-3 rounded-2xl bg-slate-50 px-3 py-2 text-xs font-medium text-slate-600">Translating...</div>
-        )}
-        {error && (
-          <div className="mt-3 rounded-2xl bg-red-50 px-3 py-2 text-xs font-medium text-red-700">
-            Translation unavailable now
-          </div>
-        )}
+          <X size={14} />
+        </button>
+        <button
+          type="button"
+          aria-label={leftLabel}
+          onClick={(event) => {
+            if (consumeSuppressedClick()) return;
+            event.stopPropagation();
+            handleSelect(leftAction);
+          }}
+          className="h-full min-w-0 truncate border-r border-slate-200 bg-[#0EA5A4]/10 px-2 text-center text-[#064e3b] transition hover:bg-[#0EA5A4]/20 disabled:opacity-60"
+          disabled={loading && leftAction !== "en"}
+        >
+          {leftLabel}
+        </button>
+        <button
+          type="button"
+          aria-label={rightLabel}
+          onClick={(event) => {
+            if (consumeSuppressedClick()) return;
+            event.stopPropagation();
+            handleSelect(rightAction);
+          }}
+          className="h-full min-w-0 truncate bg-[#00C896]/10 px-2 text-center text-[#065f4b] transition hover:bg-[#00C896]/20 disabled:opacity-60"
+          disabled={loading && rightAction !== "en"}
+        >
+          {rightLabel}
+        </button>
       </div>
+      <span className="sr-only" aria-live="polite">
+        {loading ? "Translating" : error ?? (showEnglishRestore ? "Translation active" : "Translator ready")}
+      </span>
     </div>
   );
 }
