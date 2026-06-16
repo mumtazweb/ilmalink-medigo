@@ -10,7 +10,6 @@ import {
   ExternalLink,
   LocateFixed,
   Mail,
-  MapPin,
   MessageCircle,
   Phone,
   Search,
@@ -62,11 +61,11 @@ const footerLinks = [
 ];
 
 const offices = [
-  {
-    label: "Headquarters",
-    city: "Bengaluru",
-    address: "Near Lalbagh Main Gate, Hosur Road, Bangalore - 27",
-  },
+ {
+  label: "Headquarters",
+  city: "Bengaluru",
+  address: "146/16-01, 6th Cross, 3rd Main, Wilson Garden, Bangalore - 560027",
+},
   {
     label: "Main Office",
     city: "Kolkata",
@@ -333,16 +332,16 @@ export default function Footer() {
             >
               <img src="/logoimage.svg" alt="" className="h-full w-full object-contain" />
             </Link>
-            <div className="min-w-0">
-              <p className="text-base font-semibold tracking-wide text-white">ILMALINK MEDIGO</p>
-              <p className="mt-1 max-w-xl text-sm leading-5 text-slate-400">
-                MBBS admission guidance for India, Nepal, Bangladesh, Kyrgyzstan and trusted abroad
-                options.
-              </p>
-              <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500">
-                ILMALINK MEDIGO is a medical education initiative by ilmaLink.
-              </p>
-            </div>
+           <div className="min-w-0">
+  <p className="text-base font-semibold tracking-wide text-white">
+    ILMALINK MEDIGO <span className="text-emerald-200">by ilmaLink</span>
+  </p>
+  <p className="mt-1 max-w-xl text-sm leading-5 text-slate-400">
+    ILMALINK MEDIGO guides Indian students for MBBS Abroad, MBBS India, NEET
+    counselling, scholarships, education loans and medical admission documentation
+    through transparent support from Kolkata, Bengaluru and Mumbai contact points.
+  </p>
+</div>
           </div>
 
           <div className="grid grid-cols-2 gap-2">
@@ -378,7 +377,7 @@ export default function Footer() {
                   Nearby
                 </span>
                 <span className="block truncate text-xs font-semibold text-white sm:text-sm">
-                  Contact point
+                  Contact Points
                 </span>
               </span>
             </button>
@@ -406,23 +405,22 @@ export default function Footer() {
             </button>
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
-            {offices.map((office) => (
-              <article
-                key={`${office.label}-${office.city}`}
-                className="min-w-0 rounded-md border border-white/10 bg-white/[0.025] p-2"
-              >
-                <div className="flex items-center gap-1.5 text-emerald-200">
-                  <MapPin className="h-3.5 w-3.5 shrink-0" />
-                  <p className="truncate text-[11px] font-semibold uppercase tracking-[0.12em]">
-                    {office.label}
-                  </p>
-                </div>
-                <p className="mt-1 text-sm font-semibold text-white">{office.city}</p>
-                <p className="mt-1 text-[11px] leading-4 text-slate-400">{office.address}</p>
-              </article>
-            ))}
-          </div>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+  {offices.map((office) => (
+    <article
+      key={`${office.label}-${office.city}`}
+      className="min-w-0 rounded-md border border-white/10 bg-white/[0.025] p-2.5 text-center"
+    >
+      <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-emerald-200">
+        {office.label}
+      </p>
+      <p className="mt-1 text-sm font-semibold text-white">{office.city}</p>
+      <p className="mx-auto mt-1 max-w-[18rem] text-[11px] leading-4 text-slate-400">
+        {office.address}
+      </p>
+    </article>
+  ))}
+</div>
 
           {contactPointsOpen && (
             <div className="mt-3 rounded-md border border-white/10 bg-white/[0.025] p-3">
