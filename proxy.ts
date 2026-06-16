@@ -10,6 +10,12 @@ const oldLocalizedSearchUrl = /^\/(ar|bn|hi)\/search(\/|$)/i;
 
 const oldSearchQueryLocales = /^\/(ar|bn|hi)\/?$/i;
 
+const publicFileUrl = /((?!\.well-known(?:\/.*)?)(?:[^/]+\/)*[^/]+\.\w+)/;
+
+function needsTrailingSlash(pathname: string) {
+  return !pathname.endsWith("/") && !publicFileUrl.test(pathname);
+}
+
 export function proxy(request: NextRequest) {
   const requestHost = request.headers.get("host") ?? request.nextUrl.host;
 
@@ -23,6 +29,13 @@ export function proxy(request: NextRequest) {
   }
 
   const { pathname, searchParams } = request.nextUrl;
+
+  if (needsTrailingSlash(pathname)) {
+    const redirectUrl = new URL(request.url);
+    redirectUrl.pathname = `${pathname}/`;
+
+    return NextResponse.redirect(redirectUrl, 308);
+  }
 
   const hasOldSearchQuery =
     searchParams.get("s") === "search_term_string" ||

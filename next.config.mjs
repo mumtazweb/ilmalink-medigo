@@ -21,6 +21,7 @@ const nextConfig = {
     proxyClientMaxBodySize: "100mb",
   },
   trailingSlash: true,
+  skipTrailingSlashRedirect: true,
 };
 
 export default nextConfig;

@@ -634,8 +634,8 @@ export default function HomeHeroClient() {
           <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-5 px-4 pt-7 pb-6 sm:px-6 md:pt-9 md:pb-9 lg:min-h-[430px] lg:grid-cols-[1.05fr_1.15fr_0.75fr] lg:gap-7 lg:px-8">
             {/* Left content */}
             <div className="relative z-20 min-h-[245px] pr-[30%] text-left md:min-h-0 md:pr-0 md:text-center lg:text-left">
-              <p className="text-[11px] font-semibold tracking-[0.24em] text-white/[0.85] sm:text-xs">
-                ILMALINK MEDIGO by ilmaLink
+              <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/[0.85] sm:text-xs">
+                Your Gateway To
               </p>
 
               <h1 className="mt-3 text-[1.9rem] font-extrabold leading-[0.95] tracking-[-0.05em] text-white sm:text-[2.55rem] md:text-[2.8rem] lg:text-[3.45rem] xl:text-[3.8rem]">
@@ -646,9 +646,6 @@ export default function HomeHeroClient() {
               </h1>
 
               <div className="mt-4 space-y-1 text-sm text-white/[0.82] sm:text-[15px]">
-                <p className="font-semibold text-white">
-                  Official MBBS Abroad, MBBS India, NEET Counselling & Medical Education Guidance Platform
-                </p>
                 <p>Explore 480+ NMC Approved  Universities in 54+ Countries.</p>
                 <p className="hidden md:block">As Per FMGE Screening Test 2023</p>
               </div>
