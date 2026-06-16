@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { BookOpen, ChevronDown, Search, SlidersHorizontal, X } from "lucide-react";
 import BlogCard from "./BlogCard";
-import type { BlogPost, BlogSort } from "@/app/lib/blog/types";
+import type { BlogSort, BlogSummaryPost } from "@/app/lib/blog/types";
 
 const visibleStep = 6;
 
@@ -13,7 +13,7 @@ export default function BlogsDirectory({
   categories,
   countries,
 }: {
-  posts: BlogPost[];
+  posts: BlogSummaryPost[];
   categories: string[];
   countries: string[];
 }) {

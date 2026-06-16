@@ -91,6 +91,22 @@ export type BlogPost = {
   | "right";
 };
 
+export type BlogSummaryPost = Pick<
+  BlogPost,
+  | "id"
+  | "title"
+  | "slug"
+  | "featuredImage"
+  | "imageAlt"
+  | "shortDescription"
+  | "category"
+  | "country"
+  | "tags"
+  | "publishDate"
+  | "readTime"
+  | "views"
+>;
+
 export type BlogTickerPost = {
   id: string;
   title: string;

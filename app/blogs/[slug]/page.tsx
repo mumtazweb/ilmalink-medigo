@@ -1,28 +1,29 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { CalendarDays, ChevronLeft, ChevronRight, MessageCircle, Send, Share2, ShieldCheck } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaTelegramPlane, FaWhatsapp, FaYoutube } from "react-icons/fa";
 import { FaThreads, FaXTwitter } from "react-icons/fa6";
 import Navbar from "@/app/components/navbar";
 import BlogCard from "@/app/components/blog/BlogCard";
+import BlogCommentSubmittedNotice from "@/app/components/blog/BlogCommentSubmittedNotice";
 import BlogContent from "@/app/components/blog/BlogContent";
 import BlogImageRenderer from "@/app/components/blog/BlogImageRenderer";
 import { submitBlogCommentAction } from "@/app/lib/blog/actions";
 import { isImageFile, isVideoFile } from "@/app/lib/blog/imageValidation";
 import {
-  getAdjacentBlogs,
-  getApprovedBlogComments,
   getBlogBySlug,
+  getBlogArticleData,
   getPublishedBlogs,
-  getRelatedBlogs,
 } from "@/app/lib/blog/store";
 
 type BlogPageProps = {
   params: Promise<{ slug: string }>;
-  searchParams?: Promise<{ comment?: string }>;
 };
+
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   const posts = await getPublishedBlogs();
@@ -78,19 +79,14 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   };
 }
 
-export default async function SingleBlogPage({ params, searchParams }: BlogPageProps) {
+export default async function SingleBlogPage({ params }: BlogPageProps) {
   const { slug } = await params;
-  const query = await searchParams;
-  const post = await getBlogBySlug(slug);
+  const { post, related, adjacent, comments } = await getBlogArticleData(slug);
 
   if (!post) {
     notFound();
   }
 
-  const related = await getRelatedBlogs(post);
-  const adjacent = await getAdjacentBlogs(post);
-  const comments = await getApprovedBlogComments(post.id);
-  const commentSubmitted = query?.comment === "submitted";
   const articleUrl = `https://ilmalink.com/blogs/${post.slug}`;
   const encodedArticleUrl = encodeURIComponent(articleUrl);
   const encodedShareText = encodeURIComponent(`${post.title} - ${post.shortDescription}`);
@@ -498,11 +494,9 @@ export default async function SingleBlogPage({ params, searchParams }: BlogPageP
               Ask a question or share a useful note. Keep it clear, respectful, and helpful for other students.
             </p>
 
-            {commentSubmitted && (
-              <p className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700">
-                Comment submitted and added below.
-              </p>
-            )}
+            <Suspense fallback={null}>
+              <BlogCommentSubmittedNotice />
+            </Suspense>
           </div>
 
           <form action={submitBlogCommentAction} className="grid gap-4 p-5 sm:p-7">

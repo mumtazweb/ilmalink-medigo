@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import Navbar from "./components/navbar";
 import HomeHeroClient from "./components/HomeHeroClient";
 import LatestBlogsScroller from "./components/blog/LatestBlogsScroller";
-import type { BlogCardPost } from "./components/blog/BlogCard";
-import { getLatestBlogs } from "./lib/blog/store";
+import { getLatestBlogSummaries } from "./lib/blog/store";
 
 export const metadata: Metadata = {
   title: "ILMALINK MEDIGO by ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
@@ -24,18 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const publishedBlogs = await getLatestBlogs(8);
-  const latestBlogs = publishedBlogs.map((post) => ({
-    id: post.id,
-    title: post.title,
-    slug: post.slug,
-    featuredImage: post.featuredImage,
-    imageAlt: post.imageAlt,
-    shortDescription: post.shortDescription,
-    category: post.category,
-    tags: post.tags,
-    publishDate: post.publishDate,
-  })) satisfies BlogCardPost[];
+  const latestBlogs = await getLatestBlogSummaries(8);
 
   return (
     <main className="min-h-screen bg-background text-foreground">

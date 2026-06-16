@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CalendarDays } from "lucide-react";
-import type { BlogPost } from "@/app/lib/blog/types";
+import { ArrowRight, CalendarDays, Clock } from "lucide-react";
+import type { BlogSummaryPost } from "@/app/lib/blog/types";
 import { isImageFile, isVideoFile } from "@/app/lib/blog/imageValidation";
 
 export type BlogCardPost = Pick<
-  BlogPost,
+  BlogSummaryPost,
   | "id"
   | "title"
   | "slug"
@@ -15,6 +15,7 @@ export type BlogCardPost = Pick<
   | "category"
   | "tags"
   | "publishDate"
+  | "readTime"
 >;
 
 export default function BlogCard({ post }: { post: BlogCardPost }) {
@@ -79,6 +80,10 @@ export default function BlogCard({ post }: { post: BlogCardPost }) {
               year: "numeric",
             })}
           </span>
+          <span className="flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5">
+            <Clock size={14} />
+            {post.readTime}
+          </span>
 
           {cardTags.map((tag) => (
             <span
@@ -93,6 +98,7 @@ export default function BlogCard({ post }: { post: BlogCardPost }) {
 
         <Link
           href={`/blogs/${post.slug}`}
+          prefetch
           className="mt-auto inline-flex w-fit items-center justify-center gap-2 rounded-full border border-[#0F4CFF]/20 bg-[#0F4CFF]/10 px-5 py-2.5 text-sm font-black text-[#0F4CFF] transition hover:border-[#0F4CFF] hover:bg-[#0F4CFF] hover:text-white"
         >
           Read article <ArrowRight size={15} className="transition group-hover:translate-x-0.5" />

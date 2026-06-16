@@ -567,6 +567,19 @@ export async function saveBlogAction(
     await saveBlogDatabase(database);
 
     revalidatePath("/blogs");
+    if (
+      status === "published" ||
+      existingBlog?.status === "published"
+    ) {
+      revalidatePath(`/blogs/${blog.slug}`);
+
+      if (
+        existingBlog?.slug &&
+        existingBlog.slug !== blog.slug
+      ) {
+        revalidatePath(`/blogs/${existingBlog.slug}`);
+      }
+    }
     revalidatePath("/dashboard");
     revalidatePath("/sitemap.xml");
 
@@ -652,6 +665,7 @@ export async function approveBlogAction(
     await saveBlogDatabase(database);
 
     revalidatePath("/blogs");
+    revalidatePath(`/blogs/${blog.slug}`);
     revalidatePath("/dashboard");
     revalidatePath("/sitemap.xml");
   } catch (error) {
@@ -702,6 +716,9 @@ export async function deleteBlogAction(
     await deleteStoredBlog(blogId, blog.slug);
 
    revalidatePath("/blogs");
+   if (blog.status === "published") {
+     revalidatePath(`/blogs/${blog.slug}`);
+   }
    revalidatePath("/dashboard");
    revalidatePath("/sitemap.xml");
   } catch (error) {

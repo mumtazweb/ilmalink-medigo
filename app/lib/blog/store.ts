@@ -11,6 +11,7 @@ import type {
   BlogPost,
   BlogRole,
   BlogSort,
+  BlogSummaryPost,
   BlogTickerPost,
   BlogUser,
 } from "./types";
@@ -401,6 +402,37 @@ function addBlogToMap(
   }
 
   map.set(blog.id, blog);
+}
+
+function getSortedPublishedBlogs(
+  database: BlogDatabase
+) {
+  return database.blogs
+    .filter((blog) => blog.status === "published")
+    .sort(
+      (a, b) =>
+        Date.parse(b.publishDate) -
+        Date.parse(a.publishDate)
+    );
+}
+
+function toBlogSummaryPost(
+  blog: BlogPost
+): BlogSummaryPost {
+  return {
+    id: blog.id,
+    title: blog.title,
+    slug: blog.slug,
+    featuredImage: blog.featuredImage,
+    imageAlt: blog.imageAlt,
+    shortDescription: blog.shortDescription,
+    category: blog.category,
+    country: blog.country,
+    tags: blog.tags,
+    publishDate: blog.publishDate,
+    readTime: blog.readTime,
+    views: blog.views,
+  };
 }
 
 async function readPrismaBlogs() {
@@ -824,19 +856,25 @@ export async function deleteStoredBlog(
 }
 
 export async function getPublishedBlogs() {
-  const database = await readDatabase();
+  const database = await getBlogDatabase();
 
-  return database.blogs
-    .filter((blog) => blog.status === "published")
-    .sort(
-      (a, b) =>
-        Date.parse(b.publishDate) -
-        Date.parse(a.publishDate)
-    );
+  return getSortedPublishedBlogs(database);
+}
+
+export async function getPublishedBlogSummaries() {
+  const blogs = await getPublishedBlogs();
+
+  return blogs.map(toBlogSummaryPost);
 }
 
 export async function getLatestBlogs(limit = 8) {
   const blogs = await getPublishedBlogs();
+
+  return blogs.slice(0, limit);
+}
+
+export async function getLatestBlogSummaries(limit = 8) {
+  const blogs = await getPublishedBlogSummaries();
 
   return blogs.slice(0, limit);
 }
@@ -900,7 +938,7 @@ export async function getTickerBlogs(
 export async function getApprovedBlogComments(
   blogId: string
 ) {
-  const database = await readDatabase();
+  const database = await getBlogDatabase();
 
   return database.comments
     .filter(
@@ -921,6 +959,69 @@ export async function getBlogBySlug(slug: string) {
   return (
     blogs.find((blog) => blog.slug === slug) ?? null
   );
+}
+
+export async function getBlogArticleData(
+  slug: string,
+  relatedLimit = 3
+) {
+  const database = await getBlogDatabase();
+  const blogs = getSortedPublishedBlogs(database);
+  const post =
+    blogs.find((blog) => blog.slug === slug) ?? null;
+
+  if (!post) {
+    return {
+      post,
+      related: [],
+      adjacent: {
+        previous: null,
+        next: null,
+      },
+      comments: [],
+    };
+  }
+
+  const index = blogs.findIndex(
+    (blog) => blog.id === post.id
+  );
+  const related = blogs
+    .filter((blog) => blog.id !== post.id)
+    .filter(
+      (blog) =>
+        blog.category === post.category ||
+        blog.country === post.country ||
+        blog.tags.some((tag) =>
+          post.tags.includes(tag)
+        )
+    )
+    .slice(0, relatedLimit);
+  const comments = database.comments
+    .filter(
+      (comment) =>
+        comment.blogId === post.id &&
+        comment.status === "approved"
+    )
+    .sort(
+      (a, b) =>
+        Date.parse(b.createdAt) -
+        Date.parse(a.createdAt)
+    );
+
+  return {
+    post,
+    related,
+    adjacent: {
+      previous:
+        index > 0 ? blogs[index - 1] : null,
+      next:
+        index >= 0 &&
+        index < blogs.length - 1
+          ? blogs[index + 1]
+          : null,
+    },
+    comments,
+  };
 }
 
 export async function getRelatedBlogs(
@@ -1110,7 +1211,7 @@ export function calculateReadTime(
 }
 
 export function getCountries(
-  blogs: BlogPost[]
+  blogs: Pick<BlogPost, "country">[]
 ) {
   return Array.from(
     new Set(

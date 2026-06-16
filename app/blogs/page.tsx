@@ -3,8 +3,9 @@ import Navbar from "../components/navbar";
 import BlogsDirectory from "../components/blog/BlogsDirectory";
 import { blogCategories } from "../lib/blog/seed";
 
-import { getCountries, getPublishedBlogs } from "../lib/blog/store";
+import { getCountries, getPublishedBlogSummaries } from "../lib/blog/store";
 
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "ILMALINK MEDIGO Blogs | MBBS, NEET & Medical Admission Updates",
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogsPage() {
-  const posts = await getPublishedBlogs();
+  const posts = await getPublishedBlogSummaries();
   const countries = getCountries(posts);
 
   const breadcrumbSchema = {
@@ -64,7 +65,7 @@ export default async function BlogsPage() {
         "@type": "ListItem",
         position: index + 1,
         name: post.title,
-        description: post.metaDescription || post.shortDescription,
+        description: post.shortDescription,
         url: `https://ilmalink.com/blogs/${post.slug}`,
       })),
     },
