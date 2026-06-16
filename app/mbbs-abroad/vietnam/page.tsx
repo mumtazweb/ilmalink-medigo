@@ -4,21 +4,22 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in Vietnam 2026 | Affordable Emerging MBBS Destination | ILMALINK MEDIGO",
+    "Study MBBS in Vietnam 2026 for Indian Students | Fees, WDOMS & NMC/FMGL Checks",
 
   description:
-    "Study MBBS in Vietnam for Indian students with affordable tuition fees, English-medium medical education, modern infrastructure and growing NMC-recognized universities.",
+    "Explore MBBS in Vietnam for Indian students with 29 WDOMS-listed medical schools, fee guidance, eligibility checks, NMC/FMGL rule review, documents and ILMALINK MEDIGO counselling support.",
 
   keywords: [
     "MBBS in Vietnam",
     "Study medicine in Vietnam",
     "Vietnam medical universities",
+    "WDOMS listed medical schools Vietnam",
+    "NMC FMGL checks Vietnam",
     "MBBS abroad Vietnam",
     "Indian students MBBS Vietnam",
-    "NMC approved Vietnam universities",
     "Duy Tan University",
-    "Can Tho University",
-    "Hong Bang University",
+    "Can Tho University of Medicine and Pharmacy",
+    "Hong Bang International University",
   ],
 };
 
@@ -26,43 +27,43 @@ const universities = [
   {
     name: "Duy Tan University",
     city: "Da Nang",
-    fees: "₹30–45 Lakhs Total",
-    note: "One of the most internationally known universities in Vietnam",
+    fees: "₹30-45 Lakhs Total",
+    note: "Verify WDOMS listing, host-country recognition and medicine pathway before admission",
   },
 
   {
     name: "Can Tho University of Medicine and Pharmacy",
     city: "Can Tho",
-    fees: "₹28–42 Lakhs Total",
-    note: "Strong clinical exposure and affordable tuition",
+    fees: "₹28-42 Lakhs Total",
+    note: "Official university details and clinical training structure should be checked university-wise",
   },
 
   {
     name: "Hong Bang International University",
     city: "Ho Chi Minh City",
-    fees: "₹32–50 Lakhs Total",
-    note: "Popular among international students with English-medium pathway",
+    fees: "₹32-50 Lakhs Total",
+    note: "English-medium route, internship and licensing pathway must be verified before admission",
   },
 
   {
     name: "Hai Phong Medical University",
     city: "Hai Phong",
-    fees: "₹25–38 Lakhs Total",
-    note: "Affordable university with growing Indian student presence",
+    fees: "₹25-38 Lakhs Total",
+    note: "Students should confirm current eligibility, recognition and language structure directly",
   },
 
   {
     name: "Phan Chau Trinh University",
     city: "Da Nang",
-    fees: "₹30–48 Lakhs Total",
-    note: "Modern infrastructure and English-medium MBBS",
+    fees: "₹30-48 Lakhs Total",
+    note: "Check host-country recognition, WDOMS listing and NMC/FMGL fit before shortlisting",
   },
 
   {
     name: "Hue University of Medicine and Pharmacy",
     city: "Hue",
-    fees: "₹25–40 Lakhs Total",
-    note: "One of Vietnam’s oldest and respected medical institutions",
+    fees: "₹25-40 Lakhs Total",
+    note: "Verify current official admission, medium of instruction and clinical pathway details",
   },
 ];
 
@@ -77,18 +78,17 @@ export default function VietnamPage() {
 
           <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-8">
 
-            Study MBBS in Vietnam
+            Study MBBS in Vietnam 2026 for Indian Students
 
           </h1>
 
           <p className="text-lg text-gray-300 max-w-5xl leading-8">
 
-            Vietnam is becoming a rapidly growing MBBS abroad destination
-            for Indian students due to affordable tuition fees,
-            English-medium medical programs, modern infrastructure,
-            good hospital exposure and close connectivity with India.
-            The country is attracting students looking for alternatives
-            to Russia, China and Central Asian countries.
+            Vietnam is an emerging medical education destination for Indian
+            students, with 29 WDOMS-listed medical schools to review. Before
+            admission, students should verify WDOMS listing, host-country
+            recognition, medium of instruction, internship, clinical training,
+            eligibility and licensing pathway for the specific university.
 
           </p>
 
@@ -119,7 +119,7 @@ export default function VietnamPage() {
 
               <p className="text-yellow-200 mt-2">
 
-                Vietnam is promising but still a comparatively new MBBS destination.
+                Vietnam requires careful university-wise verification.
 
               </p>
 
@@ -132,31 +132,31 @@ export default function VietnamPage() {
             <ul className="space-y-4">
 
               <li>
-                ⚠️ Vietnam is still a relatively new destination for Indian MBBS students
+                ⚠️ Vietnam is still a comparatively newer MBBS abroad route for Indian students
               </li>
 
               <li>
-                ⚠️ Published FMGE/NExT performance data is still limited
+                ⚠️ Published FMGE/NExT performance data may be limited for some universities
               </li>
 
               <li>
-                ⚠️ Some universities may partially use Vietnamese language clinically
+                ⚠️ English-medium route must be verified university-wise
               </li>
 
               <li>
-                ⚠️ Students should independently verify complete English-medium structure
+                ⚠️ Host-country recognition and local licensing eligibility should be checked
               </li>
 
               <li>
-                ⚠️ NMC/FMGL compliance should be carefully checked before admission
+                ⚠️ NMC/FMGL compliance should be reviewed before admission
               </li>
 
               <li>
-                ⚠️ Clinical exposure quality may vary by university
+                ⚠️ Clinical exposure, internship structure and documents may vary by university
               </li>
 
               <li>
-                ⚠️ Some newer universities are heavily agent-driven
+                ⚠️ Students should not rely only on agent brochures or fee claims
               </li>
 
             </ul>
@@ -165,16 +165,17 @@ export default function VietnamPage() {
 
               <h3 className="text-2xl font-bold text-red-300 mb-4">
 
-                Important NMC Alert
+                Important NMC/FMGL Alert
 
               </h3>
 
               <p className="text-gray-300 leading-8">
 
-                The National Medical Commission does not officially endorse
-                any foreign medical university list. Students must verify
-                course duration, internship, language structure and
-                licensing eligibility independently before admission.
+                Indian students must verify current NMC/FMGL rules before
+                admission. WDOMS listing is a directory check, not an approval
+                claim. Course duration, internship, English-medium instruction,
+                host-country licence eligibility and registration pathway should
+                be checked independently.
 
               </p>
 
@@ -193,42 +194,34 @@ export default function VietnamPage() {
 
           <h2 className="text-4xl font-bold text-green-300 mb-8">
 
-            Major Advantages of MBBS in Vietnam
+            Why Students Consider Vietnam
 
           </h2>
 
           <ul className="space-y-5 text-gray-300 text-lg leading-8">
 
             <li>
-              ✔ Affordable tuition fees compared to private colleges in India
+              ✔ Nearby Asian destination with improving medical education interest
             </li>
 
             <li>
-              ✔ English-medium MBBS programs available
+              ✔ Semester fee guidance around ₹ 3.0L/Semester for planning
             </li>
 
             <li>
-              ✔ Strong patient flow and practical clinical exposure
+              ✔ 29 WDOMS-listed medical schools for listing checks
             </li>
 
             <li>
-              ✔ Modern infrastructure and teaching facilities
+              ✔ Some universities may offer English-medium routes that need direct verification
             </li>
 
             <li>
-              ✔ Short travel distance from India
+              ✔ Clinical training, internship and hospital exposure should be compared carefully
             </li>
 
             <li>
-              ✔ Safe and student-friendly environment
-            </li>
-
-            <li>
-              ✔ Similar food habits and climate compared to many Asian countries
-            </li>
-
-            <li>
-              ✔ WHO/WDOMS recognized universities available
+              ✔ ILMALINK MEDIGO can support document verification and counselling
             </li>
 
           </ul>
@@ -244,7 +237,7 @@ export default function VietnamPage() {
 
           <h2 className="text-4xl font-bold mb-10">
 
-            Top Medical Universities in Vietnam
+            Medical Universities to Verify in Vietnam
 
           </h2>
 
@@ -298,22 +291,22 @@ export default function VietnamPage() {
 
           <h2 className="text-4xl font-bold mb-8">
 
-            NMC Guidelines & Recognition
+            NMC/FMGL Rule Checks
 
           </h2>
 
           <ul className="space-y-5 text-gray-300 text-lg leading-8">
 
             <li>
-              ✔ NEET qualification mandatory for Indian students
+              ✔ NEET qualification and Indian eligibility must be checked
             </li>
 
             <li>
-              ✔ Course duration should comply with FMGL regulations
+              ✔ Course duration should be reviewed against current FMGL regulations
             </li>
 
             <li>
-              ✔ Internship should meet current NMC guidelines
+              ✔ Internship and clinical training structure should be verified
             </li>
 
             <li>
@@ -321,11 +314,11 @@ export default function VietnamPage() {
             </li>
 
             <li>
-              ✔ English-medium instruction should be confirmed carefully
+              ✔ English-medium instruction should be confirmed university-wise
             </li>
 
             <li>
-              ✔ FMGE/NExT qualification required for Indian practice
+              ✔ FMGE/NExT or applicable licensing pathway must be planned before admission
             </li>
 
           </ul>
@@ -350,23 +343,23 @@ export default function VietnamPage() {
             <ul className="space-y-5 text-gray-300 leading-8">
 
               <li>
-                💰 Tuition Fees: ₹25–50 Lakhs Total
+                💰 Semester Fee Guidance: ₹ 3.0L/Semester
               </li>
 
               <li>
-                🏠 Living Cost: ₹10k – ₹25k/month
+                💰 Tuition Fees: ₹25-50 Lakhs Total
               </li>
 
               <li>
-                📚 Course Duration: 6 Years
+                🏠 Living Cost: ₹10k - ₹25k/month
+              </li>
+
+              <li>
+                📚 Course Duration: verify university-wise
               </li>
 
               <li>
                 ✈️ Visa + Insurance + Travel Extra
-              </li>
-
-              <li>
-                🍛 Asian food and Indian food availability improving
               </li>
 
             </ul>
@@ -384,23 +377,23 @@ export default function VietnamPage() {
             <ul className="space-y-5 text-gray-300 leading-8">
 
               <li>
-                ✔ NEET qualification mandatory
+                ✔ NEET qualification and PCB eligibility review
               </li>
 
               <li>
-                ✔ Minimum PCB eligibility criteria required
+                ✔ WDOMS listing and host-country recognition check
               </li>
 
               <li>
-                ✔ English-medium MBBS available
+                ✔ English-medium route verification
               </li>
 
               <li>
-                ✔ Student visa required
+                ✔ Student visa and document support
               </li>
 
               <li>
-                ✔ IELTS/TOEFL generally not mandatory in many universities
+                ✔ University-wise admission and licensing pathway review
               </li>
 
             </ul>
@@ -434,9 +427,9 @@ export default function VietnamPage() {
 
               <p className="text-gray-300 leading-7">
 
-                Yes, if the university and course structure fully comply
-                with current NMC/FMGL regulations including internship
-                and licensing eligibility.
+                It depends on whether the selected university and course
+                structure satisfy current NMC/FMGL rules, internship conditions,
+                medium of instruction and host-country licensing requirements.
 
               </p>
 
@@ -452,9 +445,10 @@ export default function VietnamPage() {
 
               <p className="text-gray-300 leading-7">
 
-                Vietnam is becoming a promising affordable MBBS destination
-                with improving infrastructure and English-medium programs,
-                but students should carefully verify universities before admission.
+                Vietnam may be considered after careful route comparison.
+                Students should verify WDOMS listing, official university
+                details, English-medium pathway, clinical training, internship
+                and NMC/FMGL fit before admission.
 
               </p>
 
@@ -466,13 +460,11 @@ export default function VietnamPage() {
 
       </section>
 
-    
-
       <VerificationCounsellingCard
         countryName="Vietnam MBBS"
         title="Check Vietnam MBBS eligibility with ILMALINK"
         buttonLabel="Get Vietnam MBBS Counselling"
       />
-</main>
+    </main>
   );
 }

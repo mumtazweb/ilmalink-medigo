@@ -26,4 +26,6 @@ export const navbarCountryDestinations: NavbarCountryDestination[] = [
   { href: "/mbbs-abroad/australia", label: "Australia", flag: "au", insight: "Explore competitive entry and study routes" },
   { href: "/mbbs-abroad/new-zealand", label: "New Zealand", flag: "nz", insight: "High-quality education pathway guidance" },
   { href: "/mbbs-abroad/uk", label: "England (UK)", flag: "gb", insight: "Plan eligibility, fees, and admission steps" },
+  { href: "/mbbs-abroad/vietnam", label: "Vietnam", flag: "vn", insight: "Verify WDOMS listing, English-medium route and NMC/FMGL fit" },
+  { href: "/mbbs-abroad/germany", label: "Germany", flag: "de", insight: "Check DAAD route, language requirements and licensing pathway" },
 ];

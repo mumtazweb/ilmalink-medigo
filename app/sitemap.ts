@@ -32,6 +32,7 @@ const staticRoutes = [
   "/mbbs-abroad/australia",
   "/mbbs-abroad/new-zealand",
   "/mbbs-abroad/uk",
+  "/mbbs-abroad/germany",
   "/mbbs-abroad/vietnam",
   "/mbbs-abroad/singapore",
   "/mbbs-abroad/barbados",

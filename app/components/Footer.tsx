@@ -559,7 +559,13 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col gap-1.5 pt-3 text-xs leading-5 text-slate-500 lg:flex-row lg:items-center lg:justify-between">
-          <p>Copyright {new Date().getFullYear()} ILMALINK MEDIGO. All rights reserved.</p>
+          <p>
+  © {new Date().getFullYear()} ILMALINK MEDIGO by{" "}
+  <Link href="/" className="font-semibold text-slate-300 transition hover:text-white">
+    ilmaLink
+  </Link>
+  . All rights reserved.
+</p>
           <p className="max-w-3xl">
             Verify admission rules, fees, recognition and counselling updates from official sources
             before final decisions.

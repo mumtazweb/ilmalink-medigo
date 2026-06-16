@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Globe2, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Globe2, Search, X } from "lucide-react";
 import CounsellingPopup from "./CounsellingPopup";
 import FMGEExplorerModal from "./FMGEExplorerModal";
 import HeroGlobeV2 from "./HeroGlobeV2";
@@ -44,141 +44,173 @@ const verifiedDestinationMeta: Partial<
   >
 > = {
   "/mbbs-india": {
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 10 L/Semester",
+    universityCount: 823,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/kyrgyzstan": {
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 1.8L/Semester",
+    universityCount: 32,
     badges: ["NMC", "WHO", "English"],
   },
   "/mbbs-abroad/georgia": {
     fee: "Rs. 35-45 Lakhs Total",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 2.5L/Semester",
+    universityCount: 39,
     badges: ["NMC", "WHO", "English"],
   },
   "/mbbs-abroad/russia": {
     fee: "Rs. 28-45 Lakhs Total",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 2.5L/Semester",
+    universityCount: 102,
     badges: ["NMC", "WHO", "English"],
   },
   "/mbbs-abroad/bangladesh": {
     fee: "Rs. 25-40 Lakhs Total",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 3L/Semester",
+    universityCount: 110,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/nepal": {
-    semesterFee: "Strict MEC route",
-    secondaryText: "MECEE-BL priority",
+    semesterFee: "₹ 5L/Semester",
+    universityCount: 21,
     badges: ["PCB 50%", "Limited"],
   },
   "/mbbs-abroad/uzbekistan": {
     fee: "Rs. 20-35 Lakhs Total",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 2.0L/Semester",
+    universityCount: 39,
     badges: ["NMC", "WHO", "English"],
   },
   "/mbbs-abroad/kazakhstan": {
     fee: "Rs. 22-35 Lakhs Total",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 2.2L/Semester",
+    universityCount: 15,
     badges: ["NMC", "WHO", "English"],
   },
   "/mbbs-abroad/tajikistan": {
     fee: "Rs. 18-30 Lakhs Total",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 1.8L/Semester",
+    universityCount: 5,
     badges: ["NMC", "WHO", "English"],
   },
   "/mbbs-abroad/malaysia": {
-    semesterFee: manualSemesterFeePlaceholder,
+    semesterFee: "₹ 4.5L/Semester",
+    universityCount: 33,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/egypt": {
     fee: "Rs. 18-30 Lakhs Total",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 2.4L/Semester",
+    universityCount: 57,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/saudi-arabia": {
     fee: "Rs. 60 Lakhs-1.2 Crores+",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 10L/Semester",
+    universityCount: 40,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/qatar": {
     fee: "Rs. 1.5-3+ Crores",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 12L/Semester",
+    universityCount: 2,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/uae": {
     fee: "Rs. 60 Lakhs-1.2 Crore+",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 7L/Semester",
+    universityCount: 8,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/iran": {
-    fee: "Rs. 35-55 Lakhs Total",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    fee: "Rs. 25-55 Lakhs Total",
+    semesterFee: "₹ 1.5L/Semester",
+    universityCount: 72,
     badges: ["NMC", "WHO", "English"],
   },
   "/mbbs-abroad/usa": {
     fee: "Rs. 45-65 Lakhs/year",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 25L/Semester",
+    universityCount: 225,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/canada": {
     fee: "Rs. 35-55 Lakhs/year",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 20L/Semester",
+    universityCount: 18,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/australia": {
     fee: "Rs. 40-60 Lakhs/year",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 22L/Semester",
+    universityCount: 22,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/new-zealand": {
     fee: "Rs. 28-35 Lakhs/year",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 18L/Semester",
+    universityCount: 5,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/uk": {
     fee: "Rs. 45-60 Lakhs/year",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 24L/Semester",
+    universityCount: 67,
     badges: ["NMC", "English"],
   },
+  "/mbbs-abroad/germany": {
+    semesterFee: "₹ Zero tuition Fees",
+    universityCount: 48,
+    badges: ["FMGE"],
+  },
   "/mbbs-abroad/vietnam": {
-    fee: "Rs. 30-45 Lakhs Total",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    fee: "Rs. 25-30 Lakhs Total",
+    semesterFee: "₹ 3.0L/Semester",
+    universityCount: 29,
     badges: ["NMC", "WHO", "English"],
   },
   "/mbbs-abroad/singapore": {
     fee: "Rs. 1.5-3+ Crores",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    semesterFee: "₹ 20L/Semester",
+    universityCount: 3,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/barbados": {
-    fee: "Rs. 30-50 Lakhs Total",
-    semesterFee: manualSemesterFeePlaceholder,
-    universityCount: manualUniversityCountPlaceholder,
+    fee: "Rs. 50-55 Lakhs Total",
+    semesterFee: "₹ 4L/Semester",
+    universityCount: 9,
     badges: ["NMC", "WHO", "English"],
   },
   "/mbbs-abroad/china": {
-    semesterFee: manualSemesterFeePlaceholder,
-    badges: ["FMGE"],
+    fee: "Rs. 25-30 Lakhs Total",
+    semesterFee: "₹ 2.0L/Semester",
+    universityCount: 179,
+    badges: ["NMC", "WHO", "English"],
+  },
+  "/mbbs-abroad/armenia": {
+    fee: "Rs. 35-40 Lakhs Total",
+    semesterFee: "₹ 2.4L/Semester",
+    universityCount: 9,
+    badges: ["NMC", "WHO", "English"],
+  },
+  "/mbbs-abroad/oman": {
+    fee: "Rs. 1-1.6 Crores Total",
+    semesterFee: "₹ 6L/Semester",
+    universityCount: 3,
+    badges: ["NMC", "WHO", "English"],
+  },
+  "/mbbs-abroad/philippines": {
+    fee: "Rs. 25-30 Lakhs Total",
+    semesterFee: "₹ 2.0L/Semester",
+    universityCount: 58,
+    badges: ["NMC", "WHO", "English"],
+  },
+  "/mbbs-abroad/ukraine": {
+    fee: "Rs. 27-32 Lakhs Total",
+    semesterFee: "₹ 2.2L/Semester",
+    universityCount: 37,
+    badges: ["NMC", "WHO", "English"],
   },
 };
 
@@ -269,6 +301,7 @@ const destinationOrder = [
   "/mbbs-abroad/australia",
   "/mbbs-abroad/new-zealand",
   "/mbbs-abroad/uk",
+  "/mbbs-abroad/germany",
   "/mbbs-abroad/vietnam",
   "/mbbs-abroad/singapore",
   "/mbbs-abroad/barbados",
@@ -375,13 +408,13 @@ const heroCountryCards = [
 
 const featureBlocks = [
   {
-    title: "Verified University Marketplace",
-    desc: "Access NMC-approved medical universities with transparent rankings and fees.",
-  },
+  title: "Verified University Options",
+  desc: "Compare medical university options with recognition, fee and NMC/FMGL rule checks.",
+},
   {
-    title: "Admission Tracking SaaS",
-    desc: "Track every application, offer letter, and visa milestone from one dashboard.",
-  },
+  title: "Application Follow-up Support",
+  desc: "Get step-by-step application, offer letter and document follow-up support.",
+},
   {
     title: "NEET Intelligence Center",
     desc: "Get score-based pathways and scholarship recommendations for MBBS admissions.",
@@ -393,9 +426,9 @@ const featureBlocks = [
 ];
 
 const liveMetrics = [
-  { label: "Applications Submitted", value: "1234K+" },
-  { label: "Offer Letters Issued", value: "1234K+" },
-  { label: "Visas Approved", value: "1234K+" },
+  { label: "Applications Submitted", value: "5000+" },
+  { label: "Offer Letters Issued", value: "2000+" },
+  { label: "Visas Approved", value: "1900+" },
   { label: "Universities Active", value: "480+" },
 ];
 
@@ -574,6 +607,7 @@ export default function HomeHeroClient() {
   const [neetScore, setNeetScore] = useState("");
   const topMarketplaceScrollRef = useRef<HTMLDivElement | null>(null);
   const bottomMarketplaceScrollRef = useRef<HTMLDivElement | null>(null);
+  const destinationSearchInputRef = useRef<HTMLInputElement | null>(null);
 
   const filteredDestinations = useMemo(
     () =>
@@ -594,6 +628,28 @@ export default function HomeHeroClient() {
       left: direction * Math.max(target.clientWidth * 0.78, 190),
       behavior: "smooth",
     });
+  };
+
+  const openDestinationSearch = () => {
+    setIsDestinationSearchOpen(true);
+    window.requestAnimationFrame(() => {
+      destinationSearchInputRef.current?.focus();
+    });
+  };
+
+  const closeDestinationSearch = () => {
+    setSearchQuery("");
+    setIsDestinationSearchOpen(false);
+    destinationSearchInputRef.current?.blur();
+  };
+
+  const toggleDestinationSearch = () => {
+    if (isDestinationSearchOpen || searchQuery) {
+      closeDestinationSearch();
+      return;
+    }
+
+    openDestinationSearch();
   };
 
   useEffect(() => {
@@ -619,7 +675,7 @@ export default function HomeHeroClient() {
   return (
     <>
       <section className="relative z-[60] left-1/2 right-1/2 w-screen -ml-[50vw] -mr-[50vw] border-b border-slate-100/50 bg-white pt-0 shadow-sm overflow-visible">
-        <section className="relative z-[60] w-full -mt-1.5 md:-mt-2 overflow-hidden rounded-t-[32px] md:rounded-t-[50px] border-t border-white/10 bg-[#062a55] bg-gradient-to-br from-[#061D3F] via-[#073B76] to-[#06234D] shadow-[0_35px_120px_rgba(0,18,51,0.45)] lg:min-h-[430px]">
+        <section className="relative z-[60] w-full -mt-1.5 overflow-hidden rounded-t-[32px] border-t border-white/10 bg-[#062a55] bg-gradient-to-br from-[#061D3F] via-[#073B76] to-[#06234D] shadow-[0_35px_120px_rgba(0,18,51,0.45)] md:-mt-2 md:rounded-t-[50px] lg:min-h-[540px] lg:rounded-t-[64px] lg:shadow-[0_38px_130px_rgba(0,18,51,0.52)]">
           <div
             className="pointer-events-none absolute inset-0 rounded-t-[32px] md:rounded-t-[50px] opacity-20"
             style={{
@@ -630,34 +686,32 @@ export default function HomeHeroClient() {
           />
           <div className="pointer-events-none absolute left-[38%] top-[12%] h-[320px] w-[320px] rounded-full bg-[#33A6FF]/20 blur-[90px]" />
           <div className="pointer-events-none absolute inset-y-0 right-0 w-[45%] rounded-t-[32px] bg-[radial-gradient(circle_at_center,rgba(65,170,255,0.20),transparent_60%)] md:rounded-t-[50px]" />
+          <div className="pointer-events-none absolute inset-x-10 top-0 hidden h-px bg-gradient-to-r from-transparent via-white/35 to-transparent lg:block" />
 
-          <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-5 px-4 pt-7 pb-6 sm:px-6 md:pt-9 md:pb-9 lg:min-h-[430px] lg:grid-cols-[1.05fr_1.15fr_0.75fr] lg:gap-7 lg:px-8">
+          <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-5 px-4 pb-6 pt-7 sm:px-6 md:pb-9 md:pt-9 lg:min-h-[540px] lg:grid-cols-[minmax(0,0.98fr)_minmax(360px,0.92fr)_minmax(255px,0.68fr)] lg:gap-5 lg:px-10 lg:py-12 xl:grid-cols-[minmax(420px,1.02fr)_minmax(410px,0.96fr)_minmax(285px,0.72fr)] xl:gap-8 xl:px-12">
             {/* Left content */}
-            <div className="relative z-20 min-h-[245px] pr-[30%] text-left md:min-h-0 md:pr-0 md:text-center lg:text-left">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/[0.85] sm:text-xs">
+            <div className="relative z-20 min-h-[245px] pr-[30%] text-left md:min-h-0 md:pr-0 md:text-center lg:flex lg:min-h-[420px] lg:flex-col lg:justify-center lg:text-left xl:min-h-[450px]">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/[0.85] sm:text-xs lg:text-[12px] lg:tracking-[0.48em]">
                 Your Gateway To
               </p>
 
-              <h1 className="mt-3 text-[1.9rem] font-extrabold leading-[0.95] tracking-[-0.05em] text-white sm:text-[2.55rem] md:text-[2.8rem] lg:text-[3.45rem] xl:text-[3.8rem]">
-                <span className="block md:hidden">Global Medical</span>
-                <span className="hidden md:block">Global</span>
-                <span className="hidden md:block">Medical</span>
+              <h1 className="mt-3 text-[1.9rem] font-extrabold leading-[0.95] tracking-[-0.05em] text-white sm:text-[2.55rem] md:text-[2.8rem] lg:max-w-[560px] lg:text-[3.7rem] lg:leading-[0.94] lg:tracking-[-0.03em] lg:[word-spacing:0.08em] xl:text-[3.95rem]">
+                <span className="block lg:whitespace-nowrap">Global Medical</span>
                 <span className="block">Education</span>
               </h1>
-
-              <div className="mt-4 space-y-1 text-sm text-white/[0.82] sm:text-[15px]">
+              <div className="mt-4 space-y-1 text-sm text-white/[0.82] sm:text-[15px] lg:mt-5 lg:max-w-[520px] lg:text-base lg:leading-7">
                 <p>Explore 480+ FMGE-2025  Universities in 54+ Countries.</p>
-                <p className="hidden md:block">As Per FMGE Screening Test 2023</p>
+                <p className="hidden md:block">As Per FMGE Screening Test 2025</p>
               </div>
 
-              <div className="mx-auto mt-5 hidden max-w-[520px] grid-cols-2 gap-3 sm:grid-cols-4 md:grid lg:mx-0">
+              <div className="mx-auto mt-5 hidden max-w-[520px] grid-cols-2 gap-3 sm:grid-cols-4 md:grid lg:mx-0 lg:mt-7 lg:max-w-[480px] lg:grid-cols-2 lg:gap-2.5 lg:rounded-2xl lg:border lg:border-white/15 lg:bg-white/[0.075] lg:p-3 lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_18px_44px_rgba(0,0,0,0.16)] lg:backdrop-blur-xl">
                 <div className="flex items-start justify-center gap-2 text-white lg:justify-start">
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
                     <UniversityIcon />
                   </div>
                   <div>
-                    <p className="text-base font-bold">480+</p>
-                    <p className="text-[11px] text-white/70">Universities</p>
+                    <p className="text-base font-bold lg:text-[15px]">480+</p>
+                    <p className="text-[11px] text-white/70 lg:text-[10px] lg:leading-4">Universities</p>
                   </div>
                 </div>
 
@@ -666,8 +720,8 @@ export default function HomeHeroClient() {
                     <CountryIcon />
                   </div>
                   <div>
-                    <p className="text-base font-bold">54+</p>
-                    <p className="text-[11px] text-white/70">Countries</p>
+                    <p className="text-base font-bold lg:text-[15px]">54+</p>
+                    <p className="text-[11px] text-white/70 lg:text-[10px] lg:leading-4">Countries</p>
                   </div>
                 </div>
 
@@ -676,8 +730,8 @@ export default function HomeHeroClient() {
                     <StudentsIcon />
                   </div>
                   <div>
-                    <p className="text-base font-bold">100000+</p>
-                    <p className="text-[11px] text-white/70">MBBSs Abroad</p>
+                    <p className="text-base font-bold lg:text-[15px]">100000+</p>
+                    <p className="text-[11px] text-white/70 lg:text-[10px] lg:leading-4">MBBS Abroad</p>
                   </div>
                 </div>
 
@@ -686,17 +740,17 @@ export default function HomeHeroClient() {
                     <ShieldIcon />
                   </div>
                   <div>
-                    <p className="text-base font-bold"> 823+ | 1.29L+ </p>
-                    <p className="text-[11px] text-white/70">Indian Colleges | MBBS Seats</p>
+                    <p className="text-base font-bold lg:text-[15px]">823+ | 1.29L+</p>
+                    <p className="text-[11px] text-white/70 lg:text-[10px] lg:leading-4">Indian Colleges | MBBS Seats</p>
                   </div>
                 </div>
               </div>
 
-              <div className="mx-0 mt-5 flex w-full max-w-[190px] flex-col items-stretch justify-center gap-2 md:mx-auto md:mt-6 md:max-w-[360px] md:flex-row md:flex-nowrap lg:mx-0 lg:max-w-none lg:justify-start lg:gap-3">
+              <div className="mx-0 mt-5 flex w-full max-w-[190px] flex-col items-stretch justify-center gap-2 md:mx-auto md:mt-6 md:max-w-[360px] md:flex-row md:flex-nowrap lg:mx-0 lg:mt-8 lg:max-w-[520px] lg:justify-start lg:gap-3">
                 <button
                   type="button"
                   onClick={() => setShowFMGEExplorer(true)}
-                  className="group inline-flex min-w-0 flex-none items-center justify-center gap-1.5 whitespace-nowrap rounded-xl bg-[#16C784] px-2 py-2 text-[11px] font-bold text-[#001B2E] shadow-[0_18px_45px_rgba(22,199,132,0.32)] transition hover:-translate-y-0.5 hover:bg-[#18d890] sm:px-3 sm:text-xs md:flex-1 lg:flex-none lg:gap-2 lg:rounded-[14px] lg:px-5 lg:py-3 lg:text-sm"
+                  className="group inline-flex min-w-0 flex-none items-center justify-center gap-1.5 whitespace-nowrap rounded-xl bg-[#16C784] px-2 py-2 text-[11px] font-bold text-[#001B2E] shadow-[0_18px_45px_rgba(22,199,132,0.32)] transition hover:-translate-y-0.5 hover:bg-[#18d890] sm:px-3 sm:text-xs md:flex-1 lg:min-w-[210px] lg:flex-none lg:gap-2 lg:rounded-[16px] lg:px-6 lg:py-3.5 lg:text-sm"
                 >
                   Explore Universities
                   <span className="transition-transform group-hover:translate-x-1">
@@ -707,7 +761,7 @@ export default function HomeHeroClient() {
                 <button
                   type="button"
                   onClick={() => setShowRankPredictor(true)}
-                  className="inline-flex min-w-0 flex-none items-center justify-center whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-2 py-2 text-[11px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/[0.15] sm:px-3 sm:text-xs md:flex-1 lg:flex-none lg:rounded-[14px] lg:px-5 lg:py-3 lg:text-sm"
+                  className="inline-flex min-w-0 flex-none items-center justify-center whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-2 py-2 text-[11px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/[0.15] sm:px-3 sm:text-xs md:flex-1 lg:min-w-[190px] lg:flex-none lg:rounded-[16px] lg:px-6 lg:py-3.5 lg:text-sm"
                 >
                   NEET Rank Predictor
                 </button>
@@ -715,8 +769,8 @@ export default function HomeHeroClient() {
             </div>
 
             {/* Globe */}
-            <div className="pointer-events-none absolute right-[-90px] top-8 z-10 flex w-[240px] max-w-none items-center justify-center opacity-90 md:pointer-events-auto md:relative md:right-auto md:top-auto md:mx-auto md:w-auto md:max-w-[300px] md:opacity-100 lg:-ml-8 lg:max-w-none">
-              <div className="relative aspect-square w-full lg:h-[380px] lg:w-[380px] xl:h-[420px] xl:w-[420px]">
+            <div className="pointer-events-none absolute right-[-90px] top-8 z-10 flex w-[240px] max-w-none items-center justify-center opacity-90 md:pointer-events-auto md:relative md:right-auto md:top-auto md:mx-auto md:w-auto md:max-w-[300px] md:opacity-100 lg:-ml-10 lg:max-w-none lg:scale-[1.08] xl:-ml-8 xl:scale-[1.12]">
+              <div className="relative aspect-square w-full lg:h-[430px] lg:w-[430px] xl:h-[470px] xl:w-[470px]">
                 <HeroGlobeV2 />
               </div>
             </div>
@@ -756,7 +810,7 @@ export default function HomeHeroClient() {
             </div>
 
             {/* Country card */}
-            <div className="relative z-30 mx-auto w-full max-w-[320px] lg:mx-0">
+            <div className="relative z-30 mx-auto w-full max-w-[320px] lg:mx-0 lg:self-center">
               <div className="hidden rounded-[20px] border border-white/20 bg-[#143967]/[0.82] p-2.5 shadow-[0_35px_85px_rgba(0,0,0,0.38)] backdrop-blur-2xl md:hidden">
                 <div className="grid grid-cols-2 gap-1.5">
                   {heroCountryCards.slice(0, 3).map((country) => (
@@ -802,13 +856,21 @@ export default function HomeHeroClient() {
                 </div>
               </div>
 
-              <div className="hidden w-full rounded-[22px] border border-white/20 bg-[#143967]/[0.82] p-3 shadow-[0_35px_85px_rgba(0,0,0,0.38)] backdrop-blur-2xl md:block">
+              <div className="hidden w-full rounded-[22px] border border-white/20 bg-[#143967]/[0.82] p-3 shadow-[0_35px_85px_rgba(0,0,0,0.38)] backdrop-blur-2xl md:block lg:rounded-[28px] lg:border-white/25 lg:bg-white/[0.11] lg:p-4 lg:shadow-[0_32px_90px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.16)] lg:ring-1 lg:ring-white/10">
+                <div className="mb-3 hidden items-center justify-between px-1 lg:flex">
+                  <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/80">
+                    Quick routes
+                  </p>
+                  <span className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#7EE1FF]">
+                    Top choices
+                  </span>
+                </div>
                 <div className="space-y-2">
                   {heroCountryCards.map((country) => (
                     <Link
                       key={country.href}
                       href={country.href}
-                      className="group flex items-center gap-3 rounded-[18px] border border-white/[0.12] bg-white/[0.08] px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition duration-300 hover:-translate-y-0.5 hover:bg-white/[0.12] md:text-xs"
+                      className="group flex items-center gap-3 rounded-[18px] border border-white/[0.12] bg-white/[0.08] px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition duration-300 hover:-translate-y-0.5 hover:bg-white/[0.12] md:text-xs lg:rounded-2xl lg:px-3.5 lg:py-3 lg:hover:border-[#7EE1FF]/45"
                     >
                       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10">
                         <img
@@ -833,7 +895,7 @@ export default function HomeHeroClient() {
 
                 <Link
                   href="/mbbs-abroad"
-                  className="mt-4 hidden w-full items-center justify-center gap-2 rounded-full border border-white/25 bg-white/[0.12] px-4 py-2 text-xs font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] transition hover:bg-white/[0.18] md:flex"
+                  className="mt-4 hidden w-full items-center justify-center gap-2 rounded-full border border-white/25 bg-white/[0.12] px-4 py-2 text-xs font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] transition hover:bg-white/[0.18] md:flex lg:mt-5 lg:h-11 lg:border-white/30 lg:bg-white/[0.14] lg:font-bold"
                 >
                   MBBS All Countries
                   <ArrowRightIcon />
@@ -965,7 +1027,7 @@ export default function HomeHeroClient() {
                         type="button"
                         aria-label="Search destinations"
                         aria-expanded={isDestinationSearchOpen}
-                        onClick={() => setIsDestinationSearchOpen((open) => !open)}
+                        onClick={toggleDestinationSearch}
                         className="group/search relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cyan-100 bg-[linear-gradient(145deg,#ffffff_0%,#eefcff_52%,#c9f7ee_100%)] p-0 text-cyan-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.96),inset_-5px_-7px_14px_rgba(8,145,178,0.12),0_10px_22px_rgba(8,145,178,0.18)] transition duration-300 [transform:perspective(480px)_rotateX(10deg)_rotateY(14deg)] hover:-translate-y-0.5 hover:text-cyan-950 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.96),inset_-5px_-7px_14px_rgba(8,145,178,0.15),0_14px_28px_rgba(8,145,178,0.26)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70 active:translate-y-0 active:scale-95 sm:h-10 sm:w-10"
                       >
                         <span className="pointer-events-none absolute left-2 top-1.5 h-2 w-3 rounded-full bg-white/85 blur-[1px]" />
@@ -979,18 +1041,31 @@ export default function HomeHeroClient() {
                   </div>
 
                   {(isDestinationSearchOpen || searchQuery) ? (
-                    <label className="mx-auto mt-3 block w-full max-w-sm px-1">
-                      <span className="sr-only">Search countries</span>
-                      <input
-                        id="home-hero-destination-search"
-                        name="homeHeroDestinationSearch"
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search country"
-                        className="w-full rounded-2xl border border-cyan-100 bg-white px-3 py-2.5 text-sm text-[#06203f] outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_10px_24px_rgba(8,47,73,0.08)] transition placeholder:text-slate-400 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-200/60"
-                      />
-                    </label>
+                    <div className="mx-auto mt-3 w-full max-w-sm px-1">
+                      <label htmlFor="home-hero-destination-search" className="sr-only">
+                        Search countries
+                      </label>
+                      <div className="relative">
+                        <input
+                          id="home-hero-destination-search"
+                          name="homeHeroDestinationSearch"
+                          ref={destinationSearchInputRef}
+                          type="text"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          placeholder="Search country"
+                          className="w-full rounded-2xl border border-cyan-100 bg-white px-3 py-2.5 pr-11 text-sm text-[#06203f] outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_10px_24px_rgba(8,47,73,0.08)] transition placeholder:text-slate-400 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-200/60"
+                        />
+                        <button
+                          type="button"
+                          aria-label="Close destination search"
+                          onClick={closeDestinationSearch}
+                          className="absolute right-2 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full border border-cyan-100 bg-cyan-50 text-cyan-800 transition hover:border-cyan-300 hover:bg-white hover:text-cyan-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200"
+                        >
+                          <X className="h-4 w-4" strokeWidth={2.6} />
+                        </button>
+                      </div>
+                    </div>
                   ) : null}
 
                   <div className="mt-2 w-full space-y-2">

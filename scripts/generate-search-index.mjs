@@ -99,6 +99,7 @@ const countryRoutes = [
   ["Barbados", "/mbbs-abroad/barbados"],
   ["Singapore", "/mbbs-abroad/singapore"],
   ["Vietnam", "/mbbs-abroad/vietnam"],
+  ["Germany", "/mbbs-abroad/germany"],
 ].flatMap(([label, href]) => {
   const labelWithoutParentheses = label.replace(/\([^)]*\)/g, "");
 
