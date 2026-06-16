@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description:
     "Explore MBBS abroad countries, FMGE performance data, destination pages, and counselling support for medical admission planning.",
   alternates: {
-    canonical: "https://ilmalink.com/mbbs-abroad",
+    canonical: "https://www.ilmalink.com/mbbs-abroad",
   },
 };
 

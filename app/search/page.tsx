@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description:
     "Search ILMALINK MEDIGO for MBBS abroad countries, MBBS India colleges, FMGE data, NEET guidance, scholarships, loans, and blogs.",
   alternates: {
-    canonical: "https://ilmalink.com/search",
+    canonical: "https://www.ilmalink.com/search",
   },
   robots: {
     index: true,
@@ -26,7 +26,7 @@ type SearchPageProps = {
 
 function absoluteUrl(url: string) {
   if (/^https?:\/\//.test(url)) return url;
-  return `https://ilmalink.com${url.startsWith("/") ? url : `/${url}`}`;
+  return `https://www.ilmalink.com${url.startsWith("/") ? url : `/${url}`}`;
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
@@ -37,8 +37,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     : searchInternalSiteData("MBBS", { limit: 12 });
   const results = search.matchedItems;
   const pageUrl = query
-    ? `https://ilmalink.com/search?q=${encodeURIComponent(query)}`
-    : "https://ilmalink.com/search";
+    ? `https://www.ilmalink.com/search?q=${encodeURIComponent(query)}`
+    : "https://www.ilmalink.com/search";
   const searchResultsSchema = {
     "@context": "https://schema.org",
     "@type": "SearchResultsPage",

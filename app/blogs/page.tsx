@@ -12,13 +12,13 @@ export const metadata: Metadata = {
   description:
     "Medical education updates, MBBS guidance, NEET insights and career resources from ILMALINK MEDIGO.",
   alternates: {
-    canonical: "https://ilmalink.com/blogs",
+    canonical: "https://www.ilmalink.com/blogs",
   },
   openGraph: {
     title: "ILMALINK MEDIGO Blogs",
     description:
       "Medical education updates, MBBS guidance, NEET insights and career resources.",
-    url: "https://ilmalink.com/blogs",
+    url: "https://www.ilmalink.com/blogs",
     type: "website",
   },
   twitter: {
@@ -41,13 +41,13 @@ export default async function BlogsPage() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://ilmalink.com",
+        item: "https://www.ilmalink.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Blogs",
-        item: "https://ilmalink.com/blogs",
+        item: "https://www.ilmalink.com/blogs",
       },
     ],
   };
@@ -57,7 +57,7 @@ export default async function BlogsPage() {
     name: "ILMALINK MEDIGO Blogs",
     description:
       "Published ILMALINK MEDIGO medical education updates, MBBS guidance, NEET insights and career resources.",
-    url: "https://ilmalink.com/blogs",
+    url: "https://www.ilmalink.com/blogs",
     inLanguage: "en-IN",
     mainEntity: {
       "@type": "ItemList",
@@ -66,7 +66,7 @@ export default async function BlogsPage() {
         position: index + 1,
         name: post.title,
         description: post.shortDescription,
-        url: `https://ilmalink.com/blogs/${post.slug}`,
+        url: `https://www.ilmalink.com/blogs/${post.slug}`,
       })),
     },
   };

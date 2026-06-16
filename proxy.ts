@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const canonicalSiteUrl = "https://www.ilmalink.com";
+
 const oldAuthorUrl = /^\/author(\/|$)/i;
 
 const oldLegacyUrls = /^\/(russianmarket|courses|key-function|area-of-operations)(\/|$)/i;
@@ -9,6 +11,17 @@ const oldLocalizedSearchUrl = /^\/(ar|bn|hi)\/search(\/|$)/i;
 const oldSearchQueryLocales = /^\/(ar|bn|hi)\/?$/i;
 
 export function proxy(request: NextRequest) {
+  const requestHost = request.headers.get("host") ?? request.nextUrl.host;
+
+  if (requestHost.toLowerCase().includes("vercel.app")) {
+    const redirectUrl = new URL(
+      `${request.nextUrl.pathname}${request.nextUrl.search}`,
+      canonicalSiteUrl
+    );
+
+    return NextResponse.redirect(redirectUrl, 308);
+  }
+
   const { pathname, searchParams } = request.nextUrl;
 
   const hasOldSearchQuery =
@@ -54,6 +67,6 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)",
+    "/((?!_next/static|_next/image).*)",
   ],
 };

@@ -163,7 +163,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
       "Admission-linked scholarship, fee discount, counselling support, documentation support or loan-guidance support may be reviewed by ILMALINK up to INR 3,00,000.",
     whyUsefulForMBBS:
       "It keeps ILMALINK support visible for every MBBS aspirant while clearly marking the estimate as subject to verification and approval.",
-    officialWebsite: "https://ilmalink.com",
+    officialWebsite: "https://www.ilmalink.com",
     applyRoute: "/?counselling=open",
     documents: [...baseAcademicDocuments, "Annual tuition fee estimate", "Admission processing details through ILMALINK"],
     importantNotes: [

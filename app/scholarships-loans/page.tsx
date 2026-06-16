@@ -14,13 +14,13 @@ export const metadata: Metadata = {
   description:
     "Find MBBS scholarships, education loans, minority finance schemes, student credit cards, Zakat funds, charitable support and ILMALINK fee support for medical students in India and abroad.",
   alternates: {
-    canonical: "https://ilmalink.com/scholarships-loans",
+    canonical: "https://www.ilmalink.com/scholarships-loans",
   },
   openGraph: {
     title: "MBBS Scholarships & Education Loans | ILMALINK MEDIGO",
     description:
       "Find MBBS scholarships, education loans, minority finance schemes, student credit cards, Zakat support, charitable aid and ILMALINK fee support.",
-    url: "https://ilmalink.com/scholarships-loans",
+    url: "https://www.ilmalink.com/scholarships-loans",
     type: "website",
   },
   twitter: {
@@ -270,13 +270,13 @@ const breadcrumbJsonLd = {
       "@type": "ListItem",
       position: 1,
       name: "Home",
-      item: "https://ilmalink.com",
+      item: "https://www.ilmalink.com",
     },
     {
       "@type": "ListItem",
       position: 2,
       name: "Scholarships & Loans",
-      item: "https://ilmalink.com/scholarships-loans",
+      item: "https://www.ilmalink.com/scholarships-loans",
     },
   ],
 };

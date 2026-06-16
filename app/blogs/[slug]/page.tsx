@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     };
   }
 
-  const url = `https://ilmalink.com/blogs/${post.slug}`;
+  const url = `https://www.ilmalink.com/blogs/${post.slug}`;
   const featuredImage = post.featuredImage?.trim();
   const hasSocialImage = Boolean(featuredImage && isImageFile(featuredImage));
 
@@ -87,7 +87,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
     notFound();
   }
 
-  const articleUrl = `https://ilmalink.com/blogs/${post.slug}`;
+  const articleUrl = `https://www.ilmalink.com/blogs/${post.slug}`;
   const encodedArticleUrl = encodeURIComponent(articleUrl);
   const encodedShareText = encodeURIComponent(`${post.title} - ${post.shortDescription}`);
 
@@ -222,7 +222,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
       name: "ILMALINK MEDIGO",
       logo: {
         "@type": "ImageObject",
-        url: "https://ilmalink.com/logoimage.svg",
+        url: "https://www.ilmalink.com/logoimage.svg",
       },
     },
     mainEntityOfPage: articleUrl,
@@ -236,13 +236,13 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://ilmalink.com",
+        item: "https://www.ilmalink.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Blogs",
-        item: "https://ilmalink.com/blogs",
+        item: "https://www.ilmalink.com/blogs",
       },
       {
         "@type": "ListItem",

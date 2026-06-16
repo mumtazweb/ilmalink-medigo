@@ -48,7 +48,7 @@ export async function generateMetadata({
     title: `MBBS in ${displayName} | FMGE Data | ILMALINK MEDIGO`,
     description: `Explore ${displayName} FMGE country and college-wise data with counselling support for MBBS abroad shortlisting.`,
     alternates: {
-      canonical: `https://ilmalink.com${getFmgeCountryHref(country.country)}`,
+      canonical: `https://www.ilmalink.com${getFmgeCountryHref(country.country)}`,
     },
   };
 }

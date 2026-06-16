@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical:
-      "https://ilmalink.com/mbbs-abroad/kyrgyzstan/kyrgyz-state-medical-academy",
+      "https://www.ilmalink.com/mbbs-abroad/kyrgyzstan/kyrgyz-state-medical-academy",
   },
 };
 
