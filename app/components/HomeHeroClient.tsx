@@ -646,7 +646,7 @@ export default function HomeHeroClient() {
               </h1>
 
               <div className="mt-4 space-y-1 text-sm text-white/[0.82] sm:text-[15px]">
-                <p>Explore 480+ NMC Approved  Universities in 54+ Countries.</p>
+                <p>Explore 480+ FMGE-2025  Universities in 54+ Countries.</p>
                 <p className="hidden md:block">As Per FMGE Screening Test 2023</p>
               </div>
 
@@ -957,7 +957,7 @@ export default function HomeHeroClient() {
                           Top MBBS Destinations
                         </h2>
                         <p className="truncate text-[10px] font-semibold text-cyan-800/75 sm:text-xs">
-                          (NMC, WHO approved & English Curriculum)
+                          (NMC/FMGL Checks & English-Medium Options)
                         </p>
                       </div>
 
