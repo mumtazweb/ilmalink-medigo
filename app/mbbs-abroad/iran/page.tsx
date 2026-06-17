@@ -4,7 +4,7 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in Iran 2026 | Affordable NMC Aligned Medical Universities | ILMALINK MEDIGO",
+    "Study MBBS in Iran 2026 | WDOMS & NMC-Regulation-Aware Shortlisting | ILMALINK MEDIGO",
 
   description:
     "Study MBBS in Iran for Indian students with affordable tuition fees, strong clinical exposure, English-medium medical education and globally recognized universities.",
@@ -17,7 +17,7 @@ export const metadata = {
     "MBBS abroad Iran",
     "Indian students MBBS Iran",
     "Iran medical colleges",
-    "NMC approved Iran universities",
+    "WDOMS-listed and NMC-regulation-aware university shortlisting",
   ],
 };
 

@@ -5,16 +5,16 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in Kazakhstan 2026 | Affordable NMC Aligned MBBS Abroad",
+    "Study MBBS in Kazakhstan 2026 | WDOMS & NMC-Regulation-Aware MBBS Shortlisting",
 
   description:
-    "Study MBBS in Kazakhstan for Indian students with affordable fees, English-medium education, NMC aligned universities and strong FMGE/NExT preparation pathways.",
+    "Study MBBS in Kazakhstan for Indian students with affordable fees, English-medium education, WDOMS-listed and NMC-regulation-aware university shortlisting and strong FMGE/NExT preparation pathways.",
 
   keywords: [
     "MBBS in Kazakhstan",
     "Study medicine in Kazakhstan",
     "Kazakhstan medical universities",
-    "NMC approved Kazakhstan universities",
+    "WDOMS-listed and NMC-regulation-aware university shortlisting",
     "MBBS abroad Kazakhstan",
     "Indian students MBBS Kazakhstan",
     "Kazakh National Medical University",
@@ -80,7 +80,7 @@ export default function KazakhstanPage() {
             Kazakhstan is one of the most affordable and popular MBBS
             abroad destinations for Indian students due to low tuition
             fees, English-medium medical education, WHO-recognized
-            universities and improving NMC/FMGL compliance structures.
+            universities and NMC-regulation-aware compliance checks.
 
           </p>
 

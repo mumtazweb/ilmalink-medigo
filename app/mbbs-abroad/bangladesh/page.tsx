@@ -9,14 +9,14 @@ export const metadata = {
     "Study MBBS in Bangladesh 2026 | Affordable SAARC Medical Education",
 
   description:
-    "Study MBBS in Bangladesh for Indian students with NMC aligned medical colleges, SAARC fee benefits, English-medium education and Indian curriculum similarity.",
+    "Study MBBS in Bangladesh for Indian students with WDOMS-listed and NMC-regulation-aware university shortlisting, SAARC fee benefits, English-medium education and Indian curriculum similarity.",
 
  keywords: [
   "MBBS in Bangladesh",
   "Study medicine in Bangladesh",
   "Bangladesh medical colleges",
   "SAARC MBBS",
-  "NMC approved Bangladesh colleges",
+  "WDOMS-listed and NMC-regulation-aware university shortlisting",
   "MBBS abroad Bangladesh",
   "Indian students MBBS Bangladesh",
   "Affordable MBBS abroad",
@@ -190,8 +190,8 @@ export default function BangladeshPage() {
               <p className="text-gray-300 leading-8">
 
                 Bangladesh still remains academically favorable for many
-                Indian students due to curriculum familiarity and NMC
-                aligned structures. However, students should carefully
+                Indian students due to curriculum familiarity and
+                NMC-regulation-aware structures. However, students should carefully
                 evaluate the latest regional developments before finalizing admission.
 
               </p>
@@ -236,11 +236,12 @@ export default function BangladeshPage() {
           <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
 
             <h2 className="text-2xl font-bold mb-4">
-              NMC Alignment
+              NMC-Regulation-Aware Shortlisting
             </h2>
 
             <p className="text-gray-300 leading-7">
-              Many Bangladesh colleges generally follow NMC-compatible structures.
+              Students should compare WDOMS listing, course duration,
+              internship, local recognition and current Indian regulations.
             </p>
 
           </div>
@@ -646,9 +647,9 @@ export default function BangladeshPage() {
 
               <p className="text-gray-300 leading-7">
 
-                Many Bangladesh medical colleges generally follow
-                NMC-compatible structures, but students should always
-                verify current NMC regulations before admission.
+                Many Bangladesh medical colleges may fit Indian-student
+                requirements, but students should always verify current
+                NMC/FMGL regulations before admission.
 
               </p>
 

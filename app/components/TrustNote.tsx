@@ -15,10 +15,10 @@ export default function TrustNote({
             Trust Note
           </p>
           <h2 className="mt-2 text-2xl font-black tracking-normal text-[#081B35]">
-            Reviewed by ILMALINK MEDIGO Counselling Desk
+            Reviewed by: ILMALINK MEDIGO Counselling Desk
           </h2>
           <p className="mt-3 text-sm font-bold text-slate-600">
-            Last reviewed date: {lastReviewedDate}
+            Last reviewed: {lastReviewedDate}
           </p>
         </div>
 
@@ -35,9 +35,9 @@ export default function TrustNote({
             ))}
           </ul>
           <p className="mt-4 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold leading-7 text-slate-600">
-            Final admission depends on eligibility, documents, university rules,
-            government regulations, counselling rules and visa/licensing
-            requirements.
+            Disclaimer: Final admission depends on eligibility, documents,
+            university rules, government regulations, counselling rules and
+            visa/licensing requirements.
           </p>
         </div>
       </div>

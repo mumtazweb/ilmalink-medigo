@@ -44,6 +44,10 @@ function officePostalSuffix(office: (typeof ilmaLinkEntityData.offices)[number])
     : "";
 }
 
+function countryGuideHref(slug: string) {
+  return slug === "india" ? "/mbbs-india" : `/mbbs-abroad/${slug}`;
+}
+
 export default function GeoProfilePage() {
   return (
     <main className="min-h-screen bg-[#F8FAFC] text-slate-950">
@@ -255,7 +259,7 @@ export default function GeoProfilePage() {
                     </td>
                     <td className="px-4 py-3">
                       <Link
-                        href={`/mbbs-abroad/${country.slug}`}
+                        href={countryGuideHref(country.slug)}
                         className="font-bold text-[#0F4CFF] hover:underline"
                       >
                         MBBS in {country.countryName}
@@ -282,6 +286,9 @@ export default function GeoProfilePage() {
               instruction, internship pattern, scholarship or loan fit, visa
               requirements and licensing pathway.
             </p>
+            <h3 className="mt-5 text-lg font-black tracking-normal text-[#081B35]">
+              Disclaimer
+            </h3>
             <p className="mt-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-semibold leading-7 text-amber-900">
               Final admission depends on eligibility, documents, university
               rules, government regulations, counselling rules and
@@ -310,6 +317,32 @@ export default function GeoProfilePage() {
                 </Link>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 pb-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-[#0F4CFF]">
+            FAQ
+          </p>
+          <h2 className="mt-2 text-2xl font-black tracking-normal text-[#081B35]">
+            Frequently asked questions about ILMALINK MEDIGO
+          </h2>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            {faqs.map((faq) => (
+              <article
+                key={faq.question}
+                className="rounded-lg border border-slate-200 bg-[#F8FAFC] p-4"
+              >
+                <h3 className="text-base font-black leading-6 text-[#081B35]">
+                  {faq.question}
+                </h3>
+                <p className="mt-2 text-sm font-medium leading-7 text-slate-700">
+                  {faq.answer}
+                </p>
+              </article>
+            ))}
           </div>
         </div>
       </section>

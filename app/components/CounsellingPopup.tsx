@@ -216,8 +216,8 @@ Message: ${formData.message}
                   },
                   { 
                     icon: <Globe size={16} />, 
-                    title: "NMC & WHO Approved Universities", 
-                    desc: "Explore foreign opportunities with confidence"
+                    title: "WDOMS-listed and NMC-regulation-aware university shortlisting", 
+                    desc: "Explore foreign opportunities with verified checks"
                   },
                   { 
                     icon: <BadgeCheck size={16} />, 

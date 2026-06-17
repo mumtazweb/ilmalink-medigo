@@ -7,6 +7,7 @@ import CounsellingPopup from "./CounsellingPopup";
 import FMGEExplorerModal from "./FMGEExplorerModal";
 import HeroGlobeV2 from "./HeroGlobeV2";
 import NeetRankPredictorTool from "./NeetRankPredictorTool";
+import { countryGeoFacts } from "../data/geo";
 import { navbarCountryDestinations } from "../data/navbarDestinations";
 
 const OPEN_FMGE_EVENT = "ilmalink:open-fmge-explorer";
@@ -30,8 +31,12 @@ const destinationCardCopy = {
   cta: "Open country",
 };
 
-const manualSemesterFeePlaceholder = "1.7L/sem";
-const manualUniversityCountPlaceholder = 32;
+const countryWdomsCountByHref = new Map(
+  countryGeoFacts.map((country) => [
+    country.slug === "india" ? "/mbbs-india" : `/mbbs-abroad/${country.slug}`,
+    country.wdomsCount,
+  ])
+);
 
 // TODO: add verified semester fee/university count from country page where missing.
 const verifiedDestinationMeta: Partial<
@@ -120,43 +125,43 @@ const verifiedDestinationMeta: Partial<
   "/mbbs-abroad/uae": {
     fee: "Rs. 60 Lakhs-1.2 Crore+",
     semesterFee: "₹ 7L/Semester",
-    universityCount: 8,
+    universityCount: 12,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/iran": {
     fee: "Rs. 25-55 Lakhs Total",
     semesterFee: "₹ 1.5L/Semester",
-    universityCount: 72,
+    universityCount: 55,
     badges: ["NMC", "WHO", "English"],
   },
   "/mbbs-abroad/usa": {
     fee: "Rs. 45-65 Lakhs/year",
     semesterFee: "₹ 25L/Semester",
-    universityCount: 225,
+    universityCount: 160,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/canada": {
     fee: "Rs. 35-55 Lakhs/year",
     semesterFee: "₹ 20L/Semester",
-    universityCount: 18,
+    universityCount: 17,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/australia": {
     fee: "Rs. 40-60 Lakhs/year",
     semesterFee: "₹ 22L/Semester",
-    universityCount: 22,
+    universityCount: 26,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/new-zealand": {
     fee: "Rs. 28-35 Lakhs/year",
     semesterFee: "₹ 18L/Semester",
-    universityCount: 5,
+    universityCount: 2,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/uk": {
     fee: "Rs. 45-60 Lakhs/year",
     semesterFee: "₹ 24L/Semester",
-    universityCount: 67,
+    universityCount: 46,
     badges: ["NMC", "English"],
   },
   "/mbbs-abroad/germany": {
@@ -345,7 +350,14 @@ const firstMarketplaceRows = [
 
 const destinationData = destinationOrder
   .map((href) => destinationSourceData.find((destination) => destination.href === href))
-  .filter((destination): destination is DestinationCardData => Boolean(destination));
+  .filter((destination): destination is DestinationCardData => Boolean(destination))
+  .map((destination) => {
+    const wdomsCount = countryWdomsCountByHref.get(destination.href);
+
+    return typeof wdomsCount === "number"
+      ? { ...destination, universityCount: wdomsCount }
+      : destination;
+  });
 
 const buildDestinationRows = (destinations: DestinationCardData[]) => {
   const rows = firstMarketplaceRows.map((row) =>
@@ -553,12 +565,13 @@ function DestinationMarketplaceCard({
 }: {
   destination: DestinationCardData;
 }) {
-  const semesterFeeText = destination.semesterFee ?? manualSemesterFeePlaceholder;
+  const semesterFeeText =
+    destination.semesterFee ?? destination.fee ?? "Fees vary by university";
   const universityText =
     destination.secondaryText ??
     (typeof destination.universityCount === "number"
-      ? `${destination.universityCount} universities`
-      : `${manualUniversityCountPlaceholder} universities`);
+      ? `${destination.universityCount} WDOMS entries`
+      : "Country guide");
   return (
     <Link
       href={destination.href}

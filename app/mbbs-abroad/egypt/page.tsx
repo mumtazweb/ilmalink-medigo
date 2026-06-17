@@ -4,7 +4,7 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in Egypt 2026 | NMC Aligned Medical Universities | ILMALINK MEDIGO",
+    "Study MBBS in Egypt 2026 | WDOMS & NMC-Regulation-Aware Shortlisting | ILMALINK MEDIGO",
 
   description:
     "Study MBBS in Egypt for Indian students with affordable fees, English-medium medical education, ancient medical heritage and globally recognized universities.",
@@ -14,7 +14,7 @@ export const metadata = {
     "Study medicine in Egypt",
     "Egypt medical universities",
     "MBBS abroad Egypt",
-    "NMC approved Egypt universities",
+    "WDOMS-listed and NMC-regulation-aware university shortlisting",
     "Indian students MBBS Egypt",
     "Affordable MBBS abroad",
     "Cairo University MBBS",

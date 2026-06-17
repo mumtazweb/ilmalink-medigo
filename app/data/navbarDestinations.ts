@@ -7,7 +7,7 @@ export type NavbarCountryDestination = {
 };
 
 export const navbarCountryDestinations: NavbarCountryDestination[] = [
-  { href: "/mbbs-abroad/kyrgyzstan", label: "Kyrgyzstan", flag: "kg", badge: "Top", insight: "Affordable fees and NMC-friendly options" },
+  { href: "/mbbs-abroad/kyrgyzstan", label: "Kyrgyzstan", flag: "kg", badge: "Top", insight: "Affordable fees and NMC-rule-aware options" },
   { href: "/mbbs-abroad/georgia", label: "Georgia", flag: "ge", badge: "Top", insight: "EEU Tbilisi fees, English MD route, and FMGE data" },
   { href: "/mbbs-abroad/bangladesh", label: "Bangladesh", flag: "bd", badge: "Top", insight: "Nearby destination with strong clinical exposure" },
   { href: "/mbbs-abroad/nepal", label: "Nepal", flag: "np", badge: "Strict", insight: "Strict MEC route | Individual PCB 50% | MECEE-BL priority | Limited seats" },

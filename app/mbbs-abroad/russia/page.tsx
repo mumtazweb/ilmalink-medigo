@@ -5,7 +5,7 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in Russia 2026 | NMC Aligned Medical Universities | ILMALINK MEDIGO",
+    "Study MBBS in Russia 2026 | WDOMS & NMC-Regulation-Aware Shortlisting | ILMALINK MEDIGO",
 
   description:
     "Study MBBS in Russia for Indian students with affordable tuition fees, globally recognized universities, strong clinical exposure and English-medium medical education pathways.",
@@ -14,7 +14,7 @@ export const metadata = {
     "MBBS in Russia",
     "Study medicine in Russia",
     "Russia medical universities",
-    "NMC approved Russian universities",
+    "WDOMS-listed and NMC-regulation-aware university shortlisting",
     "MBBS abroad Russia",
     "Indian students MBBS Russia",
     "Perm State Medical University",
