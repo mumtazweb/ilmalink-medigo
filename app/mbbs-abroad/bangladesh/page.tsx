@@ -1,4 +1,5 @@
 
+import GeoCountrySection from "../../components/GeoCountrySection";
 import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
 import BangladeshGpaCalculator from "../../components/BangladeshGpaCalculator";
 export const dynamic = "force-static";
@@ -109,6 +110,8 @@ export default function BangladeshPage() {
         </div>
 
       </section>
+
+      <GeoCountrySection countryName="Bangladesh" />
 
       {/* ALERT */}
       <section className="px-6 pb-20">

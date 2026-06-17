@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Metadata } from "next";
+import JsonLd from "../components/JsonLd";
+import { buildBreadcrumbSchema } from "../lib/schema";
 
 // --- METADATA for SEO ---
 export const metadata: Metadata = {
@@ -28,37 +30,14 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const officialSocialProfiles = [
-  "https://www.facebook.com/ilmalinkeduprise/",
-  "https://www.instagram.com/ilmalinkmbbs/",
-  "https://www.youtube.com/@ilmaLinkFoundation",
-  "https://www.threads.com/@ilmalinkmbbs",
-];
-
-// --- JSON-LD Structured Data ---
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "EducationalOrganization",
-  name: "ILMALINK MEDIGO",
-  alternateName: ["ilmaLink", "ilmalink", "ILMALINK", "ilmalink.com"],
-  url: "https://www.ilmalink.com",
-  logo: "https://www.ilmalink.com/logoimage.svg",
-  description: "Medical education consultancy providing career guidance for MBBS admissions in India and abroad.",
-  foundingDate: "2020",
-  founder: { "@type": "Person", name: "Injamul Hoque Middya" },
-  sameAs: officialSocialProfiles,
-  contactPoint: [
-    { "@type": "ContactPoint", telephone: "+919330155576", contactType: "customer service" },
-    { "@type": "ContactPoint", telephone: "+919563910223", contactType: "customer support", contactOption: "WhatsApp" },
-  ],
-};
-
 export default function AboutPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      <JsonLd
+        data={buildBreadcrumbSchema([
+          { name: "Home", url: "/" },
+          { name: "About ILMALINK MEDIGO", url: "/about" },
+        ])}
       />
 
       <main className="min-h-screen bg-white">
@@ -132,6 +111,47 @@ export default function AboutPage() {
                 </div>
               </div>
             </div>
+
+            <section className="mb-8 rounded-2xl border border-blue-100 bg-blue-50 p-6 shadow-sm md:p-8">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700">
+                Entity Clarification
+              </p>
+              <h2 className="mt-2 text-2xl font-bold text-gray-900 md:text-3xl">
+                ILMALINK MEDIGO Entity Clarification
+              </h2>
+              <div className="mt-4 space-y-4 text-base leading-8 text-gray-700">
+                <p>
+                  ILMALINK MEDIGO is the MBBS admission counselling, MBBS
+                  abroad guidance, MBBS India counselling support, medical
+                  education data bank and student support platform of ILMALINK.
+                </p>
+                <p>
+                  Mumtaz Educational Institutions is an associated educational
+                  ecosystem where applicable. ILMALINK MEDIGO and Mumtaz
+                  Educational Institutions should not be merged as the same
+                  entity. Students should treat ILMALINK MEDIGO as the primary
+                  counselling and guidance platform for information on
+                  ilmalink.com.
+                </p>
+              </div>
+              <div className="mt-5 flex flex-wrap gap-3">
+                {[
+                  { label: "GEO Profile", href: "/geo-profile" },
+                  { label: "MBBS Abroad Countries", href: "/mbbs-abroad" },
+                  { label: "Scholarships & Loans", href: "/scholarships-loans" },
+                  { label: "Student Alerts", href: "/alert" },
+                  { label: "Blog", href: "/blogs" },
+                ].map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="rounded-lg border border-blue-200 bg-white px-4 py-2 text-sm font-bold text-blue-700 transition hover:border-blue-400 hover:text-blue-900"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </section>
 
             {/* India's MBBS Reality Section */}
             <div className="text-center mb-6">

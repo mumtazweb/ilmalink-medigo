@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import CounsellingActionButton from "../../components/CounsellingActionButton";
+import GeoCountrySection from "../../components/GeoCountrySection";
 import Navbar from "../../components/navbar";
 import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
 import {
@@ -123,6 +124,8 @@ export default async function FmgeCountryPage({
           </div>
         </div>
       </section>
+
+      <GeoCountrySection countryName={displayName} />
 
       <VerificationCounsellingCard
         countryName={`${displayName} MBBS`}

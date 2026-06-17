@@ -3,6 +3,7 @@
 import { MessageCircle, ShieldCheck } from "lucide-react";
 
 import CounsellingActionButton from "./CounsellingActionButton";
+import TrustNote from "./TrustNote";
 
 type VerificationCounsellingCardProps = {
   countryName?: string;
@@ -45,6 +46,15 @@ export default function VerificationCounsellingCard({
             {ctaLabel}
           </CounsellingActionButton>
         </div>
+      </div>
+      <div className="mx-auto mt-4 max-w-7xl">
+        <TrustNote
+          whatThisPageHelpsWith={[
+            `Checking eligibility and documents for ${countryName}.`,
+            "Understanding counselling, university, visa and licensing risks before payment.",
+            "Preparing questions for a student-first admission guidance session.",
+          ]}
+        />
       </div>
     </section>
   );

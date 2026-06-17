@@ -6,6 +6,7 @@ import {
   kyrgyzFinalDisclaimer,
   kyrgyzstanUniversities,
 } from "../../data/kyrgyzstanUniversities";
+import GeoCountrySection from "../../components/GeoCountrySection";
 import KyrgyzstanUniversityExplorer from "./KyrgyzstanUniversityExplorer";
 
 export const dynamic = "force-static";
@@ -108,6 +109,8 @@ export default function KyrgyzstanPage() {
           </p>
         </div>
       </section>
+
+      <GeoCountrySection countryName="Kyrgyzstan" />
 
       <section className="px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.35fr_0.65fr]">

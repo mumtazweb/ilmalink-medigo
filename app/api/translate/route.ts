@@ -10,6 +10,29 @@ function isAzureLanguage(value: unknown): value is AzureLanguage {
   return typeof value === "string" && SUPPORTED_TARGETS.includes(value as AzureLanguage);
 }
 
+function readTranslationText(item: unknown) {
+  if (!item || typeof item !== "object" || !("translations" in item)) {
+    return "";
+  }
+
+  const translations = (item as { translations?: unknown }).translations;
+  if (!Array.isArray(translations)) {
+    return "";
+  }
+
+  const firstTranslation = translations[0];
+  if (
+    !firstTranslation ||
+    typeof firstTranslation !== "object" ||
+    !("text" in firstTranslation)
+  ) {
+    return "";
+  }
+
+  const text = (firstTranslation as { text?: unknown }).text;
+  return typeof text === "string" ? text : "";
+}
+
 async function translateWithAzure(texts: string[], target: AzureLanguage, source = "en") {
   const key = process.env.AZURE_TRANSLATOR_KEY;
   const region = process.env.AZURE_TRANSLATOR_REGION;
@@ -40,15 +63,12 @@ async function translateWithAzure(texts: string[], target: AzureLanguage, source
     throw new Error("Azure translation failed");
   }
 
-  const data = await response.json();
+  const data = (await response.json()) as unknown;
   if (!Array.isArray(data)) {
     throw new Error("Azure Translator returned an unexpected response");
   }
 
-  return data.map((item: any) => {
-    const translation = item?.translations?.[0]?.text;
-    return typeof translation === "string" ? translation : "";
-  });
+  return data.map(readTranslationText);
 }
 
 export async function POST(req: Request) {
@@ -82,8 +102,8 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ error: "Translation provider is not configured" }, { status: 503 });
-  } catch (error: any) {
-    const message = error?.message || "Server error";
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Server error";
     if (message.includes("Translation provider is not configured")) {
       return NextResponse.json({ error: message }, { status: 503 });
     }

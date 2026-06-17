@@ -411,7 +411,7 @@ export default function AlertPage() {
 
             <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
               <h4 className="flex items-center gap-2 text-sm font-bold text-[#081B35]"><AlertTriangle size={16} /> Fee-discount & cash-demand pattern</h4>
-              <p className="mt-2 text-sm text-slate-700">A commonly reported pattern: intermediaries claim a college can offer a large discount on official fees (sometimes many lakhs) if the family pays in cash. Victims are told to pay cash for 'discounted' fees; initially the arrangement may appear to work for the first year, but later the promised adjustment is not honoured or additional payments are demanded. In practice, verified official discounts rarely exceed ₹4–5 lakh; claims of much larger reductions are strongly suspect.</p>
+              <p className="mt-2 text-sm text-slate-700">A commonly reported pattern: intermediaries claim a college can offer a large discount on official fees (sometimes many lakhs) if the family pays in cash. Victims are told to pay cash for &apos;discounted&apos; fees; initially the arrangement may appear to work for the first year, but later the promised adjustment is not honoured or additional payments are demanded. In practice, verified official discounts rarely exceed ₹4–5 lakh; claims of much larger reductions are strongly suspect.</p>
               <p className="mt-2 text-sm text-slate-700">Advice: never pay large sums in cash; insist on official college invoices and signed agreements; make payments only through official university or counselling payment channels; keep bank proofs and refuse off-the-record cash transactions. If pressured or extorted, preserve evidence and report to police and your bank immediately.</p>
             </div>
           </div>
@@ -496,10 +496,10 @@ export default function AlertPage() {
 
           <div className="mt-6 rounded-xl bg-white/30 backdrop-blur ring-1 ring-white/30 p-4 shadow-[0_14px_34px_rgba(8,27,53,0.08)]">
             <h4 className="text-sm font-extrabold text-[#081B35]">About ILMALINK MEDIGO</h4>
-            <p className="mt-2 text-sm text-slate-700">ILMALINK MEDIGO is not an agency. We act as a watchdog and information service with internal news and resources. Our team includes members with over 10 years' experience in the medical education sector, including college administration, NEET tutoring and counselling-system experience. We publish verified guidance to protect students and parents from fraud risks.</p>
+            <p className="mt-2 text-sm text-slate-700">ILMALINK MEDIGO is not an agency. We act as a watchdog and information service with internal news and resources. Our team includes members with over 10 years&apos; experience in the medical education sector, including college administration, NEET tutoring and counselling-system experience. We publish verified guidance to protect students and parents from fraud risks.</p>
             <div className="mt-3 flex gap-3">
               <Link href="/create-account/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-4 py-2 text-sm font-bold text-[#008f72]">Contact ILMALINK</Link>
-              <a href="/blogs" className="inline-flex items-center gap-2 rounded-lg bg-white/50 px-4 py-2 text-sm font-semibold text-slate-800">Read internal news</a>
+              <Link href="/blogs" className="inline-flex items-center gap-2 rounded-lg bg-white/50 px-4 py-2 text-sm font-semibold text-slate-800">Read internal news</Link>
             </div>
           </div>
         </section>

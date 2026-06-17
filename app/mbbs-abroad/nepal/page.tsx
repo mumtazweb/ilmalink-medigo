@@ -441,7 +441,7 @@ export default function NepalPage() {
                 Nepal MBBS should not be treated like a normal direct-admission
                 MBBS-abroad route. Nepal does not safely work on only PCB
                 aggregate 50%, and students should have minimum 50%
-                individually in Physics, Chemistry and Biology. Nepal's foreign
+                individually in Physics, Chemistry and Biology. Nepal&apos;s foreign
                 NEET-based route should be planned with the general NEET 50th
                 percentile benchmark, not merely the Indian reserved-category
                 cutoff. Seats are limited, MECEE-BL candidates get priority,
@@ -550,7 +550,7 @@ export default function NepalPage() {
                 NEET general 50th percentile benchmark
               </h3>
               <p className="mt-3 text-sm font-medium leading-7 text-slate-700">
-                For Nepal's foreign NEET-based route, Indian students should
+                For Nepal&apos;s foreign NEET-based route, Indian students should
                 not assume that reserved-category NEET qualification is enough.
                 ILMALINK MEDIGO uses the general NEET qualifying benchmark /
                 50th percentile and above as the safer standard, unless Nepal
@@ -808,7 +808,7 @@ export default function NepalPage() {
               <p className="mt-4 text-sm font-medium leading-7 text-slate-700 md:text-base">
                 Students from West Bengal, Karnataka, Maharashtra and other
                 Indian states can request ILMALINK MEDIGO counselling before
-                choosing Nepal, because Nepal's route is stricter than many
+                choosing Nepal, because Nepal&apos;s route is stricter than many
                 other MBBS abroad destinations.
               </p>
               <p className="mt-3 text-sm font-medium leading-7 text-slate-700 md:text-base">

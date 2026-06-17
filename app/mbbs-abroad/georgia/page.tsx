@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import CounsellingActionButton from "../../components/CounsellingActionButton";
+import GeoCountrySection from "../../components/GeoCountrySection";
 import {
   eastEuropeanUniversity,
   featuredGeorgiaUniversities,
@@ -387,6 +388,8 @@ export default function GeorgiaPage() {
           </div>
         </div>
       </section>
+
+      <GeoCountrySection countryName="Georgia" />
 
       <section className="px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-3 sm:grid-cols-2 lg:grid-cols-4">

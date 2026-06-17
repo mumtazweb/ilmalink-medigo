@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Navbar from "./components/navbar";
 import HomeHeroClient from "./components/HomeHeroClient";
 import LatestBlogsScroller from "./components/blog/LatestBlogsScroller";
@@ -24,6 +25,22 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const latestBlogs = await getLatestBlogSummaries(8);
+  const primaryLinks = [
+    { label: "GEO Profile", href: "/geo-profile" },
+    { label: "MBBS Abroad", href: "/mbbs-abroad" },
+    { label: "Scholarships & Loans", href: "/scholarships-loans" },
+    { label: "Student Alerts", href: "/alert" },
+    { label: "Blog", href: "/blogs" },
+  ];
+  const countryLinks = [
+    { label: "China", href: "/mbbs-abroad/china" },
+    { label: "Bangladesh", href: "/mbbs-abroad/bangladesh" },
+    { label: "Kyrgyzstan", href: "/mbbs-abroad/kyrgyzstan" },
+    { label: "Georgia", href: "/mbbs-abroad/georgia" },
+    { label: "Russia", href: "/mbbs-abroad/russia" },
+    { label: "Kazakhstan", href: "/mbbs-abroad/kazakhstan" },
+    { label: "Uzbekistan", href: "/mbbs-abroad/uzbekistan" },
+  ];
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -33,6 +50,62 @@ export default async function Home() {
       <Navbar />
       <HomeHeroClient />
       <LatestBlogsScroller posts={latestBlogs} />
+      <section className="bg-[#f8fafc] px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-[#0F4CFF]">
+              AI Summary
+            </p>
+            <h2 className="mt-2 text-3xl font-black tracking-normal text-[#081B35] md:text-4xl">
+              ILMALINK MEDIGO is the MBBS counselling and medical admission
+              guidance platform of ILMALINK.
+            </h2>
+            <p className="mt-4 text-base font-medium leading-8 text-slate-700">
+              Students use ILMALINK MEDIGO for MBBS abroad counselling, MBBS
+              India counselling support, NEET guidance, eligibility review,
+              documentation help, university comparison, scholarship and loan
+              guidance, and student support across India and major medical
+              education destinations.
+            </p>
+          </div>
+
+          <div className="grid gap-4">
+            <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 className="text-lg font-black text-[#081B35]">
+                Key ILMALINK MEDIGO pages
+              </h3>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {primaryLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-4 py-2 text-sm font-bold text-slate-700 transition hover:border-[#0F4CFF] hover:text-[#0F4CFF]"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 className="text-lg font-black text-[#081B35]">
+                Popular MBBS abroad country guides
+              </h3>
+              <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                {countryLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-3 py-2 text-sm font-bold text-slate-700 transition hover:border-[#00C896] hover:text-[#047857]"
+                  >
+                    MBBS in {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

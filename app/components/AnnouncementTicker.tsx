@@ -201,7 +201,7 @@ export default function AnnouncementTicker() {
         }
       `}</style>
 
-      <div className="flex items-center">
+      <div className="flex min-w-0 items-center overflow-hidden">
         <button
           type="button"
           aria-label="Scroll announcements left"
@@ -213,11 +213,11 @@ export default function AnnouncementTicker() {
 
         <div
           ref={scrollContainerRef}
-          className="ticker-scrollbar flex-1 overflow-x-auto overflow-y-hidden"
+          className="ticker-scrollbar relative h-10 min-w-0 flex-1 overflow-hidden"
           onTouchStart={pauseThenResume}
           onWheel={pauseThenResume}
         >
-          <div className="ticker-content flex w-max whitespace-nowrap">
+          <div className="ticker-content absolute left-0 top-0 flex w-max whitespace-nowrap">
             <TickerItems items={marqueeItems} prefix="first" />
             <TickerItems items={marqueeItems} prefix="second" />
           </div>

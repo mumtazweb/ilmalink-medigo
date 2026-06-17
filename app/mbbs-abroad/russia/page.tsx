@@ -1,3 +1,4 @@
+import GeoCountrySection from "../../components/GeoCountrySection";
 import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
 
 export const dynamic = "force-static";
@@ -98,6 +99,8 @@ export default function RussiaPage() {
         </div>
 
       </section>
+
+      <GeoCountrySection countryName="Russia" />
 
       {/* MAIN ALERT */}
       <section className="px-6 pb-20">

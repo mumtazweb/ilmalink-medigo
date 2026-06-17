@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -9,6 +9,11 @@ const SUPPORTED = ["bn", "hi"] as const;
 type Lang = (typeof SUPPORTED)[number];
 type Position = { left: number; top: number };
 type TextSegment = { text: string; protected: boolean };
+type TranslatorInitialState = {
+  position: Position | null;
+  hasManualPosition: boolean;
+  lang: Lang | null;
+};
 
 const PROTECTED_TERMS = [
   "ILMALINK MEDIGO",
@@ -92,6 +97,10 @@ function shouldTranslateSegment(text: string) {
   return /[A-Za-z]/.test(text) && text.trim().length > 1;
 }
 
+function isSupportedLang(value: unknown): value is Lang {
+  return typeof value === "string" && (SUPPORTED as readonly string[]).includes(value);
+}
+
 function splitProtectedText(text: string): TextSegment[] {
   const segments: TextSegment[] = [];
   let lastIndex = 0;
@@ -118,7 +127,7 @@ function readCache(): Record<string, string> {
   try {
     const raw = localStorage.getItem(CACHE_KEY);
     return raw ? JSON.parse(raw) : {};
-  } catch (e) {
+  } catch {
     return {};
   }
 }
@@ -126,7 +135,7 @@ function readCache(): Record<string, string> {
 function writeCache(cache: Record<string, string>) {
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
-  } catch (e) {
+  } catch {
     // ignore
   }
 }
@@ -162,7 +171,7 @@ function readSavedPosition(): Position | null {
   try {
     const raw = localStorage.getItem(POSITION_KEY);
     return raw ? clampPosition(JSON.parse(raw)) : null;
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -170,16 +179,36 @@ function readSavedPosition(): Position | null {
 function writePosition(position: Position) {
   try {
     localStorage.setItem(POSITION_KEY, JSON.stringify(position));
-  } catch (e) {
+  } catch {
     // ignore
   }
 }
 
+function readInitialTranslatorState(): TranslatorInitialState {
+  if (typeof window === "undefined") {
+    return { position: null, hasManualPosition: false, lang: null };
+  }
+
+  const active = localStorage.getItem("ilm_active_lang");
+  const savedPosition = readSavedPosition();
+
+  return {
+    position: savedPosition ?? getDefaultPosition(),
+    hasManualPosition: !!savedPosition,
+    lang: isSupportedLang(active) ? active : null,
+  };
+}
+
 export default function UniversalTranslator() {
   const pathname = usePathname();
-  const [position, setPosition] = useState<Position | null>(null);
-  const [hasManualPosition, setHasManualPosition] = useState(false);
-  const [lang, setLang] = useState<string | null>(null);
+  const [initialTranslatorState] = useState(readInitialTranslatorState);
+  const [position, setPosition] = useState<Position | null>(
+    initialTranslatorState.position
+  );
+  const [hasManualPosition, setHasManualPosition] = useState(
+    initialTranslatorState.hasManualPosition
+  );
+  const [lang, setLang] = useState<Lang | null>(initialTranslatorState.lang);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [visible, setVisible] = useState(true);
@@ -189,69 +218,14 @@ export default function UniversalTranslator() {
   const dragRef = useRef(false);
   const dragMovedRef = useRef(false);
   const suppressClickRef = useRef(false);
-  const latestPositionRef = useRef<Position | null>(null);
-  const hasManualPositionRef = useRef(false);
+  const latestPositionRef = useRef<Position | null>(
+    initialTranslatorState.position
+  );
+  const hasManualPositionRef = useRef(initialTranslatorState.hasManualPosition);
   const pointerOriginRef = useRef<{ x: number; y: number; left: number; top: number } | null>(null);
   const isTranslatingRef = useRef(false);
 
-  // init from localStorage
-  useEffect(() => {
-    const active = localStorage.getItem("ilm_active_lang");
-    if (active && (active === "bn" || active === "hi")) setLang(active);
-    const savedPosition = readSavedPosition();
-    setHasManualPosition(!!savedPosition);
-    hasManualPositionRef.current = !!savedPosition;
-    setPosition(savedPosition ?? getDefaultPosition());
-
-    const handleResize = () => {
-      setPosition((current) =>
-        hasManualPositionRef.current ? clampPosition(current ?? getDefaultPosition()) : getDefaultPosition()
-      );
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    latestPositionRef.current = position;
-  }, [position]);
-
-  useEffect(() => {
-    hasManualPositionRef.current = hasManualPosition;
-  }, [hasManualPosition]);
-
-  // observe route changes and re-run translation if needed
-  useEffect(() => {
-    if (!lang) return;
-    const t = setTimeout(() => {
-      runTranslate(lang as Lang);
-    }, 220);
-    return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
-
-  useEffect(() => {
-    if (!lang) return;
-    runTranslate(lang as Lang);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lang]);
-
-  useEffect(() => {
-    // observe DOM mutations to translate dynamic content
-    const obs = new MutationObserver((mutations) => {
-      if (!lang) return;
-      if (isTranslatingRef.current) return;
-      if (debounceRef.current) window.clearTimeout(debounceRef.current);
-      debounceRef.current = window.setTimeout(() => runTranslate(lang as Lang), 350);
-    });
-    observerRef.current = obs;
-    obs.observe(document.body, { childList: true, subtree: true, characterData: true });
-    return () => obs.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lang]);
-
-  async function runTranslate(target: Lang) {
+  const runTranslate = useCallback(async (target: Lang) => {
     setError(null);
     setLoading(true);
     isTranslatingRef.current = true;
@@ -325,21 +299,33 @@ export default function UniversalTranslator() {
         });
 
         if (toFetch.length) {
-          const resp = await fetch('/api/translate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+          const resp = await fetch("/api/translate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ texts: toFetch, target }),
           });
           if (!resp.ok) {
-            const body = await resp.json().catch(() => ({}));
-            throw new Error(body?.error || body?.message || 'Translation provider error');
+            const body = (await resp.json().catch(() => ({}))) as {
+              error?: unknown;
+              message?: unknown;
+            };
+            const message =
+              typeof body.error === "string"
+                ? body.error
+                : typeof body.message === "string"
+                  ? body.message
+                  : "Translation provider error";
+            throw new Error(message);
           }
-          const data = await resp.json();
-          const { translations } = data;
-          translations.forEach((tr: string, j: number) => {
+          const data = (await resp.json()) as { translations?: unknown };
+          const translations = Array.isArray(data.translations)
+            ? data.translations
+            : [];
+          translations.forEach((translation, j) => {
+            if (typeof translation !== "string") return;
             const idx = toFetchIdx[j];
-            results[idx] = tr;
-            cache[`${target}::${toFetch[j]}`] = tr;
+            results[idx] = translation;
+            cache[`${target}::${toFetch[j]}`] = translation;
           });
         }
       }
@@ -358,26 +344,68 @@ export default function UniversalTranslator() {
 
         if (plan.node.parentElement) {
           plan.node.nodeValue = translated;
-          plan.node.parentElement.setAttribute('data-ilm-translated', target);
+          plan.node.parentElement.setAttribute("data-ilm-translated", target);
         }
       });
 
       setLoading(false);
-    } catch (err: any) {
-      console.error(err?.message || err);
+    } catch (err: unknown) {
+      console.error(err instanceof Error ? err.message : err);
       setLoading(false);
       setError("Translation unavailable now");
     } finally {
       isTranslatingRef.current = false;
     }
-  }
+  }, []);
+
+  // keep the floating control responsive after initial localStorage hydration
+  useEffect(() => {
+    const handleResize = () => {
+      setPosition((current) =>
+        hasManualPositionRef.current ? clampPosition(current ?? getDefaultPosition()) : getDefaultPosition()
+      );
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    latestPositionRef.current = position;
+  }, [position]);
+
+  useEffect(() => {
+    hasManualPositionRef.current = hasManualPosition;
+  }, [hasManualPosition]);
+
+  useEffect(() => {
+    if (!lang) return;
+    const timeoutId = window.setTimeout(() => {
+      void runTranslate(lang);
+    }, 220);
+    return () => window.clearTimeout(timeoutId);
+  }, [pathname, lang, runTranslate]);
+
+  useEffect(() => {
+    if (!lang) return;
+    const obs = new MutationObserver(() => {
+      if (isTranslatingRef.current) return;
+      if (debounceRef.current) window.clearTimeout(debounceRef.current);
+      debounceRef.current = window.setTimeout(() => {
+        void runTranslate(lang);
+      }, 350);
+    });
+    observerRef.current = obs;
+    obs.observe(document.body, { childList: true, subtree: true, characterData: true });
+    return () => obs.disconnect();
+  }, [lang, runTranslate]);
 
   async function handleSelect(t: string | null) {
     setError(null);
     if (!t) return;
-    if (t === 'en') {
+    if (t === "en") {
       if (debounceRef.current) window.clearTimeout(debounceRef.current);
-      localStorage.removeItem('ilm_active_lang');
+      localStorage.removeItem("ilm_active_lang");
       localStorage.removeItem(POSITION_KEY);
       isTranslatingRef.current = false;
       setLoading(false);
@@ -386,9 +414,9 @@ export default function UniversalTranslator() {
       return;
     }
 
-    if (t !== 'bn' && t !== 'hi') return;
+    if (!isSupportedLang(t)) return;
     setLang(t);
-    localStorage.setItem('ilm_active_lang', t);
+    localStorage.setItem("ilm_active_lang", t);
   }
 
   const showEnglishRestore = !!lang;
