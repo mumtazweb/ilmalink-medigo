@@ -17,6 +17,8 @@ const staticRoutes = [
   "/mbbs-abroad/nepal",
   "/mbbs-abroad/kyrgyzstan",
   "/mbbs-abroad/georgia",
+  "/mbbs-abroad/georgia/east-european-university",
+  "/mbbs-abroad/georgia/alte-university",
   "/mbbs-abroad/russia",
   "/mbbs-abroad/kazakhstan",
   "/mbbs-abroad/uzbekistan",
@@ -99,7 +101,11 @@ function routePriority(route: string, priorityHint?: number) {
   if (route === "") return 1;
   if (route.startsWith("/blogs/")) return 0.82;
   if (route === "/blogs") return 0.78;
-  if (route.includes("bangladesh") || route.includes("kyrgyzstan")) return 0.9;
+  if (
+    route.includes("bangladesh") ||
+    route.includes("kyrgyzstan") ||
+    route.includes("georgia")
+  ) return 0.9;
   if (route.includes("mbbs-abroad") || route.includes("scholarships-loans")) return 0.8;
   if (priorityHint) return Math.max(0.5, Math.min(0.86, priorityHint / 115));
 

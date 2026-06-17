@@ -9,6 +9,7 @@ import {
 import { getMBBSIndiaAdmissionAccess } from "@/app/data/mbbsIndiaAdmissionAccess";
 import { navbarCountryDestinations } from "@/app/data/navbarDestinations";
 import { kyrgyzstanUniversities } from "@/app/data/kyrgyzstanUniversities";
+import { georgiaUniversities } from "@/app/data/georgiaUniversities";
 import { fmgeCountries } from "@/app/data/fmgeData";
 import {
   getFmgeCollegeDetailHref,
@@ -231,6 +232,7 @@ const coreVocabulary = [
   "fees",
   "fmge",
   "fmgl",
+  "georgia",
   "government",
   "hostel",
   "india",
@@ -260,6 +262,7 @@ const coreVocabulary = [
   "seat",
   "state",
   "study",
+  "tbilisi",
   "tuition",
   "university",
   "universities",
@@ -296,6 +299,12 @@ const universityAliases: Record<string, string[]> = {
     "KSMA",
     "Kyrgyz State Medical Academy",
     "I K Akhunbaev Kyrgyz State Medical Academy",
+  ],
+  "east-european-university": [
+    "EEU",
+    "East European University",
+    "East European University Georgia",
+    "East European University Faculty of Healthcare Sciences",
   ],
 };
 
@@ -344,6 +353,12 @@ function getCanonicalVocabulary() {
   for (const university of kyrgyzstanUniversities) {
     baseTokenize(university.name).forEach((term) => vocabulary.add(term));
     baseTokenize(university.location).forEach((term) => vocabulary.add(term));
+  }
+
+  for (const university of georgiaUniversities) {
+    baseTokenize(university.name).forEach((term) => vocabulary.add(term));
+    baseTokenize(university.location).forEach((term) => vocabulary.add(term));
+    baseTokenize(university.city).forEach((term) => vocabulary.add(term));
   }
 
   for (const aliases of Object.values(universityAliases)) {
@@ -459,6 +474,12 @@ function getImportantQueryTerms(query: string) {
 
   if (/\bihsm\b/i.test(query)) {
     tokenize("international higher school medicine").forEach((term) =>
+      terms.add(term)
+    );
+  }
+
+  if (/\beeu\b/i.test(query)) {
+    tokenize("east european university georgia tbilisi").forEach((term) =>
       terms.add(term)
     );
   }
@@ -855,6 +876,104 @@ function buildBaseRecords() {
             accreditationLabel: university.accreditationLabel,
             recommendationLevel: university.recommendationLevel,
             recommendationMessage: university.recommendationMessage,
+            feeRows: university.feeRows,
+            feeNotes: university.feeNotes,
+            fmgePerformance: university.fmgePerformance,
+          },
+        }
+      )
+    );
+  }
+
+  for (const university of georgiaUniversities) {
+    const aliases = universityAliases[university.slug] ?? [];
+    const firstFee = university.feeRows[0];
+    const fmgeSummary = university.fmgePerformance
+      ?.map(
+        (item) =>
+          `${item.sourceName}: ${item.appeared} appeared, ${item.passed} passed, ${item.passRate} pass rate`
+      )
+      .join(" ");
+    const url = university.pageExists
+      ? `/mbbs-abroad/georgia/${university.slug}/`
+      : `/mbbs-abroad/georgia?q=${encodeURIComponent(university.name)}#georgia-universities`;
+
+    records.push(
+      createRecord(
+        {
+          id: `ask-georgia-university-${university.slug}`,
+          title: university.name,
+          description: `${university.recommendationLabel}: ${university.feeSummary}`,
+          url,
+          category: "Georgia Universities",
+          group: "Destinations",
+          type: "destination",
+          tags: [
+            "Georgia",
+            "MBBS in Georgia",
+            "Tbilisi",
+            university.name,
+            university.shortName ?? "",
+            university.location,
+            university.recommendationLabel,
+            university.accreditationLabel,
+            ...aliases,
+          ].filter(Boolean),
+          content: [
+            university.name,
+            university.shortName ?? "",
+            ...aliases,
+            university.city,
+            university.location,
+            university.program,
+            university.intake,
+            university.duration,
+            university.medium,
+            university.feeSummary,
+            university.totalTuition ?? "",
+            university.annualTuition ?? "",
+            university.mandatoryHostelMess ?? "",
+            university.livingCost ?? "",
+            university.accreditationLabel,
+            university.recommendationLabel,
+            university.summary,
+            firstFee
+              ? `${firstFee.year} ${firstFee.semester} tuition ${firstFee.tuitionFee} hostel ${firstFee.hostelAndMess} total ${firstFee.semesterTotal}`
+              : "",
+            ...university.feeRows.map(
+              (row) =>
+                `${row.year} ${row.semester} tuition ${row.tuitionFee} hostel mess ${row.hostelAndMess} total ${row.semesterTotal}`
+            ),
+            ...university.additionalFees.map(
+              (fee) => `${fee.label} ${fee.amount} ${fee.note ?? ""}`
+            ),
+            ...university.highlights,
+            ...university.feeNotes,
+            ...university.entryRequirements,
+            ...university.documentChecklist,
+            ...university.facilities,
+            fmgeSummary ?? "",
+            "fees cost tuition hostel mess admission documents FMGE NMC FMGL WDOMS Georgia Tbilisi East European University EEU",
+          ].join(" "),
+          priority: university.pageExists ? 107 : 93,
+        },
+        university.feeRows.length ? "University Fee" : "University",
+        "ILMALINK Georgia university data",
+        {
+          keyFacts: [
+            university.recommendationLabel,
+            university.accreditationLabel,
+            university.totalTuition
+              ? `Total tuition: ${university.totalTuition}`
+              : university.feeSummary,
+            fmgeSummary ? "FMGE 2025 reference available" : undefined,
+          ].filter(Boolean) as string[],
+          data: {
+            kind: "georgia-university",
+            slug: university.slug,
+            name: university.name,
+            location: university.location,
+            feeSummary: university.feeSummary,
             feeRows: university.feeRows,
             feeNotes: university.feeNotes,
             fmgePerformance: university.fmgePerformance,

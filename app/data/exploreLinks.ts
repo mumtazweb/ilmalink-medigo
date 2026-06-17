@@ -3,6 +3,10 @@ import {
   kyrgyzstanUniversities,
   type KyrgyzUniversityPageData,
 } from "./kyrgyzstanUniversities";
+import {
+  georgiaUniversities,
+  type GeorgiaUniversityPageData,
+} from "./georgiaUniversities";
 import { navbarCountryDestinations } from "./navbarDestinations";
 import type { MBBSIndiaCollege } from "./mbbsIndiaColleges";
 
@@ -136,11 +140,34 @@ function getKyrgyzUniversityForFmgeCollege(
   });
 }
 
-export function getFmgeCollegeDetailHref(country: string, collegeName: string) {
-  const university = getKyrgyzUniversityForFmgeCollege(country, collegeName);
+function getGeorgiaUniversityForFmgeCollege(
+  country: string,
+  collegeName: string
+): GeorgiaUniversityPageData | undefined {
+  if (normalizeLookupKey(country) !== normalizeLookupKey("GEORGIA")) return undefined;
 
-  if (university?.pageExists) {
-    return `/mbbs-abroad/kyrgyzstan/${university.slug}`;
+  const collegeKey = normalizeLookupKey(collegeName);
+
+  return georgiaUniversities.find((university) => {
+    if (normalizeLookupKey(university.name) === collegeKey) return true;
+
+    return university.fmgePerformance?.some(
+      (performance) => normalizeLookupKey(performance.sourceName) === collegeKey
+    );
+  });
+}
+
+export function getFmgeCollegeDetailHref(country: string, collegeName: string) {
+  const kyrgyzUniversity = getKyrgyzUniversityForFmgeCollege(country, collegeName);
+
+  if (kyrgyzUniversity?.pageExists) {
+    return `/mbbs-abroad/kyrgyzstan/${kyrgyzUniversity.slug}`;
+  }
+
+  const georgiaUniversity = getGeorgiaUniversityForFmgeCollege(country, collegeName);
+
+  if (georgiaUniversity?.pageExists) {
+    return `/mbbs-abroad/georgia/${georgiaUniversity.slug}`;
   }
 
   return null;
@@ -151,17 +178,28 @@ export function getFmgeCollegeAnchor(country: string, collegeName: string) {
 }
 
 export function getFmgeCollegeContextHref(country: string, collegeName: string) {
-  const university = getKyrgyzUniversityForFmgeCollege(country, collegeName);
+  const university =
+    getKyrgyzUniversityForFmgeCollege(country, collegeName) ??
+    getGeorgiaUniversityForFmgeCollege(country, collegeName);
 
   if (university) {
-    return `/mbbs-abroad/kyrgyzstan?q=${encodeURIComponent(university.name)}#universities`;
+    const countrySlug =
+      normalizeLookupKey(country) === normalizeLookupKey("GEORGIA")
+        ? "georgia"
+        : "kyrgyzstan";
+    const anchor =
+      countrySlug === "georgia" ? "georgia-universities" : "universities";
+
+    return `/mbbs-abroad/${countrySlug}?q=${encodeURIComponent(university.name)}#${anchor}`;
   }
 
   return `${getFmgeCountryHref(country)}#${getFmgeCollegeAnchor(country, collegeName)}`;
 }
 
 export function getFmgeCollegeConnectLabel(country: string, collegeName: string) {
-  const university = getKyrgyzUniversityForFmgeCollege(country, collegeName);
+  const university =
+    getKyrgyzUniversityForFmgeCollege(country, collegeName) ??
+    getGeorgiaUniversityForFmgeCollege(country, collegeName);
 
   if (university) {
     return `${university.name} does not have a full detail page yet. Connect with a counsellor for verified latest details.`;

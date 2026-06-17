@@ -131,6 +131,18 @@ const detailedFmgeCollegeRoutes = new Map([
     `${normalizeLookupKey("KYRGYZSTAN")}::${normalizeLookupKey("I K AKHUNBAEV KYRGYZ STATE MEDICAL ACADEMY FACULTY OF GENERAL MEDICINE")}`,
     "/mbbs-abroad/kyrgyzstan/kyrgyz-state-medical-academy",
   ],
+  [
+    `${normalizeLookupKey("GEORGIA")}::${normalizeLookupKey("EAST EUROPEAN UNIVERSITY FACULTY OF HEALTHCARE SCIENCES")}`,
+    "/mbbs-abroad/georgia/east-european-university",
+  ],
+  [
+    `${normalizeLookupKey("GEORGIA")}::${normalizeLookupKey("ALTE UNIVERSITY SCHOOL OF MEDICINE")}`,
+    "/mbbs-abroad/georgia/alte-university",
+  ],
+  [
+    `${normalizeLookupKey("GEORGIA")}::${normalizeLookupKey("LLC ALTE UNIVERSITY")}`,
+    "/mbbs-abroad/georgia/alte-university",
+  ],
 ]);
 
 function getFmgeCollegeUrl(country, college) {

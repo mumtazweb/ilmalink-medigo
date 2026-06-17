@@ -54,10 +54,10 @@ const verifiedDestinationMeta: Partial<
     badges: ["NMC", "WHO", "English"],
   },
   "/mbbs-abroad/georgia": {
-    fee: "Rs. 35-45 Lakhs Total",
-    semesterFee: "₹ 2.5L/Semester",
+    fee: "EEU tuition approx Rs. 28L",
+    semesterFee: "USD 2,750/Semester",
     universityCount: 39,
-    badges: ["NMC", "WHO", "English"],
+    badges: ["EEU", "FMGE", "English"],
   },
   "/mbbs-abroad/russia": {
     fee: "Rs. 28-45 Lakhs Total",
@@ -434,7 +434,7 @@ const liveMetrics = [
 
 const costInsights = [
   { label: "India Private Management", fee: "70L+", hostel: "₹5L", living: "₹5L" },
-  { label: "Georgia", fee: "₹22L", hostel: "₹8L", living: "₹8L" },
+  { label: "Georgia", fee: "₹28L", hostel: "₹2.6L", living: "₹10L-15L" },
   { label: "Kyrgyzstan", fee: "₹16L", hostel: "₹4L", living: "₹4L" },
   { label: "Bangladesh", fee: "₹30L", hostel: "₹3.5L", living: "₹3.5L" },
   { label: "Russia", fee: "₹18L", hostel: "₹5L", living: "₹5L" },

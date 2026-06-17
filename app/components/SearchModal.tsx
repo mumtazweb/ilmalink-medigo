@@ -12,6 +12,7 @@ import { mbbsIndiaColleges, mbbsIndiaCollegesByState } from "../data/mbbsIndiaCo
 import { getMBBSIndiaAdmissionAccess } from "../data/mbbsIndiaAdmissionAccess";
 import { navbarCountryDestinations } from "../data/navbarDestinations";
 import { kyrgyzstanUniversities } from "../data/kyrgyzstanUniversities";
+import { georgiaUniversities } from "../data/georgiaUniversities";
 import { getMBBSIndiaCollegeHref, getMBBSIndiaStateAnchor } from "../data/exploreLinks";
 
 type SearchResult = GlobalSearchEntry & {
@@ -47,6 +48,7 @@ const categories = [
   "Pages",
   "Destinations",
   "Kyrgyzstan",
+  "Georgia",
   "MBBS India",
   "FMGE Data",
   "Blogs",
@@ -114,6 +116,7 @@ const searchCorrectionVocabulary = [
   "fees",
   "fmge",
   "fmgl",
+  "georgia",
   "hostel",
   "india",
   "institute",
@@ -131,6 +134,7 @@ const searchCorrectionVocabulary = [
   "seat",
   "state",
   "study",
+  "tbilisi",
   "tuition",
   "university",
   "universities",
@@ -323,7 +327,7 @@ const kyrgyzstanUniversitySearchEntries: GlobalSearchEntry[] = kyrgyzstanUnivers
           const firstCampusFee = campus.feeRows[0];
           const feeText =
             firstCampusFee?.totalCost &&
-            firstCampusFee.totalCost !== "Not specified in brochure"
+            firstCampusFee.totalCost !== "Not specified"
               ? `first listed total ${firstCampusFee.totalCost}`
               : firstCampusFee?.tuitionFee
                 ? `first listed tuition ${firstCampusFee.tuitionFee}`
@@ -397,10 +401,85 @@ const kyrgyzstanUniversitySearchEntries: GlobalSearchEntry[] = kyrgyzstanUnivers
   };
 });
 
+const georgiaUniversitySearchEntries: GlobalSearchEntry[] = georgiaUniversities.map((university) => {
+  const firstFee = university.feeRows[0];
+  const feeRowsText = university.feeRows
+    .map(
+      (row) =>
+        `${row.year} ${row.semester} tuition ${row.tuitionFee} hostel mess ${row.hostelAndMess} total ${row.semesterTotal}`
+    )
+    .join(" ");
+  const additionalFeeText = university.additionalFees
+    .map((fee) => `${fee.label} ${fee.amount} ${fee.note ?? ""}`)
+    .join(" ");
+  const fmgeSummary = university.fmgePerformance?.length
+    ? university.fmgePerformance
+        .map(
+          (item) =>
+            `${item.sourceName}: ${item.appeared} appeared, ${item.passed} passed, ${item.passRate} pass rate`
+        )
+        .join(" ")
+    : "FMGE 2025 match to be verified";
+
+  return {
+    id: `georgia-university-${slugifySearchId(university.slug)}`,
+    title: university.name,
+    description: `${university.recommendationLabel}. ${university.feeSummary}`,
+    url: university.pageExists
+      ? `/mbbs-abroad/georgia/${university.slug}/`
+      : `/mbbs-abroad/georgia?q=${encodeURIComponent(university.name)}#georgia-universities`,
+    category: "Georgia Universities",
+    group: "Destinations",
+    type: "destination",
+    tags: [
+      "Georgia",
+      "MBBS in Georgia",
+      "Tbilisi",
+      university.name,
+      university.shortName ?? "",
+      university.city,
+      university.recommendationLabel,
+      university.accreditationLabel,
+      university.totalTuition ?? "",
+      university.annualTuition ?? "",
+    ].filter(Boolean),
+    content: [
+      university.name,
+      university.shortName ?? "",
+      university.city,
+      university.location,
+      university.program,
+      university.intake,
+      university.duration,
+      university.medium,
+      university.summary,
+      university.feeSummary,
+      university.totalTuition ?? "",
+      university.annualTuition ?? "",
+      university.mandatoryHostelMess ?? "",
+      university.livingCost ?? "",
+      firstFee
+        ? `${firstFee.year} ${firstFee.semester} tuition ${firstFee.tuitionFee} hostel ${firstFee.hostelAndMess} total ${firstFee.semesterTotal}`
+        : "",
+      feeRowsText,
+      additionalFeeText,
+      ...university.highlights,
+      ...university.feeNotes,
+      ...university.entryRequirements,
+      ...university.documentChecklist,
+      ...university.facilities,
+      fmgeSummary,
+      "EEU East European University Georgia Tbilisi fees fee structure hostel mess tuition MBBS MD FMGE NMC FMGL WDOMS admission documents",
+    ].join(" "),
+    priority: university.pageExists ? 103 : 94,
+  };
+});
+
 const siteSearchIndex: GlobalSearchEntry[] = [
   mbbsIndiaDirectorySearchEntry,
   ...navbarDropdownSearchEntries,
   ...kyrgyzstanUniversitySearchEntries,
+  ...georgiaUniversitySearchEntries,
   ...mbbsIndiaStateSearchEntries,
   ...mbbsIndiaCollegeSearchEntries,
   ...globalSearchIndex,
@@ -512,6 +591,12 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
         if (selectedCategory === "Destinations") return result.group === "Destinations";
         if (selectedCategory === "Blogs") return result.group === "Blogs";
         if (selectedCategory === "Kyrgyzstan") return result.category === "Kyrgyzstan Universities";
+        if (selectedCategory === "Georgia") {
+          return (
+            result.category === "Georgia Universities" ||
+            result.url.startsWith("/mbbs-abroad/georgia")
+          );
+        }
         return result.category === selectedCategory;
       });
     }
@@ -602,9 +687,11 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
     return [
       byId("mbbs-india-state-west-bengal"),
       byId("mbbs-india-state-karnataka"),
-      byId("mbbs-india-state-jharkhand"),
+      byUrl("/mbbs-abroad/georgia/east-european-university/") ??
+        byUrl("/mbbs-abroad/georgia/east-european-university"),
       byUrl("/blogs"),
       byUrl("/mbbs-abroad/kyrgyzstan"),
+      byUrl("/mbbs-abroad/georgia"),
       siteSearchIndex.find((item) => item.group === "Blogs"),
     ].filter(Boolean) as GlobalSearchEntry[];
   }, [searchTerms, selectedCategory]);
@@ -811,6 +898,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
             <div className="px-5 pb-4 text-xs text-slate-500 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <span>
                 Try searching for <span className="font-semibold text-slate-900">Kyrgyzstan</span>,{" "}
+                <span className="font-semibold text-slate-900">EEU Georgia</span>,{" "}
                 <span className="font-semibold text-slate-900">MBBS India</span>,{" "}
                 <span className="font-semibold text-slate-900">West Bengal</span>, or{" "}
                 <span className="font-semibold text-slate-900">FMGE</span>.
