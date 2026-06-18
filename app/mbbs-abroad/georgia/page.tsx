@@ -1,63 +1,80 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-
-import { ArrowRight } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  Building2,
+  CheckCircle2,
+  CircleDollarSign,
+  ClipboardCheck,
+  FileCheck2,
+  FileText,
+  GraduationCap,
+  MapPin,
+  MessageCircle,
+  Microscope,
+  SearchCheck,
+  ShieldAlert,
+  ShieldCheck,
+  Stethoscope,
+  TrendingUp,
+  Users,
+} from "lucide-react";
 
 import CounsellingActionButton from "../../components/CounsellingActionButton";
-import GeoCountrySection from "../../components/GeoCountrySection";
+import JsonLd from "../../components/JsonLd";
+import Navbar from "../../components/navbar";
+import { whatsappCounsellingUrl } from "../../data/exploreLinks";
 import {
-  eastEuropeanUniversity,
   featuredGeorgiaUniversities,
+  georgianAmericanUniversity,
   georgiaCountryStats,
   georgiaFinalDisclaimer,
   georgiaUniversities,
 } from "../../data/georgiaUniversities";
-import GeorgiaUniversityExplorer from "./GeorgiaUniversityExplorer";
+import GeorgiaUniversityRail from "./GeorgiaUniversityCards";
 
 export const dynamic = "force-static";
 
-const pageUrl = "https://www.ilmalink.com/mbbs-abroad/georgia";
-const eeuUrl =
-  "https://www.ilmalink.com/mbbs-abroad/georgia/east-european-university";
-const gauUrl =
-  "https://www.ilmalink.com/mbbs-abroad/georgia/georgian-american-university";
+const pageUrl = "https://www.ilmalink.com/mbbs-abroad/georgia/";
+const georgiaWhatsappUrl = `${whatsappCounsellingUrl}?text=${encodeURIComponent(
+  "Hello ILMALINK MEDIGO, I want to talk to a Georgia MBBS admission expert."
+)}`;
 
 export const metadata: Metadata = {
   title:
-    "MBBS in Georgia 2026 | GAU, ALTE & EEU Fees | ILMALINK MEDIGO",
+    "MBBS in Georgia 2026 | Georgia Medical Universities, Fees & FMGE",
   description:
-    "Study MBBS in Georgia with Georgian American University, ALTE University and East European University fee structures, private-university guidance, hostel costs, admission requirements and NMC/FMGL checks.",
+    "Compare MBBS in Georgia universities including Georgian American University, ALTE University and East European University. Review Georgia MBBS fees 2026, FMGE performance, NEET, eligibility, documents, WDOMS and NMC/FMGL verification.",
   keywords: [
-    "MBBS in Georgia 2026",
-    "Georgian American University MBBS 2026",
-    "GAU Georgia MBBS fees 2026-2027",
-    "ALTE University Georgia fees",
-    "ALTE University Tbilisi MBBS",
-    "East European University Georgia",
-    "East European University fee structure",
-    "EEU Georgia MBBS fees",
-    "MBBS in Tbilisi for Indian students",
-    "Georgia medical universities FMGE data",
-    "Georgia MBBS fee structure",
-    "NMC FMGL checklist Georgia MBBS",
-    "Study medicine in Georgia",
+    "MBBS in Georgia",
+    "Georgia MBBS fees 2026",
+    "Georgian American University",
+    "GAU Georgia",
+    "ALTE University",
+    "East European University",
+    "private medical universities in Georgia",
+    "NEET required for Indian students",
+    "NMC FMGL compliance check",
+    "WDOMS listing verification",
+    "Georgia FMGE performance",
   ],
   alternates: {
     canonical: pageUrl,
   },
   openGraph: {
-    title:
-      "MBBS in Georgia 2026 | GAU, ALTE & EEU Fee Structures",
+    title: "MBBS in Georgia 2026 | Universities, Fees & FMGE",
     description:
-      "Compare Georgian American University, ALTE University and East European University fees, hostel terms, admissions and NMC/FMGL checkpoints.",
+      "Compare all Georgia medical universities in the ILMALINK MEDIGO data, including full fee and admission pages for GAU, ALTE and EEU.",
     url: pageUrl,
     siteName: "ILMALINK MEDIGO",
     images: [
       {
-        url: "/georgia/east-european-university-hero.jpg",
+        url: "/georgia/georgia-tbilisi-student-life.jpg",
         width: 1800,
-        height: 1044,
-        alt: "East European University medical classroom in Tbilisi",
+        height: 506,
+        alt: "Georgia and Tbilisi landscape for MBBS students",
       },
     ],
     locale: "en_IN",
@@ -65,155 +82,183 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title:
-      "MBBS in Georgia 2026 | GAU, ALTE & EEU Fee Structures",
+    title: "MBBS in Georgia 2026 | Universities, Fees & FMGE",
     description:
-      "Compare GAU, ALTE and EEU fees, hostel terms, private-university routes and NMC/FMGL checkpoints for Georgia.",
-    images: ["/georgia/east-european-university-hero.jpg"],
-  },
-  other: {
-    "geo.region": "GE-TB",
-    "geo.placename": "Tbilisi, Georgia",
-    "geo.position": "41.7151;44.8271",
-    ICBM: "41.7151, 44.8271",
-    "content-language": "en-IN",
+      "Georgia MBBS university comparison with fees, FMGE data, eligibility, documents and verification guidance.",
+    images: ["/georgia/georgia-tbilisi-student-life.jpg"],
   },
 };
 
-function JsonLdScript() {
-  const jsonLd = [
+const mainFaqs = [
+  {
+    question: "Is NEET required for Indian students planning MBBS in Georgia?",
+    answer:
+      "The Georgia university data lists NEET qualification in the admission requirements for Indian students. Students must verify the current Indian eligibility and NMC/FMGL requirements before final admission.",
+  },
+  {
+    question: "What should students verify before choosing MBBS in Georgia?",
+    answer:
+      "Students must verify the exact WDOMS listing, NMC/FMGL compliance, medium of instruction, internship and clerkship structure, recognition, hostel terms, fee invoice, visa rules and latest admission status.",
+  },
+  {
+    question: "What are the listed Georgia MBBS fees for 2026?",
+    answer:
+      "The current Georgia data lists GAU tuition at USD 3,250 per semester, ALTE annual tuition at USD 5,950 and EEU annual tuition at USD 5,500. Latest fee and payment details must be verified before admission.",
+  },
+  {
+    question: "Does FMGE performance guarantee recognition or admission?",
+    answer:
+      "FMGE performance is displayed as reference data for comparison. Final admission depends on eligibility, documents, university approval, visa approval and applicable Georgian and Indian regulations.",
+  },
+];
+
+const quickLinks = [
+  { label: "Quick Jump", href: "#overview", icon: SearchCheck },
+  { label: "Universities", href: "#universities", icon: Building2 },
+  { label: "Fees & Cost", href: "#fees", icon: CircleDollarSign },
+  { label: "Eligibility", href: "#eligibility", icon: ClipboardCheck },
+  { label: "Documents", href: "#documents", icon: FileText },
+  { label: "Why Georgia", href: "#why-georgia", icon: MapPin },
+  { label: "FMGE Results", href: "#fmge", icon: TrendingUp },
+  { label: "FAQ", href: "#faq", icon: BookOpen },
+];
+
+const whyGeorgia = [
+  {
+    title: "English-medium options",
+    body:
+      "The Georgia data includes English-medium medical pathways in selected universities, subject to verification of the latest official program document.",
+    icon: BookOpen,
+    tone: "blue",
+  },
+  {
+    title: "Private university comparison",
+    body:
+      "GAU, ALTE University and East European University have full data-backed pages for students comparing private medical universities in Georgia.",
+    icon: Building2,
+    tone: "green",
+  },
+  {
+    title: "Visible fee examples",
+    body:
+      "The featured university records include semester tuition, first-year hostel terms, additional fees and payment conditions where available.",
+    icon: CircleDollarSign,
+    tone: "amber",
+  },
+  {
+    title: "Program and internship checks",
+    body:
+      "Course duration, clinical rotation, clerkship and internship details are shown when they are available in the Georgia data.",
+    icon: Stethoscope,
+    tone: "blue",
+  },
+  {
+    title: "FMGE comparison",
+    body:
+      "University-wise FMGE 2025 appeared, passed and pass-rate figures are visible as comparison references.",
+    icon: TrendingUp,
+    tone: "purple",
+  },
+  {
+    title: "Verification-first guidance",
+    body:
+      "Every option requires a current check of WDOMS, NMC/FMGL rules, recognition, medium, fees, hostel and admission status.",
+    icon: ShieldCheck,
+    tone: "green",
+  },
+] as const;
+
+function buildJsonLd() {
+  return [
     {
       "@context": "https://schema.org",
-      "@type": "WebPage",
-      name: "MBBS in Georgia 2026 - GAU, ALTE and EEU",
-      url: pageUrl,
-      description: metadata.description,
-      inLanguage: "en-IN",
-      about: {
-        "@type": "ItemList",
-        name: "Featured private medical universities in Georgia",
-        itemListElement: [
-          {
-            "@type": "CollegeOrUniversity",
-            name: "Georgian American University",
-            alternateName: "GAU",
-            url: gauUrl,
-          },
-          {
-            "@type": "CollegeOrUniversity",
-            name: "ALTE University",
-            url: "https://www.ilmalink.com/mbbs-abroad/georgia/alte-university",
-          },
-          {
-            "@type": "CollegeOrUniversity",
-            name: "East European University",
-            alternateName: "EEU Georgia",
-            url: eeuUrl,
-          },
-        ],
-      },
-      primaryImageOfPage: {
-        "@type": "ImageObject",
-        url: "https://www.ilmalink.com/georgia/east-european-university-hero.jpg",
-      },
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://www.ilmalink.com/",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "MBBS Abroad",
+          item: "https://www.ilmalink.com/mbbs-abroad/",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: "MBBS in Georgia",
+          item: pageUrl,
+        },
+      ],
     },
     {
       "@context": "https://schema.org",
-      "@type": "Course",
-      name: "Medical Doctor (MD) Program at East European University",
-      description:
-        "English-medium 6-year Medical Doctor program in Tbilisi with 360 credits, clinical rotations from the 4th year, and a 12-month clerkship.",
-      provider: {
-        "@type": "CollegeOrUniversity",
-        name: "East European University",
-        sameAs: eeuUrl,
-      },
-      educationalCredentialAwarded: "Medical Doctor (MD)",
-      courseMode: "On campus",
-      inLanguage: "English",
-      offers: {
-        "@type": "Offer",
-        price: "5500",
-        priceCurrency: "USD",
-        category: "Annual tuition",
-        url: eeuUrl,
-      },
+      "@type": "ItemList",
+      name: "Georgia medical universities",
+      numberOfItems: georgiaUniversities.length,
+      itemListElement: georgiaUniversities.map((university, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: university.name,
+        url: `${pageUrl}${university.slug}/`,
+      })),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: "MBBS in Georgia guide sections",
+      itemListElement: quickLinks.map((link, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: link.label,
+        url: `${pageUrl}${link.href}`,
+      })),
     },
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "What is the East European University Georgia fee structure for MBBS?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "The listed annual tuition is USD 5,500. Six-year tuition totals USD 33,100. First-year hostel and mess is mandatory at USD 1,500 per semester, or USD 3,000 for the first year.",
-          },
+      mainEntity: mainFaqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
         },
-        {
-          "@type": "Question",
-          name: "Is East European University in Tbilisi?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Yes. East European University is located in Tbilisi, Georgia, and has two modern campuses in the city.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "What is the course duration for EEU Georgia MD program?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "The Medical Doctor program is 6 academic years with 360 credits and includes a 12-month clerkship.",
-          },
-        },
-      ],
+      })),
     },
   ];
-
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-      }}
-    />
-  );
 }
 
 function SectionHeading({
   eyebrow,
   title,
   description,
-  tone = "light",
+  centered = false,
 }: {
   eyebrow: string;
   title: string;
   description?: string;
-  tone?: "light" | "dark";
+  centered?: boolean;
 }) {
-  const isDark = tone === "dark";
-
   return (
-    <div>
-      <p
-        className={`text-xs font-extrabold uppercase tracking-[0.18em] ${
-          isDark ? "text-[#efc36a]" : "text-[#8f2118]"
-        }`}
-      >
+    <div className={centered ? "text-center" : ""}>
+      <p className="text-xs font-black uppercase tracking-[0.18em] text-[#00A878]">
         {eyebrow}
       </p>
       <h2
-        className={`mt-2 text-3xl font-extrabold tracking-normal md:text-4xl ${
-          isDark ? "text-white" : "text-[#24110f]"
+        className={`mt-2 text-2xl font-black tracking-tight text-[#071f3f] sm:text-3xl lg:text-4xl ${
+          centered ? "mx-auto" : ""
         }`}
       >
         {title}
       </h2>
       {description ? (
         <p
-          className={`mt-3 max-w-3xl text-sm font-medium leading-7 md:text-base ${
-            isDark ? "text-slate-200" : "text-slate-600"
+          className={`mt-3 text-sm font-medium leading-7 text-slate-600 sm:text-base ${
+            centered ? "mx-auto max-w-3xl" : "max-w-4xl"
           }`}
         >
           {description}
@@ -223,386 +268,588 @@ function SectionHeading({
   );
 }
 
-function CostSnapshot() {
-  const items = [
-    ["Annual tuition", eastEuropeanUniversity.annualTuition ?? "Verify"],
-    ["Six-year tuition", eastEuropeanUniversity.totalTuition ?? "Verify"],
-    [
-      "Mandatory first-year hostel/mess",
-      eastEuropeanUniversity.mandatoryHostelMess ?? "Verify",
-    ],
-    ["Living estimate", eastEuropeanUniversity.livingCost ?? "Verify"],
-  ];
-
+function CtaButtons({
+  dark = false,
+  compact = false,
+  primaryLabel = "Check Eligibility",
+}: {
+  dark?: boolean;
+  compact?: boolean;
+  primaryLabel?: string;
+}) {
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
-      {items.map(([label, value]) => (
-        <div
-          key={label}
-          className="rounded-lg border border-[#f0d4ce] bg-[#fff9f7] p-4"
-        >
-          <p className="text-xs font-bold uppercase text-[#8f2118]">
-            {label}
-          </p>
-          <p className="mt-1 text-xl font-extrabold text-[#24110f]">
-            {value}
-          </p>
-        </div>
-      ))}
+    <div
+      className={
+        compact
+          ? "grid w-full grid-cols-1 gap-1.5 min-[340px]:grid-cols-[1.18fr_1fr]"
+          : "flex flex-col gap-3 sm:flex-row sm:flex-wrap"
+      }
+    >
+      <CounsellingActionButton
+        className={`inline-flex min-w-0 items-center justify-center rounded-lg bg-[#00B981] font-extrabold text-white shadow-[0_12px_30px_rgba(0,185,129,0.26)] transition hover:bg-[#00A878] ${
+          compact
+            ? "min-h-8 whitespace-nowrap px-1 py-1 !text-[10px] tracking-[-0.025em] min-[360px]:!text-xs sm:min-h-9 sm:gap-1 sm:px-2 sm:!text-sm"
+            : "min-h-11 gap-2 px-5 py-3 text-sm"
+        }`}
+      >
+        {primaryLabel}
+        {compact ? null : <ArrowRight size={16} />}
+      </CounsellingActionButton>
+      <a
+        href={georgiaWhatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Talk to a Georgia admission expert on WhatsApp at 9563910223"
+        className={`inline-flex min-w-0 items-center justify-center border font-extrabold transition ${
+          dark
+            ? "border-white/30 bg-white/10 text-white hover:border-[#51e6b3] hover:text-[#51e6b3]"
+            : "border-[#0b4b7a] bg-white text-[#0b3a67] hover:border-[#00A878] hover:text-[#00A878]"
+        } ${
+          compact
+            ? "min-h-8 whitespace-nowrap rounded-lg px-1 py-1 !text-[10px] tracking-[-0.025em] min-[360px]:!text-xs sm:min-h-9 sm:gap-1 sm:px-2 sm:!text-sm"
+            : "min-h-11 gap-2 rounded-xl px-5 py-3 text-sm"
+        }`}
+      >
+        Talk to Expert
+        {compact ? null : <MessageCircle size={16} />}
+      </a>
     </div>
   );
 }
 
-const featuredAccents: Record<
-  string,
-  { ring: string; badge: string; button: string }
-> = {
-  "georgian-american-university": {
-    ring: "hover:border-[#1769aa]/40",
-    badge: "bg-[#e8f3fb] text-[#1769aa] ring-[#c7e0f1]",
-    button: "bg-[#1769aa] hover:bg-[#0f5288]",
-  },
-  "alte-university": {
-    ring: "hover:border-[#0f766e]/40",
-    badge: "bg-[#e6f4f1] text-[#0f766e] ring-[#bfe0da]",
-    button: "bg-[#0c3a37] hover:bg-[#12514c]",
-  },
-  "east-european-university": {
-    ring: "hover:border-[#8f2118]/40",
-    badge: "bg-[#fff1ed] text-[#8f2118] ring-[#f5c7be]",
-    button: "bg-[#8f2118] hover:bg-[#6f1711]",
-  },
-};
-
-function FeaturedUniversities() {
+function GeorgiaHero() {
   return (
-    <section className="px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <SectionHeading
-          eyebrow="Featured medical universities"
-          title="Three dedicated private Georgia university pages"
-          description="Georgian American University, ALTE University and East European University each have a visible fee-and-admission page. Compare semester fees, hostel terms, clinical learning and NMC/FMGL checkpoints before admission."
-        />
-        <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {featuredGeorgiaUniversities.map((university) => {
-            const accent =
-              featuredAccents[university.slug] ??
-              featuredAccents["east-european-university"];
-            const fmge = university.fmgePerformance?.[0];
+    <section
+      id="overview"
+      className="relative overflow-hidden bg-[#031b35] px-4 py-7 text-white sm:px-6 sm:py-9 lg:px-8 lg:py-10"
+    >
+      <Image
+        src="/georgia/georgia-tbilisi-student-life.jpg"
+        alt="Georgia mountain and Tbilisi city landscape"
+        fill
+        preload
+        sizes="100vw"
+        className="absolute inset-0 h-full w-full object-cover object-center opacity-75"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,27,53,0.99)_0%,rgba(3,39,72,0.92)_45%,rgba(3,27,53,0.38)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(3,27,53,0.42),transparent_45%)]" />
 
-            return (
-              <article
-                key={university.slug}
-                className={`flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${accent.ring}`}
-              >
-                <img
-                  src={university.heroImage}
-                  alt={
-                    university.slug === "georgian-american-university"
-                      ? "Tbilisi, Georgia, location of Georgian American University"
-                      : `${university.name} medical campus in ${university.city}`
-                  }
-                  className="h-44 w-full object-cover"
-                />
-                <div className="flex flex-1 flex-col p-5">
-                  <div className="flex flex-wrap gap-2">
-                    <span
-                      className={`rounded-full px-2.5 py-1 text-xs font-extrabold ring-1 ${accent.badge}`}
-                    >
-                      {university.recommendationLabel}
+      <div className="relative mx-auto max-w-7xl">
+        <div className="grid grid-cols-[minmax(0,1fr)_minmax(112px,0.42fr)] gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(210px,0.48fr)] sm:gap-6 lg:grid-cols-[1.2fr_0.52fr] lg:items-stretch">
+          <div className="min-w-0">
+            <div className="inline-block max-w-full">
+              <h1 className="max-w-3xl text-4xl font-black uppercase leading-[0.94] tracking-tight sm:text-6xl lg:text-7xl">
+                MBBS in
+                <span className="block text-[#00D39B]">Georgia</span>
+              </h1>
+              <p className="mt-1 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#7ff0ca] sm:text-xs">
+                (2026 MBBS Admissions)
+              </p>
+            </div>
+            <p className="mt-3 max-w-2xl text-base font-bold leading-5 text-white sm:text-xl">
+              Georgian medical universities,
+              <br />
+              fees, FMGE performance
+              <br />
+              and admission guidance
+            </p>
+            <div className="mt-4 grid w-full max-w-[60vw] grid-cols-3 gap-1 sm:max-w-md sm:gap-3">
+              {[
+                ["NMC & WHO", "Compliant", ShieldCheck],
+                ["English", "Medium", BookOpen],
+                ["High FMGE", "Pass Rate", TrendingUp],
+              ].map(([label, value, Icon]) => {
+                const IconComponent = Icon as typeof ShieldCheck;
+
+                return (
+                  <div
+                    key={label as string}
+                    className="flex min-w-0 items-center gap-0.5 sm:gap-2"
+                  >
+                    <span className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#c7fff0]/90 bg-[linear-gradient(145deg,rgba(255,255,255,0.2),rgba(5,97,112,0.28))] text-white shadow-[0_6px_15px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-5px_10px_rgba(0,55,91,0.28)] min-[360px]:h-[30px] min-[360px]:w-[30px] sm:h-9 sm:w-9">
+                      <span className="absolute inset-[3px] rounded-full border border-white/20" />
+                      <span className="absolute -right-px top-0 h-1.5 w-1.5 rounded-full bg-[#51e6b3] shadow-[0_0_8px_rgba(81,230,179,1)] ring-1 ring-[#07345d]" />
+                      <IconComponent
+                        size={14}
+                        strokeWidth={1.7}
+                        className="relative drop-shadow-[0_2px_3px_rgba(0,0,0,0.4)] min-[360px]:h-4 min-[360px]:w-4 sm:h-[18px] sm:w-[18px]"
+                      />
                     </span>
-                    <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-extrabold text-slate-700 ring-1 ring-slate-200">
-                      {university.city}
-                    </span>
-                  </div>
-                  <h3 className="mt-3 text-xl font-extrabold leading-7 text-[#24110f]">
-                    {university.name}
-                  </h3>
-                  <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
-                    {university.summary}
-                  </p>
-                  <dl className="mt-4 grid gap-2 text-sm">
-                    <div className="rounded-lg bg-slate-50 px-3 py-2">
-                      <dt className="text-xs font-bold uppercase text-slate-500">
-                        Fee status
-                      </dt>
-                      <dd className="mt-1 font-extrabold text-[#047857]">
-                        {university.feeSummary}
-                      </dd>
+                    <div className="min-w-0">
+                      <p className="whitespace-nowrap text-[7px] font-black leading-none tracking-[-0.025em] text-white min-[360px]:text-[9px] sm:text-xs">
+                        {label as string}
+                      </p>
+                      <p className="mt-1 whitespace-nowrap text-[7px] font-bold leading-none text-[#b8ffea] min-[360px]:text-[9px] sm:text-xs">
+                        {value as string}
+                      </p>
                     </div>
-                    {fmge ? (
-                      <div className="rounded-lg bg-slate-50 px-3 py-2">
-                        <dt className="text-xs font-bold uppercase text-slate-500">
-                          FMGE 2025
-                        </dt>
-                        <dd className="mt-1 font-semibold text-slate-700">
-                          {fmge.appeared.toLocaleString("en-IN")} appeared,{" "}
-                          {fmge.passed.toLocaleString("en-IN")} passed,{" "}
-                          {fmge.passRate} pass rate
-                        </dd>
-                      </div>
-                    ) : null}
-                  </dl>
-                  <div className="mt-auto pt-5">
-                    <Link
-                      href={`/mbbs-abroad/georgia/${university.slug}`}
-                      className={`inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-extrabold text-white transition ${accent.button}`}
-                    >
-                      View {university.shortName ?? university.name} details
-                      <ArrowRight size={16} />
-                    </Link>
                   </div>
+                );
+              })}
+            </div>
+
+            <div className="mt-4">
+              <CtaButtons
+                dark
+                compact
+                primaryLabel="Apply for Admission"
+              />
+            </div>
+          </div>
+
+          <aside className="flex min-w-0 flex-col self-stretch rounded-xl bg-white p-2.5 text-[#071f3f] shadow-[0_24px_70px_rgba(0,0,0,0.24)] sm:p-4">
+            <h2 className="text-[8px] font-black uppercase leading-tight tracking-[0.05em] sm:text-xs sm:tracking-[0.08em]">
+              Georgia at a glance
+            </h2>
+            <div className="mt-1.5 flex flex-1 flex-col justify-center divide-y divide-slate-200 sm:mt-2">
+              {georgiaCountryStats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="py-2 text-center sm:flex sm:items-center sm:justify-between sm:gap-3 sm:py-2.5 sm:text-left"
+                >
+                  <p className="text-[7px] font-bold leading-3 text-slate-500 sm:max-w-[68%] sm:text-[10px] sm:leading-4">
+                    {stat.label}
+                  </p>
+                  <p className="mt-0.5 shrink-0 text-xs font-black text-[#071f3f] sm:mt-0 sm:text-base">
+                    {stat.value}
+                  </p>
                 </div>
-              </article>
-            );
-          })}
+              ))}
+            </div>
+          </aside>
         </div>
       </div>
     </section>
   );
 }
 
-function CtaRow() {
+function QuickNavigation() {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row">
-      <Link
-        href="/mbbs-abroad/georgia/georgian-american-university"
-        className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#efc36a] px-5 py-3 text-sm font-extrabold text-[#24110f] transition hover:bg-[#ffd782]"
-      >
-        View GAU Fee Structure
-      </Link>
-      <CounsellingActionButton className="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/25 bg-white/10 px-5 py-3 text-sm font-extrabold text-white transition hover:border-[#efc36a] hover:text-[#efc36a]">
-        Get Georgia Counselling
-      </CounsellingActionButton>
-    </div>
+    <nav
+      aria-label="MBBS in Georgia page sections"
+      className="border-y border-white/10 bg-[#031b35] px-3 py-1 shadow-[0_8px_24px_rgba(3,27,53,0.16)] sm:px-6 lg:px-8"
+      itemScope
+      itemType="https://schema.org/SiteNavigationElement"
+    >
+      <div className="mx-auto flex max-w-7xl items-center gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 lg:justify-between">
+        {quickLinks.map(({ label, href, icon: Icon }, index) => (
+          <a
+            key={href}
+            href={href}
+            itemProp="url"
+            aria-label={`Jump to ${label}`}
+            className={`inline-flex h-6 shrink-0 items-center justify-center gap-1.5 rounded-full border px-2.5 text-[9px] font-bold leading-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#51e6b3] focus-visible:ring-offset-2 focus-visible:ring-offset-[#031b35] sm:px-3 sm:text-[10px] lg:text-[11px] ${
+              index === 0
+                ? "border-[#00d39b]/70 bg-[#073b50] !text-[#d9fff2] shadow-[inset_0_0_0_1px_rgba(0,211,155,0.08)] hover:bg-[#0a4a60]"
+                : "border-transparent !text-[#edf7ff] hover:border-white/15 hover:bg-white/10 hover:!text-[#62f1c7]"
+            }`}
+          >
+            <Icon
+              aria-hidden="true"
+              size={11}
+              strokeWidth={2}
+              className={index === 0 ? "text-[#00d39b]" : "text-[#b9d8ee]"}
+            />
+            <span itemProp="name">{label}</span>
+          </a>
+        ))}
+      </div>
+    </nav>
+  );
+}
+
+function AdmissionUpdate() {
+  return (
+    <section className="px-4 pt-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 rounded-2xl border border-red-200 bg-[#fff8f8] p-4 sm:flex-row sm:items-center sm:p-5">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#cf1731] text-white">
+          <ShieldAlert size={19} />
+        </span>
+        <div className="flex-1">
+          <h2 className="text-sm font-black uppercase text-[#b8172f]">
+            Important admission update
+          </h2>
+          <p className="mt-1 text-sm font-medium leading-6 text-[#26394d]">
+            Georgia admission rules, university intake, fee terms, document
+            criteria and visa requirements are dynamic and may change. Contact
+            ILMALINK MEDIGO for current guidance. Final admission depends on
+            eligibility, documents, university approval, visa approval and
+            applicable Georgian and Indian regulations.
+          </p>
+        </div>
+        <a
+          href="#verification"
+          className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#cf1731] px-4 py-2.5 text-sm font-extrabold text-white hover:bg-[#ad1027]"
+        >
+          Read verification note
+          <ArrowRight size={15} />
+        </a>
+      </div>
+    </section>
+  );
+}
+
+function UniversitiesSection() {
+  return (
+    <section
+      id="universities"
+      className="scroll-mt-24 px-4 pb-3 pt-4 sm:px-6 sm:pt-5 lg:px-8"
+    >
+      <div className="mx-auto max-w-7xl">
+        <h2
+          id="georgia-universities-heading"
+          className="text-center text-2xl font-black tracking-tight text-[#071f3f] sm:text-3xl lg:text-4xl"
+        >
+          Medical (MBBS) Universities in Georgia
+        </h2>
+        <div className="mt-2">
+          <GeorgiaUniversityRail
+            universities={georgiaUniversities}
+            labelledBy="georgia-universities-heading"
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhyGeorgiaSection() {
+  const toneStyles = {
+    blue: "bg-[#f2f7ff] text-[#0F4CFF]",
+    green: "bg-[#effbf7] text-[#00A878]",
+    amber: "bg-[#fff8ec] text-[#e58a00]",
+    purple: "bg-[#f7f3ff] text-[#7254d8]",
+  };
+
+  return (
+    <section
+      id="why-georgia"
+      className="scroll-mt-24 bg-white px-4 py-7 sm:px-6 lg:px-8"
+    >
+      <div className="mx-auto max-w-7xl">
+        <SectionHeading
+          eyebrow="Decision support"
+          title="Why compare MBBS in Georgia?"
+          description="The Georgia data supports a verification-led comparison of English-medium routes, private university options, listed fee plans, clinical details and FMGE performance."
+          centered
+        />
+        <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-6">
+          {whyGeorgia.map(({ title, body, icon: Icon, tone }) => (
+            <article
+              key={title}
+              className="rounded-2xl border border-slate-200 bg-white p-3.5 text-center shadow-sm sm:p-4"
+            >
+              <span
+                className={`mx-auto flex h-11 w-11 items-center justify-center rounded-xl ${
+                  toneStyles[tone]
+                }`}
+              >
+                <Icon size={20} />
+              </span>
+              <h3 className="mt-3 text-xs font-black leading-5 text-[#071f3f] sm:text-sm">
+                {title}
+              </h3>
+              <p className="mt-2 text-[10px] font-medium leading-5 text-slate-600 sm:text-xs sm:leading-6">
+                {body}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FeeEligibilityDocuments() {
+  const feeRows = [
+    ...georgianAmericanUniversity.feeRows.slice(0, 3),
+    georgianAmericanUniversity.feeRows[
+      georgianAmericanUniversity.feeRows.length - 1
+    ],
+  ].filter(Boolean);
+
+  return (
+    <section className="px-4 py-7 sm:px-6 lg:px-8">
+      <div className="mx-auto grid min-w-0 max-w-7xl gap-5 lg:grid-cols-[1.2fr_0.9fr_0.9fr]">
+        <article
+          id="fees"
+          className="min-w-0 scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
+          <h2 className="text-lg font-black text-[#071f3f]">
+            Georgia MBBS fees 2026: GAU example
+          </h2>
+          <p className="mt-2 text-xs font-medium leading-5 text-slate-600">
+            Selected rows from the GAU 12-semester data. The complete visible
+            table is available on the Georgian American University page.
+          </p>
+          <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200">
+            <table className="w-full min-w-[520px] border-collapse text-left text-xs">
+              <thead className="bg-[#eef4fa] text-[#26394d]">
+                <tr>
+                  {["Year", "Semester", "Tuition", "Hostel & mess", "Total"].map(
+                    (heading) => (
+                      <th key={heading} className="px-3 py-3 font-black">
+                        {heading}
+                      </th>
+                    ),
+                  )}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {feeRows.map((row) => (
+                  <tr key={row.semester}>
+                    <td className="px-3 py-3 font-bold">{row.year}</td>
+                    <td className="px-3 py-3">{row.semester}</td>
+                    <td className="px-3 py-3">{row.tuitionFee}</td>
+                    <td className="px-3 py-3">{row.hostelAndMess}</td>
+                    <td className="px-3 py-3 font-bold text-[#00A878]">
+                      {row.semesterTotal}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <ul className="mt-4 grid gap-2">
+            {georgianAmericanUniversity.feeNotes.slice(0, 3).map((note) => (
+              <li
+                key={note}
+                className="flex items-start gap-2 text-xs font-semibold leading-5 text-slate-600"
+              >
+                <CheckCircle2
+                  size={15}
+                  className="mt-0.5 shrink-0 text-[#00A878]"
+                />
+                {note}
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/mbbs-abroad/georgia/georgian-american-university/#fee-structure"
+            className="mt-4 inline-flex items-center gap-2 text-xs font-black text-[#0F4CFF] hover:text-[#00A878]"
+          >
+            View full GAU fee structure
+            <ArrowRight size={14} />
+          </Link>
+        </article>
+
+        <article
+          id="eligibility"
+          className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
+          <h2 className="text-lg font-black text-[#071f3f]">
+            Eligibility criteria
+          </h2>
+          <ul className="mt-4 grid gap-3">
+            {georgianAmericanUniversity.entryRequirements.map((item) => (
+              <li
+                key={item}
+                className="flex items-start gap-3 text-xs font-semibold leading-6 text-slate-700"
+              >
+                <CheckCircle2
+                  size={17}
+                  className="mt-0.5 shrink-0 text-[#00A878]"
+                />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <a
+            href="#verification"
+            className="mt-5 inline-flex items-center gap-2 text-xs font-black text-[#0F4CFF] hover:text-[#00A878]"
+          >
+            Check detailed eligibility
+            <ArrowRight size={14} />
+          </a>
+        </article>
+
+        <article
+          id="documents"
+          className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
+          <h2 className="text-lg font-black text-[#071f3f]">
+            Documents required
+          </h2>
+          <ul className="mt-4 grid gap-3">
+            {georgianAmericanUniversity.documentChecklist.map((item) => (
+              <li
+                key={item}
+                className="flex items-start gap-3 text-xs font-semibold leading-6 text-slate-700"
+              >
+                <FileCheck2
+                  size={17}
+                  className="mt-0.5 shrink-0 text-[#0F4CFF]"
+                />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/mbbs-abroad/georgia/georgian-american-university/#documents"
+            className="mt-5 inline-flex items-center gap-2 text-xs font-black text-[#0F4CFF] hover:text-[#00A878]"
+          >
+            View university details
+            <ArrowRight size={14} />
+          </Link>
+        </article>
+      </div>
+    </section>
+  );
+}
+
+function FmgeAndCounselling() {
+  const fmgeRows = georgiaUniversities
+    .map((university) => ({
+      university,
+      fmge: university.fmgePerformance?.[0],
+    }))
+    .filter((item) => item.fmge);
+
+  return (
+    <section
+      id="fmge"
+      className="scroll-mt-24 px-4 pb-7 sm:px-6 lg:px-8"
+    >
+      <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl bg-[linear-gradient(110deg,#031b35,#063b70)] text-white shadow-[0_24px_70px_rgba(3,27,53,0.2)]">
+        <div className="grid gap-px bg-white/10 sm:grid-cols-2 lg:grid-cols-5">
+          {[
+            [
+              georgiaUniversities.length.toString(),
+              "Universities in Georgia data",
+              Building2,
+            ],
+            [georgiaCountryStats[0].value, "FMGE 2025 appeared", Users],
+            [georgiaCountryStats[1].value, "FMGE 2025 pass rate", TrendingUp],
+            ["6 years", "Featured MD program duration", GraduationCap],
+            [fmgeRows.length.toString(), "University FMGE matches", Microscope],
+          ].map(([value, label, Icon]) => {
+            const IconComponent = Icon as typeof Building2;
+
+            return (
+              <div
+                key={label as string}
+                className="flex items-center gap-3 bg-[#052b54]/85 p-4"
+              >
+                <IconComponent
+                  size={24}
+                  className="shrink-0 text-[#51e6b3]"
+                />
+                <div>
+                  <p className="text-xl font-black text-[#51e6b3]">
+                    {value as string}
+                  </p>
+                  <p className="mt-1 text-xs font-semibold leading-5 text-blue-100">
+                    {label as string}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="grid gap-5 p-5 sm:p-6 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#51e6b3]">
+              Need a university comparison?
+            </p>
+            <h2 className="mt-2 text-2xl font-black sm:text-3xl">
+              Get Georgia admission guidance from ILMALINK MEDIGO
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm font-medium leading-7 text-blue-100">
+              Compare fees, eligibility, documents, FMGE references, WDOMS,
+              NMC/FMGL checkpoints, hostel terms and current university
+              admission status before payment.
+            </p>
+          </div>
+          <CtaButtons dark />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function VerificationAndFaq() {
+  return (
+    <section
+      id="verification"
+      className="scroll-mt-24 bg-white px-4 py-7 sm:px-6 lg:px-8"
+    >
+      <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#00A878]">
+            Verification disclaimer
+          </p>
+          <h2 className="mt-2 text-2xl font-black text-[#071f3f]">
+            Rules and criteria can change
+          </h2>
+          <p className="mt-4 text-sm font-medium leading-7 text-slate-700">
+            {georgiaFinalDisclaimer}
+          </p>
+          <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold leading-7 text-amber-950">
+            Final admission depends on eligibility, documents, university
+            approval, visa approval and applicable Georgian and Indian
+            regulations. Contact ILMALINK MEDIGO for current guidance before
+            making a payment or travel commitment.
+          </p>
+
+          <h3 className="mt-5 text-sm font-black uppercase tracking-wide text-[#071f3f]">
+            Popular Georgia links
+          </h3>
+          <div className="mt-3 grid gap-2">
+            {featuredGeorgiaUniversities.map((university) => (
+              <Link
+                key={university.slug}
+                href={`/mbbs-abroad/georgia/${university.slug}/`}
+                className="inline-flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3 text-sm font-bold text-[#173452] transition hover:border-[#00A878] hover:text-[#00A878]"
+              >
+                {university.name}
+                <ArrowRight size={15} />
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div id="faq" className="scroll-mt-24">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#00A878]">
+            Top FAQ
+          </p>
+          <h2 className="mt-2 text-2xl font-black text-[#071f3f]">
+            MBBS in Georgia questions
+          </h2>
+          <div className="mt-4 grid gap-3">
+            {mainFaqs.map((faq) => (
+              <article
+                key={faq.question}
+                className="rounded-xl border border-slate-200 bg-[#f8fafc] p-4"
+              >
+                <h3 className="text-sm font-black leading-6 text-[#071f3f]">
+                  {faq.question}
+                </h3>
+                <p className="mt-2 text-sm font-medium leading-7 text-slate-600">
+                  {faq.answer}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
 export default function GeorgiaPage() {
   return (
-    <main className="min-h-screen bg-[#f8fafc] text-slate-950">
-      <JsonLdScript />
-
-      <section className="relative min-h-[88vh] overflow-hidden bg-[#180806] px-4 pb-10 pt-28 text-white sm:px-6 lg:px-8">
-        <img
-          src={eastEuropeanUniversity.heroImage}
-          alt="East European University classroom and medical teaching environment"
-          className="absolute inset-0 h-full w-full object-cover opacity-45"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(24,8,6,0.96),rgba(24,8,6,0.76),rgba(24,8,6,0.28))]" />
-        <div className="relative mx-auto flex min-h-[calc(88vh-9rem)] max-w-7xl flex-col justify-end">
-          <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-[#efc36a]">
-            MBBS in Georgia 2026
-          </p>
-          <h1 className="mt-4 max-w-5xl text-4xl font-extrabold tracking-normal md:text-6xl">
-            MBBS in Georgia: GAU, ALTE and EEU guide
-          </h1>
-          <p className="mt-5 max-w-3xl text-base font-medium leading-7 text-slate-100 md:text-lg md:leading-8">
-            A focused Georgia page for Indian students comparing Georgian
-            American University, ALTE University and East European University
-            in Tbilisi, including MD fees, hostel terms, clinical learning,
-            admission requirements and NMC/FMGL checks.
-          </p>
-          <div className="mt-8">
-            <CtaRow />
-          </div>
-        </div>
-      </section>
-
-      <GeoCountrySection countryName="Georgia" />
-
-      <section className="px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mx-auto grid max-w-7xl gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {georgiaCountryStats.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
-            >
-              <p className="text-2xl font-extrabold text-[#24110f]">
-                {stat.value}
-              </p>
-              <p className="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
-                {stat.label}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-          <div>
-            <SectionHeading
-              eyebrow="Tbilisi medicine route"
-              title="Why East European University stands out inside Georgia"
-              description="EEU gives this Georgia page a dedicated university track: clear MD program structure, English instruction, clinical rotations from the fourth year, affiliated hospital exposure, and a transparent semester-wise fee plan."
-            />
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              {eastEuropeanUniversity.facts.slice(0, 8).map((fact) => (
-                <div
-                  key={`${fact.label}-${fact.value}`}
-                  className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
-                >
-                  <p className="text-xl font-extrabold text-[#8f2118]">
-                    {fact.value}
-                  </p>
-                  <p className="mt-1 text-xs font-bold uppercase leading-5 text-slate-500">
-                    {fact.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-            <img
-              src={eastEuropeanUniversity.detailImage}
-              alt="East European University practical labs and classroom facilities"
-              className="h-64 w-full rounded-lg object-cover sm:h-80"
-            />
-            <div className="mt-5">
-              <h2 className="text-2xl font-extrabold tracking-normal text-[#24110f]">
-                EEU cost snapshot
-              </h2>
-              <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
-                This snapshot is summarized from the current listed semester
-                plan. Open the dedicated EEU page for the full semester-wise
-                structure.
-              </p>
-              <div className="mt-4">
-                <CostSnapshot />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-          <img
-            src="/georgia/georgia-tbilisi-student-life.jpg"
-            alt="Georgia and Tbilisi landscape for international students"
-            className="h-72 w-full rounded-lg object-cover shadow-sm lg:h-96"
-          />
-          <div>
-            <SectionHeading
-              eyebrow="Geo-friendly student context"
-              title="Study medicine in Tbilisi, Georgia"
-              description="Georgia sits between Europe and Asia and attracts international students for English-medium programs, student-friendly cities, and a lower-cost route compared with many private medical options. Tbilisi is the primary medical-education hub for several universities on this page."
-            />
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              {[
-                "English-medium MD programs are available in selected Georgian universities.",
-                "Students should compare WDOMS listing, local recognition, hospital rotations, internship, and NMC/FMGL rules.",
-                "Georgia FMGE 2025 data gives students a useful reference point, but it is not a recognition guarantee.",
-                "University-wise fee tables must be verified before payment because tuition, hostel, and visa costs can change.",
-              ].map((item) => (
-                <p
-                  key={item}
-                  className="rounded-lg bg-white px-4 py-3 text-sm font-semibold leading-6 text-slate-700 shadow-sm ring-1 ring-slate-200"
-                >
-                  {item}
-                </p>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <FeaturedUniversities />
-
-      <GeorgiaUniversityExplorer universities={georgiaUniversities} />
-
-      <section className="px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl rounded-lg bg-[#24110f] p-6 text-white shadow-sm">
-          <SectionHeading
-            eyebrow="Indian student safety checklist"
-            title="NMC/FMGL verification before Georgia MBBS admission"
-            description="Use this checklist before confirming any Georgia medical university. It is especially important when comparing East European University with other Tbilisi, Batumi, or Kutaisi options."
-            tone="dark"
-          />
-          <div className="mt-6 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-            {[
-              "NEET qualification and Indian eligibility.",
-              "Exact WDOMS school name and listing.",
-              "Local recognition and medical registration eligibility in Georgia.",
-              "Course duration, credits, internship, and clerkship structure.",
-              "English medium across teaching, exams, and clinical training.",
-              "University fee account, refund rules, hostel terms, visa, insurance, and TRC costs.",
-            ].map((item) => (
-              <div
-                key={item}
-                className="rounded-lg border border-white/10 bg-white/10 p-4 text-sm font-semibold leading-6 text-slate-100"
-              >
-                {item}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-5xl">
-          <SectionHeading
-            eyebrow="Questions students ask"
-            title="Georgia MBBS FAQs"
-          />
-          <div className="mt-6 grid gap-4">
-            {[
-              [
-                "What is East European University Georgia MBBS fee?",
-                "The listed annual tuition is USD 5,500. Six-year tuition totals USD 33,100. First-year hostel and mess is mandatory at USD 1,500 per semester.",
-              ],
-              [
-                "Is the EEU MD program English medium?",
-                "Yes, the MD route is listed with English as the language of instruction. Students should still verify the latest official admission letter and program document before payment.",
-              ],
-              [
-                "Is MBBS in Georgia valid in India?",
-                "Indian students must verify current NMC/FMGL rules, NEET qualification, WDOMS listing, local licence eligibility, course duration, internship, English medium, and recognition before admission.",
-              ],
-            ].map(([question, answer]) => (
-              <div
-                key={question}
-                className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
-              >
-                <h3 className="text-lg font-extrabold text-[#24110f]">
-                  {question}
-                </h3>
-                <p className="mt-2 text-sm font-medium leading-7 text-slate-700">
-                  {answer}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 pb-16 pt-6 sm:px-6 lg:px-8">
-        <div className="mx-auto grid max-w-7xl gap-4 lg:grid-cols-[1fr_1fr]">
-          <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-            <h2 className="text-2xl font-extrabold tracking-normal text-[#24110f]">
-              Final guidance
-            </h2>
-            <p className="mt-3 text-sm font-medium leading-7 text-slate-700">
-              {georgiaFinalDisclaimer}
-            </p>
-          </div>
-          <div className="rounded-lg bg-[#8f2118] p-5 text-white shadow-sm">
-            <h2 className="text-2xl font-extrabold tracking-normal">
-              Need help comparing Georgia universities?
-            </h2>
-            <p className="mt-3 text-sm font-medium leading-7 text-red-50">
-              ILMALINK counsellors can help compare EEU fees, FMGE data,
-              hostel cost, clinical exposure, documents, and NMC/FMGL
-              suitability before admission.
-            </p>
-            <div className="mt-5">
-              <CtaRow />
-            </div>
-          </div>
-        </div>
-      </section>
+    <main className="min-h-screen overflow-x-hidden bg-[#f6f8fb] text-slate-950">
+      <JsonLd data={buildJsonLd()} />
+      <Navbar />
+      <GeorgiaHero />
+      <QuickNavigation />
+      <UniversitiesSection />
+      <AdmissionUpdate />
+      <WhyGeorgiaSection />
+      <FeeEligibilityDocuments />
+      <FmgeAndCounselling />
+      <VerificationAndFaq />
     </main>
   );
 }

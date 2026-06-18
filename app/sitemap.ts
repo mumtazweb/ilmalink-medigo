@@ -3,6 +3,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 import { countryGeoFacts } from "./data/geo";
+import { georgiaUniversities } from "./data/georgiaUniversities";
 import { globalSearchIndex } from "./data/searchIndex";
 
 const SITE_URL = "https://www.ilmalink.com";
@@ -31,8 +32,9 @@ const staticRoutes = [
   ...countryRoutes,
   ...additionalPublicCountryRoutes,
   "/mbbs-abroad/georgia",
-  "/mbbs-abroad/georgia/east-european-university",
-  "/mbbs-abroad/georgia/alte-university",
+  ...georgiaUniversities.map(
+    (university) => `/mbbs-abroad/georgia/${university.slug}`
+  ),
   "/mbbs-abroad/kyrgyzstan/international-higher-school-of-medicine",
   "/mbbs-abroad/kyrgyzstan/kyrgyz-state-medical-academy",
   "/scholarships-loans",

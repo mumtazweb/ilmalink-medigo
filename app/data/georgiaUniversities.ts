@@ -315,6 +315,7 @@ const otherGeorgiaUniversities: GeorgiaUniversityPageData[] = [
     feeSummary: "Fee structure to be verified before admission.",
     accreditationLabel: "Recognition verification required",
     recommendationLabel: "Compare carefully",
+    pageExists: true,
     summary:
       "A long-running public medical university option in Tbilisi. Students should verify fee schedule, English-medium delivery, WDOMS listing, clinical rotations, and NMC/FMGL fit before admission.",
     feeRows: [],
@@ -351,6 +352,7 @@ const otherGeorgiaUniversities: GeorgiaUniversityPageData[] = [
     feeSummary: "Fee structure to be verified before admission.",
     accreditationLabel: "Recognition verification required",
     recommendationLabel: "Compare carefully",
+    pageExists: true,
     summary:
       "A commonly searched Georgia MBBS option for Indian students. Compare current fee, hostel terms, clinical exposure, and FMGE/NExT planning before admission.",
     feeRows: [],
@@ -387,6 +389,7 @@ const otherGeorgiaUniversities: GeorgiaUniversityPageData[] = [
     feeSummary: "Fee structure to be verified before admission.",
     accreditationLabel: "Recognition verification required",
     recommendationLabel: "Compare carefully",
+    pageExists: true,
     summary:
       "A private university option in Tbilisi for medical studies. Students should compare official fees, hostel terms, hospital exposure, and NMC/FMGL compliance.",
     feeRows: [],
@@ -423,6 +426,7 @@ const otherGeorgiaUniversities: GeorgiaUniversityPageData[] = [
     feeSummary: "Fee structure to be verified before admission.",
     accreditationLabel: "Recognition verification required",
     recommendationLabel: "Compare carefully",
+    pageExists: true,
     summary:
       "A known Georgia medicine option. Students should verify latest official recognition, fee schedule, clinical rotation terms, and Indian licensing fit.",
     feeRows: [],
@@ -459,6 +463,7 @@ const otherGeorgiaUniversities: GeorgiaUniversityPageData[] = [
     feeSummary: "Fee structure to be verified before admission.",
     accreditationLabel: "Recognition verification required",
     recommendationLabel: "Compare carefully",
+    pageExists: true,
     summary:
       "A Batumi-based public university option. Verify official fee, English-medium availability, clinical training, and NMC/FMGL fit before admission.",
     feeRows: [],
@@ -496,6 +501,7 @@ const otherGeorgiaUniversities: GeorgiaUniversityPageData[] = [
     feeSummary: "Fee structure to be verified before admission.",
     accreditationLabel: "Recognition verification required",
     recommendationLabel: "Compare carefully",
+    pageExists: true,
     summary:
       "A Kutaisi-based state university option. Students should verify current recognition, fee structure, and Indian licensing compatibility.",
     feeRows: [],
