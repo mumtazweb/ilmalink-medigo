@@ -160,8 +160,8 @@ export default async function FmgeCountryPage({
                 {displayName} college-wise FMGE performance
               </h2>
               <p className="mt-3 max-w-3xl text-sm font-medium leading-6 text-slate-600">
-                Crawlable table content is kept focused on performance data.
-                Admission guidance actions are grouped into one sticky contact panel.
+                The table is focused on performance data for clear student comparison.
+                Admission guidance actions are grouped into one contact panel.
               </p>
             </div>
             <Link

@@ -9,7 +9,7 @@ import { buildBreadcrumbSchema, buildFAQSchema } from "../lib/schema";
 export const metadata: Metadata = {
   title: "ILMALINK MEDIGO GEO Profile | MBBS Counselling Entity Data",
   description:
-    "Crawlable ILMALINK MEDIGO entity profile for MBBS abroad counselling, MBBS India support, offices, services, country coverage and student guidance.",
+    "Detailed ILMALINK MEDIGO entity profile for MBBS abroad counselling, MBBS India support, offices, services, country coverage and student guidance.",
   alternates: {
     canonical: "https://www.ilmalink.com/geo-profile",
   },
@@ -76,7 +76,7 @@ export default function GeoProfilePage() {
             platform operated through the ILMALINK ecosystem for India and
             abroad. This page keeps the core entity facts, service areas,
             offices, country coverage and student disclaimers visible for
-            students, parents, search crawlers and generative AI systems.
+            students, parents and education partners.
           </p>
         </div>
       </section>

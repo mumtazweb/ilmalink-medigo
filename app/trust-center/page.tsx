@@ -52,8 +52,8 @@ export default function TrustCenterPage() {
             Trust Center
           </h1>
           <p className="mt-4 max-w-3xl text-base font-medium leading-7 text-slate-200 md:text-lg md:leading-8">
-            A single hierarchy hub for trust and verification pages used by students,
-            parents, crawlers and AI systems.
+            Find student-safety alerts, verified official links, organization details and
+            important regulatory updates in one place.
           </p>
         </div>
       </section>

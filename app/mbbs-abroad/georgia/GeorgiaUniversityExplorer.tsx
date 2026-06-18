@@ -176,8 +176,8 @@ export default function GeorgiaUniversityExplorer({
             </h2>
             <p className="mt-3 max-w-3xl text-sm font-medium leading-6 text-slate-600">
               Search by university, city, fee, FMGE data, or program details.
-              ALTE University and East European University have full
-              fee-structure pages.
+              Georgian American University, ALTE University and East European
+              University have full fee-and-admission pages.
             </p>
           </div>
 
@@ -207,7 +207,7 @@ export default function GeorgiaUniversityExplorer({
                 name="q"
                 value={searchInput}
                 onChange={(event) => setSearchInput(event.target.value)}
-                placeholder="Search ALTE, EEU, Tbilisi, fees..."
+                placeholder="Search GAU, ALTE, EEU, Tbilisi, fees..."
                 className="min-h-11 w-full rounded-lg border border-slate-300 bg-white pl-10 pr-4 text-sm font-semibold text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-[#8f2118] focus:ring-2 focus:ring-[#8f2118]/15"
               />
             </div>
@@ -228,8 +228,8 @@ export default function GeorgiaUniversityExplorer({
             ))
           ) : (
             <div className="rounded-lg border border-dashed border-slate-300 bg-white p-6 text-sm font-semibold text-slate-600 md:col-span-2 xl:col-span-3">
-              No Georgia university matches this search. Try East European
-              University, Tbilisi, fee, hostel, or FMGE.
+              No Georgia university matches this search. Try GAU, ALTE, East
+              European University, Tbilisi, fee, hostel, or FMGE.
             </div>
           )}
         </div>

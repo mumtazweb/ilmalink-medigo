@@ -8,6 +8,7 @@ import UniversalTranslator from "./components/UniversalTranslator";
 import { ilmaLinkEntityData } from "./data/geo";
 import {
   buildEducationalOrganizationSchema,
+  buildGuidanceDisclaimerSchema,
   buildLocalBusinessSchema,
   buildOrganizationSchema,
   buildSiteNavigationSchema,
@@ -90,6 +91,7 @@ export default function RootLayout({
             buildEducationalOrganizationSchema(),
             buildWebsiteSchema(),
             buildSiteNavigationSchema(),
+            buildGuidanceDisclaimerSchema(),
             ...ilmaLinkEntityData.offices.map((office) =>
               buildLocalBusinessSchema(office)
             ),

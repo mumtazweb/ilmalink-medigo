@@ -522,6 +522,129 @@ const otherGeorgiaUniversities: GeorgiaUniversityPageData[] = [
   },
 ];
 
+const gauFeeRows: GeorgiaFeeRow[] = Array.from({ length: 12 }, (_, index) => {
+  const semesterNumber = index + 1;
+  const firstYear = semesterNumber <= 2;
+
+  return {
+    year: `Year ${Math.floor(index / 2) + 1}`,
+    semester: `Semester ${semesterNumber}`,
+    tuitionFee: "USD 3,250",
+    hostelAndMess: firstYear ? "USD 1,500" : "Optional",
+    semesterTotal: firstYear
+      ? "USD 4,750 listed fees"
+      : "USD 3,250 tuition only",
+  };
+});
+
+const gauAdditionalFees = [
+  {
+    label: "One-time admission and processing",
+    amount: "USD 1,000",
+    note: "Payable in the first year as stated in the 2026-2027 flyer.",
+  },
+  {
+    label: "Premium Training Program",
+    amount: "INR 1,25,000",
+    note: "Flyer-listed training support for licensing-exam preparation.",
+  },
+  {
+    label: "Visa and air-ticket fee",
+    amount: "INR 75,000",
+  },
+  {
+    label: "Medical assistance",
+    amount: "USD 100 per year",
+  },
+  {
+    label: "Hostel and mess",
+    amount: "USD 1,500 per semester",
+    note: "Mandatory in the first year and listed for a five-month term.",
+  },
+];
+
+const gauFeeNotes = [
+  "Tuition is listed at USD 3,250 per semester for each of the 12 semesters in the 2026-2027 flyer.",
+  "The listed tuition across 12 semesters is USD 39,000 before accommodation, processing, training, visa, travel, medical assistance, and personal expenses.",
+  "Accommodation is mandatory for the first year.",
+  "Hostel accommodation and mess is USD 1,500 per semester during the first year.",
+  "The flyer states that the hostel and mess fee includes charges for a five-month term.",
+  "Hostel and mess is shown as optional from Semester 3 onward.",
+  "Fees may change according to university policy, exchange rates, visa and travel costs, and official notification.",
+];
+
+const gauPaymentTerms = [
+  "Tuition and hostel-mess fees must be paid in advance according to the schedule specified by the university.",
+  "Students must settle tuition and semester fees before each semester begins.",
+  "Failure to pay the required semester fees may make a student ineligible to proceed to the next semester.",
+  "First-year hostel and mess is compulsory and must be paid before arrival in Georgia.",
+  "Students using education-loan support should complete the loan process before travel confirmation.",
+  "Late payment may lead to penalties or additional charges.",
+  "After obtaining a visa and officially commencing classes, one semester fee becomes chargeable as stated in the flyer.",
+  "Refunds are subject to the university refund policy and the services already used by the student.",
+];
+
+const gauEntryRequirements = [
+  "Completed intermediate education or 12 years of schooling equivalent to secondary education.",
+  "Minimum 50% score in Biology, Physics, and Chemistry.",
+  "NEET qualification for Indian students, or an entrance examination where applicable.",
+  "English-language readiness for the medical pathway; verify the latest official program and admission documents.",
+];
+
+const gauDocuments = [
+  "High school certificate or 10th-grade certificate.",
+  "Secondary school certificate or 12th-grade certificate.",
+  "NEET passing certificate or applicable entrance certificate.",
+  "Passport.",
+  "Visa with six months validity, where applicable.",
+];
+
+const gauOneTimeServiceItems = [
+  "RFID-enabled student ID card.",
+  "Police registration support.",
+  "Document translation in Georgia.",
+  "Assistance with ministry or other related permissions.",
+  "Local SIM card support.",
+  "New bank account opening assistance.",
+  "Temporary Residence Card (TRC) support.",
+  "Airport pickup from the airport to the hostel in Georgia.",
+];
+
+const gauHighlights = [
+  "Exposure to modern medical technologies.",
+  "Internship opportunities in affiliated hospitals.",
+  "Advanced simulation labs for practical learning.",
+  "Strong emphasis on patient care and clinical skills.",
+  "Special focus on FMGE, USMLE, and PLAB training from the first year as stated in the flyer.",
+  "The flyer presents the curriculum as aligned with the latest National Medical Commission guidelines.",
+  "The course includes a clinical rotatory internship as stated in the flyer.",
+];
+
+const gauFacts = [
+  { label: "Institution type", value: "Private university" },
+  { label: "City", value: "Tbilisi" },
+  { label: "Academic year", value: "2026-2027" },
+  { label: "Program", value: "Medical Doctor (MD)" },
+  { label: "Course pattern", value: "12 semesters" },
+  { label: "Tuition", value: "USD 3,250 / semester" },
+  { label: "First-year hostel/mess", value: "USD 1,500 / semester" },
+  { label: "Clinical internship", value: "Included per flyer" },
+];
+
+const gauFacilities = [
+  "High-tech teaching methods.",
+  "Modern medical research facilities.",
+  "Advanced simulation laboratories.",
+  "Practical-learning facilities focused on patient care and clinical skills.",
+];
+
+const gauSupportServices = [
+  "Academic support.",
+  "Strong alumni network highlighted in the flyer.",
+  "Licensing-exam preparation focus for FMGE, USMLE, and PLAB from the first year.",
+  "Student arrival and local setup assistance listed in the flyer.",
+];
+
 const alteFeeRows: GeorgiaFeeRow[] = [
   {
     year: "Year 1",
@@ -766,6 +889,50 @@ const alteFmgePerformance: GeorgiaFmgePerformance[] = [
   },
 ];
 
+export const georgianAmericanUniversity: GeorgiaUniversityPageData = {
+  name: "Georgian American University",
+  shortName: "GAU",
+  slug: "georgian-american-university",
+  city: "Tbilisi",
+  location: "Tbilisi, Georgia",
+  program: "Medical Doctor Program / MBBS equivalent",
+  intake: "Academic year 2026-2027",
+  duration:
+    "6 years / 12 semesters as presented in the flyer, including a clinical rotatory internship",
+  medium:
+    "English-medium medical pathway; verify the latest official university program document",
+  feeSummary:
+    "Tuition USD 3,250 per semester; listed 12-semester tuition USD 39,000; first-year hostel and mess USD 3,000 mandatory.",
+  totalTuition: "USD 39,000 listed tuition",
+  annualTuition: "USD 6,500",
+  mandatoryHostelMess: "USD 3,000 in the first year",
+  livingCost: "Budget separately for personal and living costs in Tbilisi",
+  accreditationLabel: "Private university; WDOMS and NMC/FMGL checks required",
+  recommendationLabel: "2026-2027 private Georgia option",
+  summary:
+    "Georgian American University is a private university option in Tbilisi for Indian students planning MBBS abroad in 2026. Its Medical Doctor Program is presented with a 12-semester fee plan, clinical rotatory internship, simulation-based learning, affiliated-hospital exposure, academic support, and licensing-exam preparation from the first year. Students must independently verify the current WDOMS entry, NMC/FMGL compliance, medium of instruction, internship structure, and licensing pathway before admission.",
+  feeRows: gauFeeRows,
+  additionalFees: gauAdditionalFees,
+  feeNotes: gauFeeNotes,
+  paymentTerms: gauPaymentTerms,
+  entryRequirements: gauEntryRequirements,
+  documentChecklist: gauDocuments,
+  oneTimeServiceItems: gauOneTimeServiceItems,
+  highlights: gauHighlights,
+  facts: gauFacts,
+  facilities: gauFacilities,
+  supportServices: gauSupportServices,
+  clinicalCenters: [
+    "Internship opportunities in affiliated hospitals are highlighted in the flyer; students should verify the current hospital list and rotation schedule.",
+  ],
+  partnerHighlights: [
+    "The flyer presents global memberships, collaborations, and accredited global programs; students should verify the current official status directly.",
+  ],
+  heroImage: "/georgia/georgia-tbilisi-student-life.jpg",
+  detailImage: "/georgia/georgia-tbilisi-student-life.jpg",
+  pageExists: true,
+};
+
 export const alteUniversity: GeorgiaUniversityPageData = {
   name: "ALTE University",
   shortName: "ALTE",
@@ -845,12 +1012,14 @@ export const eastEuropeanUniversity: GeorgiaUniversityPageData = {
 };
 
 export const georgiaUniversities: GeorgiaUniversityPageData[] = [
+  georgianAmericanUniversity,
   alteUniversity,
   eastEuropeanUniversity,
   ...otherGeorgiaUniversities,
 ];
 
 export const featuredGeorgiaUniversities: GeorgiaUniversityPageData[] = [
+  georgianAmericanUniversity,
   alteUniversity,
   eastEuropeanUniversity,
 ];

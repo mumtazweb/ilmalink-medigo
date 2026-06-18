@@ -39,7 +39,7 @@ export default async function Home() {
     { label: "Trust Center", href: "/trust-center" },
     { label: "Student Alerts", href: "/alert/" },
     { label: "Blog", href: "/blogs" },
-    { label: "Site Hierarchy", href: "/site-hierarchy" },
+    { label: "Explore All Pages", href: "/site-hierarchy" },
   ];
   const countryLinks = [
     { label: "China", href: "/mbbs-abroad/china" },

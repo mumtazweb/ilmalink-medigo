@@ -19,14 +19,18 @@ export const dynamic = "force-static";
 const pageUrl = "https://www.ilmalink.com/mbbs-abroad/georgia";
 const eeuUrl =
   "https://www.ilmalink.com/mbbs-abroad/georgia/east-european-university";
+const gauUrl =
+  "https://www.ilmalink.com/mbbs-abroad/georgia/georgian-american-university";
 
 export const metadata: Metadata = {
   title:
-    "MBBS in Georgia 2026 | ALTE & East European University Fees | ILMALINK MEDIGO",
+    "MBBS in Georgia 2026 | GAU, ALTE & EEU Fees | ILMALINK MEDIGO",
   description:
-    "Study MBBS in Georgia with ALTE University and East European University Tbilisi fee structures, MD program details, hostel cost, FMGE 2025 data, admission requirements, and NMC/FMGL checklist.",
+    "Study MBBS in Georgia with Georgian American University, ALTE University and East European University fee structures, private-university guidance, hostel costs, admission requirements and NMC/FMGL checks.",
   keywords: [
     "MBBS in Georgia 2026",
+    "Georgian American University MBBS 2026",
+    "GAU Georgia MBBS fees 2026-2027",
     "ALTE University Georgia fees",
     "ALTE University Tbilisi MBBS",
     "East European University Georgia",
@@ -43,9 +47,9 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title:
-      "MBBS in Georgia 2026 | East European University Fee Structure",
+      "MBBS in Georgia 2026 | GAU, ALTE & EEU Fee Structures",
     description:
-      "Compare Georgia medical universities and review East European University MD program fees, hostel, admission, FMGE data, and student facilities.",
+      "Compare Georgian American University, ALTE University and East European University fees, hostel terms, admissions and NMC/FMGL checkpoints.",
     url: pageUrl,
     siteName: "ILMALINK MEDIGO",
     images: [
@@ -62,9 +66,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title:
-      "MBBS in Georgia 2026 | East European University Fee Structure",
+      "MBBS in Georgia 2026 | GAU, ALTE & EEU Fee Structures",
     description:
-      "EEU Georgia MBBS fees, hostel cost, admission requirements, clinical rotations, and FMGE 2025 reference data.",
+      "Compare GAU, ALTE and EEU fees, hostel terms, private-university routes and NMC/FMGL checkpoints for Georgia.",
     images: ["/georgia/east-european-university-hero.jpg"],
   },
   other: {
@@ -81,25 +85,32 @@ function JsonLdScript() {
     {
       "@context": "https://schema.org",
       "@type": "WebPage",
-      name: "MBBS in Georgia 2026 - East European University",
+      name: "MBBS in Georgia 2026 - GAU, ALTE and EEU",
       url: pageUrl,
       description: metadata.description,
       inLanguage: "en-IN",
       about: {
-        "@type": "CollegeOrUniversity",
-        name: "East European University",
-        alternateName: "EEU Georgia",
-        url: eeuUrl,
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Tbilisi",
-          addressCountry: "GE",
-        },
-        geo: {
-          "@type": "GeoCoordinates",
-          latitude: 41.7151,
-          longitude: 44.8271,
-        },
+        "@type": "ItemList",
+        name: "Featured private medical universities in Georgia",
+        itemListElement: [
+          {
+            "@type": "CollegeOrUniversity",
+            name: "Georgian American University",
+            alternateName: "GAU",
+            url: gauUrl,
+          },
+          {
+            "@type": "CollegeOrUniversity",
+            name: "ALTE University",
+            url: "https://www.ilmalink.com/mbbs-abroad/georgia/alte-university",
+          },
+          {
+            "@type": "CollegeOrUniversity",
+            name: "East European University",
+            alternateName: "EEU Georgia",
+            url: eeuUrl,
+          },
+        ],
       },
       primaryImageOfPage: {
         "@type": "ImageObject",
@@ -246,6 +257,11 @@ const featuredAccents: Record<
   string,
   { ring: string; badge: string; button: string }
 > = {
+  "georgian-american-university": {
+    ring: "hover:border-[#1769aa]/40",
+    badge: "bg-[#e8f3fb] text-[#1769aa] ring-[#c7e0f1]",
+    button: "bg-[#1769aa] hover:bg-[#0f5288]",
+  },
   "alte-university": {
     ring: "hover:border-[#0f766e]/40",
     badge: "bg-[#e6f4f1] text-[#0f766e] ring-[#bfe0da]",
@@ -264,10 +280,10 @@ function FeaturedUniversities() {
       <div className="mx-auto max-w-7xl">
         <SectionHeading
           eyebrow="Featured medical universities"
-          title="Two dedicated Georgia university pages"
-          description="ALTE University and East European University each have a full fee-structure and admission page. Open either for the complete semester-wise plan, hostel terms, clinical exposure, and FMGE data."
+          title="Three dedicated private Georgia university pages"
+          description="Georgian American University, ALTE University and East European University each have a visible fee-and-admission page. Compare semester fees, hostel terms, clinical learning and NMC/FMGL checkpoints before admission."
         />
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
+        <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {featuredGeorgiaUniversities.map((university) => {
             const accent =
               featuredAccents[university.slug] ??
@@ -281,7 +297,11 @@ function FeaturedUniversities() {
               >
                 <img
                   src={university.heroImage}
-                  alt={`${university.name} medical campus in ${university.city}`}
+                  alt={
+                    university.slug === "georgian-american-university"
+                      ? "Tbilisi, Georgia, location of Georgian American University"
+                      : `${university.name} medical campus in ${university.city}`
+                  }
                   className="h-44 w-full object-cover"
                 />
                 <div className="flex flex-1 flex-col p-5">
@@ -346,10 +366,10 @@ function CtaRow() {
   return (
     <div className="flex flex-col gap-3 sm:flex-row">
       <Link
-        href="/mbbs-abroad/georgia/east-european-university"
+        href="/mbbs-abroad/georgia/georgian-american-university"
         className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#efc36a] px-5 py-3 text-sm font-extrabold text-[#24110f] transition hover:bg-[#ffd782]"
       >
-        View EEU Fee Structure
+        View GAU Fee Structure
       </Link>
       <CounsellingActionButton className="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/25 bg-white/10 px-5 py-3 text-sm font-extrabold text-white transition hover:border-[#efc36a] hover:text-[#efc36a]">
         Get Georgia Counselling
@@ -375,13 +395,13 @@ export default function GeorgiaPage() {
             MBBS in Georgia 2026
           </p>
           <h1 className="mt-4 max-w-5xl text-4xl font-extrabold tracking-normal md:text-6xl">
-            East European University Georgia MBBS guide
+            MBBS in Georgia: GAU, ALTE and EEU guide
           </h1>
           <p className="mt-5 max-w-3xl text-base font-medium leading-7 text-slate-100 md:text-lg md:leading-8">
-            A focused Georgia page for Indian students comparing East European
-            University in Tbilisi, MD program fees, hostel cost, FMGE 2025
-            data, clinical training, admission requirements, and NMC/FMGL
-            checks before admission.
+            A focused Georgia page for Indian students comparing Georgian
+            American University, ALTE University and East European University
+            in Tbilisi, including MD fees, hostel terms, clinical learning,
+            admission requirements and NMC/FMGL checks.
           </p>
           <div className="mt-8">
             <CtaRow />

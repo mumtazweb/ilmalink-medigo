@@ -44,7 +44,7 @@ export default function GeoCountrySection({
         ]}
       />
 
-      <div className="mx-auto grid max-w-7xl gap-6">
+      <div className="mx-auto grid min-w-0 max-w-7xl grid-cols-[minmax(0,1fr)] gap-6">
         <GeoAnswerBox
           title={`Is ${country.countryName} a suitable MBBS abroad option?`}
           summary={summary}

@@ -21,9 +21,15 @@ type SiteNavigationItem = {
 
 const siteNavigationItems: SiteNavigationItem[] = [
   { name: "Home", url: "/" },
-  { name: "Site Hierarchy", url: "/site-hierarchy" },
+  { name: "Explore All Pages", url: "/site-hierarchy" },
   { name: "MBBS Abroad", url: "/mbbs-abroad" },
+  { name: "Study MBBS in Georgia", url: "/mbbs-abroad/georgia" },
+  {
+    name: "East European University",
+    url: "/mbbs-abroad/georgia/east-european-university",
+  },
   { name: "MBBS India", url: "/mbbs-india" },
+  { name: "Medical Colleges in India", url: "/mbbs-india#west-bengal" },
   { name: "NEET Hub", url: "/neet" },
   { name: "NEET Admit Card", url: "/neet/admit-card" },
   { name: "NEET Result", url: "/neet/result" },
@@ -205,17 +211,38 @@ export function buildWebsiteSchema() {
   };
 }
 
+export function buildGuidanceDisclaimerSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "@id": "https://www.ilmalink.com/#guidance-disclaimer",
+    name: "ILMALINK MEDIGO Admissions Guidance Disclaimer",
+    text:
+      "ILMALINK MEDIGO provides admission guidance, counselling and student-support information. Final admission, eligibility, documentation, visa approval, scholarship, loan or licence outcome is subject to official rules, university decisions, regulatory authorities and applicable government norms.",
+    inLanguage: "en-IN",
+    isPartOf: {
+      "@id": "https://www.ilmalink.com/#website",
+    },
+    publisher: {
+      "@id": "https://www.ilmalink.com/#organization",
+    },
+  };
+}
+
 export function buildSiteNavigationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
     "@id": "https://www.ilmalink.com/#site-navigation",
-    name: "ILMALINK MEDIGO Public Site Hierarchy",
+    name: "ILMALINK MEDIGO Study and Support Navigation",
     itemListElement: siteNavigationItems.map((item, index) => ({
-      "@type": "SiteNavigationElement",
+      "@type": "ListItem",
       position: index + 1,
-      name: item.name,
-      url: absoluteUrl(item.url),
+      item: {
+        "@type": "SiteNavigationElement",
+        name: item.name,
+        url: absoluteUrl(item.url),
+      },
     })),
     isPartOf: {
       "@id": "https://www.ilmalink.com/#website",

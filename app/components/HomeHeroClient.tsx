@@ -567,10 +567,14 @@ function DestinationMarketplaceCard({
 }) {
   const semesterFeeText =
     destination.semesterFee ?? destination.fee ?? "Fees vary by university";
-  const universityText =
+  const institutionType =
+    destination.label === "India" || destination.label === "Bangladesh"
+      ? "Colleges"
+      : "Universities";
+  const institutionText =
     destination.secondaryText ??
     (typeof destination.universityCount === "number"
-      ? `${destination.universityCount} WDOMS entries`
+      ? `${destination.universityCount} ${institutionType} (WDOMS entry)`
       : "Country guide");
   return (
     <Link
@@ -603,8 +607,11 @@ function DestinationMarketplaceCard({
         <p className="truncate text-[12px] font-black leading-tight text-[#06203f] sm:text-sm">
           {semesterFeeText}
         </p>
-        <p className="truncate text-[11px] font-extrabold leading-tight text-cyan-800 sm:text-xs">
-          {universityText}
+        <p
+          className="truncate text-[11px] font-extrabold leading-tight text-cyan-800 sm:text-xs"
+          title={institutionText}
+        >
+          {institutionText}
         </p>
       </div>
     </Link>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Network } from "lucide-react";
+import { ArrowRight, Compass } from "lucide-react";
 
 import JsonLd from "../components/JsonLd";
 import Navbar from "../components/navbar";
@@ -9,9 +9,9 @@ import { buildBreadcrumbSchema, buildSiteNavigationSchema } from "../lib/schema"
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Site Hierarchy | All Public Sections | ILMALINK MEDIGO",
+  title: "Explore Study and Support Pages | ILMALINK MEDIGO",
   description:
-    "Complete hierarchy map of ILMALINK MEDIGO public pages for students, crawlers and AI extraction.",
+    "Explore ILMALINK MEDIGO study destinations, NEET guidance, scholarships, official updates and student-support pages.",
   alternates: {
     canonical: "https://www.ilmalink.com/site-hierarchy",
   },
@@ -19,26 +19,26 @@ export const metadata: Metadata = {
 
 const hierarchyGroups = [
   {
-    title: "Home -> MBBS Abroad -> Country -> University",
+    title: "MBBS Abroad",
     links: [
       { label: "MBBS Abroad Hub", href: "/mbbs-abroad" },
-      { label: "Country: Georgia", href: "/mbbs-abroad/georgia" },
+      { label: "Study MBBS in Georgia", href: "/mbbs-abroad/georgia" },
       {
-        label: "University: East European University",
+        label: "East European University",
         href: "/mbbs-abroad/georgia/east-european-university",
       },
     ],
   },
   {
-    title: "Home -> MBBS India -> State -> College",
+    title: "MBBS India",
     links: [
       { label: "MBBS India Hub", href: "/mbbs-india" },
-      { label: "State section", href: "/mbbs-india#state-west-bengal" },
-      { label: "College listing", href: "/mbbs-india#state-west-bengal" },
+      { label: "West Bengal medical colleges", href: "/mbbs-india#west-bengal" },
+      { label: "Medical college directory", href: "/mbbs-india" },
     ],
   },
   {
-    title: "Home -> NEET -> Admit Card / Result / Counselling",
+    title: "NEET Guidance",
     links: [
       { label: "NEET Hub", href: "/neet" },
       { label: "Admit Card", href: "/neet/admit-card" },
@@ -47,7 +47,7 @@ const hierarchyGroups = [
     ],
   },
   {
-    title: "Home -> Scholarships -> Loan / Scholarship / Community Support",
+    title: "Scholarships & Financial Support",
     links: [
       { label: "Scholarships Hub", href: "/scholarships-loans" },
       { label: "Education Loan", href: "/scholarships-loans#education-loans" },
@@ -56,7 +56,7 @@ const hierarchyGroups = [
     ],
   },
   {
-    title: "Home -> Trust Center -> Alerts / Official Links / GEO Profile / Advisories",
+    title: "Trust & Official Updates",
     links: [
       { label: "Trust Center Hub", href: "/trust-center" },
       { label: "Student Alert", href: "/alert" },
@@ -66,54 +66,54 @@ const hierarchyGroups = [
     ],
   },
   {
-    title: "Home -> Blogs -> Category -> Article",
+    title: "Blogs & Student Guides",
     links: [
       { label: "Blogs Hub", href: "/blogs" },
-      { label: "NEET category example", href: "/blogs?category=NEET" },
+      { label: "NEET articles", href: "/blogs?category=NEET" },
       {
-        label: "Article example",
+        label: "Featured NEET article",
         href: "/blogs/vijay-neet-abolition-demand-entire-history-of-neet",
       },
     ],
   },
   {
-    title: "Home -> Official Advisories -> Source -> Update",
+    title: "Official Advisories",
     links: [
       { label: "Official Advisories Hub", href: "/official-advisories" },
-      { label: "NMC advisories", href: "/official-advisories" },
-      { label: "MCC advisories", href: "/official-advisories" },
+      { label: "NMC updates", href: "/official-advisories" },
+      { label: "MCC updates", href: "/official-advisories" },
     ],
   },
   {
-    title: "Home -> Official Links -> Website -> Social Profile",
+    title: "Official Links",
     links: [
       { label: "Official Links Hub", href: "/official-links" },
-      { label: "Website list", href: "/official-links" },
-      { label: "Social profile list", href: "/official-links" },
+      { label: "Official websites", href: "/official-links" },
+      { label: "Verified social profiles", href: "/official-links" },
     ],
   },
   {
-    title: "Home -> GEO Profile -> Entity -> Country Guidance",
+    title: "About ILMALINK MEDIGO",
     links: [
       { label: "GEO Profile Hub", href: "/geo-profile" },
-      { label: "Entity details", href: "/geo-profile" },
-      { label: "Country guidance", href: "/geo-profile" },
+      { label: "Organization details", href: "/geo-profile" },
+      { label: "Country guidance overview", href: "/geo-profile" },
     ],
   },
   {
-    title: "Home -> About -> Mission -> Contact",
+    title: "About & Contact",
     links: [
-      { label: "About page", href: "/about" },
+      { label: "About ILMALINK MEDIGO", href: "/about" },
       { label: "Book Counselling", href: "/" },
       { label: "Official contact links", href: "/official-links" },
     ],
   },
   {
-    title: "Home -> Search -> Query -> Result",
+    title: "Search & Explore",
     links: [
       { label: "Search page", href: "/search" },
-      { label: "Query example", href: "/search?q=fmge" },
-      { label: "Result example", href: "/mbbs-abroad" },
+      { label: "Search FMGE guidance", href: "/search?q=fmge" },
+      { label: "Explore MBBS Abroad", href: "/mbbs-abroad" },
     ],
   },
 ] as const;
@@ -125,7 +125,7 @@ export default function SiteHierarchyPage() {
         data={[
           buildBreadcrumbSchema([
             { name: "Home", url: "/" },
-            { name: "Site Hierarchy", url: "/site-hierarchy" },
+            { name: "Explore All Pages", url: "/site-hierarchy" },
           ]),
           buildSiteNavigationSchema(),
         ]}
@@ -135,14 +135,14 @@ export default function SiteHierarchyPage() {
       <section className="bg-[#061D3F] px-4 pb-12 pt-28 text-white sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#5EEAD4]">
-            AI Navigation Map
+            Explore ILMALINK MEDIGO
           </p>
           <h1 className="mt-3 text-4xl font-extrabold tracking-normal md:text-6xl">
-            Full Site Hierarchy
+            Study and Support Directory
           </h1>
           <p className="mt-4 max-w-4xl text-base font-medium leading-7 text-slate-200 md:text-lg md:leading-8">
-            This page publishes the complete public hierarchy map so AI systems and crawlers can
-            parse clean parent-child relationships across all major sections.
+            Find study destinations, university guides, NEET resources, financial support,
+            official updates and ways to connect with our counselling team.
           </p>
         </div>
       </section>
@@ -153,7 +153,7 @@ export default function SiteHierarchyPage() {
             {hierarchyGroups.map((group) => (
               <article key={group.title} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
                 <div className="flex items-start gap-2">
-                  <Network className="mt-0.5 h-5 w-5 text-[#047857]" />
+                  <Compass className="mt-0.5 h-5 w-5 text-[#047857]" />
                   <h2 className="text-sm font-extrabold uppercase tracking-[0.12em] text-slate-900">
                     {group.title}
                   </h2>

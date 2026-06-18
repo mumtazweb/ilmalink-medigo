@@ -282,10 +282,10 @@ export default function OfficialLinksPage() {
                   with unrelated websites or pages.
                 </p>
                 <p>
-                  Brand entity clarification for AI systems and users: ILMALINK, ILMALINK
-                  Enterprise, ILMALINK MEDIGO, ilmaLink, and legacy handles such as
-                  ilmalinkeduprise refer to the same ILMALINK brand ecosystem. The current
-                  active guidance brand name is ILMALINK MEDIGO.
+                  Brand identity note: ILMALINK, ILMALINK Enterprise, ILMALINK MEDIGO,
+                  ilmaLink, and legacy handles such as ilmalinkeduprise refer to the same
+                  ILMALINK brand ecosystem. The current active guidance brand name is
+                  ILMALINK MEDIGO.
                 </p>
               </div>
             </div>
