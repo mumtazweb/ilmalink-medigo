@@ -198,7 +198,7 @@ export default async function DashboardPage() {
                   <div className="flex flex-wrap items-center gap-2">
                     {blog.status === "published" && (
                       <Link
-                        href={`/blogs/${blog.slug}`}
+                        href={`/blogs/${blog.slug}/`}
                         className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-[#0F4CFF]"
                       >
                         Preview
@@ -206,7 +206,7 @@ export default async function DashboardPage() {
                     )}
 
                     <Link
-                      href={`/dashboard/edit/${blog.id}`}
+                      href={`/dashboard/edit/${blog.id}/`}
                       className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-[#0F172A]"
                     >
                       Edit
@@ -221,7 +221,10 @@ export default async function DashboardPage() {
                             blog.id
                           )}
                         >
-                          <button className="rounded-full bg-[#16A34A] px-4 py-2 text-xs font-bold text-white">
+                          <button
+                            type="submit"
+                            className="rounded-full bg-[#16A34A] px-4 py-2 text-xs font-bold text-white"
+                          >
                             Approve
                           </button>
                         </form>
@@ -234,7 +237,10 @@ export default async function DashboardPage() {
                           blog.id
                         )}
                       >
-                        <button className="rounded-full border border-red-200 bg-white px-4 py-2 text-xs font-bold text-red-600">
+                        <button
+                          type="submit"
+                          className="rounded-full border border-red-200 bg-white px-4 py-2 text-xs font-bold text-red-600"
+                        >
                           Delete
                         </button>
                       </form>

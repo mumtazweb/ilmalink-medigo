@@ -17,6 +17,17 @@ function needsTrailingSlash(pathname: string) {
 }
 
 export function proxy(request: NextRequest) {
+  const requestMethod = request.method.toUpperCase();
+  const isServerActionRequest = request.headers.has("next-action");
+  const isMutationRequest =
+    requestMethod !== "GET" && requestMethod !== "HEAD";
+
+  // Never redirect or rewrite mutation requests (including Server Actions).
+  // Redirect responses for these requests can break form actions in the dashboard.
+  if (isServerActionRequest || isMutationRequest) {
+    return NextResponse.next();
+  }
+
   const requestHost = request.headers.get("host") ?? request.nextUrl.host;
 
   if (requestHost.toLowerCase().includes("vercel.app")) {
