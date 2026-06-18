@@ -383,7 +383,7 @@ export default function AboutPage() {
         >
           Late Dr. Mumtaz Ahmed Khan
         </a>
-        <p className="text-gray-500 text-xs">Founder, Al-Ameen Movement | Established 1966, Bangalore</p>
+        <p className="text-gray-500 text-xs">Founder, Al-Ameen Movement | Established 1966, Bengaluru</p>
         <p className="text-gray-400 text-xs mt-1">Educational Empowerment Pioneer | Social Reformer</p>
       </div>
       
@@ -422,7 +422,7 @@ export default function AboutPage() {
         >
           Al-Ameen Movement
         </a>
-        established in <strong className="text-amber-700">Bangalore in 1966</strong>.
+        established in <strong className="text-amber-700">Bengaluru in 1966</strong>.
       </p>
       
       <p className="text-gray-700 leading-relaxed mb-4">
@@ -476,7 +476,7 @@ export default function AboutPage() {
         rel="noopener noreferrer"
         className="text-amber-700 italic hover:text-amber-900 underline transition mx-1"
       >
-        Al-Ameen Educational Society, Bangalore
+        Al-Ameen Educational Society, Bengaluru
       </a>
       &apos;s mission of educational empowerment through transparent medical career guidance
     </p>

@@ -283,7 +283,7 @@ export default function KyrgyzStateMedicalAcademyPage() {
 
             <div className="rounded-lg border border-[#00C896]/30 bg-white/10 p-5">
               <p className="text-xs font-extrabold uppercase text-[#00C896]">
-                2026 Kyrgyz Ministry of Health Accreditation Status:
+                May 2026 state accreditation position:
               </p>
               <p className="mt-2 text-lg font-extrabold text-white">
                 {data.accreditationStatus}
@@ -295,11 +295,12 @@ export default function KyrgyzStateMedicalAcademyPage() {
                 {data.recommendationLevel}
               </p>
               <p className="mt-4 text-sm font-medium leading-6 text-slate-200">
-                KSMA was not subject to state accreditation under the provided
-                update. Students should verify KSMA&apos;s latest official
-                recognition, course duration, internship structure, WDOMS
-                listing, local licence eligibility, and NMC/FMGL compliance
-                before admission.
+                The Kyrgyz Ministry of Health reported that KSMA was legally
+                not subject to the May 2026 state accreditation procedure
+                because of its special status. This is not a failed
+                accreditation result. Students must still verify the exact
+                medical program, course duration, internship structure, WDOMS
+                listing, local licence eligibility, and NMC/FMGL compliance.
               </p>
             </div>
           </div>

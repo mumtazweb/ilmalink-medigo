@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowRight, MessageCircle, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
-import CounsellingActionButton from "../../components/CounsellingActionButton";
 import type { GeorgiaUniversityPageData } from "../../data/georgiaUniversities";
+import { GeorgiaUniversityCard } from "./GeorgiaUniversityCards";
 
 function normalize(value: string) {
   return value
@@ -13,18 +13,6 @@ function normalize(value: string) {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\s+/g, " ")
     .trim();
-}
-
-function universityHref(slug: string) {
-  return `/mbbs-abroad/georgia/${slug}`;
-}
-
-function firstFmgeLine(university: GeorgiaUniversityPageData) {
-  const fmge = university.fmgePerformance?.[0];
-
-  if (!fmge) return "FMGE 2025 match: verify with latest data";
-
-  return `FMGE 2025: ${fmge.appeared.toLocaleString("en-IN")} appeared, ${fmge.passed.toLocaleString("en-IN")} passed, ${fmge.passRate} pass rate`;
 }
 
 function matchesSearch(university: GeorgiaUniversityPageData, query: string) {
@@ -70,73 +58,6 @@ function scrollToExplorer() {
   document
     .getElementById("georgia-universities")
     ?.scrollIntoView({ block: "start" });
-}
-
-function UniversityCard({
-  university,
-}: {
-  university: GeorgiaUniversityPageData;
-}) {
-  const hasFullPage = Boolean(university.pageExists);
-
-  return (
-    <article className="flex h-full flex-col rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#8f2118]/35 hover:shadow-md">
-      <div className="flex flex-wrap gap-2">
-        <span className="rounded-lg bg-[#fff1ed] px-2.5 py-1 text-xs font-extrabold text-[#8f2118] ring-1 ring-[#f5c7be]">
-          {university.recommendationLabel}
-        </span>
-        <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-extrabold text-slate-700 ring-1 ring-slate-200">
-          {university.city}
-        </span>
-      </div>
-
-      <h3 className="mt-4 text-xl font-extrabold leading-7 text-[#24110f]">
-        {university.name}
-      </h3>
-      <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
-        {university.summary}
-      </p>
-
-      <dl className="mt-4 grid gap-2 text-sm">
-        <div className="rounded-lg bg-slate-50 px-3 py-2">
-          <dt className="text-xs font-bold uppercase text-slate-500">
-            Fee status
-          </dt>
-          <dd className="mt-1 font-extrabold text-[#047857]">
-            {university.feeSummary}
-          </dd>
-        </div>
-        <div className="rounded-lg bg-slate-50 px-3 py-2">
-          <dt className="text-xs font-bold uppercase text-slate-500">
-            FMGE reference
-          </dt>
-          <dd className="mt-1 font-semibold text-slate-700">
-            {firstFmgeLine(university)}
-          </dd>
-        </div>
-      </dl>
-
-      <div className="mt-auto grid gap-2 pt-4 sm:grid-cols-2">
-        {hasFullPage ? (
-          <a
-            href={universityHref(university.slug)}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#24110f] px-4 py-2.5 text-sm font-extrabold text-white transition hover:bg-[#4b1812]"
-          >
-            View Details
-            <ArrowRight size={16} />
-          </a>
-        ) : null}
-        <CounsellingActionButton
-          className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[#8f2118]/25 bg-white px-4 py-2.5 text-sm font-extrabold text-[#8f2118] transition hover:border-[#8f2118]/60 hover:bg-[#fff7f4] ${
-            hasFullPage ? "" : "sm:col-span-2"
-          }`}
-        >
-          <MessageCircle size={16} />
-          Verify Now
-        </CounsellingActionButton>
-      </div>
-    </article>
-  );
 }
 
 export default function GeorgiaUniversityExplorer({
@@ -221,10 +142,13 @@ export default function GeorgiaUniversityExplorer({
           </form>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-6 grid justify-items-center gap-5 md:grid-cols-2 xl:grid-cols-3">
           {filteredUniversities.length > 0 ? (
             filteredUniversities.map((university) => (
-              <UniversityCard key={university.slug} university={university} />
+              <GeorgiaUniversityCard
+                key={university.slug}
+                university={university}
+              />
             ))
           ) : (
             <div className="rounded-lg border border-dashed border-slate-300 bg-white p-6 text-sm font-semibold text-slate-600 md:col-span-2 xl:col-span-3">

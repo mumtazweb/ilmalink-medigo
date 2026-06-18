@@ -1,0 +1,8 @@
+
+> ilmalink-medigo@0.1.0 start
+> next start --port 3011
+
+▲ Next.js 16.2.6
+- Local:         http://localhost:3011
+- Network:       http://10.168.108.23:3011
+✓ Ready in 260ms

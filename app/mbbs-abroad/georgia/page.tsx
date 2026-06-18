@@ -335,7 +335,7 @@ function GeorgiaHero() {
       <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(3,27,53,0.42),transparent_45%)]" />
 
       <div className="relative mx-auto max-w-7xl">
-        <div className="grid grid-cols-[minmax(0,1fr)_minmax(112px,0.42fr)] gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(210px,0.48fr)] sm:gap-6 lg:grid-cols-[1.2fr_0.52fr] lg:items-stretch">
+        <div className="grid grid-cols-[minmax(0,1fr)_minmax(102px,0.36fr)] gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(210px,0.48fr)] sm:gap-6 lg:grid-cols-[1.2fr_0.52fr] lg:items-stretch">
           <div className="min-w-0">
             <div className="inline-block max-w-full">
               <h1 className="max-w-3xl text-4xl font-black uppercase leading-[0.94] tracking-tight sm:text-6xl lg:text-7xl">
@@ -353,7 +353,7 @@ function GeorgiaHero() {
               <br />
               and admission guidance
             </p>
-            <div className="mt-4 grid w-full max-w-[60vw] grid-cols-3 gap-1 sm:max-w-md sm:gap-3">
+            <div className="mt-4 grid w-full max-w-[61vw] grid-cols-3 gap-0.5 sm:max-w-md sm:gap-3">
               {[
                 ["NMC & WHO", "Compliant", ShieldCheck],
                 ["English", "Medium", BookOpen],
@@ -364,22 +364,22 @@ function GeorgiaHero() {
                 return (
                   <div
                     key={label as string}
-                    className="flex min-w-0 items-center gap-0.5 sm:gap-2"
+                    className="flex min-w-0 items-center gap-0 sm:gap-2"
                   >
-                    <span className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#c7fff0]/90 bg-[linear-gradient(145deg,rgba(255,255,255,0.2),rgba(5,97,112,0.28))] text-white shadow-[0_6px_15px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-5px_10px_rgba(0,55,91,0.28)] min-[360px]:h-[30px] min-[360px]:w-[30px] sm:h-9 sm:w-9">
+                    <span className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#c7fff0]/90 bg-[linear-gradient(145deg,rgba(255,255,255,0.2),rgba(5,97,112,0.28))] text-white shadow-[0_6px_15px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-5px_10px_rgba(0,55,91,0.28)] min-[360px]:h-7 min-[360px]:w-7 sm:h-9 sm:w-9">
                       <span className="absolute inset-[3px] rounded-full border border-white/20" />
                       <span className="absolute -right-px top-0 h-1.5 w-1.5 rounded-full bg-[#51e6b3] shadow-[0_0_8px_rgba(81,230,179,1)] ring-1 ring-[#07345d]" />
                       <IconComponent
-                        size={14}
+                        size={12}
                         strokeWidth={1.7}
-                        className="relative drop-shadow-[0_2px_3px_rgba(0,0,0,0.4)] min-[360px]:h-4 min-[360px]:w-4 sm:h-[18px] sm:w-[18px]"
+                        className="relative h-3 w-3 drop-shadow-[0_2px_3px_rgba(0,0,0,0.4)] min-[360px]:h-[13px] min-[360px]:w-[13px] sm:h-[18px] sm:w-[18px]"
                       />
                     </span>
                     <div className="min-w-0">
-                      <p className="whitespace-nowrap text-[7px] font-black leading-none tracking-[-0.025em] text-white min-[360px]:text-[9px] sm:text-xs">
+                      <p className="whitespace-nowrap text-[6px] font-black leading-none tracking-[-0.04em] text-white min-[360px]:text-[8px] sm:text-xs">
                         {label as string}
                       </p>
-                      <p className="mt-1 whitespace-nowrap text-[7px] font-bold leading-none text-[#b8ffea] min-[360px]:text-[9px] sm:text-xs">
+                      <p className="mt-0.5 whitespace-nowrap text-[6px] font-bold leading-none text-[#b8ffea] min-[360px]:text-[8px] sm:text-xs">
                         {value as string}
                       </p>
                     </div>
@@ -392,12 +392,12 @@ function GeorgiaHero() {
               <CtaButtons
                 dark
                 compact
-                primaryLabel="Apply for Admission"
+                primaryLabel="Admission Desk"
               />
             </div>
           </div>
 
-          <aside className="flex min-w-0 flex-col self-stretch rounded-xl bg-white p-2.5 text-[#071f3f] shadow-[0_24px_70px_rgba(0,0,0,0.24)] sm:p-4">
+          <aside className="flex min-w-0 flex-col self-stretch rounded-xl bg-white px-1.5 py-2.5 text-[#071f3f] shadow-[0_24px_70px_rgba(0,0,0,0.24)] sm:p-4">
             <h2 className="text-[8px] font-black uppercase leading-tight tracking-[0.05em] sm:text-xs sm:tracking-[0.08em]">
               Georgia at a glance
             </h2>

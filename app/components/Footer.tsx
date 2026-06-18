@@ -77,7 +77,7 @@ const offices = [
   {
     label: "Main Office",
     city: "Kolkata",
-    address: "MUMTAZ Campus, Kamrbari, Basina, Rajarhat-Newtown, Kolkata-135",
+    address: "MUMTAZ Campus, Kamrbari, Basina, Rajarhat-Newtown, Kolkata - 700135",
   },
   {
     label: "R&D Branch",
@@ -382,7 +382,7 @@ export default function Footer() {
               </span>
               <span className="min-w-0">
                 <span className="block text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
-                  Nearby
+                  Contact
                 </span>
                 <span className="block truncate text-xs font-semibold text-white sm:text-sm">
                   Nearby Contact Points
@@ -406,7 +406,7 @@ export default function Footer() {
               className="inline-flex items-center gap-1.5 rounded-md border border-white/10 px-2.5 py-1.5 text-xs font-semibold text-slate-200 transition hover:border-emerald-300/40 hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200"
               aria-expanded={contactPointsOpen}
             >
-              View India and International Contact Points
+              Nearby Contact Points
               <ChevronDown
                 className={`h-3.5 w-3.5 transition ${contactPointsOpen ? "rotate-180" : ""}`}
               />

@@ -1,685 +1,859 @@
+import type { Metadata } from "next";
+import {
+  AlertTriangle,
+  ArrowRight,
+  BookOpen,
+  Building2,
+  CheckCircle2,
+  CircleDollarSign,
+  ClipboardCheck,
+  FileCheck2,
+  FileText,
+  GraduationCap,
+  Landmark,
+  MessageCircle,
+  Microscope,
+  SearchCheck,
+  ShieldAlert,
+  ShieldCheck,
+  TrendingUp,
+  Users,
+} from "lucide-react";
 
-import GeoCountrySection from "../../components/GeoCountrySection";
-import TrustNote from "../../components/TrustNote";
-import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
 import BangladeshGpaCalculator from "../../components/BangladeshGpaCalculator";
+import CounsellingActionButton from "../../components/CounsellingActionButton";
+import JsonLd from "../../components/JsonLd";
+import Navbar from "../../components/navbar";
+import { whatsappCounsellingUrl } from "../../data/exploreLinks";
+import { fmgeCountries } from "../../data/fmgeData";
+import {
+  bangladeshCountryStats,
+  bangladeshDocumentChecklist,
+  bangladeshEligibilityRequirements,
+  bangladeshFaqs,
+  bangladeshFeaturedUniversities,
+  bangladeshFinalDisclaimer,
+  bangladeshFraudWarnings,
+  bangladeshGapRulePoints,
+  bangladeshGovernmentQuotaPoints,
+} from "../../data/bangladeshUniversities";
+
 export const dynamic = "force-static";
 
-export const metadata = {
+const pageUrl = "https://www.ilmalink.com/mbbs-abroad/bangladesh/";
+const bangladeshWhatsappUrl = `${whatsappCounsellingUrl}?text=${encodeURIComponent(
+  "Hello ILMALINK MEDIGO, I want Bangladesh MBBS eligibility and college verification support.",
+)}`;
+
+const bangladeshCountryFmge =
+  fmgeCountries.find((entry) => entry.country === "BANGLADESH") ??
+  (() => {
+    throw new Error("Bangladesh FMGE country data is missing.");
+  })();
+
+const quickLinks = [
+  { label: "Quick Jump", href: "#overview", icon: SearchCheck },
+  { label: "Colleges", href: "#universities", icon: Building2 },
+  { label: "Fees", href: "#fees", icon: CircleDollarSign },
+  { label: "Eligibility", href: "#eligibility", icon: ClipboardCheck },
+  { label: "Documents", href: "#documents", icon: FileText },
+  { label: "Gap Rule", href: "#bangladesh-gap-rule", icon: AlertTriangle },
+  { label: "FMGE", href: "#fmge", icon: TrendingUp },
+  { label: "FAQ", href: "#faq", icon: BookOpen },
+];
+
+const whyBangladesh = [
+  {
+    title: "Indian curriculum familiarity",
+    body:
+      "Many students compare Bangladesh because the curriculum flow and classroom structure can feel more familiar for Indian students.",
+    icon: GraduationCap,
+    tone: "blue",
+  },
+  {
+    title: "SAARC-linked fee advantage",
+    body:
+      "Bangladesh remains attractive where SAARC-category tuition and living costs are lower than many other private foreign routes.",
+    icon: CircleDollarSign,
+    tone: "amber",
+  },
+  {
+    title: "Strong private-college pool",
+    body:
+      "Students can compare multiple private medical colleges across Dhaka and other cities with visible fee ranges.",
+    icon: Building2,
+    tone: "green",
+  },
+  {
+    title: "Visible FMGE references",
+    body:
+      "Bangladesh country-level and college-level FMGE 2025 references are available for realistic comparison before admission.",
+    icon: TrendingUp,
+    tone: "purple",
+  },
+  {
+    title: "Eligibility-first planning",
+    body:
+      "The GPA rule, Biology GP, passing-year conditions, and NEET requirement should be verified before processing fees or booking money.",
+    icon: ClipboardCheck,
+    tone: "blue",
+  },
+  {
+    title: "BM&DC and DGME verification",
+    body:
+      "Students must verify current DGME and BM&DC guidance, route type, and document validity before payment and travel.",
+    icon: Landmark,
+    tone: "green",
+  },
+] as const;
+
+const highlightedFeeRows = [
+  { year: "Dhaka National", semester: "Total estimate", tuition: "₹25-40 Lakhs", hostel: "Included in estimate", total: "Range varies by intake" },
+  { year: "Tairunnessa Memorial", semester: "Total estimate", tuition: "₹28-40 Lakhs", hostel: "Included in estimate", total: "Range varies by intake" },
+  { year: "Holy Family Red Crescent", semester: "Total estimate", tuition: "₹35-45 Lakhs", hostel: "Included in estimate", total: "Range varies by intake" },
+  { year: "Jahurul Islam", semester: "Total estimate", tuition: "₹30-40 Lakhs", hostel: "Included in estimate", total: "Range varies by intake" },
+];
+
+export const metadata: Metadata = {
   title:
-    "Study MBBS in Bangladesh 2026 | Affordable SAARC Medical Education",
-
+    "MBBS in Bangladesh 2026 | Fees, Eligibility, FMGE & College Comparison",
   description:
-    "Study MBBS in Bangladesh for Indian students with WDOMS-listed and NMC-regulation-aware university shortlisting, SAARC fee benefits, English-medium education and Indian curriculum similarity.",
-
- keywords: [
-  "MBBS in Bangladesh",
-  "Study medicine in Bangladesh",
-  "Bangladesh medical colleges",
-  "SAARC MBBS",
-  "WDOMS-listed and NMC-regulation-aware university shortlisting",
-  "MBBS abroad Bangladesh",
-  "Indian students MBBS Bangladesh",
-  "Affordable MBBS abroad",
-
-  "Bangladesh MBBS eligibility",
-  "Bangladesh MBBS gap rule",
-  "Bangladesh MBBS old passout eligibility",
-  "BMDC eligibility for foreign students",
-  "DGME Bangladesh MBBS admission",
-  "Bangladesh MBBS GPA 7",
-  "Bangladesh MBBS Biology GP 3.50",
-  "Bangladesh MBBS fake certificate warning",
-
-  "Best medical colleges in Bangladesh",
-  "Top medical colleges in Bangladesh for Indian students",
-  "Popular medical colleges in Bangladesh",
-  "Best private medical colleges in Bangladesh",
-  "Bangladesh MBBS colleges for Indian students",
-
-  "Dhaka National Medical College",
-  "Tairunnessa Memorial Medical College",
-  "Holy Family Red Crescent Medical College",
-  "Jahurul Islam Medical College",
-  "Anwer Khan Modern Medical College",
-  "Green Life Medical College",
-],
+    "Study MBBS in Bangladesh with private-route eligibility checks, GPA and gap-rule guidance, FMGE references, fee ranges, and verification support for Indian students.",
+  keywords: [
+    "MBBS in Bangladesh 2026",
+    "Bangladesh MBBS eligibility for Indian students",
+    "Bangladesh MBBS gap rule",
+    "Bangladesh BMDC and DGME admission guidance",
+    "Bangladesh medical colleges for Indian students",
+    "Bangladesh FMGE 2025",
+    "Dhaka National Medical College",
+    "Tairunnessa Memorial Medical College",
+    "Holy Family Red Crescent Medical College",
+    "Jahurul Islam Medical College",
+    "Anwer Khan Modern Medical College",
+    "Green Life Medical College",
+  ],
+  alternates: {
+    canonical: pageUrl,
+  },
+  openGraph: {
+    title: "MBBS in Bangladesh 2026 | Fees, Eligibility & FMGE",
+    description:
+      "Bangladesh MBBS guidance with private-route eligibility, GPA and gap-rule checks, FMGE references, and college comparison.",
+    url: pageUrl,
+    siteName: "ILMALINK MEDIGO",
+    locale: "en_IN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MBBS in Bangladesh 2026 | Fees, Eligibility & FMGE",
+    description:
+      "Bangladesh MBBS shortlisting with eligibility, gap-rule, and FMGE guidance.",
+  },
 };
 
-const universities = [
-  {
-    name: "Dhaka National Medical College",
-    city: "Dhaka",
-    fees: "₹25–40 Lakhs Total",
-  },
+function buildJsonLd() {
+  return [
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://www.ilmalink.com/",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "MBBS Abroad",
+          item: "https://www.ilmalink.com/mbbs-abroad/",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: "MBBS in Bangladesh",
+          item: pageUrl,
+        },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: "Featured Bangladesh medical colleges",
+      numberOfItems: bangladeshFeaturedUniversities.length,
+      itemListElement: bangladeshFeaturedUniversities.map((college, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: college.name,
+        url: `${pageUrl}#universities`,
+      })),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: "MBBS in Bangladesh guide sections",
+      itemListElement: quickLinks.map((link, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: link.label,
+        url: `${pageUrl}${link.href}`,
+      })),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: bangladeshFaqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    },
+  ];
+}
 
-  {
-    name: "Tairunnessa Memorial Medical College",
-    city: "Gazipur",
-    fees: "₹28–40 Lakhs Total",
-  },
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+  centered = false,
+}: {
+  eyebrow: string;
+  title: string;
+  description?: string;
+  centered?: boolean;
+}) {
+  return (
+    <div className={centered ? "text-center" : ""}>
+      <p className="text-xs font-black uppercase tracking-[0.18em] text-[#00A878]">
+        {eyebrow}
+      </p>
+      <h2
+        className={`mt-2 text-2xl font-black tracking-tight text-[#071f3f] sm:text-3xl lg:text-4xl ${
+          centered ? "mx-auto" : ""
+        }`}
+      >
+        {title}
+      </h2>
+      {description ? (
+        <p
+          className={`mt-3 text-sm font-medium leading-7 text-slate-600 sm:text-base ${
+            centered ? "mx-auto max-w-3xl" : "max-w-4xl"
+          }`}
+        >
+          {description}
+        </p>
+      ) : null}
+    </div>
+  );
+}
 
-  {
-    name: "Holy Family Red Crescent Medical College",
-    city: "Dhaka",
-    fees: "₹35–45 Lakhs Total",
-  },
+function CtaButtons({
+  dark = false,
+  compact = false,
+  primaryLabel = "Check Eligibility",
+}: {
+  dark?: boolean;
+  compact?: boolean;
+  primaryLabel?: string;
+}) {
+  return (
+    <div
+      className={
+        compact
+          ? "grid w-full grid-cols-1 gap-1.5 min-[340px]:grid-cols-[1.18fr_1fr]"
+          : "flex flex-col gap-3 sm:flex-row sm:flex-wrap"
+      }
+    >
+      <CounsellingActionButton
+        className={`inline-flex min-w-0 items-center justify-center rounded-lg bg-[#00B981] font-extrabold text-white shadow-[0_12px_30px_rgba(0,185,129,0.26)] transition hover:bg-[#00A878] ${
+          compact
+            ? "min-h-8 whitespace-nowrap px-1 py-1 !text-[10px] tracking-[-0.025em] min-[360px]:!text-xs sm:min-h-9 sm:gap-1 sm:px-2 sm:!text-sm"
+            : "min-h-11 gap-2 px-5 py-3 text-sm"
+        }`}
+      >
+        {primaryLabel}
+        {compact ? null : <ArrowRight size={16} />}
+      </CounsellingActionButton>
+      <a
+        href={bangladeshWhatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Talk to a Bangladesh MBBS expert on WhatsApp"
+        className={`inline-flex min-w-0 items-center justify-center border font-extrabold transition ${
+          dark
+            ? "border-white/30 bg-white/10 text-white hover:border-[#51e6b3] hover:text-[#51e6b3]"
+            : "border-[#0b4b7a] bg-white text-[#0b3a67] hover:border-[#00A878] hover:text-[#00A878]"
+        } ${
+          compact
+            ? "min-h-8 whitespace-nowrap rounded-lg px-1 py-1 !text-[10px] tracking-[-0.025em] min-[360px]:!text-xs sm:min-h-9 sm:gap-1 sm:px-2 sm:!text-sm"
+            : "min-h-11 gap-2 rounded-xl px-5 py-3 text-sm"
+        }`}
+      >
+        Talk to Expert
+        {compact ? null : <MessageCircle size={16} />}
+      </a>
+    </div>
+  );
+}
 
-  {
-    name: "Jahurul Islam Medical College",
-    city: "Kishoreganj",
-    fees: "₹30–40 Lakhs Total",
-  },
+function BangladeshHero() {
+  return (
+    <section
+      id="overview"
+      className="relative overflow-hidden bg-[#031b35] px-4 py-7 text-white sm:px-6 sm:py-9 lg:px-8 lg:py-10"
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_0%,rgba(25,122,184,0.28),transparent_34%),radial-gradient(circle_at_85%_10%,rgba(0,211,155,0.16),transparent_28%),linear-gradient(110deg,#031b35,#0a3d68_56%,#0b3558)]" />
+      <div className="absolute right-[-84px] top-12 h-52 w-52 rounded-full bg-[#00d39b]/12 blur-3xl" />
+      <div className="absolute left-[-70px] bottom-0 h-44 w-44 rounded-full bg-[#0f4cff]/14 blur-3xl" />
 
-  {
-    name: "Anwer Khan Modern Medical College",
-    city: "Dhaka",
-    fees: "₹30–45 Lakhs Total",
-  },
+      <div className="relative mx-auto max-w-7xl">
+        <div className="grid grid-cols-[minmax(0,1fr)_minmax(112px,0.42fr)] gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(210px,0.48fr)] sm:gap-6 lg:grid-cols-[1.2fr_0.52fr] lg:items-stretch">
+          <div className="min-w-0">
+            <div className="inline-block max-w-full">
+              <h1 className="max-w-4xl text-4xl font-black uppercase leading-[0.94] tracking-tight sm:text-6xl lg:text-7xl">
+                MBBS in
+                <span className="block text-[#00D39B]">Bangladesh</span>
+              </h1>
+              <p className="mt-1 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#7ff0ca] sm:text-xs">
+                (2026 eligibility and admissions)
+              </p>
+            </div>
+            <p className="mt-3 max-w-2xl text-base font-bold leading-5 text-white sm:text-xl">
+              Bangladesh medical college comparison,
+              <br />
+              private-route eligibility, FMGE references
+              <br />
+              and admission guidance
+            </p>
+            <div className="mt-4 grid w-full max-w-[60vw] grid-cols-3 gap-1 sm:max-w-md sm:gap-3">
+              {[
+                ["NEET", "Required", ShieldCheck],
+                ["GPA", "Rule", ClipboardCheck],
+                ["FMGE", "Visible", TrendingUp],
+              ].map(([label, value, Icon]) => {
+                const IconComponent = Icon as typeof ShieldCheck;
 
-  {
-    name: "Green Life Medical College",
-    city: "Dhaka",
-    fees: "₹35–45 Lakhs Total",
-  },
-];
+                return (
+                  <div
+                    key={label as string}
+                    className="flex min-w-0 items-center gap-0.5 sm:gap-2"
+                  >
+                    <span className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#c7fff0]/90 bg-[linear-gradient(145deg,rgba(255,255,255,0.2),rgba(5,97,112,0.28))] text-white shadow-[0_6px_15px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-5px_10px_rgba(0,55,91,0.28)] min-[360px]:h-[30px] min-[360px]:w-[30px] sm:h-9 sm:w-9">
+                      <span className="absolute inset-[3px] rounded-full border border-white/20" />
+                      <span className="absolute -right-px top-0 h-1.5 w-1.5 rounded-full bg-[#51e6b3] shadow-[0_0_8px_rgba(81,230,179,1)] ring-1 ring-[#07345d]" />
+                      <IconComponent
+                        size={14}
+                        strokeWidth={1.7}
+                        className="relative drop-shadow-[0_2px_3px_rgba(0,0,0,0.4)] min-[360px]:h-4 min-[360px]:w-4 sm:h-[18px] sm:w-[18px]"
+                      />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="whitespace-nowrap text-[7px] font-black leading-none tracking-[-0.025em] text-white min-[360px]:text-[9px] sm:text-xs">
+                        {label as string}
+                      </p>
+                      <p className="mt-1 whitespace-nowrap text-[7px] font-bold leading-none text-[#b8ffea] min-[360px]:text-[9px] sm:text-xs">
+                        {value as string}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="mt-4">
+              <CtaButtons dark compact primaryLabel="Check Eligibility" />
+            </div>
+          </div>
+
+          <aside className="flex min-w-0 flex-col self-stretch rounded-xl bg-white p-2.5 text-[#071f3f] shadow-[0_24px_70px_rgba(0,0,0,0.24)] sm:p-4">
+            <h2 className="text-[8px] font-black uppercase leading-tight tracking-[0.05em] sm:text-xs sm:tracking-[0.08em]">
+              Bangladesh at a glance
+            </h2>
+            <div className="mt-1.5 flex flex-1 flex-col justify-center divide-y divide-slate-200 sm:mt-2">
+              {bangladeshCountryStats.slice(0, 4).map((stat) => (
+                <div
+                  key={stat.label}
+                  className="py-2 text-center sm:flex sm:items-center sm:justify-between sm:gap-3 sm:py-2.5 sm:text-left"
+                >
+                  <p className="text-[7px] font-bold leading-3 text-slate-500 sm:max-w-[68%] sm:text-[10px] sm:leading-4">
+                    {stat.label}
+                  </p>
+                  <p className="mt-0.5 shrink-0 text-xs font-black text-[#071f3f] sm:mt-0 sm:text-base">
+                    {stat.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function QuickNavigation() {
+  return (
+    <nav
+      aria-label="MBBS in Bangladesh page sections"
+      className="border-y border-white/10 bg-[#031b35] px-3 py-1 shadow-[0_8px_24px_rgba(3,27,53,0.16)] sm:px-6 lg:px-8"
+      itemScope
+      itemType="https://schema.org/SiteNavigationElement"
+    >
+      <div className="mx-auto flex max-w-7xl items-center gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-2 lg:justify-between">
+        {quickLinks.map(({ label, href, icon: Icon }, index) => (
+          <a
+            key={href}
+            href={href}
+            itemProp="url"
+            aria-label={`Jump to ${label}`}
+            className={`inline-flex h-6 shrink-0 items-center justify-center gap-1.5 rounded-full border px-2.5 text-[9px] font-bold leading-none transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#51e6b3] focus-visible:ring-offset-2 focus-visible:ring-offset-[#031b35] sm:px-3 sm:text-[10px] lg:text-[11px] ${
+              index === 0
+                ? "border-[#00d39b]/70 bg-[#073b50] !text-[#d9fff2] shadow-[inset_0_0_0_1px_rgba(0,211,155,0.08)] hover:bg-[#0a4a60]"
+                : "border-transparent !text-[#edf7ff] hover:border-white/15 hover:bg-white/10 hover:!text-[#62f1c7]"
+            }`}
+          >
+            <Icon
+              aria-hidden="true"
+              size={11}
+              strokeWidth={2}
+              className={index === 0 ? "text-[#00d39b]" : "text-[#b9d8ee]"}
+            />
+            <span itemProp="name">{label}</span>
+          </a>
+        ))}
+      </div>
+    </nav>
+  );
+}
+
+function CollegesSection() {
+  return (
+    <section
+      id="universities"
+      className="scroll-mt-24 px-4 pb-3 pt-4 sm:px-6 sm:pt-5 lg:px-8"
+    >
+      <div className="mx-auto max-w-7xl">
+        <h2 className="text-center text-2xl font-black tracking-tight text-[#071f3f] sm:text-3xl lg:text-4xl">
+          Popular Medical Colleges in Bangladesh
+        </h2>
+        <p className="mx-auto mt-3 max-w-5xl text-center text-sm font-medium leading-7 text-slate-600 sm:text-base">
+          Students should compare BM&DC and DGME alignment, eligibility route, total fee structure, clinical exposure, hostel facilities, and payment terms before final shortlisting.
+        </p>
+
+        <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {bangladeshFeaturedUniversities.map((college) => (
+            <article
+              key={college.name}
+              className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+            >
+              <h3 className="text-base font-black leading-6 text-[#071f3f]">
+                {college.name}
+              </h3>
+              <p className="mt-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                {college.city}
+              </p>
+              <p className="mt-3 text-sm font-black text-[#00A878]">
+                {college.fees}
+              </p>
+              <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
+                {college.summary}
+              </p>
+              <p className="mt-3 rounded-xl bg-[#f4f7fb] px-3 py-2 text-xs font-semibold text-[#243b5a]">
+                FMGE 2025: {college.fmge.appeared.toLocaleString("en-IN")} appeared, {college.fmge.passed.toLocaleString("en-IN")} passed ({college.fmge.passRate})
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AdmissionUpdate() {
+  return (
+    <section className="px-4 pt-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 rounded-2xl border border-red-200 bg-[#fff8f8] p-4 sm:flex-row sm:items-center sm:p-5">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#cf1731] text-white">
+          <ShieldAlert size={19} />
+        </span>
+        <div className="flex-1">
+          <h2 className="text-sm font-black uppercase text-[#b8172f]">
+            Important regional and admission alert
+          </h2>
+          <p className="mt-1 text-sm font-medium leading-6 text-[#26394d]">
+            Bangladesh remains a popular MBBS destination, but political climate, admission rules, visa timelines, and eligibility circulars can change. Students should verify current embassy, DGME, BM&DC, and college-level guidance before payment.
+          </p>
+        </div>
+        <a
+          href="#verification"
+          className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#cf1731] px-4 py-2.5 text-sm font-extrabold text-white hover:bg-[#ad1027]"
+        >
+          Read verification note
+          <ArrowRight size={15} />
+        </a>
+      </div>
+    </section>
+  );
+}
+
+function WhyBangladeshSection() {
+  const toneStyles = {
+    blue: "bg-[#f2f7ff] text-[#0F4CFF]",
+    green: "bg-[#effbf7] text-[#00A878]",
+    amber: "bg-[#fff8ec] text-[#e58a00]",
+    purple: "bg-[#f7f3ff] text-[#7254d8]",
+  };
+
+  return (
+    <section className="scroll-mt-24 bg-white px-4 py-7 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <SectionHeading
+          eyebrow="Decision support"
+          title="Why compare MBBS in Bangladesh carefully?"
+          description="Bangladesh should be shortlisted through route-specific eligibility checks, fee verification, and document validation before any payment."
+          centered
+        />
+        <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-6">
+          {whyBangladesh.map(({ title, body, icon: Icon, tone }) => (
+            <article
+              key={title}
+              className="rounded-2xl border border-slate-200 bg-white p-3.5 text-center shadow-sm sm:p-4"
+            >
+              <span
+                className={`mx-auto flex h-11 w-11 items-center justify-center rounded-xl ${
+                  toneStyles[tone]
+                }`}
+              >
+                <Icon size={20} />
+              </span>
+              <h3 className="mt-3 text-xs font-black leading-5 text-[#071f3f] sm:text-sm">
+                {title}
+              </h3>
+              <p className="mt-2 text-[10px] font-medium leading-5 text-slate-600 sm:text-xs sm:leading-6">
+                {body}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FeeEligibilityDocuments() {
+  return (
+    <section className="px-4 py-7 sm:px-6 lg:px-8">
+      <div className="mx-auto grid min-w-0 max-w-7xl gap-5 lg:grid-cols-[1.2fr_0.9fr_0.9fr]">
+        <article
+          id="fees"
+          className="min-w-0 scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
+          <h2 className="text-lg font-black text-[#071f3f]">
+            Bangladesh MBBS fee ranges 2026
+          </h2>
+          <p className="mt-2 text-xs font-medium leading-5 text-slate-600">
+            Comparative total-fee estimates from popular private-college options used by Indian students for early budgeting.
+          </p>
+          <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200">
+            <table className="w-full min-w-[580px] border-collapse text-left text-xs">
+              <thead className="bg-[#eef4fa] text-[#26394d]">
+                <tr>
+                  {[
+                    "College",
+                    "Fee view",
+                    "Tuition range",
+                    "Hostel & mess",
+                    "Total note",
+                  ].map((heading) => (
+                    <th key={heading} className="px-3 py-3 font-black">
+                      {heading}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {highlightedFeeRows.map((row) => (
+                  <tr key={row.year}>
+                    <td className="px-3 py-3 font-bold">{row.year}</td>
+                    <td className="px-3 py-3">{row.semester}</td>
+                    <td className="px-3 py-3">{row.tuition}</td>
+                    <td className="px-3 py-3">{row.hostel}</td>
+                    <td className="px-3 py-3 font-bold text-[#00A878]">
+                      {row.total}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <ul className="mt-4 grid gap-2">
+            <li className="flex items-start gap-2 text-xs font-semibold leading-5 text-slate-600">
+              <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[#00A878]" />
+              These are estimate ranges; exact payable structure varies by session, seat type, hostel, and payment schedule.
+            </li>
+            <li className="flex items-start gap-2 text-xs font-semibold leading-5 text-slate-600">
+              <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[#00A878]" />
+              Students should collect written fee breakups, refund policy, and payment route details before transfer.
+            </li>
+            <li className="flex items-start gap-2 text-xs font-semibold leading-5 text-slate-600">
+              <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[#00A878]" />
+              Never rely on unofficial verbal commitments regarding fee waivers, management quota, or gap-rule bypass.
+            </li>
+          </ul>
+        </article>
+
+        <article
+          id="eligibility"
+          className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
+          <h2 className="text-lg font-black text-[#071f3f]">
+            Eligibility criteria
+          </h2>
+          <ul className="mt-4 grid gap-3">
+            {bangladeshEligibilityRequirements.map((item) => (
+              <li
+                key={item}
+                className="flex items-start gap-3 text-xs font-semibold leading-6 text-slate-700"
+              >
+                <CheckCircle2
+                  size={17}
+                  className="mt-0.5 shrink-0 text-[#00A878]"
+                />
+                {item}
+              </li>
+            ))}
+          </ul>
+
+          <div
+            id="bangladesh-gap-rule"
+            className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3"
+          >
+            <p className="text-xs font-black uppercase tracking-wide text-amber-900">
+              Gap rule warning
+            </p>
+            <ul className="mt-2 grid gap-2">
+              {bangladeshGapRulePoints.map((item) => (
+                <li
+                  key={item}
+                  className="flex items-start gap-2 text-xs font-semibold leading-5 text-amber-900"
+                >
+                  <AlertTriangle size={14} className="mt-0.5 shrink-0 text-amber-700" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </article>
+
+        <article
+          id="documents"
+          className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
+          <h2 className="text-lg font-black text-[#071f3f]">
+            Documents required
+          </h2>
+          <ul className="mt-4 grid gap-3">
+            {bangladeshDocumentChecklist.map((item) => (
+              <li
+                key={item}
+                className="flex items-start gap-3 text-xs font-semibold leading-6 text-slate-700"
+              >
+                <FileCheck2
+                  size={17}
+                  className="mt-0.5 shrink-0 text-[#0F4CFF]"
+                />
+                {item}
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3">
+            <p className="text-xs font-black uppercase tracking-wide text-red-800">
+              Fraud and fake-document warning
+            </p>
+            <ul className="mt-2 grid gap-2">
+              {bangladeshFraudWarnings.map((item) => (
+                <li
+                  key={item}
+                  className="flex items-start gap-2 text-xs font-semibold leading-5 text-red-900"
+                >
+                  <ShieldAlert size={14} className="mt-0.5 shrink-0 text-red-700" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      </div>
+
+      <div className="mx-auto mt-5 max-w-7xl rounded-2xl border border-cyan-200 bg-cyan-50 p-4">
+        <h3 className="text-sm font-black uppercase tracking-wide text-cyan-900">
+          Bangladesh MBBS GPA eligibility calculator
+        </h3>
+        <p className="mt-1 text-sm font-medium leading-6 text-cyan-900/90">
+          Use this to check private-route eligibility using Class 10 top-five marks, Class 12 PCB marks, Biology GP 3.50, combined GPA 7.00, and NEET qualification.
+        </p>
+        <div className="mt-4">
+          <BangladeshGpaCalculator />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FmgeAndCounselling() {
+  return (
+    <section id="fmge" className="scroll-mt-24 px-4 pb-7 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl bg-[linear-gradient(110deg,#031b35,#063b70)] text-white shadow-[0_24px_70px_rgba(3,27,53,0.2)]">
+        <div className="grid gap-px bg-white/10 sm:grid-cols-2 lg:grid-cols-5">
+          {[
+            [bangladeshFeaturedUniversities.length.toString(), "Featured colleges", Building2],
+            [bangladeshCountryFmge.appeared.toLocaleString("en-IN"), "FMGE 2025 appeared", Users],
+            [bangladeshCountryFmge.passRate, "FMGE 2025 pass rate", TrendingUp],
+            ["6 colleges", "Mapped with FMGE records", Microscope],
+            ["Private route", "Main admission pathway", GraduationCap],
+          ].map(([value, label, Icon]) => {
+            const IconComponent = Icon as typeof Building2;
+
+            return (
+              <div
+                key={label as string}
+                className="flex items-center gap-3 bg-[#052b54]/85 p-4"
+              >
+                <IconComponent size={24} className="shrink-0 text-[#51e6b3]" />
+                <div>
+                  <p className="text-xl font-black text-[#51e6b3]">
+                    {value as string}
+                  </p>
+                  <p className="mt-1 text-xs font-semibold leading-5 text-blue-100">
+                    {label as string}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="grid gap-5 p-5 sm:p-6 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#51e6b3]">
+              Need route verification?
+            </p>
+            <h2 className="mt-2 text-2xl font-black sm:text-3xl">
+              Get Bangladesh MBBS eligibility guidance from ILMALINK MEDIGO
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm font-medium leading-7 text-blue-100">
+              Compare GPA and passing-year eligibility, college fee range, FMGE references, route-specific documentation, and payment safety checkpoints before processing admission.
+            </p>
+          </div>
+          <CtaButtons dark />
+        </div>
+      </div>
+
+      <div className="mx-auto mt-5 max-w-7xl rounded-2xl border border-blue-200 bg-blue-50 p-4">
+        <h3 className="text-sm font-black uppercase tracking-wide text-blue-900">
+          Bangladesh government medical foreign quota note
+        </h3>
+        <ul className="mt-2 grid gap-2">
+          {bangladeshGovernmentQuotaPoints.map((item) => (
+            <li
+              key={item}
+              className="flex items-start gap-2 text-sm font-semibold leading-6 text-blue-900"
+            >
+              <Landmark size={15} className="mt-1 shrink-0 text-blue-700" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+function VerificationAndFaq() {
+  return (
+    <section
+      id="verification"
+      className="scroll-mt-24 bg-white px-4 py-7 sm:px-6 lg:px-8"
+    >
+      <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#00A878]">
+            Verification disclaimer
+          </p>
+          <h2 className="mt-2 text-2xl font-black text-[#071f3f]">
+            Rules, route criteria, and fees can change
+          </h2>
+          <p className="mt-4 text-sm font-medium leading-7 text-slate-700">
+            {bangladeshFinalDisclaimer}
+          </p>
+          <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold leading-7 text-amber-950">
+            Final admission depends on route-eligible documents, university acceptance, visa approval, and applicable Bangladesh and India-facing regulations. Students should verify every claim in writing before payment.
+          </p>
+
+          <h3 className="mt-5 text-sm font-black uppercase tracking-wide text-[#071f3f]">
+            Featured Bangladesh college references
+          </h3>
+          <div className="mt-3 grid gap-2">
+            {bangladeshFeaturedUniversities.slice(0, 4).map((college) => (
+              <div
+                key={college.name}
+                className="inline-flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3 text-sm font-bold text-[#173452]"
+              >
+                {college.name}
+                <span className="text-xs font-black text-[#00A878]">{college.fees}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div id="faq" className="scroll-mt-24">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#00A878]">
+            Top FAQ
+          </p>
+          <h2 className="mt-2 text-2xl font-black text-[#071f3f]">
+            MBBS in Bangladesh questions
+          </h2>
+          <div className="mt-4 grid gap-3">
+            {bangladeshFaqs.map((faq) => (
+              <article
+                key={faq.question}
+                className="rounded-xl border border-slate-200 bg-[#f8fafc] p-4"
+              >
+                <h3 className="text-sm font-black leading-6 text-[#071f3f]">
+                  {faq.question}
+                </h3>
+                <p className="mt-2 text-sm font-medium leading-7 text-slate-600">
+                  {faq.answer}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function BangladeshPage() {
   return (
-    <main className="min-h-screen bg-[#031525] text-white">
-
-      {/* HERO */}
-      <section className="pt-32 pb-20 px-6">
-
-        <div className="max-w-7xl mx-auto">
-
-          <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-8">
-
-            Study MBBS in Bangladesh
-
-          </h1>
-
-          <p className="text-lg text-gray-300 max-w-4xl leading-8">
-
-            Bangladesh has become one of the most preferred MBBS abroad
-            destinations for Indian students due to cultural similarity,
-            Indian-style curriculum, English-medium medical education
-            and relatively affordable SAARC fee structures.
-
-          </p>
-
-        </div>
-
-      </section>
-
-      <GeoCountrySection countryName="Bangladesh" showTrustNote={false} />
-
-      {/* ALERT */}
-      <section className="px-6 pb-20">
-
-        <div className="max-w-7xl mx-auto bg-red-500/10 border-2 border-red-500/40 rounded-3xl p-8 shadow-[0_0_40px_rgba(239,68,68,0.12)]">
-
-          <div className="flex items-center gap-4 mb-6">
-
-            <div className="w-14 h-14 rounded-full bg-red-500/20 flex items-center justify-center text-3xl">
-
-              ⚠️
-
-            </div>
-
-            <div>
-
-              <h2 className="text-4xl font-bold text-red-300">
-
-                Important Regional Situation Alert
-
-              </h2>
-
-              <p className="text-red-200 mt-2">
-
-                Students should monitor the current political and regional environment carefully.
-
-              </p>
-
-            </div>
-
-          </div>
-
-          <div className="space-y-6 text-gray-300 leading-8 text-lg">
-
-            <p>
-
-              While Bangladesh remains a popular MBBS destination for
-              Indian students, applicants should stay updated about
-              evolving India-Bangladesh diplomatic relations and regional
-              political developments.
-
-            </p>
-
-            <ul className="space-y-4">
-
-              <li>
-                ⚠️ India-Bangladesh political relations have experienced fluctuations recently
-              </li>
-
-              <li>
-                ⚠️ Reports of growing anti-India sentiments in certain sections have raised concerns
-              </li>
-
-              <li>
-                ⚠️ Students should regularly monitor embassy and government advisories
-              </li>
-
-              <li>
-                ⚠️ Visa processing timelines and regional conditions may change unexpectedly
-              </li>
-
-              <li>
-                ⚠️ Parents and students should prioritize safety, stability and verified institutions
-              </li>
-
-            </ul>
-
-
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* BENEFITS */}
-      <section className="px-6 pb-20">
-
-        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
-
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
-
-            <h2 className="text-2xl font-bold mb-4">
-              Indian Curriculum Similarity
-            </h2>
-
-            <p className="text-gray-300 leading-7">
-              Bangladesh follows a curriculum structure similar to India.
-            </p>
-
-          </div>
-
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
-
-            <h2 className="text-2xl font-bold mb-4">
-              SAARC Fee Benefits
-            </h2>
-
-            <p className="text-gray-300 leading-7">
-              Indian students may receive lower SAARC-category tuition fees.
-            </p>
-
-          </div>
-
-          <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
-
-            <h2 className="text-2xl font-bold mb-4">
-              WDOMS-Listed and NMC-Regulation-Aware Shortlisting
-            </h2>
-
-            <p className="text-gray-300 leading-7">
-              Students should compare WDOMS listing, course duration,
-              internship, local recognition and current Indian regulations.
-            </p>
-
-
-          </div>
-
-        </div>
-
-      </section>
-      {/* BANGLADESH MBBS ELIGIBILITY - SEO + LOCAL SEARCH ANCHOR */}
-      <section
-        id="bangladesh-mbbs-eligibility"
-        className="px-6 pb-20 scroll-mt-28"
-      >
-        <div className="max-w-7xl mx-auto rounded-3xl border border-amber-400/30 bg-gradient-to-br from-amber-500/10 via-white/5 to-red-500/10 p-6 md:p-8 shadow-[0_0_40px_rgba(245,158,11,0.10)]">
-
-          <div className="flex flex-wrap items-center gap-3 mb-5">
-            <span className="rounded-full border border-amber-300/40 bg-amber-300/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-amber-200">
-              Eligibility Alert
-            </span>
-
-            <span className="rounded-full border border-blue-300/30 bg-blue-500/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-blue-200">
-              For Indian Students
-            </span>
-
-            <span className="rounded-full border border-red-300/40 bg-red-500/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-red-200">
-              Verify Before Payment
-            </span>
-          </div>
-
-          <p className="text-sm font-bold uppercase tracking-[0.24em] text-amber-300">
-            Bangladesh MBBS Eligibility
-          </p>
-
-          <h2 className="mt-4 text-3xl md:text-4xl font-bold leading-tight text-white">
-            Bangladesh MBBS Eligibility for Indian Students
-          </h2>
-
-          <p className="mt-5 max-w-5xl text-base md:text-lg leading-8 text-gray-300">
-            Bangladesh MBBS eligibility depends on the admission route. Students should not confuse
-            Bangladesh Government foreign quota rules with the private or non-government medical college route.
-            For most Indian students, the private/non-government medical college route is the main admission pathway.
-          </p>
-          <div className="mt-7 rounded-3xl border border-cyan-300/30 bg-cyan-500/10 p-5">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h3 className="text-xl font-bold text-white">
-                  Bangladesh MBBS GPA Eligibility Calculator
-                </h3>
-
-                <p className="mt-2 text-sm leading-6 text-gray-300">
-                  Check Bangladesh MBBS eligibility for Indian students using Class 10 top five marks,
-                  Class 12 PCB marks, Biology GP 3.50, Combined GPA 7.00, Bangladesh gap rule and
-                  NEET qualification.
-                </p>
-              </div>
-
-              <a
-                href="#bangladesh-gpa-calculator"
-                className="inline-flex shrink-0 items-center justify-center rounded-2xl bg-cyan-300 px-6 py-4 text-sm font-extrabold text-slate-950 shadow-[0_12px_30px_rgba(34,211,238,0.20)] transition hover:bg-cyan-200"
-              >
-                Check Eligibility
-              </a>
-            </div>
-          </div>
-          <div className="mt-8 grid gap-6 lg:grid-cols-2">
-
-            {/* Private College Eligibility */}
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_12px_30px_rgba(0,0,0,0.10)]">
-              <h3 className="text-2xl font-bold text-white">
-                Private / Non-Government Medical College Eligibility
-              </h3>
-
-              <p className="mt-3 text-sm leading-7 text-gray-400">
-                This is the main Bangladesh MBBS route for most Indian and foreign students.
-              </p>
-
-              <ul className="mt-5 space-y-4 text-gray-300 leading-7">
-                <li className="flex gap-3">
-                  <span className="mt-1 text-emerald-300">✔</span>
-                  <span>
-                    Minimum aggregate <strong className="text-white">GPA 7.00</strong> in
-                    Class 10/SSC/O-Level equivalent + Class 12/HSC/A-Level equivalent.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="mt-1 text-emerald-300">✔</span>
-                  <span>
-                    Minimum <strong className="text-white">GP 3.50 in Biology</strong> at
-                    Class 12/HSC/A-Level equivalent.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="mt-1 text-emerald-300">✔</span>
-                  <span>
-                    GPA below <strong className="text-white">3.50</strong> in any single exam is
-                    generally not considered.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="mt-1 text-emerald-300">✔</span>
-                  <span>
-                    O-Level/Class 10 GPA is usually calculated from the
-                    <strong className="text-white"> top 5 subjects</strong>.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="mt-1 text-emerald-300">✔</span>
-                  <span>
-                    English must be passed in both
-                    <strong className="text-white"> Class 10 and Class 12</strong>.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="mt-1 text-emerald-300">✔</span>
-                  <span>
-                    A-Level/Class 12 GPA is usually calculated from
-                    <strong className="text-white"> Physics, Chemistry and Biology</strong>.
-                  </span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="mt-1 text-emerald-300">✔</span>
-                  <span>
-                    <strong className="text-white">BM&amp;DC admission policy</strong> is applicable.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="mt-1 text-emerald-300">✔</span>
-                  <span>
-                    Indian students must qualify <strong className="text-white">NEET-UG</strong> as
-                    per India/NMC rules.
-                  </span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Gap Rule Warning */}
-            <div
-              id="bangladesh-gap-rule"
-              className="rounded-3xl border border-amber-400/50 bg-amber-500/10 p-6 shadow-[0_0_28px_rgba(245,158,11,0.10)]"
-            >
-              <div className="flex flex-wrap items-center gap-3">
-                <span className="rounded-full border border-amber-300/40 bg-amber-300/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-amber-200">
-                  Be Cautious
-                </span>
-
-                <span className="rounded-full border border-red-300/40 bg-red-500/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-red-200">
-                  Strict Gap Rule
-                </span>
-              </div>
-
-              <h3 className="mt-5 text-2xl font-bold text-amber-100">
-                Bangladesh MBBS Gap Rule Warning
-              </h3>
-
-              <ul className="mt-5 space-y-4 text-gray-300 leading-7">
-                <li className="flex gap-3">
-                  <span className="mt-1 text-amber-300">⚠️</span>
-                  <span>
-                    Bangladesh MBBS admission has a strict passing-year rule.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="mt-1 text-amber-300">⚠️</span>
-                  <span>
-                    For the 2025–26 private/non-government foreign-student route,
-                    Class 10/SSC/O-Level equivalent should not be before
-                    <strong className="text-white"> 2022</strong>.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="mt-1 text-amber-300">⚠️</span>
-                  <span>
-                    Class 12/HSC/A-Level equivalent should be
-                    <strong className="text-white"> 2024 or 2025</strong>.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="mt-1 text-red-300">⛔</span>
-                  <span className="font-semibold text-amber-100">
-                    Students with more than one year gap after Class 12/HSC/A-Level are generally
-                    not eligible or are very high-risk for Bangladesh private MBBS admission unless
-                    the latest official DGME/BM&amp;DC circular specifically allows it.
-                  </span>
-                </li>
-              </ul>
-
-              <p className="mt-5 rounded-2xl border border-amber-300/30 bg-black/20 p-4 text-sm leading-7 text-gray-300">
-                Parents should verify the student’s Class 10 and Class 12 passing year before paying
-                booking money, admission processing charges or university fees.
-              </p>
-            </div>
-          </div>
-          <BangladeshGpaCalculator />
-          {/* Fraud Warning */}
-          <div
-            id="bangladesh-fraud-warning"
-            className="mt-6 rounded-3xl border border-red-400/40 bg-black/25 p-6 shadow-[0_12px_30px_rgba(0,0,0,0.12)]"
-          >
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-red-300/40 bg-red-500/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-red-200">
-                Fraud Warning
-              </span>
-
-              <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-gray-200">
-                Document Verification
-              </span>
-            </div>
-
-            <h3 className="mt-5 text-2xl font-bold text-red-200">
-              Fake Certificate & Agent Fraud Warning
-            </h3>
-
-            <ul className="mt-5 space-y-4 text-gray-300 leading-7">
-              <li className="flex gap-3">
-                <span className="mt-1 text-red-300">⛔</span>
-                <span>
-                  Some agents or consultants may wrongly say that old-passout students can take
-                  MBBS admission in Bangladesh by “managing” certificates, equivalence papers or documents.
-                </span>
-              </li>
-
-              <li className="flex gap-3">
-                <span className="mt-1 text-red-300">⛔</span>
-                <span>
-                  Do not use fake, altered or managed Class 10/Class 12 certificates, marksheets
-                  or equivalence documents.
-                </span>
-              </li>
-
-              <li className="flex gap-3">
-                <span className="mt-1 text-red-300">⛔</span>
-                <span className="font-semibold text-red-100">
-                  Fake documents can lead to admission rejection, admission cancellation, visa problems,
-                  BM&amp;DC/university registration issues, future licensing problems and legal consequences.
-                </span>
-              </li>
-            </ul>
-
-            <p className="mt-5 rounded-2xl border border-red-300/30 bg-red-500/10 p-4 text-sm leading-7 text-red-100">
-              Always verify Bangladesh eligibility from the latest DGME/BM&amp;DC circular before paying
-              booking money, processing fees or admission fees.
-            </p>
-          </div>
-
-          {/* Government Quota */}
-          <div className="mt-6 rounded-3xl border border-blue-400/30 bg-blue-500/10 p-6">
-            <h3 className="text-2xl font-bold text-blue-200">
-              Bangladesh Government Medical College Foreign Quota
-            </h3>
-
-            <ul className="mt-5 space-y-4 text-gray-300 leading-7">
-              <li className="flex gap-3">
-                <span className="mt-1 text-blue-300">ℹ️</span>
-                <span>
-                  Bangladesh Government medical college foreign quota is separate and very limited.
-                </span>
-              </li>
-
-              <li className="flex gap-3">
-                <span className="mt-1 text-blue-300">ℹ️</span>
-                <span>
-                  Government quota rules are stricter than private/non-government college rules.
-                </span>
-              </li>
-
-              <li className="flex gap-3">
-                <span className="mt-1 text-blue-300">ℹ️</span>
-                <span>
-                  For 2025–26, the government foreign quota used higher GPA criteria, including
-                  aggregate <strong className="text-white">GPA 8.50</strong>, no single exam below
-                  <strong className="text-white"> GPA 4.00</strong> and Biology
-                  <strong className="text-white"> GP 3.50</strong>.
-                </span>
-              </li>
-            </ul>
-          </div>
-
-        </div>
-      </section>
-      {/* UNIVERSITIES */}
-      <section className="px-6 pb-20">
-
-        <div className="max-w-7xl mx-auto">
-
-          <h2 className="text-4xl font-bold mb-10">
-
-            Popular Medical Colleges in Bangladesh
-
-          </h2>
-<p className="mb-8 max-w-5xl text-gray-300 leading-8 text-lg">
-  Students searching for the best medical colleges in Bangladesh should compare
-  eligibility, BM&amp;DC recognition, DGME rules, total fees, clinical exposure,
-  hostel facilities, FMGE/NExT preparation support and safety before admission.
-  Popular Bangladesh MBBS options for Indian students include Dhaka National
-  Medical College, Tairunnessa Memorial Medical College, Holy Family Red Crescent
-  Medical College, Jahurul Islam Medical College, Anwer Khan Modern Medical
-  College, Green Life Medical College and other verified private medical colleges.
-</p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-            {universities.map((uni, index) => (
-
-              <div
-                key={index}
-                className="bg-white/5 border border-white/10 rounded-3xl p-8 hover:border-blue-500 transition"
-              >
-
-                <h3 className="text-2xl font-semibold mb-4">
-
-                  {uni.name}
-
-                </h3>
-
-                <p className="text-gray-300 mb-3">
-
-                  📍 {uni.city}
-
-                </p>
-
-                <p className="text-gray-300">
-
-                  💰 Estimated Fees: {uni.fees}
-
-                </p>
-
-              </div>
-
-            ))}
-
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* REQUIREMENTS */}
-      <section className="px-6 pb-20">
-
-        <div className="max-w-7xl mx-auto bg-white/5 border border-white/10 rounded-3xl p-8">
-
-          <h2 className="text-4xl font-bold mb-8">
-
-            Admission Requirements
-
-          </h2>
-
-          <ul className="space-y-5 text-gray-300 leading-8 text-lg">
-
-            <li>
-              ✔ NEET qualification mandatory for Indian students
-            </li>
-
-            <li>
-              ✔ Minimum PCB eligibility criteria applicable
-            </li>
-
-            <li>
-              ✔ English-medium MBBS programs available
-            </li>
-
-            <li>
-              ✔ Valid passport and medical documentation required
-            </li>
-
-            <li>
-              ✔ Student visa approval required before travel
-            </li>
-
-          </ul>
-
-        </div>
-
-      </section>
-
-      {/* FAQ */}
-      <section className="px-6 pb-24">
-
-        <div className="max-w-5xl mx-auto">
-
-          <h2 className="text-4xl font-bold mb-10">
-
-            Frequently Asked Questions
-
-          </h2>
-
-          <div className="space-y-8">
-
-            <div className="bg-white/5 border border-white/10 rounded-3xl p-7">
-
-              <h3 className="text-2xl font-semibold mb-4">
-
-                Is MBBS in Bangladesh valid in India?
-
-              </h3>
-
-              <p className="text-gray-300 leading-7">
-
-                Many Bangladesh medical colleges may fit Indian-student
-                requirements, but students should always verify current
-                NMC/FMGL regulations before admission.
-
-              </p>
-
-            </div>
-
-            <div className="bg-white/5 border border-white/10 rounded-3xl p-7">
-
-              <h3 className="text-2xl font-semibold mb-4">
-
-                Is NEET compulsory for MBBS in Bangladesh?
-
-              </h3>
-
-              <p className="text-gray-300 leading-7">
-
-                Yes. NEET qualification is mandatory for Indian students.
-
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-          <section className="px-6 pb-10">
-            <div className="max-w-7xl mx-auto">
-              <TrustNote
-                whatThisPageHelpsWith={[
-                  "Checking Bangladesh MBBS eligibility and gap-rule risk before payment.",
-                  "Understanding NEET, GPA, BM&DC and DGME-linked admission checks.",
-                  "Shortlisting universities before processing or booking fees.",
-                  "Preparing counselling questions for documents, visa and licensing review.",
-                ]}
-              />
-            </div>
-          </section>
-
-          <VerificationCounsellingCard
-        countryName="Bangladesh MBBS"
-        title="Check Bangladesh MBBS eligibility with ILMALINK"
-        buttonLabel="Get Bangladesh MBBS Counselling"
-            showTrustNote={false}
-      />
-</main>
+    <main className="min-h-screen overflow-x-hidden bg-[#f6f8fb] text-slate-950">
+      <JsonLd data={buildJsonLd()} />
+      <Navbar />
+      <BangladeshHero />
+      <QuickNavigation />
+      <CollegesSection />
+      <AdmissionUpdate />
+      <WhyBangladeshSection />
+      <FeeEligibilityDocuments />
+      <FmgeAndCounselling />
+      <VerificationAndFaq />
+    </main>
   );
 }
