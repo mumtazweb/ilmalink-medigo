@@ -825,7 +825,7 @@ export default function HomeHeroClient() {
                   <p className="text-[8px] leading-tight text-white/70">Indian Colleges | MBBS Seats</p>
                 </div>
               </div>
-              <p className="mb-1 mt-3 text-center text-[9px] font-medium leading-none tracking-wide text-white/45">
+              <p className="mb-1 mt-3 text-center text-[9px] font-small leading-none tracking-wide text-white/45">
                 These figures are compiled from official sources for student information & guidance.
               </p>
             </div>
