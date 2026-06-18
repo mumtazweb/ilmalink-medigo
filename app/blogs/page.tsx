@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Navbar from "../components/navbar";
 import BlogsDirectory from "../components/blog/BlogsDirectory";
 import { blogCategories } from "../lib/blog/seed";
+import { BLOGS_PAGE_SIZE } from "../lib/blog/pagination";
 
 import { getCountries, getPublishedBlogSummaries } from "../lib/blog/store";
 
@@ -32,6 +34,11 @@ export const metadata: Metadata = {
 export default async function BlogsPage() {
   const posts = await getPublishedBlogSummaries();
   const countries = getCountries(posts);
+  const totalPages = Math.max(1, Math.ceil(posts.length / BLOGS_PAGE_SIZE));
+  const archivePages = Array.from(
+    { length: Math.max(0, totalPages - 1) },
+    (_, index) => index + 2
+  );
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -124,6 +131,38 @@ export default async function BlogsPage() {
         categories={[...blogCategories]}
         countries={countries}
       />
+
+      {archivePages.length > 0 && (
+        <section className="pb-10">
+          <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
+            <div className="rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm">
+              <p className="text-xs font-black uppercase tracking-[0.14em] text-[#047857]">
+                Crawlable blog archive
+              </p>
+              <p className="mt-1 text-sm font-medium text-slate-600">
+                Browse older server-rendered archive pages:
+              </p>
+              <nav aria-label="Blog archive pagination" className="mt-3 flex flex-wrap gap-2">
+                <Link
+                  href="/blogs/"
+                  className="rounded-full border border-[#0F4CFF]/20 bg-[#0F4CFF]/10 px-3 py-1.5 text-xs font-black text-[#0F4CFF]"
+                >
+                  Page 1
+                </Link>
+                {archivePages.map((pageNumber) => (
+                  <Link
+                    key={`archive-page-${pageNumber}`}
+                    href={`/blogs/page/${pageNumber}/`}
+                    className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-black text-slate-700 transition hover:border-[#0F4CFF]/40 hover:text-[#0F4CFF]"
+                  >
+                    Page {pageNumber}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   );
 }

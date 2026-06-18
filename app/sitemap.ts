@@ -5,6 +5,7 @@ import path from "node:path";
 import { countryGeoFacts } from "./data/geo";
 import { georgiaUniversities } from "./data/georgiaUniversities";
 import { globalSearchIndex } from "./data/searchIndex";
+import { BLOGS_PAGE_SIZE } from "./lib/blog/pagination";
 
 const SITE_URL = "https://www.ilmalink.com";
 
@@ -24,6 +25,7 @@ const additionalPublicCountryRoutes = [
 const staticRoutes = [
   "",
   "/about",
+  "/data-methodology",
   "/geo-profile",
   "/official-links",
   "/site-hierarchy",
@@ -258,6 +260,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   for (const post of posts) {
     addBlogRoute(routes, post.slug, now, post.updatedAt, post.publishDate);
+  }
+
+  const totalBlogPages = Math.max(1, Math.ceil(posts.length / BLOGS_PAGE_SIZE));
+
+  for (let pageNumber = 2; pageNumber <= totalBlogPages; pageNumber += 1) {
+    const route = cleanRoute(`/blogs/page/${pageNumber}`);
+
+    if (!shouldIncludeRoute(route)) {
+      continue;
+    }
+
+    routes.set(route, {
+      priority: 0.7,
+      lastModified: now,
+    });
   }
 
   return [...routes.entries()]

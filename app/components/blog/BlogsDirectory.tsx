@@ -4,8 +4,9 @@ import { useMemo, useState } from "react";
 import { BookOpen, ChevronDown, Search, SlidersHorizontal, X } from "lucide-react";
 import BlogCard from "./BlogCard";
 import type { BlogSort, BlogSummaryPost } from "@/app/lib/blog/types";
+import { BLOGS_PAGE_SIZE } from "@/app/lib/blog/pagination";
 
-const visibleStep = 6;
+const visibleStep = BLOGS_PAGE_SIZE;
 
 // BLOG SYSTEM: Search, filters, sorting and load-more grid for /blogs.
 export default function BlogsDirectory({

@@ -16,7 +16,6 @@ import {
   Send,
 } from "lucide-react";
 import SearchModal from "./SearchModal";
-import { ilmaLinkEntityData } from "../data/geo";
 
 const OPEN_SEARCH_EVENT = "ilmalink:open-search";
 
@@ -69,19 +68,23 @@ const footerLinks = [
   },
 ];
 
-const officeLabelByCity: Record<string, string> = {
-  Bengaluru: "Headquarters",
-  Kolkata: "Main Office",
-  Mumbai: "R&D Office",
-};
-
-const offices = ilmaLinkEntityData.offices.map((office) => ({
-  label: officeLabelByCity[office.addressLocality] ?? office.label,
-  city: office.addressLocality,
-  address: `${office.streetAddress}, ${office.addressLocality}${
-    office.postalCode ? ` - ${office.postalCode}` : ""
-  }`,
-}));
+const offices = [
+  {
+    label: "Headquarters",
+    city: "Bengaluru",
+    address: "146/16-01, 6th Cross, 3rd Main, Wilson Garden, Bengaluru - 560027",
+  },
+  {
+    label: "Main Office",
+    city: "Kolkata",
+    address: "MUMTAZ Campus, Kamrbari, Basina, Rajarhat-Newtown, Kolkata-135",
+  },
+  {
+    label: "R&D Branch",
+    city: "Mumbai",
+    address: "M.A.K Azad Road, Sector 8B, Belapur, Mumbai - 400614",
+  },
+];
 
 const contactPointGroups = [
   {
@@ -296,7 +299,7 @@ export default function Footer() {
   const pointLabel = nearbyState === "International" ? "Country desk" : "District / city";
   const nearbyWhatsappHref = `${contact.whatsappHref}?text=${encodeURIComponent(
     [
-      "Nearby contact point request",
+      "Nearby contact points request",
       `Selected state/region: ${nearbyState}`,
       `${pointLabel}: ${selectedPoint}`,
       "Student name:",
@@ -382,7 +385,7 @@ export default function Footer() {
                   Nearby
                 </span>
                 <span className="block truncate text-xs font-semibold text-white sm:text-sm">
-                  Contact Points
+                  Nearby Contact Points
                 </span>
               </span>
             </button>
@@ -429,6 +432,7 @@ export default function Footer() {
 
           {contactPointsOpen && (
             <div className="mt-3 rounded-md border border-white/10 bg-white/[0.025] p-3">
+              <h3 className="mb-2 text-sm font-semibold text-white">Nearby Contact Points</h3>
               <div className="grid grid-cols-2 gap-2">
                 {contactPointGroups.map((group) => (
                   <div key={group.state} className="rounded-md border border-white/10 p-2">

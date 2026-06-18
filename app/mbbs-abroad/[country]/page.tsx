@@ -65,15 +65,47 @@ export default async function FmgeCountryPage({
   if (!country) notFound();
 
   const displayName = getFmgeCountryDisplayName(country.country);
+  const countryHref = getFmgeCountryHref(country.country);
+  const countryUrl = `https://www.ilmalink.com${countryHref.endsWith("/") ? countryHref : `${countryHref}/`}`;
   const whatsappHref = `${whatsappCounsellingUrl}?text=${encodeURIComponent(
     `I want counselling for MBBS in ${displayName}. Please share verified university and admission guidance.`
   )}`;
   const previewColleges = country.colleges.slice(0, 30);
   const hasMoreColleges = country.colleges.length > previewColleges.length;
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.ilmalink.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "MBBS Abroad",
+        item: "https://www.ilmalink.com/mbbs-abroad/",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: `MBBS in ${displayName}`,
+        item: countryUrl,
+      },
+    ],
+  };
 
   return (
     <main className="min-h-screen bg-[#f8fafc] text-slate-950">
       <Navbar />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c"),
+        }}
+      />
 
       <section className="bg-[#031525] px-4 pb-14 pt-32 text-white sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">

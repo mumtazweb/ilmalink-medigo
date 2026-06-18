@@ -63,6 +63,14 @@ export default async function Home() {
           <p className="text-center text-[11px] font-medium leading-5 text-slate-600">
             Data compiled from ILMALINK MEDIGO student guidance records and official public sources.
           </p>
+          <p className="mt-1 text-center text-[11px] font-semibold leading-5">
+            <Link
+              href="/data-methodology"
+              className="text-[#0F4CFF] underline-offset-2 transition hover:text-[#0b3fd6] hover:underline"
+            >
+              View data methodology
+            </Link>
+          </p>
         </div>
       </section>
       <LatestBlogsScroller posts={latestBlogs} />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 
 import CounsellingActionButton from "../../components/CounsellingActionButton";
@@ -57,10 +57,6 @@ export default function FMGEExplorerPage() {
   }, [normalizedQuery, sortBy]);
 
   const pageCount = Math.max(1, Math.ceil(filteredCountries.length / PAGE_SIZE));
-
-  useEffect(() => {
-    setPage(1);
-  }, [normalizedQuery, sortBy]);
 
   const pageCountries = filteredCountries.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
@@ -148,7 +144,10 @@ export default function FMGEExplorerPage() {
                   <input
                     type="search"
                     value={query}
-                    onChange={(event) => setQuery(event.target.value)}
+                    onChange={(event) => {
+                      setQuery(event.target.value);
+                      setPage(1);
+                    }}
                     placeholder="Search country or college"
                     className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-900 outline-none transition focus:border-[#16C784] focus:ring-2 focus:ring-[#16C784]/20"
                   />
@@ -157,7 +156,10 @@ export default function FMGEExplorerPage() {
                   <span className="sr-only">Sort FMGE data</span>
                   <select
                     value={sortBy}
-                    onChange={(event) => setSortBy(event.target.value as SortOption)}
+                    onChange={(event) => {
+                      setSortBy(event.target.value as SortOption);
+                      setPage(1);
+                    }}
                     className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-900 outline-none transition focus:border-[#16C784] focus:ring-2 focus:ring-[#16C784]/20"
                   >
                     {(Object.keys(sortLabels) as SortOption[]).map((option) => (

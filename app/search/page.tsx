@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     canonical: "https://www.ilmalink.com/search",
   },
   robots: {
-    index: true,
+    index: false,
     follow: true,
   },
 };

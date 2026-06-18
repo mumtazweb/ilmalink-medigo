@@ -55,12 +55,17 @@ function repeatForMarquee(items: AnnouncementItem[]) {
 function TickerItems({
   items,
   prefix,
+  decorative = false,
 }: {
   items: AnnouncementItem[];
   prefix: string;
+  decorative?: boolean;
 }) {
   return (
-    <div className="flex items-center gap-4 px-3 py-1.5 text-sm font-semibold text-white/95 md:text-base lg:text-[13px]">
+    <div
+      className="flex items-center gap-4 px-3 py-1.5 text-sm font-semibold text-white/95 md:text-base lg:text-[13px]"
+      aria-hidden={decorative ? "true" : undefined}
+    >
       <div className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#00F0A8]/35 bg-[linear-gradient(135deg,rgba(0,240,168,0.24),rgba(15,76,255,0.18))] shadow-[0_0_18px_rgba(0,240,168,0.28)]">
         <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border border-[#081B35] bg-[#FFD166]" />
         <BellRing size={14} className="text-[#BFFFF0]" aria-hidden="true" />
@@ -131,6 +136,17 @@ export default function AnnouncementTicker() {
   }, []);
 
   const marqueeItems = useMemo(() => repeatForMarquee(items), [items]);
+  const semanticItems = useMemo(() => {
+    const unique = new Map<string, AnnouncementItem>();
+
+    for (const item of items) {
+      if (!unique.has(item.id)) {
+        unique.set(item.id, item);
+      }
+    }
+
+    return Array.from(unique.values());
+  }, [items]);
 
   useEffect(() => {
     return () => {
@@ -217,9 +233,19 @@ export default function AnnouncementTicker() {
           onTouchStart={pauseThenResume}
           onWheel={pauseThenResume}
         >
+          <ul className="sr-only">
+            {semanticItems.map((item) => (
+              <li key={`semantic-${item.id}`}>
+                <Link href={item.href} prefetch={item.href.startsWith("/") ? undefined : false}>
+                  {getTickerLabel(item)}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
           <div className="ticker-content absolute left-0 top-0 flex w-max whitespace-nowrap">
-            <TickerItems items={marqueeItems} prefix="first" />
-            <TickerItems items={marqueeItems} prefix="second" />
+            <TickerItems items={marqueeItems} prefix="first" decorative />
+            <TickerItems items={marqueeItems} prefix="second" decorative />
           </div>
         </div>
 
