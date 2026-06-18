@@ -58,6 +58,13 @@ export default async function Home() {
       </h1>
       <Navbar />
       <HomeHeroClient />
+      <section className="bg-[#f8fafc] px-4 pb-3 pt-2 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <p className="text-center text-[11px] font-medium leading-5 text-slate-600">
+            Data compiled from ILMALINK MEDIGO student guidance records and official public sources.
+          </p>
+        </div>
+      </section>
       <LatestBlogsScroller posts={latestBlogs} />
 
       {otherEntranceExamBlogs.length > 0 && (
@@ -87,7 +94,7 @@ export default async function Home() {
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.16em] text-[#0F4CFF]">
-              AI Summary
+              Platform Overview
             </p>
             <h2 className="mt-2 text-3xl font-black tracking-normal text-[#081B35] md:text-4xl">
               ILMALINK MEDIGO is the MBBS counselling and medical admission

@@ -176,7 +176,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     priorityScore: 1000,
     sourceType: "verified",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
-    tags: ["Internal", "Fee Support", "India", "Abroad", "Counselling"],
+    tags: ["ILMALINK", "Fee Support", "India", "Abroad", "Counselling"],
     isInternalIlmalinkSupport: true,
   },
   {
@@ -538,7 +538,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     },
     marksRequirement: {
       minimumPercentage: null,
-      note: "Merit and financial hardship may be reviewed internally.",
+      note: "Merit and financial hardship are reviewed during eligibility screening.",
     },
     genderEligibility: "All",
     destinationEligibility: ["India"],
@@ -547,7 +547,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
       "Private MBBS India",
       "Counselling not completed yet",
     ],
-    maxAmount: "Check official route; amount depends on internal rules and availability.",
+    maxAmount: "Check official route; amount depends on eligibility rules and availability.",
     interestRate: "Check official source.",
     repayment: "Check official source.",
     moratorium: "Check official source.",
@@ -561,7 +561,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     importantNotes: [
       "Official criteria and amount must be checked directly.",
       "Do not assume fixed MBBS scholarship amount.",
-      "Support depends on internal verification and availability.",
+      "Support depends on eligibility verification and availability.",
     ],
     priorityScore: 43,
     sourceType: "needs-check",

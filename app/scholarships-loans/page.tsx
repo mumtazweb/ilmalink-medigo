@@ -488,7 +488,7 @@ export default function ScholarshipsLoansPage() {
               recognition, bank/NBFC rules, government rules, university/college
               rules, admission route, student profile and ILMALINK approval.
               ILMALINK MEDIGO guides students end-to-end and may offer
-              admission-linked internal fee support up to INR 3,00,000 after
+              admission-linked fee support up to INR 3,00,000 after
               verification.
             </p>
           </div>

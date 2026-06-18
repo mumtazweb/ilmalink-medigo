@@ -880,30 +880,48 @@ const OTHER_ENTRANCE_EXAM_KEYWORDS = [
   "jee main",
   "jeeadvanced",
   "jee advanced",
+  "jee",
   "mht-cet",
+  "mhcet",
   "gujcet",
   "keam",
+  "engineering",
+  "btech",
+  "b.tech",
+  "pharmacy",
+  "bpharm",
+  "b.pharm",
+  "pharm",
+  "non-medical",
 ];
+
+function containsOtherEntranceExamKeyword(value: string) {
+  const normalized = value.toLowerCase();
+
+  return OTHER_ENTRANCE_EXAM_KEYWORDS.some((keyword) =>
+    normalized.includes(keyword)
+  );
+}
 
 function isOtherEntranceExamBlog(blog: BlogSummaryPost) {
   if (blog.category === "Other Entrance Exams") {
     return true;
   }
 
-  const normalizedTitle = blog.title.toLowerCase();
+  if (containsOtherEntranceExamKeyword(blog.title)) {
+    return true;
+  }
 
-  if (
-    OTHER_ENTRANCE_EXAM_KEYWORDS.some((keyword) =>
-      normalizedTitle.includes(keyword)
-    )
-  ) {
+  if (containsOtherEntranceExamKeyword(blog.slug)) {
+    return true;
+  }
+
+  if (containsOtherEntranceExamKeyword(blog.shortDescription)) {
     return true;
   }
 
   return blog.tags.some((tag) =>
-    OTHER_ENTRANCE_EXAM_KEYWORDS.some((keyword) =>
-      tag.toLowerCase().includes(keyword)
-    )
+    containsOtherEntranceExamKeyword(tag)
   );
 }
 

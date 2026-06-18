@@ -312,7 +312,7 @@ const mbbsIndiaCollegeSearchEntries: GlobalSearchEntry[] = mbbsIndiaColleges.map
       access.detail,
       `${college.seatCapacity} MBBS seats`,
       `established ${college.establishmentYear}`,
-      "fees ##",
+      "fees to be updated",
       `Study MBBS in ${college.state}`,
     ].join(" "),
     priority: college.category === "Private" && access.status === "open" ? 94 : college.category === "Government" ? 92 : 90,

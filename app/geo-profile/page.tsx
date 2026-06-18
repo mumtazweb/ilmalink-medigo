@@ -85,7 +85,7 @@ export default function GeoProfilePage() {
         <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1fr_0.9fr]">
           <article className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
             <p className="text-xs font-black uppercase tracking-[0.16em] text-[#047857]">
-              AI Summary
+              Platform Overview
             </p>
             <h2 className="mt-2 text-2xl font-black tracking-normal text-[#081B35]">
               What ILMALINK MEDIGO does

@@ -826,7 +826,7 @@ export default function HomeHeroClient() {
                 </div>
               </div>
               <p className="mb-1 mt-3 text-center text-[9px] font-medium leading-none tracking-wide text-white/45">
-                Data compiled from official public sources
+                These figures are compiled from official sources for student information & guidance.
               </p>
             </div>
 
@@ -1240,6 +1240,9 @@ export default function HomeHeroClient() {
                     </div>
                   ))}
                 </div>
+                <p className="mt-3 text-[10px] font-medium leading-4 text-slate-500">
+                  Data compiled from ILMALINK MEDIGO student guidance records and official public sources.
+                </p>
               </section>
             </aside>
           </div>
@@ -1311,6 +1314,9 @@ export default function HomeHeroClient() {
                   </div>
                 ))}
               </div>
+              <p className="mt-3 text-[10px] font-medium leading-4 text-slate-500">
+                Data compiled from ILMALINK MEDIGO student guidance records and official public sources.
+              </p>
             </div>
 
             <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_18px_44px_rgba(15,23,42,0.08)]">

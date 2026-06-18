@@ -134,7 +134,7 @@ export default function OfficialAdvisoryBox({
           </a>
         ) : (
           <span className="text-sm font-semibold text-slate-500">
-            Official source reference retained internally.
+            Official source reference recorded by ILMALINK MEDIGO.
           </span>
         )}
       </div>

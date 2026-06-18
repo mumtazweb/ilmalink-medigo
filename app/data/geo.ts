@@ -431,7 +431,7 @@ export const countryGeoFacts: CountryGeoFact[] = [
       "Review internship pattern and return-to-India licensing pathway.",
       "Use WDOMS listing as one checkpoint, not a guarantee.",
     ],
-    "China has 179 WDOMS-listed medical schools as per ILMALINK MEDIGO's internal country dataset. Indian citizens who wish to return to India for medical licensing must satisfy Indian regulatory requirements, including NEET qualification and future licensing rules applicable at the time. Students should verify university recognition, medium of instruction, internship pattern, licensing pathway and NMC compliance before admission."
+    "China has 179 WDOMS-listed medical schools as per ILMALINK MEDIGO's country dataset. Indian citizens who wish to return to India for medical licensing must satisfy Indian regulatory requirements, including NEET qualification and future licensing rules applicable at the time. Students should verify university recognition, medium of instruction, internship pattern, licensing pathway and NMC compliance before admission."
   ),
   createCountryFact(
     "Nepal",
@@ -517,7 +517,7 @@ export function buildCountryFaqs(country: CountryGeoFact) {
     },
     {
       question: `How many WDOMS-listed medical schools are shown for ${country.countryName}?`,
-      answer: `ILMALINK MEDIGO's internal country dataset lists ${country.wdomsCount} WDOMS medical school entries for ${country.countryName}. Students should still verify the exact institution name directly before admission.`,
+      answer: `ILMALINK MEDIGO's country dataset lists ${country.wdomsCount} WDOMS medical school entries for ${country.countryName}. Students should still verify the exact institution name directly before admission.`,
     },
     {
       question: `What should students verify before choosing ${country.countryName}?`,

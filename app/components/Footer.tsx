@@ -16,6 +16,7 @@ import {
   Send,
 } from "lucide-react";
 import SearchModal from "./SearchModal";
+import { ilmaLinkEntityData } from "../data/geo";
 
 const OPEN_SEARCH_EVENT = "ilmalink:open-search";
 
@@ -68,23 +69,19 @@ const footerLinks = [
   },
 ];
 
-const offices = [
- {
-  label: "Headquarters",
-  city: "Bengaluru",
-  address: "146/16-01, 6th Cross, 3rd Main, Wilson Garden, Bangalore - 560027",
-},
-  {
-    label: "Main Office",
-    city: "Kolkata",
-    address: "MUMTAZ Campus, Kamrbari, Basina, Rajarhat-Newtown, Kolkata - 700135",
-  },
-  {
-    label: "R&D Office",
-    city: "Mumbai",
-    address: "M.A.K Azad Road, Sector 8B, Belapur, Mumbai - 400614",
-  },
-];
+const officeLabelByCity: Record<string, string> = {
+  Bengaluru: "Headquarters",
+  Kolkata: "Main Office",
+  Mumbai: "R&D Office",
+};
+
+const offices = ilmaLinkEntityData.offices.map((office) => ({
+  label: officeLabelByCity[office.addressLocality] ?? office.label,
+  city: office.addressLocality,
+  address: `${office.streetAddress}, ${office.addressLocality}${
+    office.postalCode ? ` - ${office.postalCode}` : ""
+  }`,
+}));
 
 const contactPointGroups = [
   {

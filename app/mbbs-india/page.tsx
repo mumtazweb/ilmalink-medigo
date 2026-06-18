@@ -23,6 +23,15 @@ const priorityStateCards = mbbsIndiaCollegesByState.filter((group) => group.priv
 
 const formatNumber = (value: number) => value.toLocaleString("en-IN");
 
+const formatCollegeFee = (fee: string) => {
+  const normalized = fee.trim().toLowerCase();
+  if (!normalized || normalized === "##" || normalized === "na" || normalized === "n/a") {
+    return "To be updated";
+  }
+
+  return fee;
+};
+
 function AdmissionAccessBadge({ access }: { access: MBBSIndiaAdmissionAccess }) {
   const className =
     access.status === "open"
@@ -62,7 +71,7 @@ function CollegeList({ title, colleges, tone }: { title: string; colleges: MBBSI
             >
               <h4 className="text-sm font-bold leading-5 text-slate-950">{college.collegeName}</h4>
               <p className="mt-2 text-xs font-semibold leading-5 text-slate-600">
-                Seats: {formatNumber(college.seatCapacity)} | Established: {college.establishmentYear} | Fees: {college.fees}
+                Seats: {formatNumber(college.seatCapacity)} | Established: {college.establishmentYear} | Fees: {formatCollegeFee(college.fees)}
               </p>
             </article>
           ))

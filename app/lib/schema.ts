@@ -277,7 +277,7 @@ export function buildCountryMedicalEducationSchema(countryData: CountryGeoFact) 
       {
         "@type": "Thing",
         name: `${countryData.countryName} WDOMS medical schools`,
-        description: `${countryData.wdomsCount} WDOMS-listed medical school entries in ILMALINK MEDIGO's internal country dataset.`,
+        description: `${countryData.wdomsCount} WDOMS-listed medical school entries in ILMALINK MEDIGO's country dataset.`,
       },
       {
         "@type": "Thing",

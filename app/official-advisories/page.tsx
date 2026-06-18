@@ -182,7 +182,7 @@ export default async function OfficialAdvisoriesPage() {
               </h2>
               <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-600">
                 These summaries have completed ILMALINK MEDIGO&apos;s
-                internal review. Always open the linked official source
+                editorial review. Always open the linked official source
                 before acting.
               </p>
             </div>

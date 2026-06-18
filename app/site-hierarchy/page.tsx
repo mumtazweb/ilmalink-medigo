@@ -11,7 +11,7 @@ export const dynamic = "force-static";
 export const metadata: Metadata = {
   title: "Site Hierarchy | All Public Sections | ILMALINK MEDIGO",
   description:
-    "Full internal hierarchy map of ILMALINK MEDIGO public pages for students, crawlers and AI extraction.",
+    "Complete hierarchy map of ILMALINK MEDIGO public pages for students, crawlers and AI extraction.",
   alternates: {
     canonical: "https://www.ilmalink.com/site-hierarchy",
   },

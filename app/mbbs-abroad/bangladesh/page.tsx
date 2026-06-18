@@ -1,5 +1,6 @@
 
 import GeoCountrySection from "../../components/GeoCountrySection";
+import TrustNote from "../../components/TrustNote";
 import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
 import BangladeshGpaCalculator from "../../components/BangladeshGpaCalculator";
 export const dynamic = "force-static";
@@ -111,7 +112,7 @@ export default function BangladeshPage() {
 
       </section>
 
-      <GeoCountrySection countryName="Bangladesh" />
+      <GeoCountrySection countryName="Bangladesh" showTrustNote={false} />
 
       {/* ALERT */}
       <section className="px-6 pb-20">
@@ -660,12 +661,24 @@ export default function BangladeshPage() {
 
       </section>
 
-    
+          <section className="px-6 pb-10">
+            <div className="max-w-7xl mx-auto">
+              <TrustNote
+                whatThisPageHelpsWith={[
+                  "Checking Bangladesh MBBS eligibility and gap-rule risk before payment.",
+                  "Understanding NEET, GPA, BM&DC and DGME-linked admission checks.",
+                  "Shortlisting universities before processing or booking fees.",
+                  "Preparing counselling questions for documents, visa and licensing review.",
+                ]}
+              />
+            </div>
+          </section>
 
-      <VerificationCounsellingCard
+          <VerificationCounsellingCard
         countryName="Bangladesh MBBS"
         title="Check Bangladesh MBBS eligibility with ILMALINK"
         buttonLabel="Get Bangladesh MBBS Counselling"
+            showTrustNote={false}
       />
 </main>
   );

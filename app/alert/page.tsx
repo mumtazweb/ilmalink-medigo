@@ -257,7 +257,7 @@ export default function AlertPage() {
                   "We will manage allotment letter",
                   "Do not register in official counselling",
                   "Pay token money now to block the seat",
-                  "Do not tell anyone, this is internal quota",
+                  "Do not tell anyone, this is hidden quota",
                 ].map((t) => (
                   <div key={t} className="flex items-start gap-3 rounded-lg border border-slate-100 bg-white p-3">
                     <AlertTriangle size={18} className="text-amber-600" />
@@ -372,7 +372,7 @@ export default function AlertPage() {
 
           <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
             <h4 className="text-sm font-bold text-[#081B35]">Contact ILMALINK Legal Support</h4>
-            <p className="mt-2 text-sm text-slate-700">If you are a victim of admission fraud, ILMALINK has an internal legal team that may help victims with documentation, evidence preservation, referral to local counsel, and guidance on properly reporting to police and cyber cells. ILMALINK can assist only through proper legal channels and does not replace formal police or court action.</p>
+            <p className="mt-2 text-sm text-slate-700">If you are a victim of admission fraud, ILMALINK has a legal support team that may help victims with documentation, evidence preservation, referral to local counsel, and guidance on properly reporting to police and cyber cells. ILMALINK can assist only through proper legal channels and does not replace formal police or court action.</p>
             <ul className="mt-3 list-disc pl-5 text-sm text-slate-700">
               <li>How ILMALINK can help: document review, drafting complaint templates, referrals to local lawyers, and liaising with police on behalf of the student where appropriate.</li>
               <li>What ILMALINK cannot do: act as a law firm for you, guarantee legal outcomes, or publish unverified personal accusations.</li>
@@ -496,10 +496,10 @@ export default function AlertPage() {
 
           <div className="mt-6 rounded-xl bg-white/30 backdrop-blur ring-1 ring-white/30 p-4 shadow-[0_14px_34px_rgba(8,27,53,0.08)]">
             <h4 className="text-sm font-extrabold text-[#081B35]">About ILMALINK MEDIGO</h4>
-            <p className="mt-2 text-sm text-slate-700">ILMALINK MEDIGO is not an agency. We act as a watchdog and information service with internal news and resources. Our team includes members with over 10 years&apos; experience in the medical education sector, including college administration, NEET tutoring and counselling-system experience. We publish verified guidance to protect students and parents from fraud risks.</p>
+            <p className="mt-2 text-sm text-slate-700">ILMALINK MEDIGO is not an agency. We act as a watchdog and information service with verified updates and resources. Our team includes members with over 10 years&apos; experience in the medical education sector, including college administration, NEET tutoring and counselling-system experience. We publish verified guidance to protect students and parents from fraud risks.</p>
             <div className="mt-3 flex gap-3">
               <Link href="/create-account/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-4 py-2 text-sm font-bold text-[#008f72]">Contact ILMALINK</Link>
-              <Link href="/blogs" className="inline-flex items-center gap-2 rounded-lg bg-white/50 px-4 py-2 text-sm font-semibold text-slate-800">Read internal news</Link>
+              <Link href="/blogs" className="inline-flex items-center gap-2 rounded-lg bg-white/50 px-4 py-2 text-sm font-semibold text-slate-800">Read latest updates</Link>
             </div>
           </div>
         </section>
