@@ -369,7 +369,7 @@ const kyrgyzstanUniversitySearchEntries: GlobalSearchEntry[] = kyrgyzstanUnivers
     description: `${university.recommendationLevel}: ${university.accreditationLabel}. ${feeSummary}.`,
     url: university.pageExists
       ? `/mbbs-abroad/kyrgyzstan/${university.slug}/`
-      : `/?counselling=open`,
+      : `/`,
     category: "Kyrgyzstan Universities",
     group: "Destinations",
     type: "destination",
@@ -704,8 +704,9 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
 
       if (typeof window !== "undefined") {
         if (result.url.includes("fmge=explorer")) {
-          window.sessionStorage.setItem(PENDING_FMGE_KEY, "1");
-          window.dispatchEvent(new Event(OPEN_FMGE_EVENT));
+          onClose();
+          router.push("/mbbs-abroad/explorer");
+          return;
         }
 
         if (result.url.includes("counselling=open")) {

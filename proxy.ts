@@ -30,6 +30,25 @@ export function proxy(request: NextRequest) {
 
   const { pathname, searchParams } = request.nextUrl;
 
+  const isCounsellingQueryUrl = searchParams.get("counselling") === "open";
+
+  if (isCounsellingQueryUrl) {
+    const response = NextResponse.next();
+    const canonicalPath = pathname === "/" ? "/" : pathname.endsWith("/") ? pathname : `${pathname}/`;
+
+    // Keep the behaviour available for users while preventing query-URL indexing.
+    response.headers.set(
+      "X-Robots-Tag",
+      "noindex, nofollow, noarchive, max-snippet:0"
+    );
+    response.headers.set(
+      "Link",
+      `<https://www.ilmalink.com${canonicalPath}>; rel=\"canonical\"`
+    );
+
+    return response;
+  }
+
   if (needsTrailingSlash(pathname)) {
     const redirectUrl = new URL(request.url);
     redirectUrl.pathname = `${pathname}/`;

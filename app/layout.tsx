@@ -10,6 +10,7 @@ import {
   buildEducationalOrganizationSchema,
   buildLocalBusinessSchema,
   buildOrganizationSchema,
+  buildSiteNavigationSchema,
   buildWebsiteSchema,
 } from "./lib/schema";
 import "./globals.css";
@@ -88,6 +89,7 @@ export default function RootLayout({
             buildOrganizationSchema(),
             buildEducationalOrganizationSchema(),
             buildWebsiteSchema(),
+            buildSiteNavigationSchema(),
             ...ilmaLinkEntityData.offices.map((office) =>
               buildLocalBusinessSchema(office)
             ),

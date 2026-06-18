@@ -51,12 +51,12 @@ const verifiedDestinationMeta: Partial<
   "/mbbs-india": {
     semesterFee: "₹ 10 L/Semester",
     universityCount: 823,
-    badges: ["NMC", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/kyrgyzstan": {
     semesterFee: "₹ 1.8L/Semester",
     universityCount: 32,
-    badges: ["NMC", "WHO", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/georgia": {
     fee: "EEU tuition approx Rs. 28L",
@@ -68,13 +68,13 @@ const verifiedDestinationMeta: Partial<
     fee: "Rs. 28-45 Lakhs Total",
     semesterFee: "₹ 2.5L/Semester",
     universityCount: 102,
-    badges: ["NMC", "WHO", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/bangladesh": {
     fee: "Rs. 25-40 Lakhs Total",
     semesterFee: "₹ 3L/Semester",
     universityCount: 110,
-    badges: ["NMC", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/nepal": {
     semesterFee: "₹ 5L/Semester",
@@ -85,84 +85,84 @@ const verifiedDestinationMeta: Partial<
     fee: "Rs. 20-35 Lakhs Total",
     semesterFee: "₹ 2.0L/Semester",
     universityCount: 39,
-    badges: ["NMC", "WHO", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/kazakhstan": {
     fee: "Rs. 22-35 Lakhs Total",
     semesterFee: "₹ 2.2L/Semester",
     universityCount: 15,
-    badges: ["NMC", "WHO", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/tajikistan": {
     fee: "Rs. 18-30 Lakhs Total",
     semesterFee: "₹ 1.8L/Semester",
     universityCount: 5,
-    badges: ["NMC", "WHO", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/malaysia": {
     semesterFee: "₹ 4.5L/Semester",
     universityCount: 33,
-    badges: ["NMC", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/egypt": {
     fee: "Rs. 18-30 Lakhs Total",
     semesterFee: "₹ 2.4L/Semester",
     universityCount: 57,
-    badges: ["NMC", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/saudi-arabia": {
     fee: "Rs. 60 Lakhs-1.2 Crores+",
     semesterFee: "₹ 10L/Semester",
     universityCount: 40,
-    badges: ["NMC", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/qatar": {
     fee: "Rs. 1.5-3+ Crores",
     semesterFee: "₹ 12L/Semester",
     universityCount: 2,
-    badges: ["NMC", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/uae": {
     fee: "Rs. 60 Lakhs-1.2 Crore+",
     semesterFee: "₹ 7L/Semester",
     universityCount: 12,
-    badges: ["NMC", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/iran": {
     fee: "Rs. 25-55 Lakhs Total",
     semesterFee: "₹ 1.5L/Semester",
     universityCount: 55,
-    badges: ["NMC", "WHO", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/usa": {
     fee: "Rs. 45-65 Lakhs/year",
     semesterFee: "₹ 25L/Semester",
     universityCount: 160,
-    badges: ["NMC", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/canada": {
     fee: "Rs. 35-55 Lakhs/year",
     semesterFee: "₹ 20L/Semester",
     universityCount: 17,
-    badges: ["NMC", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/australia": {
     fee: "Rs. 40-60 Lakhs/year",
     semesterFee: "₹ 22L/Semester",
     universityCount: 26,
-    badges: ["NMC", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/new-zealand": {
     fee: "Rs. 28-35 Lakhs/year",
     semesterFee: "₹ 18L/Semester",
     universityCount: 2,
-    badges: ["NMC", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/uk": {
     fee: "Rs. 45-60 Lakhs/year",
     semesterFee: "₹ 24L/Semester",
     universityCount: 46,
-    badges: ["NMC", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/germany": {
     semesterFee: "₹ Zero tuition Fees",
@@ -173,49 +173,49 @@ const verifiedDestinationMeta: Partial<
     fee: "Rs. 25-30 Lakhs Total",
     semesterFee: "₹ 3.0L/Semester",
     universityCount: 29,
-    badges: ["NMC", "WHO", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/singapore": {
     fee: "Rs. 1.5-3+ Crores",
     semesterFee: "₹ 20L/Semester",
     universityCount: 3,
-    badges: ["NMC", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/barbados": {
     fee: "Rs. 50-55 Lakhs Total",
     semesterFee: "₹ 4L/Semester",
     universityCount: 9,
-    badges: ["NMC", "WHO", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/china": {
     fee: "Rs. 25-30 Lakhs Total",
     semesterFee: "₹ 2.0L/Semester",
     universityCount: 179,
-    badges: ["NMC", "WHO", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/armenia": {
     fee: "Rs. 35-40 Lakhs Total",
     semesterFee: "₹ 2.4L/Semester",
     universityCount: 9,
-    badges: ["NMC", "WHO", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/oman": {
     fee: "Rs. 1-1.6 Crores Total",
     semesterFee: "₹ 6L/Semester",
     universityCount: 3,
-    badges: ["NMC", "WHO", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/philippines": {
     fee: "Rs. 25-30 Lakhs Total",
     semesterFee: "₹ 2.0L/Semester",
     universityCount: 58,
-    badges: ["NMC", "WHO", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
   "/mbbs-abroad/ukraine": {
     fee: "Rs. 27-32 Lakhs Total",
     semesterFee: "₹ 2.2L/Semester",
     universityCount: 37,
-    badges: ["NMC", "WHO", "English"],
+    badges: ["WDOMS-listed", "English"],
   },
 };
 
@@ -758,6 +758,9 @@ export default function HomeHeroClient() {
                   </div>
                 </div>
               </div>
+              <p className="mt-3 hidden max-w-[520px] text-[9px] font-medium leading-none tracking-wide text-white/45 md:mx-auto md:block md:text-center md:text-[10px] lg:mx-0 lg:max-w-[480px] lg:text-left">
+                Data compiled from official public sources
+              </p>
 
               <div className="mx-0 mt-5 flex w-full max-w-[190px] flex-col items-stretch justify-center gap-2 md:mx-auto md:mt-6 md:max-w-[360px] md:flex-row md:flex-nowrap lg:mx-0 lg:mt-8 lg:max-w-[520px] lg:justify-start lg:gap-3">
                 <button
@@ -788,38 +791,43 @@ export default function HomeHeroClient() {
               </div>
             </div>
 
-            <div className="relative z-20 grid grid-cols-4 gap-1.5 text-white md:hidden">
-              <div className="flex flex-col items-center gap-1 text-center">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
-                  <UniversityIcon />
+            <div className="relative z-20 md:hidden">
+              <div className="grid grid-cols-4 gap-1.5 text-white">
+                <div className="flex flex-col items-center gap-1 text-center">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
+                    <UniversityIcon />
+                  </div>
+                  <p className="text-[10px] font-bold leading-none">480+</p>
+                  <p className="text-[8px] leading-tight text-white/70">Universities</p>
                 </div>
-                <p className="text-[10px] font-bold leading-none">480+</p>
-                <p className="text-[8px] leading-tight text-white/70">Universities</p>
-              </div>
 
-              <div className="flex flex-col items-center gap-1 text-center">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
-                  <CountryIcon />
+                <div className="flex flex-col items-center gap-1 text-center">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
+                    <CountryIcon />
+                  </div>
+                  <p className="text-[10px] font-bold leading-none">54+</p>
+                  <p className="text-[8px] leading-tight text-white/70">Countries</p>
                 </div>
-                <p className="text-[10px] font-bold leading-none">54+</p>
-                <p className="text-[8px] leading-tight text-white/70">Countries</p>
-              </div>
 
-              <div className="flex flex-col items-center gap-1 text-center">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
-                  <StudentsIcon />
+                <div className="flex flex-col items-center gap-1 text-center">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
+                    <StudentsIcon />
+                  </div>
+                  <p className="text-[10px] font-bold leading-none">100000+</p>
+                  <p className="text-[8px] leading-tight text-white/70">MBBS Abroad</p>
                 </div>
-                <p className="text-[10px] font-bold leading-none">100000+</p>
-                <p className="text-[8px] leading-tight text-white/70">MBBS Abroad</p>
-              </div>
 
-              <div className="flex flex-col items-center gap-1 text-center">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
-                  <ShieldIcon />
+                <div className="flex flex-col items-center gap-1 text-center">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[#7EE1FF]">
+                    <ShieldIcon />
+                  </div>
+                  <p className="text-[10px] font-bold leading-none">823+ | 1.29L+</p>
+                  <p className="text-[8px] leading-tight text-white/70">Indian Colleges | MBBS Seats</p>
                 </div>
-                <p className="text-[10px] font-bold leading-none">823+ | 1.29L+</p>
-                <p className="text-[8px] leading-tight text-white/70">Indian Colleges | MBBS Seats</p>
               </div>
+              <p className="mb-1 mt-3 text-center text-[9px] font-medium leading-none tracking-wide text-white/45">
+                Data compiled from official public sources
+              </p>
             </div>
 
             {/* Country card */}

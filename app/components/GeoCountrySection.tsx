@@ -11,10 +11,12 @@ import {
 
 type GeoCountrySectionProps = {
   countryName: string;
+  showTrustNote?: boolean;
 };
 
 export default function GeoCountrySection({
   countryName,
+  showTrustNote = true,
 }: GeoCountrySectionProps) {
   const country = getCountryGeoFact(countryName);
 
@@ -99,14 +101,16 @@ export default function GeoCountrySection({
           </div>
         </section>
 
-        <TrustNote
-          whatThisPageHelpsWith={[
-            `Checking basic MBBS eligibility for ${country.countryName}.`,
-            "Understanding NEET, WDOMS, course duration and medium of instruction.",
-            "Shortlisting universities before paying application or booking fees.",
-            "Preparing questions for counselling, documents, visa and licensing review.",
-          ]}
-        />
+        {showTrustNote ? (
+          <TrustNote
+            whatThisPageHelpsWith={[
+              `Checking basic MBBS eligibility for ${country.countryName}.`,
+              "Understanding NEET, WDOMS, course duration and medium of instruction.",
+              "Shortlisting universities before paying application or booking fees.",
+              "Preparing questions for counselling, documents, visa and licensing review.",
+            ]}
+          />
+        ) : null}
       </div>
     </section>
   );

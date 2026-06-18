@@ -818,7 +818,7 @@ function buildBaseRecords() {
           description: `${university.recommendationLevel}: ${university.accreditationLabel}.`,
           url: university.pageExists
             ? `/mbbs-abroad/kyrgyzstan/${university.slug}/`
-            : "/?counselling=open",
+            : "/",
           category: "Kyrgyzstan Universities",
           group: "Destinations",
           type: "destination",

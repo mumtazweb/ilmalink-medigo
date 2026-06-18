@@ -10,6 +10,7 @@ type VerificationCounsellingCardProps = {
   title?: string;
   description?: string;
   buttonLabel?: string;
+  showTrustNote?: boolean;
 };
 
 export default function VerificationCounsellingCard({
@@ -17,6 +18,7 @@ export default function VerificationCounsellingCard({
   title,
   description,
   buttonLabel,
+  showTrustNote = true,
 }: VerificationCounsellingCardProps) {
   const cardTitle = title ?? `Need help checking ${countryName} eligibility?`;
   const cardDescription =
@@ -47,15 +49,17 @@ export default function VerificationCounsellingCard({
           </CounsellingActionButton>
         </div>
       </div>
-      <div className="mx-auto mt-4 max-w-7xl">
-        <TrustNote
-          whatThisPageHelpsWith={[
-            `Checking eligibility and documents for ${countryName}.`,
-            "Understanding counselling, university, visa and licensing risks before payment.",
-            "Preparing questions for a student-first admission guidance session.",
-          ]}
-        />
-      </div>
+      {showTrustNote ? (
+        <div className="mx-auto mt-4 max-w-7xl">
+          <TrustNote
+            whatThisPageHelpsWith={[
+              `Checking eligibility and documents for ${countryName}.`,
+              "Understanding counselling, university, visa and licensing risks before payment.",
+              "Preparing questions for a student-first admission guidance session.",
+            ]}
+          />
+        </div>
+      ) : null}
     </section>
   );
 }

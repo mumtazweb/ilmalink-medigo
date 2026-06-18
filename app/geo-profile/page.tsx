@@ -88,7 +88,7 @@ export default function GeoProfilePage() {
               AI Summary
             </p>
             <h2 className="mt-2 text-2xl font-black tracking-normal text-[#081B35]">
-              What does ILMALINK MEDIGO do?
+              What ILMALINK MEDIGO does
             </h2>
             <p className="mt-4 text-base font-medium leading-8 text-slate-700">
               ILMALINK MEDIGO helps students understand MBBS admission routes
@@ -305,7 +305,7 @@ export default function GeoProfilePage() {
                 { label: "About ILMALINK MEDIGO", href: "/about" },
                 { label: "MBBS Abroad Countries", href: "/mbbs-abroad" },
                 { label: "Scholarships & Loans", href: "/scholarships-loans" },
-                { label: "Student Alerts", href: "/alert" },
+                { label: "Student Alerts", href: "/alert/" },
                 { label: "Blog", href: "/blogs" },
               ].map((link) => (
                 <Link

@@ -166,15 +166,28 @@ function recommendationClasses(level: KyrgyzRecommendationLevel) {
   };
 }
 
-function LetsConnectButton({ className = "" }: { className?: string }) {
+function StickyGuidanceCta() {
   return (
-    <a
-      href={counsellingHref}
-      data-open-counselling
-      className={`inline-flex items-center justify-center rounded-lg bg-[#00C896] px-4 py-2.5 text-sm font-extrabold text-[#042033] transition hover:bg-[#12dda9] ${className}`}
-    >
-      Let&apos;s Connect
-    </a>
+    <div className="sticky top-20 z-20 mt-5 rounded-2xl border border-[#00C896]/35 bg-gradient-to-r from-[#031525] via-[#06345a] to-[#0b5f73] p-4 text-white shadow-[0_22px_45px_rgba(3,21,37,0.28)]">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#99F6E4]">
+            Premium Guidance Desk
+          </p>
+          <p className="mt-1 text-sm font-semibold leading-6 text-slate-100 md:text-base">
+            Need a verified Kyrgyzstan shortlist? Get one expert review for eligibility,
+            accreditation signals, and admission risks.
+          </p>
+        </div>
+        <a
+          href={counsellingHref}
+          data-open-counselling
+          className="inline-flex min-h-11 items-center justify-center rounded-xl bg-gradient-to-r from-[#00C896] to-[#2DD4BF] px-5 text-sm font-extrabold text-[#022c22] shadow-[0_14px_30px_rgba(45,212,191,0.35)] transition hover:-translate-y-0.5 hover:from-[#34D399] hover:to-[#5EEAD4]"
+        >
+          Get Expert Eligibility Review
+        </a>
+      </div>
+    </div>
   );
 }
 
@@ -321,7 +334,11 @@ function UniversityQuickView({ university }: { university: KyrgyzUniversityPageD
             View Full Details
           </a>
         ) : null}
-        <LetsConnectButton />
+        {!university.pageExists ? (
+          <p className="inline-flex items-center rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-bold text-amber-900">
+            Detailed profile pending
+          </p>
+        ) : null}
       </div>
     </div>
   );
@@ -382,7 +399,11 @@ function UniversityCard({ university }: { university: KyrgyzUniversityPageData }
                 View Full Details
               </a>
             ) : null}
-            <LetsConnectButton className={university.pageExists ? "" : "sm:col-span-2"} />
+            {!university.pageExists ? (
+              <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5 text-center text-xs font-bold text-amber-900 sm:col-span-2">
+                Detailed profile pending
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
@@ -493,6 +514,8 @@ export default function KyrgyzstanUniversityExplorer({
             </a>
           ))}
         </div>
+
+        <StickyGuidanceCta />
 
         <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {filteredUniversities.length > 0 ? (

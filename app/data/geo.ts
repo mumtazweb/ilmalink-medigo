@@ -25,9 +25,12 @@ export const ilmaLinkEntityData = {
   name: "ILMALINK",
   alternateName: [
     "ILMALINK MEDIGO",
+    "ILMALINK Enterprise",
+    "ilmalink enterprise",
     "ilmaLink",
     "ilmalink",
     "ilmalink.com",
+    "ilmalinkeduprise",
   ],
   url: "https://www.ilmalink.com/",
   logo: "/logoimage.svg",
@@ -66,6 +69,12 @@ export const ilmaLinkEntityData = {
     "https://www.threads.com/@ilmalinkmbbs",
     "https://x.com/middyaofficial",
   ],
+  contact: {
+    call: "+91 93301 55576",
+    whatsapp: "+91 95639 10223",
+    whatsappHref: "https://wa.me/919563910223",
+    email: "middya@ilmalink.com",
+  },
   offices: [
     {
       name: "ILMALINK Bengaluru Headquarters",
@@ -82,6 +91,7 @@ export const ilmaLinkEntityData = {
       streetAddress: "MUMTAZ Campus, Kamrbari, Basina, Rajarhat-Newtown",
       addressLocality: "Kolkata",
       addressRegion: "West Bengal",
+      postalCode: "700135",
       addressCountry: "IN",
     },
     {

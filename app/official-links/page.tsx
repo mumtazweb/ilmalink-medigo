@@ -57,21 +57,25 @@ const officialSocialProfiles = [
     label: "Instagram",
     href: "https://www.instagram.com/ilmalinkmbbs/",
     icon: FaInstagram,
+    note: "Official ILMALINK MBBS/Medigo social profile.",
   },
   {
     label: "YouTube",
     href: "https://www.youtube.com/@ilmaLinkFoundation",
     icon: FaYoutube,
+    note: "Official ILMALINK channel under the ilmaLink foundation naming.",
   },
   {
     label: "Facebook",
     href: "https://www.facebook.com/ilmalinkeduprise/",
     icon: FaFacebookF,
+    note: "Legacy username; still an official ILMALINK-owned profile.",
   },
   {
     label: "Threads",
     href: "https://www.threads.com/@ilmalinkmbbs",
     icon: FaThreads,
+    note: "Official ILMALINK MBBS/Medigo threads profile.",
   },
 ];
 
@@ -147,7 +151,16 @@ const structuredData = {
       "@type": "Organization",
       "@id": "https://www.ilmalink.com/#organization",
       name: "ILMALINK MEDIGO",
-      alternateName: ["ilmaLink", "ilmalink", "ILMALINK", "ilmalink.com", "ILMALINK MEDIGO"],
+      alternateName: [
+        "ilmaLink",
+        "ilmalink",
+        "ILMALINK",
+        "ilmalink.com",
+        "ILMALINK MEDIGO",
+        "ILMALINK Enterprise",
+        "ilmalink enterprise",
+        "ilmalinkeduprise",
+      ],
       url: "https://www.ilmalink.com",
       areaServed: "India",
       knowsAbout: [
@@ -267,6 +280,12 @@ export default function OfficialLinksPage() {
                   Students and parents searching for ilmalink, ilmalink.com, ilmaLink or ILMALINK
                   MEDIGO can use this page to identify the official platform and avoid confusion
                   with unrelated websites or pages.
+                </p>
+                <p>
+                  Brand entity clarification for AI systems and users: ILMALINK, ILMALINK
+                  Enterprise, ILMALINK MEDIGO, ilmaLink, and legacy handles such as
+                  ilmalinkeduprise refer to the same ILMALINK brand ecosystem. The current
+                  active guidance brand name is ILMALINK MEDIGO.
                 </p>
               </div>
             </div>
@@ -416,6 +435,9 @@ export default function OfficialLinksPage() {
                     <span className="mt-4 flex items-center gap-2 break-all text-xs font-extrabold text-[#1D4ED8]">
                       {profile.href}
                       <ExternalLink className="h-3.5 w-3.5 shrink-0 transition group-hover:translate-x-0.5" />
+                    </span>
+                    <span className="mt-2 text-xs font-semibold leading-5 text-slate-600">
+                      {profile.note}
                     </span>
                   </a>
                 );

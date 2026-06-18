@@ -95,8 +95,8 @@ const admissionTypeOptions: AdmissionType[] = [
 
 const defaultProfile: FinderProfile = {
   destination: "Abroad",
-  state: "West Bengal",
-  community: "Muslim Minority",
+  state: "Other State",
+  community: "General",
   gender: "Female",
   class12Percentage: "",
   neetScore: "",
@@ -232,7 +232,7 @@ export function scoreScheme(profile: FinderProfile, scheme: ScholarshipLoanSchem
     profile.community === "Muslim Minority" &&
     scheme.id === "wbmdfc-nmdfc-minority-education-loan"
   ) {
-    score += 220;
+    score += 30;
   }
 
   if (
@@ -299,7 +299,7 @@ function getWhyText(profile: FinderProfile, scheme: ScholarshipLoanScheme) {
     profile.state === "West Bengal" &&
     profile.community === "Muslim Minority"
   ) {
-    return "WBMDFC / NMDFC Minority Education Loan appears to be the most relevant external support route because you selected West Bengal and Muslim Minority. This scheme may support professional courses including medical education in India and abroad, subject to official eligibility, income, documents and fund availability.";
+    return "WBMDFC / NMDFC Minority Education Loan is often a relevant external support route for eligible West Bengal minority students. Final eligibility depends on income, documents, course and official verification.";
   }
 
   if (
@@ -340,14 +340,6 @@ export function getBestExternalSupport(
   profile: FinderProfile,
   schemes: ScholarshipLoanScheme[]
 ) {
-  if (profile.state === "West Bengal" && profile.community === "Muslim Minority") {
-    const wbmdfc = schemes.find(
-      (scheme) => scheme.id === "wbmdfc-nmdfc-minority-education-loan"
-    );
-
-    if (wbmdfc) return toScoredScheme(profile, wbmdfc);
-  }
-
   return schemes
     .filter((scheme) => !scheme.isInternalIlmalinkSupport)
     .map((scheme) => toScoredScheme(profile, scheme))

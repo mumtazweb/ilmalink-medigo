@@ -139,7 +139,7 @@ export default function AboutPage() {
                   { label: "GEO Profile", href: "/geo-profile" },
                   { label: "MBBS Abroad Countries", href: "/mbbs-abroad" },
                   { label: "Scholarships & Loans", href: "/scholarships-loans" },
-                  { label: "Student Alerts", href: "/alert" },
+                  { label: "Student Alerts", href: "/alert/" },
                   { label: "Blog", href: "/blogs" },
                 ].map((link) => (
                   <Link

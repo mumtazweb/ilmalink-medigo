@@ -12,14 +12,14 @@ export const dynamic = "force-static";
 export const metadata: Metadata = {
   title: "MBBS Scholarships & Education Loans in India & Abroad | ILMALINK MEDIGO",
   description:
-    "Find MBBS scholarships, education loans, minority finance schemes, student credit cards, Zakat funds, charitable support and ILMALINK fee support for medical students in India and abroad.",
+    "Find MBBS scholarships, education loans, merit-based and category-based funding, student credit cards, minority finance, charitable support and ILMALINK fee support for medical students in India and abroad.",
   alternates: {
     canonical: "https://www.ilmalink.com/scholarships-loans",
   },
   openGraph: {
     title: "MBBS Scholarships & Education Loans | ILMALINK MEDIGO",
     description:
-      "Find MBBS scholarships, education loans, minority finance schemes, student credit cards, Zakat support, charitable aid and ILMALINK fee support.",
+      "Find MBBS scholarships, education loans, merit scholarships, category support, student credit cards, charitable routes and ILMALINK fee support.",
     url: "https://www.ilmalink.com/scholarships-loans",
     type: "website",
   },
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "MBBS Scholarships & Education Loans | ILMALINK MEDIGO",
     description:
-      "A practical MBBS scholarship, fee-discount, education-loan and support-scheme finder for India and abroad aspirants.",
+      "A practical MBBS funding finder for merit scholarships, category support, education loans and charitable routes in India and abroad.",
   },
 };
 
@@ -43,9 +43,9 @@ const faqs = [
       "Yes, eligible students may apply through bank education loans, state student credit card schemes, minority finance loans, or private loan-scholarship options depending on state, income, documents, university and lender rules.",
   },
   {
-    question: "Which loan is best for West Bengal Muslim minority MBBS students?",
+    question: "Which loan is best for minority or state-finance eligible MBBS students?",
     answer:
-      "WBMDFC/NMDFC Minority Education Loan may be one of the most relevant options for eligible West Bengal Muslim minority students, subject to income, documents, course, admission and official approval.",
+      "WBMDFC/NMDFC Minority Education Loan may be one of the most relevant options for eligible minority students in West Bengal and other states, subject to income, documents, course, admission and official approval.",
   },
   {
     question: "Can WBMDFC/NMDFC loan be used for MBBS abroad?",
@@ -80,7 +80,7 @@ const faqs = [
   {
     question: "What if no government scholarship is available?",
     answer:
-      "Students may check education loans, student credit card schemes, minority finance, charitable support, Zakat funds, loan scholarships and ILMALINK fee support.",
+      "Students may check merit scholarships, category-based scholarships, education loans, student credit cards, charitable support, Zakat funds and ILMALINK fee support.",
   },
 ];
 
@@ -123,9 +123,9 @@ const fundingGuideSections: FundingGuideSection[] = [
     ],
   },
   {
-    title: "Minority Department & Minority Finance Routes",
+    title: "Category, Minority & Welfare Routes",
     intro:
-      "Minority MBBS students, especially West Bengal Muslim minority students, should compare NMDFC/WBMDFC education-loan routes with state minority scholarship portals.",
+      "Eligible students should compare category-based, minority and welfare routes with state and national scholarship or loan portals.",
     items: [
       {
         name: "NMDFC / WBMDFC Minority Education Loan",
@@ -211,6 +211,7 @@ const fundingGuideSections: FundingGuideSection[] = [
     ],
   },
   {
+    anchor: "community-support",
     title: "Other Institutions, Zakat & Charitable Support",
     intro:
       "Community and charitable support can reduce pressure on families when used along with official loans or scholarships.",
@@ -308,9 +309,10 @@ export default function ScholarshipsLoansPage() {
               MBBS Scholarships & Education Loan Finder
             </h1>
             <p className="mt-3 max-w-3xl text-sm font-semibold leading-6 text-slate-700 md:text-base md:leading-7">
-              Check possible MBBS scholarship, education-loan, minority finance,
-              Zakat, charitable support and ILMALINK admission-linked fee support
-              routes in one compact profile tool.
+              Check possible MBBS scholarship, education loan, merit-based support,
+              category and community finance, student credit cards, Zakat,
+              charitable support and ILMALINK admission-linked fee support routes
+              in one compact profile tool.
             </p>
 
             <div className="mt-5 grid max-w-xl grid-cols-2 gap-2 sm:gap-3">
@@ -339,14 +341,14 @@ export default function ScholarshipsLoansPage() {
               MBBS Funding Details
             </p>
             <h2 className="mt-1 text-xl font-extrabold tracking-normal text-slate-950 md:text-2xl">
-              Scholarship, minority loan, bank loan and charitable support routes
+              Scholarship, loan, category support and charitable funding routes
             </h2>
             <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-slate-600">
               Use this ordered guide after checking your profile match. ILMALINK
               helps students compare official portals, prepare documents and move
               through the application route with end-to-end guidance.
-              Education loans for MBBS abroad and Scholarships for MBBS abroad
-              are listed with official checks first.
+              Education loans, merit scholarships, category-based support and
+              community funding are all presented with official checks first.
             </p>
           </div>
 

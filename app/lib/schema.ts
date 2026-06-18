@@ -14,6 +14,31 @@ type FAQItem = {
   answer: string;
 };
 
+type SiteNavigationItem = {
+  name: string;
+  url: string;
+};
+
+const siteNavigationItems: SiteNavigationItem[] = [
+  { name: "Home", url: "/" },
+  { name: "Site Hierarchy", url: "/site-hierarchy" },
+  { name: "MBBS Abroad", url: "/mbbs-abroad" },
+  { name: "MBBS India", url: "/mbbs-india" },
+  { name: "NEET Hub", url: "/neet" },
+  { name: "NEET Admit Card", url: "/neet/admit-card" },
+  { name: "NEET Result", url: "/neet/result" },
+  { name: "NEET Counselling", url: "/neet/counselling" },
+  { name: "Scholarships and Loans", url: "/scholarships-loans" },
+  { name: "Trust Center", url: "/trust-center" },
+  { name: "Student Alert", url: "/alert" },
+  { name: "Official Links", url: "/official-links" },
+  { name: "Official Advisories", url: "/official-advisories" },
+  { name: "GEO Profile", url: "/geo-profile" },
+  { name: "Blogs", url: "/blogs" },
+  { name: "Search", url: "/search" },
+  { name: "About", url: "/about" },
+];
+
 function absoluteUrl(pathOrUrl: string) {
   if (pathOrUrl.startsWith("http")) {
     return pathOrUrl;
@@ -30,6 +55,32 @@ function buildPostalAddress(office: IlmaLinkOffice) {
     addressRegion: office.addressRegion,
     ...(office.postalCode ? { postalCode: office.postalCode } : {}),
     addressCountry: office.addressCountry,
+  };
+}
+
+function buildMbbsConsultancyServices() {
+  const serviceNames = [
+    "MBBS admission guidance and consultancy",
+    "MBBS abroad admission guidance and consultancy",
+    "NEET counselling and admission planning support",
+    "Medical admission documentation guidance",
+  ];
+
+  return {
+    "@type": "OfferCatalog",
+    name: "MBBS Admission Guidance and Consultancy Services",
+    itemListElement: serviceNames.map((serviceName, index) => ({
+      "@type": "Offer",
+      position: index + 1,
+      itemOffered: {
+        "@type": "Service",
+        name: serviceName,
+        serviceType: serviceName,
+        provider: {
+          "@id": "https://www.ilmalink.com/#organization",
+        },
+      },
+    })),
   };
 }
 
@@ -95,14 +146,40 @@ export function buildLocalBusinessSchema(office: IlmaLinkOffice) {
 
   return {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": ["LocalBusiness", "EducationalOrganization"],
     "@id": `https://www.ilmalink.com/#${id}`,
     name: office.name,
     url: ilmaLinkEntityData.url,
     image: absoluteUrl(ilmaLinkEntityData.logo),
     description:
-      "ILMALINK MEDIGO contact point for MBBS admission guidance, MBBS abroad counselling, India medical counselling support and student documentation guidance.",
+      "ILMALINK MEDIGO contact point for MBBS admission guidance and consultancy, MBBS abroad counselling, India medical counselling support and student documentation guidance.",
+    telephone: ilmaLinkEntityData.contact.call,
+    email: ilmaLinkEntityData.contact.email,
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "admissions",
+        telephone: ilmaLinkEntityData.contact.call,
+        email: ilmaLinkEntityData.contact.email,
+        areaServed: [office.addressRegion, "India"],
+        availableLanguage: ["English", "Hindi", "Bengali"],
+      },
+      {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        telephone: ilmaLinkEntityData.contact.whatsapp,
+        url: ilmaLinkEntityData.contact.whatsappHref,
+        areaServed: [office.addressRegion, "India"],
+      },
+    ],
     address: buildPostalAddress(office),
+    hasOfferCatalog: buildMbbsConsultancyServices(),
+    knowsAbout: [
+      "MBBS admission guidance",
+      "MBBS admission consultancy",
+      "MBBS abroad admission consultancy",
+      "NEET counselling support",
+    ],
     parentOrganization: {
       "@id": "https://www.ilmalink.com/#organization",
     },
@@ -124,6 +201,24 @@ export function buildWebsiteSchema() {
     inLanguage: "en-IN",
     publisher: {
       "@id": "https://www.ilmalink.com/#organization",
+    },
+  };
+}
+
+export function buildSiteNavigationSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": "https://www.ilmalink.com/#site-navigation",
+    name: "ILMALINK MEDIGO Public Site Hierarchy",
+    itemListElement: siteNavigationItems.map((item, index) => ({
+      "@type": "SiteNavigationElement",
+      position: index + 1,
+      name: item.name,
+      url: absoluteUrl(item.url),
+    })),
+    isPartOf: {
+      "@id": "https://www.ilmalink.com/#website",
     },
   };
 }

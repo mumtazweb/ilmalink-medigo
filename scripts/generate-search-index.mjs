@@ -11,9 +11,9 @@ const BLOG_METADATA_PREFIX = "<!-- BLOG_METADATA:";
 const BLOG_METADATA_SUFFIX = " -->";
 
 const componentUrls = new Map([
-  ["CounsellingPopup", "/?counselling=open"],
-  ["FloatingContactButton", "/?counselling=open"],
-  ["FMGEExplorerModal", "/?fmge=explorer"],
+  ["CounsellingPopup", "/"],
+  ["FloatingContactButton", "/"],
+  ["FMGEExplorerModal", "/mbbs-abroad/explorer"],
   ["NeetRankPredictorTool", "/"],
   ["Footer", "/"],
   ["HomeHeroClient", "/"],
@@ -149,7 +149,7 @@ function getFmgeCollegeUrl(country, college) {
   return (
     detailedFmgeCollegeRoutes.get(
       `${normalizeLookupKey(country)}::${normalizeLookupKey(college)}`
-    ) ?? "/?counselling=open"
+    ) ?? "/"
   );
 }
 

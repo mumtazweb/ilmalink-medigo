@@ -34,6 +34,7 @@ const footerLinks = [
     links: [
       { label: "MBBS in India", href: "/mbbs-india" },
       { label: "MBBS Abroad", href: "/mbbs-abroad" },
+      { label: "NEET Hub", href: "/neet" },
       { label: "MBBS in Nepal", href: "/mbbs-abroad/nepal" },
       { label: "MBBS in China", href: "/mbbs-abroad/china" },
       { label: "MBBS in Georgia", href: "/mbbs-abroad/georgia" },
@@ -46,18 +47,20 @@ const footerLinks = [
     title: "Resources",
     links: [
       { label: "Blogs", href: "/blogs" },
+      { label: "Trust Center", href: "/trust-center" },
+      { label: "Site Hierarchy", href: "/site-hierarchy" },
       { label: "GEO Profile", href: "/geo-profile" },
       { label: "Official Advisories", href: "/official-advisories" },
       { label: "Official Links", href: "/official-links/" },
       { label: "Scholarships & Loans", href: "/scholarships-loans" },
-      { label: "Student Alert", href: "/alert" },
+      { label: "Student Alert", href: "/alert/" },
       { label: "About", href: "/about" },
     ],
   },
   {
     title: "Support",
     links: [
-      { label: "Book Counselling", href: "/?counselling=open", counselling: true },
+      { label: "Book Counselling", href: "/", counselling: true },
       { label: "WhatsApp Support", href: contact.whatsappHref, external: true },
       { label: "Call Admission Team", href: contact.callHref },
       { label: "Email Us", href: contact.emailHref },
@@ -74,7 +77,7 @@ const offices = [
   {
     label: "Main Office",
     city: "Kolkata",
-    address: "MUMTAZ Campus, Kamrbari, Basina, Rajarhat-Newtown, Kolkata - 135",
+    address: "MUMTAZ Campus, Kamrbari, Basina, Rajarhat-Newtown, Kolkata - 700135",
   },
   {
     label: "R&D Office",
@@ -164,6 +167,118 @@ const socialLinks = [
     label: "Telegram",
     href: "https://t.me/+919563910223",
     icon: FaTelegramPlane,
+  },
+];
+
+const hierarchyGroups = [
+  {
+    title: "Home -> MBBS Abroad -> Country -> University",
+    links: [
+      { label: "MBBS Abroad Hub", href: "/mbbs-abroad" },
+      { label: "Country: Georgia", href: "/mbbs-abroad/georgia" },
+      {
+        label: "University: East European University",
+        href: "/mbbs-abroad/georgia/east-european-university",
+      },
+    ],
+  },
+  {
+    title: "Home -> MBBS India -> State -> College",
+    links: [
+      { label: "MBBS India Hub", href: "/mbbs-india" },
+      { label: "State: West Bengal", href: "/mbbs-india#state-west-bengal" },
+      { label: "College Rows (State Section)", href: "/mbbs-india#state-west-bengal" },
+    ],
+  },
+  {
+    title: "Home -> NEET -> Admit Card / Result / Counselling",
+    links: [
+      { label: "NEET Hub", href: "/neet" },
+      { label: "Admit Card", href: "/neet/admit-card" },
+      { label: "Result", href: "/neet/result" },
+      { label: "Counselling", href: "/neet/counselling" },
+    ],
+  },
+  {
+    title: "Home -> Scholarships -> Loan / Scholarship / Community Support",
+    links: [
+      { label: "Scholarships Hub", href: "/scholarships-loans" },
+      { label: "Education Loan", href: "/scholarships-loans#education-loans" },
+      { label: "Scholarship Routes", href: "/scholarships-loans#scholarships" },
+      { label: "Community Support", href: "/scholarships-loans#community-support" },
+    ],
+  },
+  {
+    title: "Home -> Trust Center -> Alerts / Official Links / GEO Profile / Advisories",
+    links: [
+      { label: "Trust Center Hub", href: "/trust-center" },
+      { label: "Student Alert", href: "/alert" },
+      { label: "Official Links", href: "/official-links" },
+      { label: "GEO Profile", href: "/geo-profile" },
+      { label: "Official Advisories", href: "/official-advisories" },
+    ],
+  },
+  {
+    title: "Home -> Blogs -> Category -> Article",
+    links: [
+      { label: "Blogs Hub", href: "/blogs" },
+      {
+        label: "NEET category example",
+        href: "/blogs?category=NEET",
+      },
+      {
+        label: "Article example",
+        href: "/blogs/vijay-neet-abolition-demand-entire-history-of-neet",
+      },
+    ],
+  },
+  {
+    title: "Home -> Official Advisories -> Source -> Update",
+    links: [
+      { label: "Official Advisories Hub", href: "/official-advisories" },
+      { label: "NMC source cluster", href: "/official-advisories" },
+      { label: "MCC source cluster", href: "/official-advisories" },
+    ],
+  },
+  {
+    title: "Home -> Official Links -> Website -> Social Profile",
+    links: [
+      { label: "Official Links Hub", href: "/official-links" },
+      { label: "Official Website", href: "/official-links" },
+      { label: "Official Instagram", href: "/official-links" },
+    ],
+  },
+  {
+    title: "Home -> GEO Profile -> Entity -> Country Guidance",
+    links: [
+      { label: "GEO Profile Hub", href: "/geo-profile" },
+      { label: "Entity details", href: "/geo-profile" },
+      { label: "Country guidance", href: "/geo-profile" },
+    ],
+  },
+  {
+    title: "Home -> About -> Mission -> Contact",
+    links: [
+      { label: "About page", href: "/about" },
+      { label: "Book Counselling", href: "/" },
+      { label: "Official contact point", href: "/official-links" },
+    ],
+  },
+  {
+    title: "Home -> Search -> Query -> Result",
+    links: [
+      { label: "Search page", href: "/search" },
+      { label: "Query example: FMGE", href: "/search?q=fmge" },
+      { label: "Result example: MBBS Abroad", href: "/mbbs-abroad" },
+    ],
+  },
+  {
+    title: "Home -> Site Hierarchy (All Public Routes)",
+    links: [
+      { label: "Full hierarchy page", href: "/site-hierarchy" },
+      { label: "Trust cluster", href: "/trust-center" },
+      { label: "Study clusters", href: "/mbbs-abroad" },
+    ],
   },
 ];
 
@@ -529,7 +644,7 @@ export default function Footer() {
 
           <div className="flex flex-wrap items-start justify-start gap-2 md:justify-end">
             <CounsellingLink
-              href="/?counselling=open"
+              href="/"
               className="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-emerald-300 px-3 text-sm font-bold text-slate-950 transition hover:bg-emerald-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-100"
             >
               Book counselling
@@ -562,6 +677,45 @@ export default function Footer() {
             </div>
           </div>
         </div>
+
+        <section aria-labelledby="footer-hierarchy" className="border-b border-white/10 py-4">
+          <h2
+            id="footer-hierarchy"
+            className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500"
+          >
+            Site hierarchy map
+          </h2>
+          <p className="mt-2 max-w-4xl text-xs leading-6 text-slate-400">
+            This link map is intentionally grouped for clean AI and crawler extraction of parent to
+            child page relationships.
+          </p>
+
+          <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+            {hierarchyGroups.map((group) => (
+              <article
+                key={group.title}
+                className="rounded-md border border-white/10 bg-white/[0.03] p-3"
+              >
+                <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-emerald-200">
+                  {group.title}
+                </h3>
+                <ul className="mt-2 space-y-1.5">
+                  {group.links.map((link) => (
+                    <li key={`${group.title}-${link.href}`}>
+                      <Link
+                        href={link.href}
+                        className="inline-flex items-center gap-1.5 text-sm text-slate-300 transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
+                      >
+                        <span>{link.label}</span>
+                        <ArrowRight className="h-3.5 w-3.5 opacity-70" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </section>
 
         <div className="flex flex-col gap-1.5 pt-3 text-xs leading-5 text-slate-500 lg:flex-row lg:items-center lg:justify-between">
           <p>

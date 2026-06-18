@@ -164,7 +164,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     whyUsefulForMBBS:
       "It keeps ILMALINK support visible for every MBBS aspirant while clearly marking the estimate as subject to verification and approval.",
     officialWebsite: "https://www.ilmalink.com",
-    applyRoute: "/?counselling=open",
+    applyRoute: "/",
     documents: [...baseAcademicDocuments, "Annual tuition fee estimate", "Admission processing details through ILMALINK"],
     importantNotes: [
       "ILMALINK will assist end-to-end after profile verification.",
@@ -361,7 +361,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     benefitDescription:
       "Concessional education loan for notified minority students pursuing technical and professional courses, including medical education where eligible.",
     whyUsefulForMBBS:
-      "For West Bengal Muslim minority students, this is usually the strongest external route because it can cover professional courses in India and abroad subject to income and documents.",
+      "This loan is often a strong external route for eligible minority students from West Bengal and beyond. Final eligibility depends on income, documents and official verification.",
     officialWebsite: "https://nmdfc.org/credit-1",
     applyRoute: "https://milannmdfc.org/EL_SCHEME.aspx",
     documents: [
@@ -464,7 +464,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     benefitDescription:
       "Community-funded support for needy students, with preference noted for professional disciplines including medical education.",
     whyUsefulForMBBS:
-      "Useful as partial support for West Bengal Muslim students who can document financial need and admission expenses.",
+      "Useful as partial support for eligible West Bengal students who can document financial need and admission expenses.",
     officialWebsite: "https://wbzf.org/Scholarship",
     applyRoute: "https://wbzf.org/CommonRegitrationForm?scheme_id=1",
     documents: [...baseAcademicDocuments, ...categoryDocuments, "Need verification documents requested by WBZF"],
@@ -507,9 +507,9 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     repayment: "No repayment if approved as scholarship/crowdfunding support.",
     moratorium: "Not applicable",
     benefitDescription:
-      "Community scholarship and crowdfunding route for needy Muslim students pursuing higher and professional education.",
+      "Community scholarship and crowdfunding route for eligible higher education students seeking partial support.",
     whyUsefulForMBBS:
-      "Can work as partial support for MBBS India students, especially when government scholarships do not cover the full fee.",
+      "Can work as partial support for MBBS India students who meet the current cycle's eligibility and need criteria.",
     officialWebsite: "https://ampindia.org/amp_scholarship_fund",
     applyRoute: "https://indiazakat.com/",
     documents: [...baseAcademicDocuments, ...categoryDocuments, "Zakat eligibility or need documents requested by AMP/IndiaZakat"],

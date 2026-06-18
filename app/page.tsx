@@ -2,8 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "./components/navbar";
 import HomeHeroClient from "./components/HomeHeroClient";
+import BlogCard from "./components/blog/BlogCard";
 import LatestBlogsScroller from "./components/blog/LatestBlogsScroller";
-import { getLatestBlogSummaries } from "./lib/blog/store";
+import {
+  getLatestHomepageBlogSummaries,
+  getLatestOtherEntranceExamBlogSummaries,
+} from "./lib/blog/store";
 
 export const metadata: Metadata = {
   title: "ILMALINK MEDIGO by ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
@@ -24,13 +28,18 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const latestBlogs = await getLatestBlogSummaries(8);
+  const latestBlogs = await getLatestHomepageBlogSummaries(8);
+  const otherEntranceExamBlogs = await getLatestOtherEntranceExamBlogSummaries(4);
   const primaryLinks = [
     { label: "GEO Profile", href: "/geo-profile" },
     { label: "MBBS Abroad", href: "/mbbs-abroad" },
+    { label: "MBBS India", href: "/mbbs-india" },
+    { label: "NEET Hub", href: "/neet" },
     { label: "Scholarships & Loans", href: "/scholarships-loans" },
-    { label: "Student Alerts", href: "/alert" },
+    { label: "Trust Center", href: "/trust-center" },
+    { label: "Student Alerts", href: "/alert/" },
     { label: "Blog", href: "/blogs" },
+    { label: "Site Hierarchy", href: "/site-hierarchy" },
   ];
   const countryLinks = [
     { label: "China", href: "/mbbs-abroad/china" },
@@ -50,6 +59,30 @@ export default async function Home() {
       <Navbar />
       <HomeHeroClient />
       <LatestBlogsScroller posts={latestBlogs} />
+
+      {otherEntranceExamBlogs.length > 0 && (
+        <section className="bg-[#f8fafc] px-4 py-12 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-8 max-w-3xl">
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#0F4CFF]">
+                Other Entrance Exam Updates
+              </p>
+              <h2 className="mt-2 text-3xl font-black tracking-normal text-[#081B35] md:text-4xl">
+                Stay current on WBJEE and other non-MBBS entrance exam news.
+              </h2>
+              <p className="mt-4 text-base font-medium leading-8 text-slate-700">
+                Find the latest exam alerts, counselling updates and strategic guidance for alternate entrance exams.
+              </p>
+            </div>
+
+            <div className="grid gap-5 lg:grid-cols-2">
+              {otherEntranceExamBlogs.map((post) => (
+                <BlogCard key={post.id} post={post} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
       <section className="bg-[#f8fafc] px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>

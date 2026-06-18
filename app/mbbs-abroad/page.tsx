@@ -99,7 +99,7 @@ export default function MBBSAbroadPage() {
               </h2>
             </div>
             <Link
-              href="/?fmge=explorer"
+              href="/mbbs-abroad/explorer"
               className="inline-flex items-center justify-center rounded-lg bg-[#00C896] px-4 py-2.5 text-sm font-extrabold text-[#031525] transition hover:bg-[#12dfad]"
             >
               Open FMGE Explorer

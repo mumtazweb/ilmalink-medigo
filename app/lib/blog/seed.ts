@@ -6,6 +6,8 @@ export const blogCategories = [
   "MBBS Abroad",
   "NEET",
   "Scholarships",
+  "Medical Admission",
+  "Other Entrance Exams",
   "Career",
   "Loans",
   "University Reviews",

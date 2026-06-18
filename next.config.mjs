@@ -10,6 +10,20 @@ const serverActionAllowedOrigins = [
 ];
 
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/student-alert",
+        destination: "/alert/",
+        permanent: true,
+      },
+      {
+        source: "/student-alert/",
+        destination: "/alert/",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     unoptimized: true,
   },

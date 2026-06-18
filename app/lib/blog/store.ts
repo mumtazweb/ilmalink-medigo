@@ -867,6 +867,53 @@ export async function getPublishedBlogSummaries() {
   return blogs.map(toBlogSummaryPost);
 }
 
+const HOMEPAGE_BLOG_CATEGORIES = new Set([
+  "MBBS India",
+  "MBBS Abroad",
+  "NEET",
+  "Scholarships",
+  "Medical Admission",
+]);
+
+const OTHER_ENTRANCE_EXAM_KEYWORDS = [
+  "wbjee",
+  "jee main",
+  "jeeadvanced",
+  "jee advanced",
+  "mht-cet",
+  "gujcet",
+  "keam",
+];
+
+function isOtherEntranceExamBlog(blog: BlogSummaryPost) {
+  if (blog.category === "Other Entrance Exams") {
+    return true;
+  }
+
+  const normalizedTitle = blog.title.toLowerCase();
+
+  if (
+    OTHER_ENTRANCE_EXAM_KEYWORDS.some((keyword) =>
+      normalizedTitle.includes(keyword)
+    )
+  ) {
+    return true;
+  }
+
+  return blog.tags.some((tag) =>
+    OTHER_ENTRANCE_EXAM_KEYWORDS.some((keyword) =>
+      tag.toLowerCase().includes(keyword)
+    )
+  );
+}
+
+function isHomepageMedicalBlog(blog: BlogSummaryPost) {
+  return (
+    HOMEPAGE_BLOG_CATEGORIES.has(blog.category) &&
+    !isOtherEntranceExamBlog(blog)
+  );
+}
+
 export async function getLatestBlogs(limit = 8) {
   const blogs = await getPublishedBlogs();
 
@@ -877,6 +924,24 @@ export async function getLatestBlogSummaries(limit = 8) {
   const blogs = await getPublishedBlogSummaries();
 
   return blogs.slice(0, limit);
+}
+
+export async function getLatestHomepageBlogSummaries(
+  limit = 8
+) {
+  const blogs = await getPublishedBlogSummaries();
+
+  return blogs
+    .filter(isHomepageMedicalBlog)
+    .slice(0, limit);
+}
+
+export async function getLatestOtherEntranceExamBlogSummaries(
+  limit = 4
+) {
+  const blogs = await getPublishedBlogSummaries();
+
+  return blogs.filter(isOtherEntranceExamBlog).slice(0, limit);
 }
 
 export async function getTickerBlogs(
