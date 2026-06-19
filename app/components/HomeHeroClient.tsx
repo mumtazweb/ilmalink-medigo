@@ -11,6 +11,7 @@ import { countryGeoFacts } from "../data/geo";
 import { navbarCountryDestinations } from "../data/navbarDestinations";
 
 const OPEN_FMGE_EVENT = "ilmalink:open-fmge-explorer";
+const OPEN_RANK_PREDICTOR_EVENT = "ilmalink:open-rank-predictor";
 const PENDING_FMGE_KEY = "ilmalink-pending-fmge-explorer";
 
 type DestinationCardData = {
@@ -692,22 +693,28 @@ export default function HomeHeroClient() {
     return () => window.removeEventListener(OPEN_FMGE_EVENT, openExplorer);
   }, []);
   useEffect(() => {
-  if (typeof window === "undefined") return;
+    const openRankPredictor = () => setShowRankPredictor(true);
+    const consumePendingOpen = () => {
+      const params = new URLSearchParams(window.location.search);
 
-  const params = new URLSearchParams(window.location.search);
+      if (params.get("rank-predictor") !== "open") return;
 
-  if (params.get("rank-predictor") === "open") {
-    setShowRankPredictor(true);
+      openRankPredictor();
+      params.delete("rank-predictor");
 
-    params.delete("rank-predictor");
+      const nextUrl = params.toString()
+        ? `${window.location.pathname}?${params.toString()}`
+        : window.location.pathname;
 
-    const nextUrl = params.toString()
-      ? `${window.location.pathname}?${params.toString()}`
-      : window.location.pathname;
+      window.history.replaceState({}, "", nextUrl);
+    };
 
-    window.history.replaceState({}, "", nextUrl);
-  }
-}, []);
+    window.addEventListener(OPEN_RANK_PREDICTOR_EVENT, openRankPredictor);
+    window.setTimeout(consumePendingOpen, 0);
+
+    return () =>
+      window.removeEventListener(OPEN_RANK_PREDICTOR_EVENT, openRankPredictor);
+  }, []);
 
   return (
     <>

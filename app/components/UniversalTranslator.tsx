@@ -1,5 +1,12 @@
 "use client";
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+} from "react";
 import { X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -199,8 +206,15 @@ function readInitialTranslatorState(): TranslatorInitialState {
   };
 }
 
+const subscribeToHydration = () => () => {};
+
 export default function UniversalTranslator() {
   const pathname = usePathname();
+  const isHydrated = useSyncExternalStore(
+    subscribeToHydration,
+    () => true,
+    () => false
+  );
   const [initialTranslatorState] = useState(readInitialTranslatorState);
   const [position, setPosition] = useState<Position | null>(
     initialTranslatorState.position
@@ -476,7 +490,7 @@ export default function UniversalTranslator() {
     }
   };
 
-  if (!position) return null;
+  if (!isHydrated || !position) return null;
   const translatorStyle: CSSProperties = hasManualPosition
     ? { left: position.left, top: position.top, width: getControlWidth() }
     : { bottom: 0, left: "50%", transform: "translateX(-50%)", width: getControlWidth() };

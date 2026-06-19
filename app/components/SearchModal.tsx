@@ -1,6 +1,13 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useDeferredValue,
+  useRef,
+} from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Search, X, FileText, MapPin, BookOpen, Loader2, MessageCircle, Sparkles } from "lucide-react";
@@ -46,6 +53,25 @@ type SearchResult = EnhancedSearchEntry & {
   score: number;
 };
 
+type PreparedSearchEntry = {
+  entry: EnhancedSearchEntry;
+  region: ReturnType<typeof detectEntryRegion>;
+  title: string;
+  description: string;
+  category: string;
+  tags: string;
+  content: string;
+  url: string;
+  metadataText: string;
+  searchableText: string;
+  titleTokens: string[];
+  descriptionTokens: string[];
+  tagTokens: string[];
+  categoryTokens: string[];
+  metadataTokens: string[];
+  closingRanks: number[];
+};
+
 type AskSuggestedLink = {
   title: string;
   description: string;
@@ -73,8 +99,8 @@ type SearchModalProps = {
 
 const RECENT_SEARCH_KEY = "ilmalink-search-recent";
 const MAX_RESULTS = 16;
-const AUTO_ASK_DELAY_MS = 5_000;
 const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
+const OPEN_RANK_PREDICTOR_EVENT = "ilmalink:open-rank-predictor";
 const answerDisclaimer =
   "Cutoffs, fees, counselling rules, accreditation, FMGE/NExT outcomes, and NMC/FMGL compliance can change. Use Connect ILMALINK for a personalised eligibility review before final admission.";
 const searchSpellingAliases: Record<string, string> = {
@@ -723,8 +749,19 @@ const normalizeSearchText = (value: string) =>
     .replace(/\s+/g, " ")
     .trim();
 
+const normalizeIndexedText = (value: string) =>
+  normalize(value)
+    .replace(/[^a-z0-9%]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const tokenizeIndexedText = (value: string) => {
+  const normalized = normalizeIndexedText(value);
+  return normalized ? normalized.split(" ") : [];
+};
+
 const getEntryText = (entry: EnhancedSearchEntry) =>
-  normalizeSearchText(
+  normalizeIndexedText(
     [
       entry.title,
       entry.description,
@@ -892,24 +929,23 @@ const extractClosingRanksFromEntry = (entry: EnhancedSearchEntry) => {
 };
 
 const rankMatchScore = (
-  entry: EnhancedSearchEntry,
+  preparedEntry: PreparedSearchEntry,
   rankRange: PredictedRankRange | null
 ) => {
   if (!rankRange) return 0;
 
-  const text = getEntryText(entry);
-  const ranks = extractClosingRanksFromEntry(entry);
+  const { entry, searchableText, closingRanks: ranks } = preparedEntry;
 
   if (entry.id === "neet-rank-predictor-search-entry") {
     return 700;
   }
 
-  if (!/mbbs india|medical college|counselling|closing rank|cutoff|seat matrix|state quota|aiq|mcc/i.test(text)) {
+  if (!/mbbs india|medical college|counselling|closing rank|cutoff|seat matrix|state quota|aiq|mcc/i.test(searchableText)) {
     return 0;
   }
 
   if (!ranks.length) {
-    return /mbbs india|counselling|college predictor|rank predictor/i.test(text)
+    return /mbbs india|counselling|college predictor|rank predictor/i.test(searchableText)
       ? 140
       : 0;
   }
@@ -998,39 +1034,14 @@ const tokenScore = (tokens: string[], term: string, exactScore: number, startsWi
   return 0;
 };
 
-const scoreResult = (entry: EnhancedSearchEntry, normalizedQuery: string, queryTerms: string[], rawQuery = "") => {
-  const queryProfile = analyseSearchQuery(rawQuery || normalizedQuery, normalizedQuery, queryTerms);
-  const entryRegion = detectEntryRegion(entry);
-
-  if (queryProfile.state && entryRegion.regionType === "abroad" && !queryProfile.hasComparisonIntent) {
-    return 0;
-  }
-
-  if (
-    queryProfile.isIndiaIntent &&
-    !queryProfile.isAbroadIntent &&
-    entryRegion.regionType === "abroad" &&
-    !queryProfile.hasComparisonIntent
-  ) {
-    return 0;
-  }
-
-  if (
-    queryProfile.abroadCountry &&
-    entryRegion.country &&
-    entryRegion.country !== queryProfile.abroadCountry &&
-    !queryProfile.hasComparisonIntent
-  ) {
-    return 0;
-  }
-
-  const title = normalizeSearchText(entry.title);
-  const description = normalizeSearchText(entry.description);
-  const category = normalizeSearchText(entry.category);
-  const tags = normalizeSearchText(entry.tags.join(" "));
-  const content = normalizeSearchText(entry.content);
-  const url = normalizeSearchText(entry.url);
-  const metadataText = normalizeSearchText(
+const prepareSearchEntry = (entry: EnhancedSearchEntry): PreparedSearchEntry => {
+  const title = normalizeIndexedText(entry.title);
+  const description = normalizeIndexedText(entry.description);
+  const category = normalizeIndexedText(entry.category);
+  const tags = normalizeIndexedText(entry.tags.join(" "));
+  const content = normalizeIndexedText(entry.content);
+  const url = normalizeIndexedText(entry.url);
+  const metadataText = normalizeIndexedText(
     [
       entry.country,
       entry.state,
@@ -1054,7 +1065,9 @@ const scoreResult = (entry: EnhancedSearchEntry, normalizedQuery: string, queryT
       .join(" ")
   );
 
-  const searchableText = [
+  return {
+    entry,
+    region: detectEntryRegion(entry),
     title,
     description,
     category,
@@ -1062,7 +1075,73 @@ const scoreResult = (entry: EnhancedSearchEntry, normalizedQuery: string, queryT
     content,
     url,
     metadataText,
-  ].join(" ");
+    searchableText: [
+      title,
+      description,
+      category,
+      tags,
+      content,
+      url,
+      metadataText,
+    ].join(" "),
+    titleTokens: tokenizeIndexedText(entry.title),
+    descriptionTokens: tokenizeIndexedText(entry.description),
+    tagTokens: tokenizeIndexedText(entry.tags.join(" ")),
+    categoryTokens: tokenizeIndexedText(entry.category),
+    metadataTokens: metadataText ? metadataText.split(" ") : [],
+    closingRanks: extractClosingRanksFromEntry(entry),
+  };
+};
+
+const preparedSiteSearchIndex = siteSearchIndex.map(prepareSearchEntry);
+
+type SearchQueryProfile = ReturnType<typeof analyseSearchQuery>;
+
+const scoreResult = (
+  preparedEntry: PreparedSearchEntry,
+  queryProfile: SearchQueryProfile,
+  normalizedQuery: string,
+  queryTerms: string[]
+) => {
+  const {
+    entry,
+    region: entryRegion,
+    title,
+    description,
+    category,
+    tags,
+    content,
+    url,
+    metadataText,
+    searchableText,
+    titleTokens,
+    descriptionTokens,
+    tagTokens,
+    categoryTokens,
+    metadataTokens,
+  } = preparedEntry;
+
+  if (queryProfile.state && entryRegion.regionType === "abroad" && !queryProfile.hasComparisonIntent) {
+    return 0;
+  }
+
+  if (
+    queryProfile.isIndiaIntent &&
+    !queryProfile.isAbroadIntent &&
+    entryRegion.regionType === "abroad" &&
+    !queryProfile.hasComparisonIntent
+  ) {
+    return 0;
+  }
+
+  if (
+    queryProfile.abroadCountry &&
+    entryRegion.country &&
+    entryRegion.country !== queryProfile.abroadCountry &&
+    !queryProfile.hasComparisonIntent
+  ) {
+    return 0;
+  }
 
   const usefulTerms = queryProfile.meaningfulTerms.length
     ? queryProfile.meaningfulTerms
@@ -1072,12 +1151,6 @@ const scoreResult = (entry: EnhancedSearchEntry, normalizedQuery: string, queryT
 
   if (usefulTerms.length >= 3 && matchedUsefulTerms.length < 2) return 0;
   if (usefulTerms.length > 0 && matchedUsefulTerms.length === 0) return 0;
-
-  const titleTokens = tokenize(entry.title);
-  const descriptionTokens = tokenize(entry.description);
-  const tagTokens = tokenize(entry.tags.join(" "));
-  const categoryTokens = tokenize(entry.category);
-  const metadataTokens = tokenize(metadataText);
 
   let score = Number(entry.priority || 0);
 
@@ -1114,7 +1187,7 @@ const scoreResult = (entry: EnhancedSearchEntry, normalizedQuery: string, queryT
   if (queryProfile.intents.documents && /document|documents|passport|scorecard|admit card/i.test(searchableText)) score += 140;
 
   if (queryProfile.rankRange) {
-  score += rankMatchScore(entry, queryProfile.rankRange);
+  score += rankMatchScore(preparedEntry, queryProfile.rankRange);
 
   if (entryRegion.regionType === "india") score += 220;
   if (entry.category === "MBBS India") score += 220;
@@ -1185,7 +1258,6 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
   const [hasAsked, setHasAsked] = useState(false);
   const [activeQuestion, setActiveQuestion] = useState("");
   const requestControllerRef = useRef<AbortController | null>(null);
-  const lastAskedQueryRef = useRef("");
 
   const storeRecentSearch = useCallback(
     (term: string) => {
@@ -1203,9 +1275,15 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
     [recentSearches]
   );
 
-  const searchTerms = useMemo(() => normalizeQueryForSearch(query), [query]);
-  const queryTokens = useMemo(() => tokenize(query), [query]);
+  const deferredQuery = useDeferredValue(query);
+  const searchTerms = useMemo(() => normalizeQueryForSearch(deferredQuery), [deferredQuery]);
+  const queryTokens = useMemo(() => tokenize(deferredQuery), [deferredQuery]);
+  const queryProfile = useMemo(
+    () => analyseSearchQuery(deferredQuery, searchTerms, queryTokens),
+    [deferredQuery, queryTokens, searchTerms]
+  );
   const trimmedQuery = query.trim();
+  const deferredTrimmedQuery = deferredQuery.trim();
 
   const filteredResults = useMemo<SearchResult[]>(() => {
     if (!searchTerms) {
@@ -1215,15 +1293,15 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
         .map((result) => ({ ...result, score: result.priority }));
     }
 
-    return siteSearchIndex
-      .map((result) => ({
-        ...result,
-        score: scoreResult(result, searchTerms, queryTokens, query),
+    return preparedSiteSearchIndex
+      .map((preparedEntry) => ({
+        ...preparedEntry.entry,
+        score: scoreResult(preparedEntry, queryProfile, searchTerms, queryTokens),
       }))
       .filter((result) => result.score > 0)
       .sort((a, b) => b.score - a.score || b.priority - a.priority || a.title.localeCompare(b.title))
       .slice(0, MAX_RESULTS);
-  }, [query, queryTokens, searchTerms]);
+  }, [queryProfile, queryTokens, searchTerms]);
 
   const selectedResultIndex =
     filteredResults.length > 0 ? Math.min(selectedIndex, filteredResults.length - 1) : -1;
@@ -1253,7 +1331,6 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
     requestControllerRef.current?.abort();
     const controller = new AbortController();
     requestControllerRef.current = controller;
-    lastAskedQueryRef.current = question;
 
     storeRecentSearch(question);
     setHasAsked(true);
@@ -1295,12 +1372,9 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
       }
 
       setAskError(
-        "This question can be answered better by our experts. Connect ILMALINK for a personalised reply."
+        "AI answers are temporarily unavailable. You can still use the relevant pages below or connect with ILMALINK for personalised help."
       );
       setAskAnswer(null);
-      window.setTimeout(() => {
-        openCounselling();
-      }, 250);
     } finally {
       if (requestControllerRef.current === controller) {
         requestControllerRef.current = null;
@@ -1308,22 +1382,6 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
       }
     }
   }, [openCounselling, query, storeRecentSearch]);
-
-  useEffect(() => {
-    if (
-      !isOpen ||
-      trimmedQuery.length < 3 ||
-      trimmedQuery === lastAskedQueryRef.current
-    ) {
-      return;
-    }
-
-    const timer = window.setTimeout(() => {
-      void runAskSearch(trimmedQuery);
-    }, AUTO_ASK_DELAY_MS);
-
-    return () => window.clearTimeout(timer);
-  }, [isOpen, runAskSearch, trimmedQuery]);
 
   useEffect(() => {
     if (isOpen) return;
@@ -1351,6 +1409,12 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
         }
         if (result.url.includes("rank-predictor=open")) {
           onClose();
+
+          if (window.location.pathname === "/") {
+            window.dispatchEvent(new Event(OPEN_RANK_PREDICTOR_EVENT));
+            return;
+          }
+
           router.push("/?rank-predictor=open");
           return;
         }
@@ -1390,19 +1454,15 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
   );
 
   const handleQueryChange = (value: string) => {
-    const cancelledPendingAnswer = Boolean(requestControllerRef.current);
     requestControllerRef.current?.abort();
     requestControllerRef.current = null;
-    lastAskedQueryRef.current = "";
     setQuery(value);
     setSelectedIndex(0);
     setAskLoading(false);
     setAskError("");
-
-    if (cancelledPendingAnswer && !askAnswer) {
-      setHasAsked(false);
-      setActiveQuestion("");
-    }
+    setAskAnswer(null);
+    setHasAsked(false);
+    setActiveQuestion("");
   };
 
   const handleKeyDown = useCallback(
@@ -1424,8 +1484,6 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
         document.activeElement instanceof HTMLElement &&
         document.activeElement.id === "site-search-input"
       ) {
-        event.preventDefault();
-        void runAskSearch(trimmedQuery);
         return;
       }
 
@@ -1443,9 +1501,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
       handleSelectResult,
       isOpen,
       onClose,
-      runAskSearch,
       selectedResultIndex,
-      trimmedQuery,
     ]
   );
 
@@ -1472,9 +1528,16 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
   if (!isOpen || typeof document === "undefined") return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[99999] flex items-end justify-center bg-transparent sm:items-start sm:px-4 sm:pt-8 animate-in fade-in duration-200">
+    <div className="fixed inset-0 isolate z-[2147483647] flex items-end justify-center bg-transparent sm:items-start sm:px-4 sm:pt-8 animate-in fade-in duration-200">
+      <button
+        type="button"
+        className="absolute inset-0 z-0 cursor-default"
+        onClick={onClose}
+        aria-label="Close search"
+        tabIndex={-1}
+      />
       <div
-        className="w-full max-w-3xl animate-in slide-in-from-bottom-3 duration-300 sm:px-6 sm:slide-in-from-top-2"
+        className="relative z-10 w-full max-w-3xl animate-in slide-in-from-bottom-3 duration-300 sm:px-6 sm:slide-in-from-top-2"
         onClick={(e) => e.stopPropagation()}
       >
         <div
@@ -1529,14 +1592,17 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
                 Search query
               </label>
               <div className="relative flex-1">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={17} />
+                <Search
+                  className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                  size={17}
+                />
                 <input
                   id="site-search-input"
                   autoFocus
                   value={query}
-                  onChange={(event) => handleQueryChange(event.target.value)}
-                  placeholder="TEST SEARCH INPUT..."
-                  className="min-h-12 w-full rounded-2xl border border-white/90 bg-white/85 py-2.5 pl-10 pr-3 text-sm font-semibold text-slate-900 shadow-[0_10px_30px_rgba(15,23,42,0.08)] outline-none transition placeholder:font-medium placeholder:text-slate-400 focus:border-[#00C896] focus:bg-white focus:ring-4 focus:ring-[#00C896]/15 sm:min-h-14 sm:pl-11 sm:pr-4 sm:text-base"
+                  onChange={(event) => handleQueryChange(event.currentTarget.value)}
+                  placeholder="Search MBBS India, Georgia fees, NEET rank..."
+                  className="relative min-h-12 w-full rounded-2xl border border-white/90 bg-white py-2.5 pl-10 pr-3 text-sm font-semibold text-[#0f172a] caret-[#00C896] shadow-[0_10px_30px_rgba(15,23,42,0.08)] outline-none transition placeholder:font-medium placeholder:text-slate-400 focus:border-[#00C896] focus:bg-white focus:ring-4 focus:ring-[#00C896]/15 sm:min-h-14 sm:pl-11 sm:pr-4 sm:text-base"
                 />
               </div>
               <button
@@ -1709,9 +1775,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
               </div>
             )}
 
-            {query &&
-              query.trim() === activeQuestion &&
-              (hasAsked || askLoading || askError || askAnswer) && (
+            {deferredTrimmedQuery.length >= 2 && (
               <div className={hasAsked || askLoading || askError || askAnswer ? "mt-4" : ""}>
                 <div className="mb-2 flex items-center justify-between px-1">
                   <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
@@ -1782,7 +1846,6 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
 
         </div>
       </div>
-      <button type="button" className="fixed inset-0 -z-10" onClick={onClose} aria-label="Close search" />
     </div>,
     document.body
   );
