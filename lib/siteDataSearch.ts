@@ -29,6 +29,7 @@ export type SiteQuestionIntent =
   | "mbbs-india-state-counselling"
   | "seat-matrix-round-update"
   | "mbbs-india-college-search"
+  | "mbbs-abroad-university-recommendation"
   | "mbbs-abroad-country-comparison"
   | "university-fee"
   | "accreditation-status"
@@ -116,6 +117,19 @@ const stopWords = new Set([
   "it",
   "latest",
   "me",
+  "my",
+  "get",
+  "getting",
+  "want",
+  "will",
+  "would",
+  "should",
+  "possible",
+  "possibility",
+  "chance",
+  "chances",
+  "marks",
+  "mark",
   "of",
   "on",
   "or",
@@ -460,7 +474,10 @@ function getImportantQueryTerms(query: string) {
   const normalizedQuery = normalizeSearchQueryWithCorrections(query);
   const terms = new Set(
     tokenize(query).filter(
-      (term) => term.length > 1 && !stopWords.has(term)
+      (term) =>
+        term.length > 1 &&
+        !stopWords.has(term) &&
+        !/^\d[\d,]*$/.test(term)
     )
   );
 
@@ -495,6 +512,16 @@ export function detectSiteQuestionIntent(
   query: string
 ): SiteQuestionIntent {
   const text = normalizeSearchQueryWithCorrections(query);
+  const hasNumericValue = /\b\d{2,7}\b/.test(text);
+
+  if (
+    text.includes("cutoff") ||
+    text.includes("cut off") ||
+    text.includes("lowest cutoff") ||
+    text.includes("closing rank")
+  ) {
+    return "mbbs-india-cutoff";
+  }
 
   if (
     text.includes("seat matrix") ||
@@ -507,15 +534,6 @@ export function detectSiteQuestionIntent(
   }
 
   if (
-    text.includes("cutoff") ||
-    text.includes("cut off") ||
-    text.includes("lowest cutoff") ||
-    text.includes("closing rank")
-  ) {
-    return "mbbs-india-cutoff";
-  }
-
-  if (
     text.includes("fee") ||
     text.includes("fees") ||
     text.includes("tuition") ||
@@ -523,6 +541,18 @@ export function detectSiteQuestionIntent(
     text.includes("budget")
   ) {
     return "university-fee";
+  }
+
+  if (
+    hasNumericValue &&
+    (text.includes("neet") ||
+      text.includes("score") ||
+      text.includes("rank") ||
+      text.includes("mark") ||
+      text.includes("college") ||
+      text.includes("kpc"))
+  ) {
+    return "mbbs-india-cutoff";
   }
 
   if (
@@ -575,6 +605,19 @@ export function detectSiteQuestionIntent(
     text.includes("quota")
   ) {
     return "mbbs-india-state-counselling";
+  }
+
+  if (
+    (text.includes("best") ||
+      text.includes("recommend") ||
+      text.includes("suitable") ||
+      text.includes("for me")) &&
+    (text.includes("college") ||
+      text.includes("university") ||
+      text.includes("institute") ||
+      text.includes("mbbs abroad"))
+  ) {
+    return "mbbs-abroad-university-recommendation";
   }
 
   if (
@@ -1297,6 +1340,29 @@ function scoreRecord(
   }
 
   if (
+    intent === "mbbs-india-cutoff" &&
+    record.data?.kind === "mbbs-india-college"
+  ) {
+    score += 320;
+  }
+
+  if (
+    intent === "mbbs-india-cutoff" &&
+    record.data?.kind === "mbbs-india-state"
+  ) {
+    score -= 120;
+  }
+
+  if (
+    intent === "university-fee" &&
+    ["mbbs-india-college", "kyrgyz-university", "georgia-university"].includes(
+      String(record.data?.kind)
+    )
+  ) {
+    score += 260;
+  }
+
+  if (
     queryWantsVolumeRanking &&
     record.data?.kind === "fmge-country" &&
     !queryAsksCollege
@@ -1367,10 +1433,20 @@ function dedupeRecords(records: SiteSearchRecord[]) {
   return Array.from(byId.values());
 }
 
+let baseRecordsCache: SiteSearchRecord[] | null = null;
+
 export function buildInternalSiteSearchIndex(
   extraRecords: SiteSearchRecord[] = []
 ) {
-  return dedupeRecords([...buildBaseRecords(), ...extraRecords]);
+  if (!baseRecordsCache) {
+    baseRecordsCache = dedupeRecords(buildBaseRecords());
+  }
+
+  if (extraRecords.length === 0) {
+    return baseRecordsCache;
+  }
+
+  return dedupeRecords([...baseRecordsCache, ...extraRecords]);
 }
 
 export function searchInternalSiteData(

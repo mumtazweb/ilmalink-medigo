@@ -50,6 +50,10 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+html.search-modal-open [data-ilm-translator] {
+  display: none !important;
+}
+
 html {
   scroll-behavior: smooth;
 }

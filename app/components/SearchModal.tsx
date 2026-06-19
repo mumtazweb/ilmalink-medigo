@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Search, X, FileText, MapPin, BookOpen, Loader2, MessageCircle, Sparkles } from "lucide-react";
@@ -38,6 +38,7 @@ type AskIlmalinkResponse = {
   matchedItems: unknown[];
   suggestedLinks: AskSuggestedLink[];
   shouldShowConnectCTA: true;
+  shouldAutoOpenCounselling?: boolean;
   notFound: boolean;
 };
 
@@ -47,30 +48,12 @@ type SearchModalProps = {
   onOpenCounselling?: () => void;
 };
 
-const categories = [
-  "All",
-  "Pages",
-  "Destinations",
-  "Kyrgyzstan",
-  "Georgia",
-  "MBBS India",
-  "FMGE Data",
-  "Blogs",
-];
 const RECENT_SEARCH_KEY = "ilmalink-search-recent";
-const MAX_RESULTS = 30;
+const MAX_RESULTS = 16;
+const AUTO_ASK_DELAY_MS = 5_000;
 const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
-const OPEN_FMGE_EVENT = "ilmalink:open-fmge-explorer";
-const PENDING_FMGE_KEY = "ilmalink-pending-fmge-explorer";
 const answerDisclaimer =
   "Cutoffs, fees, counselling rules, accreditation, FMGE/NExT outcomes, and NMC/FMGL compliance can change. Use Connect ILMALINK for a personalised eligibility review before final admission.";
-const aspirantTopics = [
-  "best country to study MBBS",
-  "total fees and budget",
-  "NMC/FMGL rules",
-  "FMGE result trends",
-  "low-cost private MBBS options",
-];
 const searchSpellingAliases: Record<string, string> = {
   collage: "college",
   colage: "college",
@@ -581,7 +564,6 @@ const getIcon = (type: string) => {
 export default function SearchModal({ isOpen, onClose, onOpenCounselling }: SearchModalProps) {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [recentSearches, setRecentSearches] = useState<string[]>(() => {
     if (typeof window === "undefined") return [];
 
@@ -597,6 +579,9 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
   const [askLoading, setAskLoading] = useState(false);
   const [askError, setAskError] = useState("");
   const [hasAsked, setHasAsked] = useState(false);
+  const [activeQuestion, setActiveQuestion] = useState("");
+  const requestControllerRef = useRef<AbortController | null>(null);
+  const lastAskedQueryRef = useRef("");
 
   const storeRecentSearch = useCallback(
     (term: string) => {
@@ -619,32 +604,14 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
   const trimmedQuery = query.trim();
 
   const filteredResults = useMemo<SearchResult[]>(() => {
-    let filtered = siteSearchIndex;
-
-    if (selectedCategory !== "All") {
-      filtered = filtered.filter((result) => {
-        if (selectedCategory === "Pages") return result.group === "Pages";
-        if (selectedCategory === "Destinations") return result.group === "Destinations";
-        if (selectedCategory === "Blogs") return result.group === "Blogs";
-        if (selectedCategory === "Kyrgyzstan") return result.category === "Kyrgyzstan Universities";
-        if (selectedCategory === "Georgia") {
-          return (
-            result.category === "Georgia Universities" ||
-            result.url.startsWith("/mbbs-abroad/georgia")
-          );
-        }
-        return result.category === selectedCategory;
-      });
-    }
-
     if (!searchTerms) {
-      return [...filtered]
+      return [...siteSearchIndex]
         .sort((a, b) => b.priority - a.priority || a.title.localeCompare(b.title))
         .slice(0, MAX_RESULTS)
         .map((result) => ({ ...result, score: result.priority }));
     }
 
-    return filtered
+    return siteSearchIndex
       .map((result) => ({
         ...result,
         score: scoreResult(result, searchTerms, queryTokens),
@@ -652,7 +619,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
       .filter((result) => result.score > 0)
       .sort((a, b) => b.score - a.score || b.priority - a.priority || a.title.localeCompare(b.title))
       .slice(0, MAX_RESULTS);
-  }, [queryTokens, searchTerms, selectedCategory]);
+  }, [queryTokens, searchTerms]);
 
   const selectedResultIndex =
     filteredResults.length > 0 ? Math.min(selectedIndex, filteredResults.length - 1) : -1;
@@ -675,11 +642,18 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
     openCounselling();
   }, [openCounselling, query, storeRecentSearch]);
 
-  const runAskSearch = useCallback(async () => {
-    if (!trimmedQuery) return;
+  const runAskSearch = useCallback(async (questionOverride?: string) => {
+    const question = (questionOverride ?? query).trim();
+    if (!question) return;
 
-    storeRecentSearch(trimmedQuery);
+    requestControllerRef.current?.abort();
+    const controller = new AbortController();
+    requestControllerRef.current = controller;
+    lastAskedQueryRef.current = question;
+
+    storeRecentSearch(question);
     setHasAsked(true);
+    setActiveQuestion(question);
     setAskAnswer(null);
     setAskLoading(true);
     setAskError("");
@@ -690,18 +664,27 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ question: trimmedQuery }),
+        body: JSON.stringify({ question }),
+        signal: controller.signal,
       });
       const data = (await response.json()) as AskIlmalinkResponse;
 
+      if (controller.signal.aborted) return;
       setAskAnswer(data);
 
-      if (data.notFound) {
+      if (data.notFound || data.shouldAutoOpenCounselling) {
         window.setTimeout(() => {
           openCounselling();
-        }, 250);
+        }, data.notFound ? 250 : 1_400);
       }
-    } catch {
+    } catch (error) {
+      if (
+        controller.signal.aborted ||
+        (error instanceof DOMException && error.name === "AbortError")
+      ) {
+        return;
+      }
+
       setAskError(
         "This question can be answered better by our experts. Connect ILMALINK for a personalised reply."
       );
@@ -710,27 +693,35 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
         openCounselling();
       }, 250);
     } finally {
-      setAskLoading(false);
+      if (requestControllerRef.current === controller) {
+        requestControllerRef.current = null;
+        setAskLoading(false);
+      }
     }
-  }, [openCounselling, storeRecentSearch, trimmedQuery]);
+  }, [openCounselling, query, storeRecentSearch]);
 
-  const browseSuggestions = useMemo(() => {
-    if (searchTerms || selectedCategory !== "All") return [];
+  useEffect(() => {
+    if (
+      !isOpen ||
+      trimmedQuery.length < 3 ||
+      trimmedQuery === lastAskedQueryRef.current
+    ) {
+      return;
+    }
 
-    const byId = (id: string) => siteSearchIndex.find((item) => item.id === id);
-    const byUrl = (url: string) => siteSearchIndex.find((item) => item.url === url);
+    const timer = window.setTimeout(() => {
+      void runAskSearch(trimmedQuery);
+    }, AUTO_ASK_DELAY_MS);
 
-    return [
-      byId("mbbs-india-state-west-bengal"),
-      byId("mbbs-india-state-karnataka"),
-      byUrl("/mbbs-abroad/georgia/east-european-university/") ??
-        byUrl("/mbbs-abroad/georgia/east-european-university"),
-      byUrl("/blogs"),
-      byUrl("/mbbs-abroad/kyrgyzstan"),
-      byUrl("/mbbs-abroad/georgia"),
-      siteSearchIndex.find((item) => item.group === "Blogs"),
-    ].filter(Boolean) as GlobalSearchEntry[];
-  }, [searchTerms, selectedCategory]);
+    return () => window.clearTimeout(timer);
+  }, [isOpen, runAskSearch, trimmedQuery]);
+
+  useEffect(() => {
+    if (isOpen) return;
+
+    requestControllerRef.current?.abort();
+    requestControllerRef.current = null;
+  }, [isOpen]);
 
   const handleSelectResult = useCallback(
     (result: GlobalSearchEntry) => {
@@ -785,17 +776,19 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
   );
 
   const handleQueryChange = (value: string) => {
+    const cancelledPendingAnswer = Boolean(requestControllerRef.current);
+    requestControllerRef.current?.abort();
+    requestControllerRef.current = null;
+    lastAskedQueryRef.current = "";
     setQuery(value);
     setSelectedIndex(0);
-    setHasAsked(false);
-    setAskAnswer(null);
     setAskLoading(false);
     setAskError("");
-  };
 
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category);
-    setSelectedIndex(0);
+    if (cancelledPendingAnswer && !askAnswer) {
+      setHasAsked(false);
+      setActiveQuestion("");
+    }
   };
 
   const handleKeyDown = useCallback(
@@ -818,7 +811,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
         document.activeElement.id === "site-search-input"
       ) {
         event.preventDefault();
-        void runAskSearch();
+        void runAskSearch(trimmedQuery);
         return;
       }
 
@@ -831,7 +824,15 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
         onClose();
       }
     },
-    [filteredResults, handleSelectResult, isOpen, onClose, runAskSearch, selectedResultIndex]
+    [
+      filteredResults,
+      handleSelectResult,
+      isOpen,
+      onClose,
+      runAskSearch,
+      selectedResultIndex,
+      trimmedQuery,
+    ]
   );
 
   useEffect(() => {
@@ -841,293 +842,330 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown, isOpen]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.documentElement.classList.add("search-modal-open");
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.documentElement.classList.remove("search-modal-open");
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
   if (!isOpen || typeof document === "undefined") return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[99999] flex items-start justify-center bg-slate-950/50 px-2 pt-3 backdrop-blur-sm sm:pt-8 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[99999] flex items-end justify-center bg-transparent sm:items-start sm:px-4 sm:pt-8 animate-in fade-in duration-200">
       <div
-        className="w-full max-w-3xl mx-auto px-1 sm:px-6 animate-in slide-in-from-top-2 duration-300"
+        className="w-full max-w-3xl animate-in slide-in-from-bottom-3 duration-300 sm:px-6 sm:slide-in-from-top-2"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="relative max-h-[calc(100vh-1rem)] overflow-y-auto overflow-x-hidden rounded-[1.75rem] border border-white/70 bg-white shadow-[0_30px_90px_rgba(8,27,53,0.28)]">
-          <div className="flex items-center gap-3 border-b border-slate-200 bg-gradient-to-br from-white via-[#f3fffb] to-slate-50 px-5 py-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#00C896]/12 text-[#0E766A] shadow-inner">
-              <Search size={22} />
+        <div
+          className="relative flex max-h-[92dvh] min-h-[54dvh] flex-col overflow-hidden rounded-t-[1.75rem] border border-white/55 bg-white/88 shadow-[0_-24px_80px_rgba(3,18,37,0.35)] backdrop-blur-2xl sm:max-h-[calc(100dvh-4rem)] sm:min-h-0 sm:rounded-[1.75rem] sm:shadow-[0_30px_90px_rgba(8,27,53,0.3)]"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="ask-ilmalink-title"
+        >
+          <div className="pointer-events-none absolute -right-20 -top-24 h-56 w-56 rounded-full bg-[#00C896]/20 blur-3xl" />
+          <div className="pointer-events-none absolute -left-16 top-1/3 h-44 w-44 rounded-full bg-sky-300/20 blur-3xl" />
+
+          <div className="relative order-1 flex shrink-0 items-center gap-2.5 border-b border-white/70 bg-white/50 px-3 py-2.5 sm:gap-3 sm:px-5 sm:py-4">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/80 bg-gradient-to-br from-[#d9fff4] to-white text-[#087a6a] shadow-[0_8px_24px_rgba(0,168,120,0.14)] sm:h-12 sm:w-12">
+              <Sparkles size={19} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#0E766A]">Search keywords or ask questions</p>
-              <h2 className="mt-0.5 text-lg font-extrabold text-slate-950">Ask ILMALINK</h2>
-              <p className="text-xs text-slate-500">Find pages, colleges, countries, fees, FMGE data, blogs, or ask directly.</p>
+              <div className="flex items-center gap-2">
+                <h2
+                  id="ask-ilmalink-title"
+                  className="text-base font-black tracking-tight text-[#071f3f] sm:text-lg"
+                >
+                  Ask ILMALINK
+                </h2>
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                  Ready
+                </span>
+              </div>
+              <p className="text-[10px] font-semibold text-slate-500 sm:text-xs">
+                AI search across verified ILMALINK data
+              </p>
             </div>
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:text-slate-700"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/80 bg-white/65 text-slate-500 shadow-sm transition hover:bg-white hover:text-slate-800 sm:h-11 sm:w-11"
               aria-label="Close search"
             >
               <X size={18} />
             </button>
           </div>
 
-          <div className="px-5 py-4">
+          <div className="relative order-3 shrink-0 border-t border-white/80 bg-white/65 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 shadow-[0_-14px_34px_rgba(15,23,42,0.08)] backdrop-blur-2xl sm:px-5 sm:py-4">
             <form
-              className="flex flex-col gap-3 sm:flex-row sm:items-center"
+              className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2"
               onSubmit={(event) => {
                 event.preventDefault();
-                void runAskSearch();
+                void runAskSearch(trimmedQuery);
               }}
             >
               <label className="sr-only" htmlFor="site-search-input">
                 Search query
               </label>
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={17} />
                 <input
                   id="site-search-input"
                   autoFocus
                   value={query}
                   onChange={(event) => handleQueryChange(event.target.value)}
-                  placeholder="Search keywords or ask questions..."
-                  className="min-h-14 w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-base font-semibold text-slate-900 shadow-[0_12px_30px_rgba(15,23,42,0.06)] outline-none transition placeholder:font-medium placeholder:text-slate-400 focus:border-[#00C896] focus:ring-4 focus:ring-[#00C896]/15"
+                  placeholder="Message Ask ILMALINK..."
+                  className="min-h-12 w-full rounded-2xl border border-white/90 bg-white/85 py-2.5 pl-10 pr-3 text-sm font-semibold text-slate-900 shadow-[0_10px_30px_rgba(15,23,42,0.08)] outline-none transition placeholder:font-medium placeholder:text-slate-400 focus:border-[#00C896] focus:bg-white focus:ring-4 focus:ring-[#00C896]/15 sm:min-h-14 sm:pl-11 sm:pr-4 sm:text-base"
                 />
               </div>
               <button
                 type="submit"
                 disabled={!trimmedQuery || askLoading}
-                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-5 text-sm font-extrabold text-white shadow-[0_14px_34px_rgba(0,200,150,0.30)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_42px_rgba(0,200,150,0.34)] disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex min-h-12 min-w-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-[#00C896] to-[#098f91] px-3 text-sm font-extrabold text-white shadow-[0_12px_28px_rgba(0,168,120,0.3)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(0,168,120,0.34)] disabled:cursor-not-allowed disabled:opacity-45 sm:min-h-14 sm:min-w-[7.25rem] sm:px-5"
                 aria-label="Search or ask"
               >
                 {askLoading ? <Loader2 size={18} className="animate-spin" /> : <Search size={18} />}
-                <span>Search</span>
+                <span className="hidden min-[370px]:inline">
+                  {askLoading ? "Thinking" : "Search"}
+                </span>
               </button>
             </form>
 
-            <div className="mt-3 flex flex-wrap gap-2">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  type="button"
-                  onClick={() => handleCategoryChange(category)}
-                  className={`rounded-2xl border px-3 py-2 text-xs font-semibold transition ${
-                    selectedCategory === category
-                      ? "border-[#00C896] bg-[#00C896]/10 text-[#0E766A]"
-                      : "border-slate-200 bg-slate-100 text-slate-600 hover:border-slate-300"
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
+            <div className="mt-2 flex items-center justify-between gap-3 px-1">
+              <span className="inline-flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400 sm:text-[10px]">
+                <span className={`h-1.5 w-1.5 rounded-full ${
+                  askLoading ? "animate-pulse bg-amber-400" : "bg-emerald-500"
+                }`} />
+                {askLoading
+                  ? "Analysing verified data"
+                  : trimmedQuery && trimmedQuery !== activeQuestion
+                    ? "Answers when you finish typing"
+                    : "Ready for your next question"}
+              </span>
+              <span className="hidden text-[10px] font-semibold text-slate-400 sm:inline">
+                Enter to send / Esc to close
+              </span>
             </div>
-
-            {!query && (
-              <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-6 text-slate-600">
-                <span className="font-bold text-slate-800">Students often ask about: </span>
-                {aspirantTopics.join(", ")}.
-              </div>
-            )}
           </div>
 
-          {query ? (
-            <div className="px-5 pb-4 text-xs text-slate-500">
-              Showing results for <span className="font-semibold text-slate-900">{query}</span>
-            </div>
-          ) : (
-            <div className="px-5 pb-4 text-xs text-slate-500 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <span>
-                Try searching for <span className="font-semibold text-slate-900">Kyrgyzstan</span>,{" "}
-                <span className="font-semibold text-slate-900">EEU Georgia</span>,{" "}
-                <span className="font-semibold text-slate-900">MBBS India</span>,{" "}
-                <span className="font-semibold text-slate-900">West Bengal</span>, or{" "}
-                <span className="font-semibold text-slate-900">FMGE</span>.
-              </span>
-              <span className="text-slate-400">Use Up/Down and Enter to select</span>
-            </div>
-          )}
-
-          {(hasAsked || askLoading || askError || askAnswer) && (
-            <div className="px-5 pb-4">
-              <div className={`rounded-2xl border p-4 ${
-                askAnswer?.notFound
-                  ? "border-amber-200 bg-amber-50"
-                  : "border-[#00C896]/20 bg-[#f3fffb]"
-              }`}>
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
-                    <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${
-                      askAnswer?.notFound
-                        ? "bg-amber-100 text-amber-800"
-                        : "bg-[#00C896]/15 text-[#0E766A]"
-                    }`}>
-                      {askAnswer?.notFound ? <MessageCircle size={17} /> : <Sparkles size={17} />}
-                    </span>
-                    <div>
-                      <p className="text-sm font-extrabold text-slate-900">
-                        {askAnswer?.notFound ? "Connect ILMALINK" : "Answer"}
-                      </p>
-                      <p className="text-xs text-slate-500">
-                        {askAnswer?.notFound
-                          ? "This question deserves a personal expert reply."
-                          : "Here is a quick answer for your MBBS question."}
-                      </p>
-                    </div>
+          <div
+            className="relative order-2 min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-3 sm:px-5 sm:py-4"
+            role="log"
+            aria-live="polite"
+            aria-label="Ask ILMALINK conversation"
+          >
+            {!query && !hasAsked && (
+              <div className="mx-auto max-w-xl py-3 sm:py-6">
+                <div className="flex items-start gap-2.5">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#00C896]/15 text-[#087a6a]">
+                    <Sparkles size={15} />
+                  </span>
+                  <div className="rounded-[1.25rem] rounded-tl-md border border-white/90 bg-white/70 px-3.5 py-3 shadow-[0_10px_28px_rgba(15,23,42,0.07)]">
+                    <p className="text-sm font-bold text-[#071f3f]">
+                      Hi! What would you like to know?
+                    </p>
+                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                      Ask about fees, universities, FMGE, eligibility or counselling. I will answer after you pause typing.
+                    </p>
                   </div>
                 </div>
+                <div className="mt-3 flex flex-wrap gap-1.5 pl-10">
+                  {[
+                    "Kyrgyzstan fees",
+                    "Best MBBS country",
+                    "FMGE results",
+                    "NMC/FMGL rules",
+                  ].map((topic) => (
+                      <button
+                        key={topic}
+                        type="button"
+                        onClick={() => handleQueryChange(topic)}
+                        className="rounded-full border border-white/90 bg-white/65 px-3 py-1.5 text-[11px] font-bold text-[#176b62] shadow-sm transition hover:border-[#00C896]/50 hover:bg-white"
+                      >
+                        {topic}
+                      </button>
+                    ))}
+                </div>
+              </div>
+            )}
 
-                {askLoading ? (
-                  <div className="mt-4 flex items-center gap-3 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-600">
-                    <Loader2 size={16} className="animate-spin text-[#0E766A]" />
-                    Preparing your answer...
+            {(hasAsked || askLoading || askError || askAnswer) && (
+              <div className="mx-auto max-w-2xl">
+                {hasAsked && (
+                  <div className="mb-3 flex justify-end">
+                    <div className="max-w-[86%] rounded-[1.25rem] rounded-tr-md bg-gradient-to-br from-[#0b806f] to-[#087477] px-3.5 py-2.5 text-sm font-semibold leading-5 text-white shadow-[0_10px_24px_rgba(8,116,119,0.2)]">
+                      {activeQuestion}
+                    </div>
                   </div>
-                ) : askError ? (
-                  <div className="mt-4 rounded-xl bg-white px-4 py-3 text-sm leading-6 text-slate-700">
-                    {askError}
-                  </div>
-                ) : askAnswer ? (
-                  <>
-                    <p className="mt-4 whitespace-pre-line text-sm leading-6 text-slate-800">
-                      {askAnswer.answer}
-                    </p>
+                )}
 
-                    <p className="mt-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-xs leading-5 text-slate-500">
-                      {answerDisclaimer}
-                    </p>
+                <div className="flex items-start gap-2.5">
+                  <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl ${
+                    askAnswer?.notFound
+                      ? "bg-amber-100 text-amber-800"
+                      : "bg-[#00C896]/15 text-[#087a6a]"
+                  }`}>
+                    {askAnswer?.notFound ? <MessageCircle size={15} /> : <Sparkles size={15} />}
+                  </span>
+                  <div className={`min-w-0 flex-1 rounded-[1.35rem] rounded-tl-md border p-3.5 shadow-[0_12px_34px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:p-4 ${
+                    askAnswer?.notFound
+                      ? "border-amber-200/80 bg-amber-50/85"
+                      : "border-white/90 bg-white/72"
+                  }`}>
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-xs font-black uppercase tracking-[0.14em] text-[#087a6a]">
+                        {askAnswer?.notFound ? "Counselling support" : "ILMALINK answer"}
+                      </p>
+                      {askAnswer && !askAnswer.notFound && (
+                        <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-bold uppercase text-emerald-700">
+                          {askAnswer.confidence} confidence
+                        </span>
+                      )}
+                    </div>
 
-                    {askAnswer.suggestedLinks.length > 0 && (
-                      <div className="mt-4">
-                        <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-                          Related pages/data
+                    {askLoading ? (
+                      <div className="mt-3 flex items-center gap-2.5 text-sm font-semibold text-slate-600">
+                        <span className="flex gap-1">
+                          <span className="h-2 w-2 animate-bounce rounded-full bg-[#00C896] [animation-delay:-0.3s]" />
+                          <span className="h-2 w-2 animate-bounce rounded-full bg-[#00C896] [animation-delay:-0.15s]" />
+                          <span className="h-2 w-2 animate-bounce rounded-full bg-[#00C896]" />
+                        </span>
+                        Finding the best answer...
+                      </div>
+                    ) : askError ? (
+                      <p className="mt-3 text-sm leading-6 text-slate-700">{askError}</p>
+                    ) : askAnswer ? (
+                      <>
+                        <p className="mt-3 whitespace-pre-line text-sm leading-6 text-slate-800">
+                          {askAnswer.answer}
                         </p>
-                        <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                          {askAnswer.suggestedLinks.slice(0, 4).map((link) => (
-                            <button
-                              key={`${link.url}-${link.title}`}
-                              type="button"
-                              onClick={() => handleSelectSuggestedLink(link)}
-                              className="min-w-0 rounded-xl border border-slate-200 bg-white px-3 py-3 text-left transition hover:border-[#00C896]/60 hover:bg-white"
-                            >
-                              <span className="block truncate text-sm font-bold text-slate-900">
-                                {link.title}
-                              </span>
-                              <span className="mt-1 line-clamp-2 block text-xs leading-5 text-slate-500">
-                                {link.description}
-                              </span>
-                              <span className="mt-2 inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-500">
-                                {link.dataType}
-                              </span>
-                            </button>
-                          ))}
+
+                        {askAnswer.suggestedLinks.length > 0 && (
+                          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                            {askAnswer.suggestedLinks.slice(0, 3).map((link) => (
+                              <button
+                                key={`${link.url}-${link.title}`}
+                                type="button"
+                                onClick={() => handleSelectSuggestedLink(link)}
+                                className="min-w-0 rounded-xl border border-slate-200/80 bg-white/80 px-3 py-2.5 text-left transition hover:border-[#00C896]/60 hover:bg-white"
+                              >
+                                <span className="line-clamp-2 block text-xs font-bold leading-4 text-slate-900">
+                                  {link.title}
+                                </span>
+                                <span className="mt-1 line-clamp-1 block text-[11px] leading-4 text-slate-500">
+                                  {link.description}
+                                </span>
+                                <span className="mt-2 inline-flex text-[10px] font-black uppercase tracking-[0.12em] text-[#087a6a]">
+                                  Open full page
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        {askAnswer.shouldAutoOpenCounselling && (
+                          <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] font-bold leading-4 text-amber-800">
+                            Verified data is unavailable. Opening expert counselling…
+                          </p>
+                        )}
+
+                        <p className="mt-3 border-t border-slate-200/80 pt-2.5 text-[10px] leading-4 text-slate-500">
+                          {answerDisclaimer}
+                        </p>
+                      </>
+                    ) : null}
+
+                    <button
+                      type="button"
+                      onClick={handleConnectClick}
+                      className="mt-3 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00C896] to-[#098f91] px-4 text-xs font-extrabold text-white shadow-[0_10px_24px_rgba(0,168,120,0.22)] transition hover:-translate-y-0.5"
+                    >
+                      <MessageCircle size={15} />
+                      Connect ILMALINK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {query &&
+              query.trim() === activeQuestion &&
+              (hasAsked || askLoading || askError || askAnswer) && (
+              <div className={hasAsked || askLoading || askError || askAnswer ? "mt-4" : ""}>
+                <div className="mb-2 flex items-center justify-between px-1">
+                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
+                    Relevant pages
+                  </p>
+                  <span className="text-[10px] font-semibold text-slate-400">
+                    {filteredResults.length} matches
+                  </span>
+                </div>
+
+                <div className="grid gap-2">
+                  {filteredResults.length > 0 ? (
+                    filteredResults.map((result, index) => (
+                      <button
+                        key={result.id}
+                        type="button"
+                        onClick={() => handleSelectResult(result)}
+                        className={`group flex w-full items-start gap-2.5 rounded-2xl border px-3 py-2.5 text-left shadow-sm transition sm:gap-3 sm:px-4 sm:py-3 ${
+                          index === selectedResultIndex
+                            ? "border-[#00C896]/40 bg-[#effaf5]/90"
+                            : "border-white/90 bg-white/65 hover:border-[#00C896]/30 hover:bg-white"
+                        }`}
+                      >
+                        <div
+                          className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl sm:h-10 sm:w-10 ${
+                            index === selectedResultIndex
+                              ? "bg-[#00C896]/15 text-[#0E766A]"
+                              : "bg-slate-100 text-slate-500"
+                          }`}
+                        >
+                          {getIcon(result.type)}
                         </div>
-                      </div>
-                    )}
-                  </>
-                ) : null}
-
-                <button
-                  type="button"
-                  onClick={handleConnectClick}
-                  className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-4 py-3 text-sm font-extrabold text-white shadow-[0_10px_24px_rgba(0,200,150,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(0,200,150,0.28)] sm:w-auto"
-                >
-                  <MessageCircle size={16} />
-                  Connect ILMALINK
-                </button>
-              </div>
-            </div>
-          )}
-
-          {browseSuggestions.length > 0 && !query ? (
-            <div className="px-5 pb-4">
-              <div className="mb-2 text-xs uppercase tracking-[0.2em] text-slate-400">Quick Browse</div>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {browseSuggestions.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => handleSelectResult(item)}
-                    className="group flex items-center gap-3 rounded-3xl border border-slate-200 bg-white px-4 py-3 text-left shadow-sm transition hover:border-[#00C896]/60 hover:bg-[#f0fdf9]"
-                  >
-                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#00C896]/10 text-[#0E766A]">
-                      {getIcon(item.type)}
+                        <div className="min-w-0 flex-1">
+                          <div className="flex min-w-0 items-center gap-2">
+                            <h3 className="truncate text-xs font-bold text-slate-900 sm:text-sm">
+                              {result.title}
+                            </h3>
+                            <span className="hidden shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.1em] text-slate-500 sm:inline-flex">
+                              {result.category}
+                            </span>
+                          </div>
+                          <p className="mt-1 line-clamp-1 text-[11px] leading-4 text-slate-500 sm:text-xs sm:leading-5">
+                            {result.description}
+                          </p>
+                        </div>
+                      </button>
+                    ))
+                  ) : (
+                    <div className="rounded-2xl border border-white/90 bg-white/65 px-4 py-6 text-center text-slate-500 shadow-sm">
+                      <p className="text-sm font-bold text-slate-800">No exact page match</p>
+                      <p className="mt-1 text-xs">
+                        Ask the question to get an answer or connect with counselling.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={handleConnectClick}
+                        className="mt-3 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00C896] to-[#098f91] px-4 text-xs font-extrabold text-white"
+                      >
+                        <MessageCircle size={15} />
+                        Connect ILMALINK
+                      </button>
                     </div>
-                    <div>
-                      <div className="text-sm font-semibold text-slate-900">{item.title}</div>
-                      <div className="text-[11px] text-slate-500">{item.description}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : null}
-
-          <div className="divide-y divide-slate-100 max-h-[36rem] overflow-y-auto">
-            {filteredResults.length > 0 ? (
-              filteredResults.map((result, index) => (
-                <button
-                  key={result.id}
-                  type="button"
-                  onClick={() => handleSelectResult(result)}
-                  className={`group flex w-full items-start gap-4 px-5 py-4 text-left transition ${
-                    index === selectedResultIndex ? "bg-[#effaf5]" : "hover:bg-slate-50"
-                  }`}
-                >
-                  <div
-                    className={`mt-1 flex h-11 w-11 items-center justify-center rounded-2xl ${
-                      index === selectedResultIndex
-                        ? "bg-[#00C896]/15 text-[#0E766A]"
-                        : "bg-slate-100 text-slate-500"
-                    }`}
-                  >
-                    {getIcon(result.type)}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-sm font-semibold text-slate-900">{result.title}</h3>
-                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-500">
-                        {result.category}
-                      </span>
-                    </div>
-                    <p className="mt-1 text-sm leading-5 text-slate-600 line-clamp-2">{result.description}</p>
-                    {result.tags && result.tags.length > 0 && (
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {result.tags.slice(0, 2).map((tag) => (
-                          <span key={tag} className="rounded-full bg-[#ecfdf5] px-2 py-0.5 text-[10px] font-medium text-[#0E766A]">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </button>
-              ))
-            ) : (
-              <div className="px-5 py-12 text-center text-slate-500">
-                <Search size={36} className="mx-auto mb-4" />
-                <p className="text-sm font-medium text-slate-800">Need a sharper answer?</p>
-                <p className="mt-2 text-sm">
-                  This question can be answered better by our experts.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleConnectClick}
-                  className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-5 text-sm font-extrabold text-white shadow-[0_12px_28px_rgba(0,200,150,0.24)] transition hover:-translate-y-0.5"
-                >
-                  <MessageCircle size={16} />
-                  Connect ILMALINK
-                </button>
+                  )}
+                </div>
               </div>
             )}
           </div>
 
-          <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 text-xs text-slate-500 flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
-            <button
-              type="button"
-              onClick={handleConnectClick}
-              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-[#00C896]/30 bg-white px-4 text-xs font-extrabold text-[#0E766A] transition hover:bg-[#ecfdf5]"
-            >
-              <MessageCircle size={14} />
-              Connect ILMALINK
-            </button>
-            <span className="font-medium text-slate-700">Press ESC to close</span>
-          </div>
         </div>
       </div>
       <button type="button" className="fixed inset-0 -z-10" onClick={onClose} aria-label="Close search" />

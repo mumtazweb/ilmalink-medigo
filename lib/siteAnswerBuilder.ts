@@ -8,6 +8,26 @@ import {
   type SuggestedSiteLink,
 } from "./siteDataSearch";
 import { fmgeCountries } from "@/app/data/fmgeData";
+import type {
+  MBBSIndiaCollegeCutoff,
+  MBBSIndiaCutoffCategory,
+} from "@/app/data/mbbsIndiaCounselling";
+import { getMBBSIndiaCollegeCounselling2025 } from "@/app/data/mbbsIndiaCounselling";
+import {
+  mbbsIndiaColleges,
+  type MBBSIndiaCollege,
+} from "@/app/data/mbbsIndiaColleges";
+import {
+  getMBBSIndiaCollegeHref,
+} from "@/app/data/exploreLinks";
+import {
+  kyrgyzstanUniversities,
+  type KyrgyzUniversityPageData,
+} from "@/app/data/kyrgyzstanUniversities";
+import {
+  georgiaUniversities,
+  type GeorgiaUniversityPageData,
+} from "@/app/data/georgiaUniversities";
 
 export type AskIlmalinkAnswer = {
   answer: string;
@@ -15,7 +35,14 @@ export type AskIlmalinkAnswer = {
   matchedItems: SiteSearchMatch[];
   suggestedLinks: SuggestedSiteLink[];
   shouldShowConnectCTA: true;
+  shouldAutoOpenCounselling?: boolean;
   notFound: boolean;
+};
+
+type BuiltAnswer = {
+  answer: string;
+  suggestedLinks?: SuggestedSiteLink[];
+  shouldAutoOpenCounselling?: boolean;
 };
 
 const fallbackAnswer =
@@ -37,6 +64,297 @@ function getTopByKind(search: SiteDataSearchResponse, kind: string) {
 
 function getItemsByKind(search: SiteDataSearchResponse, kind: string) {
   return search.matchedItems.filter((item) => item.data?.kind === kind);
+}
+
+function toDirectLink(
+  item: SiteSearchMatch,
+  description = item.description
+): SuggestedSiteLink {
+  return {
+    title: item.title,
+    description,
+    url: item.url,
+    sourceLabel: item.sourceLabel,
+    dataType: item.matchedDataType,
+    lastUpdated: item.lastUpdated,
+  };
+}
+
+function formatNumber(value: number) {
+  return value.toLocaleString("en-IN");
+}
+
+const genericInstitutionWords = new Set([
+  "and",
+  "college",
+  "faculty",
+  "hospital",
+  "institute",
+  "international",
+  "medical",
+  "medicine",
+  "of",
+  "school",
+  "state",
+  "the",
+  "university",
+]);
+
+function getInstitutionAliases(name: string) {
+  const uppercaseAliases = (name.match(/\b[A-Z][A-Z0-9-]{1,}\b/g) ?? [])
+    .filter(
+      (alias) =>
+        !genericInstitutionWords.has(normalizeSiteSearchText(alias))
+    );
+
+  return [name, ...uppercaseAliases];
+}
+
+function getInstitutionMatchScore(query: string, aliases: string[]) {
+  const normalizedQuery = normalizeSiteSearchText(query);
+  const queryTerms = normalizedQuery.split(" ");
+  let bestScore = 0;
+
+  for (const alias of aliases) {
+    const normalizedAlias = normalizeSiteSearchText(alias);
+    if (!normalizedAlias) continue;
+
+    const aliasTerms = normalizedAlias.split(" ");
+    const isShortAlias = aliasTerms.length === 1;
+    const hasExactAlias = isShortAlias
+      ? queryTerms.includes(normalizedAlias)
+      : normalizedQuery.includes(normalizedAlias);
+
+    if (hasExactAlias) {
+      bestScore = Math.max(
+        bestScore,
+        isShortAlias ? 1_200 + normalizedAlias.length : 2_000 + normalizedAlias.length
+      );
+      continue;
+    }
+
+    const significantTerms = normalizedAlias
+      .split(" ")
+      .filter(
+        (term) =>
+          term.length > 1 &&
+          !genericInstitutionWords.has(term)
+      );
+    if (significantTerms.length === 0) continue;
+
+    const matchedTerms = significantTerms.filter((term) =>
+      queryTerms.includes(term)
+    );
+    const ratio = matchedTerms.length / significantTerms.length;
+
+    if (matchedTerms.length >= 2 || ratio >= 0.6) {
+      bestScore = Math.max(
+        bestScore,
+        Math.round(ratio * 800) + matchedTerms.length * 80
+      );
+    }
+  }
+
+  return bestScore;
+}
+
+function resolveIndiaCollege(query: string): MBBSIndiaCollege | null {
+  let best:
+    | {
+        college: MBBSIndiaCollege;
+        score: number;
+      }
+    | undefined;
+
+  for (const college of mbbsIndiaColleges) {
+    const score = getInstitutionMatchScore(
+      query,
+      getInstitutionAliases(college.collegeName)
+    );
+
+    if (score > 0 && (!best || score > best.score)) {
+      best = { college, score };
+    }
+  }
+
+  return best?.college ?? null;
+}
+
+function resolveKyrgyzUniversity(
+  query: string
+): KyrgyzUniversityPageData | null {
+  const extraAliases: Record<string, string[]> = {
+    "kyrgyz-state-medical-academy": ["KSMA"],
+    "international-higher-school-of-medicine": ["IHSM"],
+    "international-higher-school-of-medicine-central": ["IHSM Central"],
+    "international-higher-school-of-medicine-elite": ["IHSM Elite"],
+  };
+  let best:
+    | {
+        university: KyrgyzUniversityPageData;
+        score: number;
+      }
+    | undefined;
+
+  for (const university of kyrgyzstanUniversities) {
+    let score = getInstitutionMatchScore(query, [
+      ...getInstitutionAliases(university.name),
+      ...(extraAliases[university.slug] ?? []),
+    ]);
+
+    if (
+      normalizeSiteSearchText(query).split(" ").includes("ihsm") &&
+      university.slug === "international-higher-school-of-medicine"
+    ) {
+      score += 500;
+    }
+
+    if (score > 0 && (!best || score > best.score)) {
+      best = { university, score };
+    }
+  }
+
+  return best?.university ?? null;
+}
+
+function resolveGeorgiaUniversity(
+  query: string
+): GeorgiaUniversityPageData | null {
+  let best:
+    | {
+        university: GeorgiaUniversityPageData;
+        score: number;
+      }
+    | undefined;
+
+  for (const university of georgiaUniversities) {
+    const score = getInstitutionMatchScore(query, [
+      ...getInstitutionAliases(university.name),
+      ...(university.shortName ? [university.shortName] : []),
+    ]);
+
+    if (score > 0 && (!best || score > best.score)) {
+      best = { university, score };
+    }
+  }
+
+  return best?.university ?? null;
+}
+
+function indiaCollegeLink(
+  college: MBBSIndiaCollege,
+  description: string
+): SuggestedSiteLink {
+  return {
+    title: college.collegeName,
+    description,
+    url: getMBBSIndiaCollegeHref(college),
+    sourceLabel: "ILMALINK MBBS India college data",
+    dataType: "MBBS India College",
+  };
+}
+
+function getFirstNumericQueryValue(query: string) {
+  const values = query.match(/\b\d[\d,]*\b/g) ?? [];
+
+  for (const value of values) {
+    const parsed = Number(value.replace(/,/g, ""));
+
+    if (
+      Number.isFinite(parsed) &&
+      parsed > 10 &&
+      !(parsed >= 2020 && parsed <= 2035)
+    ) {
+      return parsed;
+    }
+  }
+
+  return null;
+}
+
+function getRequestedCutoffCategory(
+  query: string,
+  rows: MBBSIndiaCutoffCategory[]
+) {
+  const normalized = normalizeSiteSearchText(query);
+  const aliases: Array<[string[], string]> = [
+    [["management", "management quota", "private quota"], "Management"],
+    [["gen ews", "general ews", "ews"], "GEN-EWS"],
+    [["obc a", "obca"], "OBC-A"],
+    [["obc b", "obcb"], "OBC-B"],
+    [["general", "gen", "ur"], "GEN"],
+    [["sc", "scheduled caste"], "SC"],
+    [["st", "scheduled tribe"], "ST"],
+  ];
+
+  const matched = aliases.find(([terms]) =>
+    terms.some((term) => normalized.includes(term))
+  )?.[1];
+
+  return matched
+    ? rows.find((row) => row.category === matched) ?? null
+    : null;
+}
+
+function getRequestedRound(query: string) {
+  const normalized = normalizeSiteSearchText(query);
+
+  if (normalized.includes("stray")) return "stray" as const;
+  if (/\bround 3\b|\br3\b/.test(normalized)) return "round3" as const;
+  if (/\bround 2\b|\br2\b/.test(normalized)) return "round2" as const;
+  if (/\bround 1\b|\br1\b/.test(normalized)) return "round1" as const;
+
+  return null;
+}
+
+const cutoffRoundFields = [
+  {
+    key: "round1",
+    label: "Round 1",
+    score: "round1Score",
+    rank: "round1Rank",
+  },
+  {
+    key: "round2",
+    label: "Round 2",
+    score: "round2Score",
+    rank: "round2Rank",
+  },
+  {
+    key: "round3",
+    label: "Round 3",
+    score: "round3Score",
+    rank: "round3Rank",
+  },
+  {
+    key: "stray",
+    label: "Stray round",
+    score: "strayScore",
+    rank: "strayRank",
+  },
+] as const;
+
+function formatCutoffRow(
+  row: MBBSIndiaCutoffCategory,
+  requestedRound: ReturnType<typeof getRequestedRound>
+) {
+  const rounds = requestedRound
+    ? cutoffRoundFields.filter((round) => round.key === requestedRound)
+    : cutoffRoundFields;
+  const details = rounds.flatMap((round) => {
+    const score = row[round.score];
+    const rank = row[round.rank];
+
+    if (score === null && rank === null) return [];
+
+    return [
+      `${round.label}: ${score ?? "score unavailable"}${
+        rank !== null ? `, rank ${formatNumber(rank)}` : ""
+      }`,
+    ];
+  });
+
+  return `${row.category} — ${details.join("; ")}`;
 }
 
 function formatFacts(item: SiteSearchMatch) {
@@ -136,42 +454,158 @@ function buildFmgeCollegeVolumeAnswer() {
   ].join("\n\n");
 }
 
-function buildCutoffAnswer(search: SiteDataSearchResponse) {
-  const stateItems = getItemsByKind(search, "mbbs-india-state");
-  const bestState = stateItems[0];
+function buildCutoffAnswer(search: SiteDataSearchResponse): BuiltAnswer {
+  const resolvedCollege = resolveIndiaCollege(search.query);
+  const matchedCollege = getTopByKind(search, "mbbs-india-college");
+  const collegeName = resolvedCollege?.collegeName ?? matchedCollege?.title;
+
+  if (collegeName) {
+    const counselling = resolvedCollege
+      ? getMBBSIndiaCollegeCounselling2025(resolvedCollege.collegeName)
+      : (matchedCollege?.data?.counselling2025 as
+          | {
+              year?: number;
+              cutoff?: MBBSIndiaCollegeCutoff | null;
+            }
+          | null
+          | undefined);
+    const cutoff = counselling?.cutoff;
+    const pageLink = resolvedCollege
+      ? indiaCollegeLink(
+          resolvedCollege,
+          `Open the full ${collegeName} counselling page with the 2025 seat matrix and round-wise cutoff table.`
+        )
+      : toDirectLink(
+          matchedCollege!,
+          `Open the full ${collegeName} counselling page with the 2025 seat matrix and round-wise cutoff table.`
+        );
+
+    if (!cutoff?.categories?.length) {
+      return {
+        answer: `I found ${collegeName}, but this website does not yet have a verified college-specific cutoff table for it. Cutoff depends on category, quota and round, so an expert should check the latest counselling source.`,
+        suggestedLinks: [pageLink],
+        shouldAutoOpenCounselling: true,
+      };
+    }
+
+    const requestedCategory = getRequestedCutoffCategory(
+      search.query,
+      cutoff.categories
+    );
+    const requestedRound = getRequestedRound(search.query);
+    const numericValue = getFirstNumericQueryValue(search.query);
+    const normalizedQuery = normalizeSiteSearchText(search.query);
+    const isRankQuery =
+      normalizedQuery.includes("rank") ||
+      (numericValue !== null && numericValue > 720);
+
+    if (numericValue !== null) {
+      const comparisons = cutoff.categories.flatMap((row) =>
+        cutoffRoundFields.flatMap((round) => {
+          if (requestedRound && round.key !== requestedRound) return [];
+          if (requestedCategory && row.category !== requestedCategory.category) {
+            return [];
+          }
+
+          const score = row[round.score];
+          const rank = row[round.rank];
+          const threshold = isRankQuery ? rank : score;
+          if (threshold === null) return [];
+
+          const meets = isRankQuery
+            ? numericValue <= threshold
+            : numericValue >= threshold;
+
+          return [
+            {
+              category: row.category,
+              round: round.label,
+              score,
+              rank,
+              threshold,
+              meets,
+              distance: Math.abs(numericValue - threshold),
+            },
+          ];
+        })
+      );
+      const reachable = comparisons
+        .filter((item) => item.meets)
+        .sort((first, second) => first.distance - second.distance)
+        .slice(0, 5);
+      const closestMisses = comparisons
+        .filter((item) => !item.meets)
+        .sort((first, second) => first.distance - second.distance)
+        .slice(0, 2);
+      const valueLabel = isRankQuery
+        ? `rank ${formatNumber(numericValue)}`
+        : `${numericValue} marks`;
+      const reachableText = reachable.length
+        ? reachable
+            .map(
+              (item) =>
+                `${item.category} ${item.round} (${item.score ?? "score unavailable"} marks${
+                  item.rank !== null ? ` / rank ${formatNumber(item.rank)}` : ""
+                })`
+            )
+            .join("; ")
+        : "none of the matched 2025 category/round rows";
+      const missesText = closestMisses.length
+        ? ` Closest higher cutoffs were ${closestMisses
+            .map(
+              (item) =>
+                `${item.category} ${item.round} (${item.score ?? "score unavailable"} marks${
+                  item.rank !== null ? ` / rank ${formatNumber(item.rank)}` : ""
+                })`
+            )
+            .join("; ")}.`
+        : "";
+
+      return {
+        answer: `For ${collegeName}, your ${valueLabel} matched these 2025 closing points: ${reachableText}.${missesText} This is a prior-year comparison, not an admission guarantee—category, quota, domicile and the current counselling round still decide eligibility.`,
+        suggestedLinks: [pageLink],
+      };
+    }
+
+    const rowsToShow = requestedCategory
+      ? [requestedCategory]
+      : [
+          cutoff.categories.find((row) => row.category === "GEN"),
+          cutoff.categories.find((row) => row.category === "Management"),
+        ].filter(Boolean) as MBBSIndiaCutoffCategory[];
+    const details = rowsToShow
+      .map((row) => formatCutoffRow(row, requestedRound))
+      .join("\n");
+
+    return {
+      answer: `${collegeName} has exact 2025 prior-year cutoff data on this website:\n${details}\nTell me your category, quota, round, score or rank for a more specific comparison.`,
+      suggestedLinks: [pageLink],
+    };
+  }
+
+  const bestState = getTopByKind(search, "mbbs-india-state");
 
   if (!bestState) {
-    return "Cutoff depends on NEET score, category, domicile, quota, round, college type, and budget. This question needs personalised score/category/domicile checking. Connect ILMALINK for a sharper reply.";
+    return {
+      answer:
+        "Please include the college name plus your NEET score or rank and category. I can then compare it against the exact cutoff numbers available on this website.",
+      shouldAutoOpenCounselling: true,
+    };
   }
 
   const state = asString(bestState.data?.state) ?? bestState.title;
-  const queryMentionsState = stateItems.some((item) => {
-    const stateName = asString(item.data?.state);
-
-    return stateName
-      ? normalizeSiteSearchText(search.query).includes(
-          normalizeSiteSearchText(stateName)
-        )
-      : false;
-  });
-
-  if (!queryMentionsState) {
-    return "Cutoff depends on NEET score, category, domicile, quota, round, college type, and budget. For a lowest-cutoff state shortlist, your score, category, domicile and fee range should be checked together. Connect ILMALINK for a personalised shortlist.";
-  }
-
   const accessLabel = asString(bestState.data?.accessLabel);
-  const accessDetail = asString(bestState.data?.accessDetail);
   const privateCount = asNumber(bestState.data?.privateCount);
   const totalSeats = asNumber(bestState.data?.totalSeats);
 
-  return [
-    "Cutoff should be read trend-wise, not as a guarantee.",
-    `For trend-wise planning, ${state} is a relevant state to review because it is tagged as ${accessLabel ?? "a state counselling route"}${privateCount !== null ? ` with ${privateCount} private MBBS colleges` : ""}${totalSeats !== null ? ` and ${totalSeats.toLocaleString("en-IN")} total MBBS seats` : ""}.`,
-    accessDetail ? `Counselling note: ${accessDetail}` : null,
-    "Needs score, category, domicile, quota, round, college type, and budget verification before any admission decision.",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  return {
+    answer: `${state} is the closest counselling match. It is tagged as ${
+      accessLabel ?? "a state counselling route"
+    }${privateCount !== null ? ` with ${privateCount} private colleges` : ""}${
+      totalSeats !== null ? ` and ${formatNumber(totalSeats)} MBBS seats` : ""
+    }. Add a college name, category and score/rank for an exact cutoff answer.`,
+    suggestedLinks: [toDirectLink(bestState)],
+  };
 }
 
 function buildStateCounsellingAnswer(search: SiteDataSearchResponse) {
@@ -245,31 +679,269 @@ function buildCountryComparisonAnswer(search: SiteDataSearchResponse) {
   return fallbackAnswer;
 }
 
-function buildFeeAnswer(search: SiteDataSearchResponse) {
-  const university = getTopByKind(search, "kyrgyz-university");
+function buildUniversityRecommendationAnswer(): BuiltAnswer {
+  return {
+    answer: [
+      "Based on the verified university data currently available on ILMALINK, my first shortlist would be International Higher School of Medicine (IHSM) and Kyrgyz State Medical Academy (KSMA).",
+      "If you want one default starting option, IHSM is the cleaner first recommendation because its listed campuses have 6-year accreditation, structured fee tables and a dedicated Indian-student pathway. KSMA is also marked Recommended and is a strong public-academy option, but its special regulatory status still needs separate current verification.",
+      "The final choice should depend on your budget, preferred campus, course/internship structure, hostel plan and latest NMC/FMGL checks.",
+    ].join("\n\n"),
+    suggestedLinks: [
+      {
+        title: "International Higher School of Medicine (IHSM)",
+        description:
+          "Open the full IHSM page with Central and Elite campus fees, accreditation, documents and FMGE references.",
+        url: "/mbbs-abroad/kyrgyzstan/international-higher-school-of-medicine/",
+        sourceLabel: "ILMALINK Kyrgyzstan university data",
+        dataType: "University",
+      },
+      {
+        title: "Kyrgyz State Medical Academy (KSMA)",
+        description:
+          "Open the full KSMA page with its 2026 fee structure, requirements, accreditation position and admission details.",
+        url: "/mbbs-abroad/kyrgyzstan/kyrgyz-state-medical-academy/",
+        sourceLabel: "ILMALINK Kyrgyzstan university data",
+        dataType: "University",
+      },
+    ],
+  };
+}
 
-  if (!university) {
-    return "Fees can change by intake, semester, hostel, mess, visa, and university policy. Connect ILMALINK for the latest personalised fee estimate.";
+function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
+  const resolvedIndiaCollege = resolveIndiaCollege(search.query);
+
+  if (resolvedIndiaCollege) {
+    const unavailable =
+      !resolvedIndiaCollege.fees ||
+      normalizeSiteSearchText(resolvedIndiaCollege.fees).includes(
+        "to be updated"
+      );
+    const targetLink = indiaCollegeLink(
+      resolvedIndiaCollege,
+      `Open the full ${resolvedIndiaCollege.collegeName} page for its available fee status, seats and counselling data.`
+    );
+
+    if (unavailable) {
+      return {
+        answer: `The verified 2026 fee for ${resolvedIndiaCollege.collegeName} has not yet been updated on this website. Please contact an ILMALINK expert for the latest official fee structure.`,
+        suggestedLinks: [targetLink],
+        shouldAutoOpenCounselling: true,
+      };
+    }
+
+    return {
+      answer: `${resolvedIndiaCollege.collegeName} fee: ${resolvedIndiaCollege.fees}. Open the college page below for the complete available record.`,
+      suggestedLinks: [targetLink],
+    };
   }
 
-  const feeRows = Array.isArray(university.data?.feeRows)
-    ? university.data?.feeRows
-    : [];
-  const firstFee = feeRows[0] as
-    | {
-        year?: string;
-        semester?: string;
-        tuitionFee?: string;
-        hostelAccommodation?: string;
-        mess?: string;
-        totalCost?: string;
-      }
-    | undefined;
-  const feeLine = firstFee
-    ? `${firstFee.year ?? "First listed year"} ${firstFee.semester ?? ""}: tuition ${firstFee.tuitionFee ?? "not specified"}, hostel ${firstFee.hostelAccommodation ?? "not specified"}, mess ${firstFee.mess ?? "not specified"}, total ${firstFee.totalCost ?? "not specified"}.`
-    : "Fee details need expert verification.";
+  const resolvedKyrgyzUniversity = resolveKyrgyzUniversity(search.query);
 
-  return `${university.title} has this first listed fee row: ${feeLine} Fees may change by intake, payment schedule, hostel/mess choice, visa, air ticket, and university policy. Use Connect ILMALINK for a current fee and admission review.`;
+  if (resolvedKyrgyzUniversity) {
+    const feeNotesText = normalizeSiteSearchText(
+      resolvedKyrgyzUniversity.feeNotes.join(" ")
+    );
+    const explicitlyUnverified =
+      feeNotesText.includes("no official") ||
+      feeNotesText.includes("not yet published") ||
+      feeNotesText.includes("not yet confirmed") ||
+      feeNotesText.includes("to be updated");
+    const validRows = resolvedKyrgyzUniversity.feeRows.filter(
+      (row) =>
+        !normalizeSiteSearchText(
+          Object.values(row).join(" ")
+        ).includes("to be updated")
+    );
+    const firstFee = validRows[0];
+    const targetLink: SuggestedSiteLink = {
+      title: resolvedKyrgyzUniversity.name,
+      description: `Open the full ${resolvedKyrgyzUniversity.name} page for the complete semester-wise fee structure and admission details.`,
+      url: `/mbbs-abroad/kyrgyzstan/${resolvedKyrgyzUniversity.slug}/`,
+      sourceLabel: "ILMALINK Kyrgyzstan university data",
+      dataType: "University Fee",
+    };
+
+    if (
+      !explicitlyUnverified &&
+      !firstFee &&
+      resolvedKyrgyzUniversity.campuses?.length
+    ) {
+      const campusFees = resolvedKyrgyzUniversity.campuses
+        .flatMap((campus) => {
+          const row = campus.feeRows.find(
+            (feeRow) =>
+              !normalizeSiteSearchText(Object.values(feeRow).join(" ")).includes(
+                "to be updated"
+              )
+          );
+
+          return row
+            ? [
+                `${campus.name}: ${row.year} ${row.semester}, tuition ${row.tuitionFee}, hostel ${row.hostelAccommodation}, mess ${row.mess}, total ${row.totalCost}`,
+              ]
+            : [];
+        })
+        .slice(0, 2);
+
+      if (campusFees.length) {
+        return {
+          answer: `${resolvedKyrgyzUniversity.name} has separate campus fee tables. ${campusFees.join(
+            ". "
+          )}. Open the fee page below for the complete campus-wise semester breakdown.`,
+          suggestedLinks: [targetLink],
+        };
+      }
+    }
+
+    if (explicitlyUnverified || !firstFee) {
+      return {
+        answer: `The verified 2026 fee for ${resolvedKyrgyzUniversity.name} has not yet been updated on this website. Please contact an ILMALINK expert for the latest university-issued fee structure.`,
+        suggestedLinks: [targetLink],
+        shouldAutoOpenCounselling: true,
+      };
+    }
+
+    return {
+      answer: `${resolvedKyrgyzUniversity.name} — ${firstFee.year} ${firstFee.semester}: tuition ${firstFee.tuitionFee}, hostel ${firstFee.hostelAccommodation}, mess ${firstFee.mess}, total ${firstFee.totalCost}. Open the fee page below for the full semester-wise structure and notes.`,
+      suggestedLinks: [targetLink],
+    };
+  }
+
+  const resolvedGeorgiaUniversity = resolveGeorgiaUniversity(search.query);
+
+  if (resolvedGeorgiaUniversity) {
+    const targetLink: SuggestedSiteLink = {
+      title: resolvedGeorgiaUniversity.name,
+      description: `Open the full ${resolvedGeorgiaUniversity.name} page for the complete available fee structure and admission details.`,
+      url: resolvedGeorgiaUniversity.pageExists
+        ? `/mbbs-abroad/georgia/${resolvedGeorgiaUniversity.slug}/`
+        : `/mbbs-abroad/georgia/?q=${encodeURIComponent(
+            resolvedGeorgiaUniversity.name
+          )}#georgia-universities`,
+      sourceLabel: "ILMALINK Georgia university data",
+      dataType: "University Fee",
+    };
+
+    if (
+      !resolvedGeorgiaUniversity.feeSummary &&
+      resolvedGeorgiaUniversity.feeRows.length === 0
+    ) {
+      return {
+        answer: `The verified 2026 fee for ${resolvedGeorgiaUniversity.name} has not yet been updated on this website. Please contact an ILMALINK expert for the latest university-issued fee structure.`,
+        suggestedLinks: [targetLink],
+        shouldAutoOpenCounselling: true,
+      };
+    }
+
+    return {
+      answer: `${resolvedGeorgiaUniversity.name}: ${
+        resolvedGeorgiaUniversity.feeSummary ||
+        "A detailed fee table is available on the university page."
+      } Open the fee page below for the complete year/semester breakdown.`,
+      suggestedLinks: [targetLink],
+    };
+  }
+
+  const target = search.matchedItems.find((item) =>
+    ["mbbs-india-college", "kyrgyz-university", "georgia-university"].includes(
+      String(item.data?.kind)
+    )
+  );
+
+  if (!target) {
+    return {
+      answer:
+        "I could not identify the exact college or university from the question. Please type its full name or common short name so I can check whether a verified fee is available.",
+      shouldAutoOpenCounselling: true,
+    };
+  }
+
+  const targetLink = toDirectLink(
+    target,
+    `Open the full ${target.title} page for the available fee details and admission information.`
+  );
+
+  if (target.data?.kind === "mbbs-india-college") {
+    const fees = asString(target.data.fees);
+    const unavailable =
+      !fees || normalizeSiteSearchText(fees).includes("to be updated");
+
+    if (unavailable) {
+      return {
+        answer: `The verified 2026 fee for ${target.title} has not yet been updated on this website. Please contact an ILMALINK expert for the latest official fee structure.`,
+        suggestedLinks: [targetLink],
+        shouldAutoOpenCounselling: true,
+      };
+    }
+
+    return {
+      answer: `${target.title} fee: ${fees}. Open the college page below for the complete available record.`,
+      suggestedLinks: [targetLink],
+    };
+  }
+
+  if (target.data?.kind === "georgia-university") {
+    const feeSummary = asString(target.data.feeSummary);
+    const feeRows = Array.isArray(target.data.feeRows)
+      ? target.data.feeRows
+      : [];
+
+    if (!feeSummary && feeRows.length === 0) {
+      return {
+        answer: `The verified 2026 fee for ${target.title} has not yet been updated on this website. Please contact an ILMALINK expert for the latest university-issued fee structure.`,
+        suggestedLinks: [targetLink],
+        shouldAutoOpenCounselling: true,
+      };
+    }
+
+    return {
+      answer: `${target.title}: ${
+        feeSummary ?? "A detailed fee table is available on the university page."
+      } Open the fee page below for the complete year/semester breakdown.`,
+      suggestedLinks: [targetLink],
+    };
+  }
+
+  const feeRows = Array.isArray(target.data?.feeRows)
+    ? target.data.feeRows
+    : [];
+  const validRows = feeRows.filter((row) => {
+    if (!row || typeof row !== "object") return false;
+    const values = Object.values(row as Record<string, unknown>)
+      .filter((value): value is string => typeof value === "string")
+      .join(" ");
+
+    return !normalizeSiteSearchText(values).includes("to be updated");
+  }) as Array<{
+    year?: string;
+    semester?: string;
+    tuitionFee?: string;
+    hostelAccommodation?: string;
+    mess?: string;
+    totalCost?: string;
+  }>;
+  const firstFee = validRows[0];
+
+  if (!firstFee) {
+    return {
+      answer: `The verified 2026 fee for ${target.title} has not yet been updated on this website. Please contact an ILMALINK expert for the latest university-issued fee structure.`,
+      suggestedLinks: [targetLink],
+      shouldAutoOpenCounselling: true,
+    };
+  }
+
+  const feeLine = `${firstFee.year ?? "First listed year"} ${
+    firstFee.semester ?? ""
+  }: tuition ${firstFee.tuitionFee ?? "not specified"}, hostel ${
+    firstFee.hostelAccommodation ?? "not specified"
+  }, mess ${firstFee.mess ?? "not specified"}, total ${
+    firstFee.totalCost ?? "not specified"
+  }.`;
+
+  return {
+    answer: `${target.title} — ${feeLine} Open the fee page below for the full semester-wise structure and notes.`,
+    suggestedLinks: [targetLink],
+  };
 }
 
 function buildAccreditationAnswer(search: SiteDataSearchResponse) {
@@ -351,6 +1023,42 @@ function buildGeneralAnswer(search: SiteDataSearchResponse) {
 export function buildSiteAnswerFromSearch(
   search: SiteDataSearchResponse
 ): AskIlmalinkAnswer {
+  if (search.intent === "mbbs-abroad-university-recommendation") {
+    const built = buildUniversityRecommendationAnswer();
+
+    return {
+      answer: built.answer,
+      confidence: "high",
+      matchedItems: search.matchedItems,
+      suggestedLinks: built.suggestedLinks ?? [],
+      shouldShowConnectCTA: true,
+      shouldAutoOpenCounselling: false,
+      notFound: false,
+    };
+  }
+
+  if (
+    search.intent === "mbbs-india-cutoff" ||
+    search.intent === "university-fee"
+  ) {
+    const built =
+      search.intent === "mbbs-india-cutoff"
+        ? buildCutoffAnswer(search)
+        : buildFeeAnswer(search);
+
+    return {
+      answer: built.answer,
+      confidence:
+        search.matchedItems.length > 0 ? search.confidence : "medium",
+      matchedItems: search.matchedItems,
+      suggestedLinks: built.suggestedLinks ?? search.suggestedLinks,
+      shouldShowConnectCTA: true,
+      shouldAutoOpenCounselling:
+        built.shouldAutoOpenCounselling ?? false,
+      notFound: false,
+    };
+  }
+
   const notFound =
     search.matchedItems.length === 0 || search.confidence === "low";
 
@@ -361,39 +1069,38 @@ export function buildSiteAnswerFromSearch(
       matchedItems: search.matchedItems,
       suggestedLinks: search.suggestedLinks,
       shouldShowConnectCTA: true,
+      shouldAutoOpenCounselling: true,
       notFound: true,
     };
   }
 
-  const answer =
-    search.intent === "mbbs-india-cutoff"
-      ? buildCutoffAnswer(search)
-      : search.intent === "mbbs-india-state-counselling"
-        ? buildStateCounsellingAnswer(search)
+  const built: BuiltAnswer =
+    search.intent === "mbbs-india-state-counselling"
+        ? { answer: buildStateCounsellingAnswer(search) }
         : search.intent === "seat-matrix-round-update"
-          ? buildSeatMatrixAnswer(search)
+          ? { answer: buildSeatMatrixAnswer(search) }
           : search.intent === "mbbs-india-college-search"
-            ? buildCollegeAnswer(search)
+            ? { answer: buildCollegeAnswer(search) }
             : search.intent === "mbbs-abroad-country-comparison"
-              ? buildCountryComparisonAnswer(search)
-              : search.intent === "university-fee"
-                ? buildFeeAnswer(search)
-                : search.intent === "accreditation-status"
-                  ? buildAccreditationAnswer(search)
+              ? { answer: buildCountryComparisonAnswer(search) }
+              : search.intent === "accreditation-status"
+                  ? { answer: buildAccreditationAnswer(search) }
                   : search.intent === "fmge-data"
-                    ? buildFmgeAnswer(search)
+                    ? { answer: buildFmgeAnswer(search) }
                     : search.intent === "nmc-fmgl-rules"
-                      ? buildNmcFmglAnswer(search)
+                      ? { answer: buildNmcFmglAnswer(search) }
                       : search.intent === "official-advisory"
-                        ? buildAdvisoryAnswer(search)
-                        : buildGeneralAnswer(search);
+                        ? { answer: buildAdvisoryAnswer(search) }
+                        : { answer: buildGeneralAnswer(search) };
 
   return {
-    answer,
+    answer: built.answer,
     confidence: search.confidence,
     matchedItems: search.matchedItems,
-    suggestedLinks: search.suggestedLinks,
+    suggestedLinks: built.suggestedLinks ?? search.suggestedLinks,
     shouldShowConnectCTA: true,
+    shouldAutoOpenCounselling:
+      built.shouldAutoOpenCounselling ?? false,
     notFound: false,
   };
 }

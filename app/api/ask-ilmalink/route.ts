@@ -23,13 +23,26 @@ type AdvisoryVersionForSearch = {
   lastChecked?: string | null;
 };
 
+let advisoryRecordsCache:
+  | {
+      expiresAt: number;
+      records: SiteSearchRecord[];
+    }
+  | undefined;
+
 async function getApprovedAdvisoryRecords(): Promise<SiteSearchRecord[]> {
+  const now = Date.now();
+
+  if (advisoryRecordsCache && advisoryRecordsCache.expiresAt > now) {
+    return advisoryRecordsCache.records;
+  }
+
   try {
     const store = await import("@/lib/advisoryStore");
     const approvedVersions =
       (await store.getApprovedVersions()) as AdvisoryVersionForSearch[];
 
-    return approvedVersions.map((version) => ({
+    const records: SiteSearchRecord[] = approvedVersions.map((version) => ({
       id: `approved-advisory-${version.id}`,
       title: `${version.sourceName} - ${version.versionLabel}`,
       description:
@@ -75,7 +88,19 @@ async function getApprovedAdvisoryRecords(): Promise<SiteSearchRecord[]> {
         sourceUrl: version.sourceUrl,
       },
     }));
+
+    advisoryRecordsCache = {
+      expiresAt: now + 60_000,
+      records,
+    };
+
+    return records;
   } catch {
+    advisoryRecordsCache = {
+      expiresAt: now + 15_000,
+      records: [],
+    };
+
     return [];
   }
 }
@@ -95,6 +120,7 @@ export async function POST(request: NextRequest) {
           matchedItems: [],
           suggestedLinks: [],
           shouldShowConnectCTA: true,
+          shouldAutoOpenCounselling: true,
           notFound: true,
         },
         { status: 400 }
@@ -107,7 +133,16 @@ export async function POST(request: NextRequest) {
     });
     const answer = buildSiteAnswerFromSearch(search);
 
-    return Response.json(answer);
+    return Response.json({
+      ...answer,
+      matchedItems: answer.matchedItems.slice(0, 4).map((item) => ({
+        id: item.id,
+        title: item.title,
+        url: item.url,
+        dataType: item.matchedDataType,
+        score: item.score,
+      })),
+    });
   } catch {
     return Response.json(
       {
@@ -117,6 +152,7 @@ export async function POST(request: NextRequest) {
         matchedItems: [],
         suggestedLinks: [],
         shouldShowConnectCTA: true,
+        shouldAutoOpenCounselling: true,
         notFound: true,
       },
       { status: 500 }
