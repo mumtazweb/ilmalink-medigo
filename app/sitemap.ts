@@ -3,8 +3,13 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 import { countryGeoFacts } from "./data/geo";
+import { mbbsIndiaColleges, mbbsIndiaCollegesByState } from "./data/mbbsIndiaColleges";
 import { georgiaUniversities } from "./data/georgiaUniversities";
 import { globalSearchIndex } from "./data/searchIndex";
+import {
+  getMBBSIndiaCollegeHref,
+  getMBBSIndiaStateHref,
+} from "./data/exploreLinks";
 import { BLOGS_PAGE_SIZE } from "./lib/blog/pagination";
 
 const SITE_URL = "https://www.ilmalink.com";
@@ -33,6 +38,10 @@ const staticRoutes = [
   "/mbbs-abroad",
   ...countryRoutes,
   ...additionalPublicCountryRoutes,
+  ...mbbsIndiaCollegesByState.map((group) =>
+    getMBBSIndiaStateHref(group.state)
+  ),
+  ...mbbsIndiaColleges.map((college) => getMBBSIndiaCollegeHref(college)),
   "/mbbs-abroad/georgia",
   ...georgiaUniversities.map(
     (university) => `/mbbs-abroad/georgia/${university.slug}`

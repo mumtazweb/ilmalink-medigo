@@ -6,6 +6,10 @@ import {
   mbbsIndiaColleges,
   mbbsIndiaCollegesByState,
 } from "@/app/data/mbbsIndiaColleges";
+import {
+  getMBBSIndiaCollegeCounselling2025,
+  getMBBSIndiaStateCounselling2025,
+} from "@/app/data/mbbsIndiaCounselling";
 import { getMBBSIndiaAdmissionAccess } from "@/app/data/mbbsIndiaAdmissionAccess";
 import { navbarCountryDestinations } from "@/app/data/navbarDestinations";
 import { kyrgyzstanUniversities } from "@/app/data/kyrgyzstanUniversities";
@@ -15,7 +19,7 @@ import {
   getFmgeCollegeDetailHref,
   getFmgeCountryHref,
   getMBBSIndiaCollegeHref,
-  getMBBSIndiaStateAnchor,
+  getMBBSIndiaStateHref,
 } from "@/app/data/exploreLinks";
 
 export type SearchConfidence = "high" | "medium" | "low";
@@ -639,7 +643,7 @@ function buildBaseRecords() {
           "private MBBS",
         ],
         content:
-          "MBBS India colleges NMC medical college list state counselling cutoff closing rank government private seats quota domicile fees admission",
+          "MBBS India colleges NMC medical college list state counselling cutoff closing rank government private seats quota domicile fees admission 2025 prior-year data 5.5 year course 4.5 year academic study 1 year internship NEET 180 questions 720 marks Physics Chemistry Biology",
         priority: 105,
       },
       "Page",
@@ -681,6 +685,10 @@ function buildBaseRecords() {
       group.state,
       group.privateCount
     );
+    const counselling = getMBBSIndiaStateCounselling2025(group.state);
+    const counsellingSummary = counselling
+      ? `${counselling.seatMatrix.length} seat matrix rows and ${counselling.cutoffs.length} cutoff colleges for 2025`
+      : "";
 
     records.push(
       createRecord(
@@ -690,7 +698,7 @@ function buildBaseRecords() {
           description: `${access.label}: ${group.privateCount} private, ${group.governmentCount} government, and ${group.totalSeats.toLocaleString(
             "en-IN"
           )} MBBS seats in ${group.state}.`,
-          url: `/mbbs-india/#${getMBBSIndiaStateAnchor(group.state)}`,
+          url: getMBBSIndiaStateHref(group.state),
           category: "MBBS India",
           group: "Pages",
           type: "page",
@@ -702,6 +710,9 @@ function buildBaseRecords() {
             "cutoff",
             "seat matrix",
             "private MBBS",
+            ...(counselling
+              ? ["2025 counselling", "closing score", "closing rank"]
+              : []),
           ],
           content: [
             group.state,
@@ -710,6 +721,10 @@ function buildBaseRecords() {
             `${group.privateCount} private colleges`,
             access.detail,
             access.sourceLabel,
+            counsellingSummary,
+            counselling?.stateFacts
+              ? `${counselling.stateFacts.governmentStateQuotaPercent}% government state quota ${counselling.stateFacts.privateStateQuotaPercent}% private state quota management quota all India`
+              : "",
             "cutoff closing rank quota domicile counselling seat matrix fees",
             ...group.governmentColleges.map(
               (college) => college.collegeName
@@ -728,6 +743,12 @@ function buildBaseRecords() {
             `${group.governmentCount} government colleges`,
             `${group.privateCount} private colleges`,
             access.label,
+            ...(counselling
+              ? [
+                  `${counselling.seatMatrix.length} 2025 seat-matrix rows`,
+                  `${counselling.cutoffs.length} colleges with 2025 cutoff data`,
+                ]
+              : []),
           ],
           data: {
             kind: "mbbs-india-state",
@@ -737,6 +758,7 @@ function buildBaseRecords() {
             totalSeats: group.totalSeats,
             accessLabel: access.label,
             accessDetail: access.detail,
+            counselling2025: counselling,
           },
         }
       )
@@ -745,6 +767,30 @@ function buildBaseRecords() {
 
   for (const college of mbbsIndiaColleges) {
     const access = getMBBSIndiaAdmissionAccess(college.state);
+    const counselling = getMBBSIndiaCollegeCounselling2025(
+      college.collegeName
+    );
+    const seatMatrixText =
+      counselling?.seatMatrix
+        .map(
+          (row) =>
+            `${row.quota} total ${row.totalSeats ?? "unavailable"} ${Object.entries(
+              row.categorySeats
+            )
+              .map(
+                ([category, seats]) =>
+                  `${category} ${seats ?? "unavailable"}`
+              )
+              .join(" ")}`
+        )
+        .join(" ") ?? "";
+    const cutoffText =
+      counselling?.cutoff?.categories
+        .map(
+          (row) =>
+            `${row.category} round 1 score ${row.round1Score ?? "unavailable"} rank ${row.round1Rank ?? "unavailable"} round 2 score ${row.round2Score ?? "unavailable"} rank ${row.round2Rank ?? "unavailable"} round 3 score ${row.round3Score ?? "unavailable"} rank ${row.round3Rank ?? "unavailable"} stray score ${row.strayScore ?? "unavailable"} rank ${row.strayRank ?? "unavailable"}`
+        )
+        .join(" ") ?? "";
 
     records.push(
       createRecord(
@@ -767,6 +813,9 @@ function buildBaseRecords() {
             "medical college",
             "cutoff",
             "fees",
+            ...(counselling
+              ? ["2025 counselling", "seat matrix", "closing rank"]
+              : []),
           ],
           content: [
             college.collegeName,
@@ -775,6 +824,8 @@ function buildBaseRecords() {
             `${college.seatCapacity} seats`,
             `established ${college.establishmentYear}`,
             access.detail,
+            seatMatrixText,
+            cutoffText,
             "cutoff closing rank counselling quota domicile fees admission",
           ].join(" "),
           priority: college.category === "Private" ? 95 : 92,
@@ -786,6 +837,14 @@ function buildBaseRecords() {
             `${college.category} college`,
             `${college.seatCapacity.toLocaleString("en-IN")} MBBS seats`,
             `State: ${college.state}`,
+            ...(counselling
+              ? [
+                  `${counselling.seatMatrix.length} seat-matrix row(s)`,
+                  counselling.cutoff
+                    ? `${counselling.cutoff.categories.length} cutoff category/quota rows`
+                    : "No cutoff row",
+                ]
+              : []),
           ],
           data: {
             kind: "mbbs-india-college",
@@ -794,6 +853,7 @@ function buildBaseRecords() {
             seatCapacity: college.seatCapacity,
             establishmentYear: college.establishmentYear,
             fees: college.fees,
+            counselling2025: counselling,
           },
         }
       )

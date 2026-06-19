@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import CounsellingActionButton from "../components/CounsellingActionButton";
 import Navbar from "../components/navbar";
+import { mbbsIndiaCounselling2025 } from "../data/mbbsIndiaCounselling";
 import { mbbsIndiaColleges, mbbsIndiaCollegesByState, type MBBSIndiaCollege } from "../data/mbbsIndiaColleges";
 import { getMBBSIndiaAdmissionAccess, type MBBSIndiaAdmissionAccess } from "../data/mbbsIndiaAdmissionAccess";
-import { getMBBSIndiaCollegeAnchor, getMBBSIndiaStateAnchor } from "../data/exploreLinks";
+import {
+  getMBBSIndiaCollegeAnchor,
+  getMBBSIndiaCollegeHref,
+  getMBBSIndiaStateAnchor,
+  getMBBSIndiaStateHref,
+} from "../data/exploreLinks";
 
 export const dynamic = "force-static";
 
@@ -20,6 +27,10 @@ const totalSeats = mbbsIndiaColleges.reduce((sum, college) => sum + college.seat
 const governmentColleges = mbbsIndiaColleges.filter((college) => college.category === "Government").length;
 const privateColleges = mbbsIndiaColleges.filter((college) => college.category === "Private").length;
 const priorityStateCards = mbbsIndiaCollegesByState.filter((group) => group.privateCount > 0).slice(0, 6);
+const counsellingCutoffRows = mbbsIndiaCounselling2025.cutoffs.reduce(
+  (sum, record) => sum + record.categories.length,
+  0
+);
 
 const formatNumber = (value: number) => value.toLocaleString("en-IN");
 
@@ -69,7 +80,12 @@ function CollegeList({ title, colleges, tone }: { title: string; colleges: MBBSI
               id={getMBBSIndiaCollegeAnchor(college)}
               className="scroll-mt-32 rounded-lg border border-slate-100 bg-slate-50 px-3 py-3 transition target:border-[#00C896] target:bg-[#ECFDF5] target:ring-2 target:ring-[#00C896]/25"
             >
-              <h4 className="text-sm font-bold leading-5 text-slate-950">{college.collegeName}</h4>
+              <Link
+                href={getMBBSIndiaCollegeHref(college)}
+                className="text-sm font-bold leading-5 text-slate-950 transition hover:text-[#047857]"
+              >
+                {college.collegeName}
+              </Link>
               <p className="mt-2 text-xs font-semibold leading-5 text-slate-600">
                 Seats: {formatNumber(college.seatCapacity)} | Established: {college.establishmentYear} | Fees: {formatCollegeFee(college.fees)}
               </p>
@@ -118,6 +134,138 @@ export default function MBBSIndiaPage() {
         </div>
       </section>
 
+      <section className="border-b border-slate-200 bg-white px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#047857]">
+                2025 prior-year counselling reference
+              </p>
+              <h2 className="mt-2 text-2xl font-extrabold tracking-normal text-slate-950 md:text-3xl">
+                Seat matrix and cutoff data linked to college pages
+              </h2>
+            </div>
+            <Link
+              href={getMBBSIndiaStateHref("West Bengal")}
+              className="inline-flex items-center justify-center rounded-lg bg-[#061D3F] px-4 py-2.5 text-sm font-extrabold text-white transition hover:bg-[#0B2B56]"
+            >
+              Explore West Bengal 2025 Data
+            </Link>
+          </div>
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              [
+                "All-India snapshot",
+                formatNumber(
+                  mbbsIndiaCounselling2025.general.allIndiaCollegeSnapshotCount
+                ),
+                "MBBS colleges listed in the 2025 reference",
+              ],
+              [
+                "Seat-matrix rows",
+                formatNumber(mbbsIndiaCounselling2025.seatMatrix.length),
+                "College and quota combinations",
+              ],
+              [
+                "Cutoff colleges",
+                formatNumber(mbbsIndiaCounselling2025.cutoffs.length),
+                "Colleges with round-wise closing data",
+              ],
+              [
+                "Category rows",
+                formatNumber(counsellingCutoffRows),
+                "GEN, EWS, OBC, SC, ST and management records",
+              ],
+            ].map(([label, value, detail]) => (
+              <div
+                key={label}
+                className="rounded-xl border border-slate-200 bg-slate-50 p-4"
+              >
+                <p className="text-2xl font-extrabold text-slate-950">{value}</p>
+                <p className="mt-1 text-xs font-extrabold uppercase tracking-[0.14em] text-[#047857]">
+                  {label}
+                </p>
+                <p className="mt-2 text-xs font-semibold leading-5 text-slate-500">
+                  {detail}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-5 grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-5">
+              <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#047857]">
+                MBBS course structure
+              </p>
+              <p className="mt-2 text-3xl font-extrabold text-slate-950">
+                {mbbsIndiaCounselling2025.general.courseDurationYears} years
+              </p>
+              <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
+                {mbbsIndiaCounselling2025.general.academicStudyYears} years of
+                academic study plus{" "}
+                {mbbsIndiaCounselling2025.general.internshipYears} year of
+                internship in the 2025 reference.
+              </p>
+            </div>
+
+            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+              <div className="border-b border-slate-200 bg-slate-50 px-4 py-3">
+                <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#1D4ED8]">
+                  NEET-UG exam structure in the 2025 reference
+                </p>
+                <p className="mt-1 text-sm font-semibold text-slate-600">
+                  {mbbsIndiaCounselling2025.general.neet.totalQuestions}{" "}
+                  questions · {mbbsIndiaCounselling2025.general.neet.totalMarks}{" "}
+                  marks · {mbbsIndiaCounselling2025.general.neet.durationHours}{" "}
+                  hours
+                </p>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-left text-sm">
+                  <thead className="bg-white text-slate-500">
+                    <tr>
+                      <th className="px-4 py-2 font-extrabold">Subject</th>
+                      <th className="px-4 py-2 text-center font-extrabold">
+                        Questions
+                      </th>
+                      <th className="px-4 py-2 text-center font-extrabold">
+                        Marks
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {mbbsIndiaCounselling2025.general.neet.subjects.map(
+                      (subject) => (
+                        <tr
+                          key={subject.subject}
+                          className="border-t border-slate-100"
+                        >
+                          <td className="px-4 py-2 font-bold text-slate-800">
+                            {subject.subject}
+                          </td>
+                          <td className="px-4 py-2 text-center font-semibold text-slate-600">
+                            {subject.questions}
+                          </td>
+                          <td className="px-4 py-2 text-center font-semibold text-slate-600">
+                            {subject.marks}
+                          </td>
+                        </tr>
+                      )
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <p className="mt-4 text-xs font-semibold leading-5 text-amber-800">
+            Historical 2025 figures are provided for comparison and are not the
+            current 2026 seat matrix or cutoff.
+          </p>
+        </div>
+      </section>
+
       <section className="px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -142,9 +290,9 @@ export default function MBBSIndiaPage() {
               const access = getMBBSIndiaAdmissionAccess(group.state, group.privateCount);
 
               return (
-                <a
+                <Link
                   key={group.state}
-                  href={`#${getMBBSIndiaStateAnchor(group.state)}`}
+                  href={getMBBSIndiaStateHref(group.state)}
                   className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#00C896]/60 hover:shadow-md"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
@@ -156,7 +304,7 @@ export default function MBBSIndiaPage() {
                   </p>
                   <p className="mt-1 text-sm font-extrabold text-[#047857]">{formatNumber(group.totalSeats)} MBBS seats</p>
                   <p className="mt-3 line-clamp-2 text-xs font-semibold leading-5 text-slate-500">{access.detail}</p>
-                </a>
+                </Link>
               );
             })}
           </div>
@@ -190,7 +338,12 @@ export default function MBBSIndiaPage() {
                     <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                       <div>
                         <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="text-xl font-extrabold text-slate-950">{group.state}</h3>
+                          <Link
+                            href={getMBBSIndiaStateHref(group.state)}
+                            className="text-xl font-extrabold text-slate-950 transition hover:text-[#047857]"
+                          >
+                            {group.state}
+                          </Link>
                           <AdmissionAccessBadge access={access} />
                         </div>
                         <p className="mt-2 text-sm font-semibold text-slate-600">

@@ -8,12 +8,16 @@ import {
   globalSearchIndex,
   type GlobalSearchEntry,
 } from "../data/searchIndex";
+import {
+  getMBBSIndiaCollegeCounselling2025,
+  getMBBSIndiaStateCounselling2025,
+} from "../data/mbbsIndiaCounselling";
 import { mbbsIndiaColleges, mbbsIndiaCollegesByState } from "../data/mbbsIndiaColleges";
 import { getMBBSIndiaAdmissionAccess } from "../data/mbbsIndiaAdmissionAccess";
 import { navbarCountryDestinations } from "../data/navbarDestinations";
 import { kyrgyzstanUniversities } from "../data/kyrgyzstanUniversities";
 import { georgiaUniversities } from "../data/georgiaUniversities";
-import { getMBBSIndiaCollegeHref, getMBBSIndiaStateAnchor } from "../data/exploreLinks";
+import { getMBBSIndiaCollegeHref, getMBBSIndiaStateHref } from "../data/exploreLinks";
 
 type SearchResult = GlobalSearchEntry & {
   score: number;
@@ -222,7 +226,8 @@ const mbbsIndiaDirectorySearchEntry: GlobalSearchEntry = {
   group: "Pages",
   type: "page",
   tags: ["MBBS India", "Study MBBS in India", "NMC college list", "Medical colleges in India"],
-  content: "Study MBBS in India full NMC medical college list state-wise government private colleges seats fees counselling",
+  content:
+    "Study MBBS in India full NMC medical college list state-wise government private colleges seats fees counselling 2025 prior-year data 5.5 year course 4.5 year academic study 1 year internship NEET 180 questions 720 marks Physics Chemistry Biology",
   priority: 100,
 };
 
@@ -252,15 +257,19 @@ const navbarDropdownSearchEntries: GlobalSearchEntry[] = navbarCountryDestinatio
 
 const mbbsIndiaStateSearchEntries: GlobalSearchEntry[] = mbbsIndiaCollegesByState.map((group) => {
   const access = getMBBSIndiaAdmissionAccess(group.state, group.privateCount);
+  const counselling = getMBBSIndiaStateCounselling2025(group.state);
   const collegeNames = [...group.governmentColleges, ...group.privateColleges]
     .map((college) => college.collegeName)
     .join(" ");
+  const counsellingSummary = counselling
+    ? `${counselling.seatMatrix.length} seat-matrix rows and ${counselling.cutoffs.length} colleges with 2025 cutoff data.`
+    : "";
 
   return {
     id: `mbbs-india-state-${slugifySearchId(group.state)}`,
     title: `MBBS Colleges in ${group.state}`,
-    description: `${access.label}: ${group.privateCount} private, ${group.governmentCount} government, and ${group.totalSeats.toLocaleString("en-IN")} MBBS seats in ${group.state}.`,
-    url: `/mbbs-india/#${getMBBSIndiaStateAnchor(group.state)}`,
+    description: `${access.label}: ${group.privateCount} private, ${group.governmentCount} government, and ${group.totalSeats.toLocaleString("en-IN")} MBBS seats in ${group.state}. ${counsellingSummary}`.trim(),
+    url: getMBBSIndiaStateHref(group.state),
     category: "MBBS India",
     group: "Pages",
     type: "page",
@@ -271,6 +280,7 @@ const mbbsIndiaStateSearchEntries: GlobalSearchEntry[] = mbbsIndiaCollegesByStat
       "MBBS India",
       "Medical colleges in India",
       "NMC college list",
+      ...(counselling ? ["2025 counselling", "seat matrix", "closing rank", "closing score"] : []),
     ],
     content: [
       `Study MBBS in ${group.state}`,
@@ -279,6 +289,10 @@ const mbbsIndiaStateSearchEntries: GlobalSearchEntry[] = mbbsIndiaCollegesByStat
       `${group.privateCount} private colleges`,
       `${group.totalSeats} seats`,
       access.detail,
+      counsellingSummary,
+      counselling?.stateFacts
+        ? `${counselling.stateFacts.governmentStateQuotaPercent}% government state quota ${counselling.stateFacts.privateStateQuotaPercent}% private state quota management quota all India`
+        : "",
       collegeNames,
     ].join(" "),
     priority: 96,
@@ -287,11 +301,30 @@ const mbbsIndiaStateSearchEntries: GlobalSearchEntry[] = mbbsIndiaCollegesByStat
 
 const mbbsIndiaCollegeSearchEntries: GlobalSearchEntry[] = mbbsIndiaColleges.map((college) => {
   const access = getMBBSIndiaAdmissionAccess(college.state);
+  const counselling = getMBBSIndiaCollegeCounselling2025(college.collegeName);
+  const seatMatrixText =
+    counselling?.seatMatrix
+      .map(
+        (row) =>
+          `${row.quota} ${row.totalSeats ?? "total unavailable"} seats ${Object.entries(
+            row.categorySeats
+          )
+            .map(([category, seats]) => `${category} ${seats ?? "unavailable"}`)
+            .join(" ")}`
+      )
+      .join(" ") ?? "";
+  const cutoffText =
+    counselling?.cutoff?.categories
+      .map(
+        (row) =>
+          `${row.category} round 1 score ${row.round1Score ?? "unavailable"} rank ${row.round1Rank ?? "unavailable"} round 2 score ${row.round2Score ?? "unavailable"} rank ${row.round2Rank ?? "unavailable"} round 3 score ${row.round3Score ?? "unavailable"} rank ${row.round3Rank ?? "unavailable"} stray score ${row.strayScore ?? "unavailable"} rank ${row.strayRank ?? "unavailable"}`
+      )
+      .join(" ") ?? "";
 
   return {
     id: `mbbs-india-college-${slugifySearchId(`${college.state}-${college.collegeName}`)}`,
     title: college.collegeName,
-    description: `${college.category} medical college in ${college.state} with ${college.seatCapacity.toLocaleString("en-IN")} MBBS seats. ${access.label}.`,
+    description: `${college.category} medical college in ${college.state} with ${college.seatCapacity.toLocaleString("en-IN")} MBBS seats. ${access.label}.${counselling ? " Includes 2025 prior-year counselling data." : ""}`,
     url: getMBBSIndiaCollegeHref(college),
     category: "MBBS India",
     group: "Pages",
@@ -304,6 +337,7 @@ const mbbsIndiaCollegeSearchEntries: GlobalSearchEntry[] = mbbsIndiaColleges.map
       "Medical college",
       "NMC college list",
       `Study MBBS in ${college.state}`,
+      ...(counselling ? ["2025 counselling", "cutoff", "closing rank", "seat matrix"] : []),
     ],
     content: [
       college.collegeName,
@@ -314,6 +348,8 @@ const mbbsIndiaCollegeSearchEntries: GlobalSearchEntry[] = mbbsIndiaColleges.map
       `established ${college.establishmentYear}`,
       "fees to be updated",
       `Study MBBS in ${college.state}`,
+      seatMatrixText,
+      cutoffText,
     ].join(" "),
     priority: college.category === "Private" && access.status === "open" ? 94 : college.category === "Government" ? 92 : 90,
   };

@@ -1,0 +1,4496 @@
+{
+  "year": 2025,
+  "referenceType": "Prior-year MBBS counselling data",
+  "general": {
+    "allIndiaCollegeSnapshotCount": 781,
+    "courseDurationYears": 5.5,
+    "academicStudyYears": 4.5,
+    "internshipYears": 1,
+    "neet": {
+      "durationHours": 3,
+      "totalQuestions": 180,
+      "totalMarks": 720,
+      "subjects": [
+        {
+          "subject": "Physics",
+          "questions": 45,
+          "marks": 180
+        },
+        {
+          "subject": "Chemistry",
+          "questions": 45,
+          "marks": 180
+        },
+        {
+          "subject": "Biology (Botany & Zoology)",
+          "questions": 90,
+          "marks": 360
+        }
+      ]
+    }
+  },
+  "stateCounselling": {
+    "West Bengal": {
+      "governmentStateQuotaPercent": 85,
+      "privateStateQuotaPercent": 33,
+      "managementQuotaOpenToAllIndiaNeetCandidates": true
+    }
+  },
+  "seatMatrix": [
+    {
+      "state": "West Bengal",
+      "collegeName": "Employees State Insurance Corporation Medical College, Joka, Kolkata",
+      "year": 2025,
+      "instituteType": "Central Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 16,
+        "urPwd": 1,
+        "ews": 4,
+        "ewsPwd": null,
+        "sc": 6,
+        "scPwd": null,
+        "st": 3,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 30,
+      "totalSeats": 41,
+      "hasSourceMismatch": true
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Gouri Devi Institute of Medical Sciences and Hospital, Durgapur",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 28,
+        "urPwd": 1,
+        "ews": 7,
+        "ewsPwd": null,
+        "sc": 14,
+        "scPwd": 1,
+        "st": 4,
+        "stPwd": null,
+        "obcA": 7,
+        "obcAPwd": null,
+        "obcB": 5,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 67,
+      "totalSeats": 67,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Gouri Devi Institute of Medical Sciences and Hospital, Durgapur",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 133,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 133,
+      "totalSeats": 133,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "IQ-City Medical College, Burdwan",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 167,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 167,
+      "totalSeats": 167,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "IQ-City Medical College, Burdwan",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 36,
+        "urPwd": 2,
+        "ews": 8,
+        "ewsPwd": null,
+        "sc": 17,
+        "scPwd": 1,
+        "st": 5,
+        "stPwd": null,
+        "obcA": 8,
+        "obcAPwd": null,
+        "obcB": 6,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 83,
+      "totalSeats": 83,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "ICARE Institute of Medical Sciences & Research, Haldia, Purba Midanpore",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 21,
+        "urPwd": 1,
+        "ews": 5,
+        "ewsPwd": null,
+        "sc": 10,
+        "scPwd": 1,
+        "st": 3,
+        "stPwd": null,
+        "obcA": 5,
+        "obcAPwd": null,
+        "obcB": 4,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 50,
+      "totalSeats": 50,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "ICARE Institute of Medical Sciences & Research, Haldia, Purba Midanpore",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 100,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 100,
+      "totalSeats": 100,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Jagannath Gupta Institute of Medical Sciences & Hospital, Kolkata",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 157,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 157,
+      "totalSeats": 157,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Jagannath Gupta Institute of Medical Sciences & Hospital, Kolkata",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "NRI Quota",
+      "categorySeats": {
+        "ur": 10,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 10,
+      "totalSeats": 10,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Jagannath Gupta Institute of Medical Sciences & Hospital, Kolkata",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 36,
+        "urPwd": 2,
+        "ews": 8,
+        "ewsPwd": null,
+        "sc": 17,
+        "scPwd": 1,
+        "st": 5,
+        "stPwd": null,
+        "obcA": 8,
+        "obcAPwd": null,
+        "obcB": 6,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 83,
+      "totalSeats": 83,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "KPC Medical College, Jadavpur, Kolkata",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 28,
+        "urPwd": 1,
+        "ews": 7,
+        "ewsPwd": null,
+        "sc": 14,
+        "scPwd": 1,
+        "st": 4,
+        "stPwd": null,
+        "obcA": 7,
+        "obcAPwd": null,
+        "obcB": 5,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 67,
+      "totalSeats": 67,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "KPC Medical College, Jadavpur, Kolkata",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "NRI Quota",
+      "categorySeats": {
+        "ur": 30,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 30,
+      "totalSeats": 30,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "KPC Medical College, Jadavpur, Kolkata",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 103,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 103,
+      "totalSeats": 103,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Santiniketan Medical College, Bolpur, West Bengal",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 21,
+        "urPwd": 1,
+        "ews": 5,
+        "ewsPwd": null,
+        "sc": 10,
+        "scPwd": 1,
+        "st": 3,
+        "stPwd": null,
+        "obcA": 5,
+        "obcAPwd": null,
+        "obcB": 4,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 50,
+      "totalSeats": 50,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Santiniketan Medical College, Bolpur, West Bengal",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 100,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 100,
+      "totalSeats": 100,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Shri Ramkrishna Institute of Medical Sciences & Sanaka Hospitals, Durgapur",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 167,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 167,
+      "totalSeats": 167,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Shri Ramkrishna Institute of Medical Sciences & Sanaka Hospitals, Durgapur",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 36,
+        "urPwd": 2,
+        "ews": 8,
+        "ewsPwd": null,
+        "sc": 17,
+        "scPwd": 1,
+        "st": 5,
+        "stPwd": null,
+        "obcA": 8,
+        "obcAPwd": null,
+        "obcB": 6,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 83,
+      "totalSeats": 83,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Bankura Sammilani Medical College, Bankura",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 70,
+        "urPwd": 4,
+        "ews": 16,
+        "ewsPwd": 1,
+        "sc": 35,
+        "scPwd": 2,
+        "st": 9,
+        "stPwd": 1,
+        "obcA": 16,
+        "obcAPwd": 1,
+        "obcB": 11,
+        "obcBPwd": 1
+      },
+      "allocatedCategorySeats": 167,
+      "totalSeats": 167,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Barasat Government Medical College & Hospital",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 35,
+        "urPwd": 2,
+        "ews": 9,
+        "ewsPwd": null,
+        "sc": 18,
+        "scPwd": 1,
+        "st": 5,
+        "stPwd": null,
+        "obcA": 9,
+        "obcAPwd": null,
+        "obcB": 6,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 85,
+      "totalSeats": 85,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Burdwan Medical College, Burdwan",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 70,
+        "urPwd": 4,
+        "ews": 16,
+        "ewsPwd": 1,
+        "sc": 35,
+        "scPwd": 2,
+        "st": 9,
+        "stPwd": 1,
+        "obcA": 16,
+        "obcAPwd": 1,
+        "obcB": 11,
+        "obcBPwd": 1
+      },
+      "allocatedCategorySeats": 167,
+      "totalSeats": 167,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Calcutta National Medical College, Kolkata",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 88,
+        "urPwd": 5,
+        "ews": 20,
+        "ewsPwd": 1,
+        "sc": 44,
+        "scPwd": 2,
+        "st": 11,
+        "stPwd": 1,
+        "obcA": 20,
+        "obcAPwd": 1,
+        "obcB": 14,
+        "obcBPwd": 1
+      },
+      "allocatedCategorySeats": 208,
+      "totalSeats": 208,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "College of Medicine and JNM Hospital, Kalyani, Nadia",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 46,
+        "urPwd": 2,
+        "ews": 10,
+        "ewsPwd": 1,
+        "sc": 22,
+        "scPwd": 1,
+        "st": 6,
+        "stPwd": null,
+        "obcA": 10,
+        "obcAPwd": 1,
+        "obcB": 7,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 106,
+      "totalSeats": 106,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "College of Medicine and Sagore Dutta Hospital, Kolkata",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 46,
+        "urPwd": 2,
+        "ews": 10,
+        "ewsPwd": 1,
+        "sc": 22,
+        "scPwd": 1,
+        "st": 6,
+        "stPwd": null,
+        "obcA": 10,
+        "obcAPwd": 1,
+        "obcB": 7,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 106,
+      "totalSeats": 106,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Purulia Government Medical College & Hospital",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 46,
+        "urPwd": 2,
+        "ews": 10,
+        "ewsPwd": 1,
+        "sc": 22,
+        "scPwd": 1,
+        "st": 6,
+        "stPwd": null,
+        "obcA": 10,
+        "obcAPwd": 1,
+        "obcB": 7,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 106,
+      "totalSeats": 106,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Diamond Harbour Government Medical College and Hospital, West Bengal",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 46,
+        "urPwd": 2,
+        "ews": 10,
+        "ewsPwd": 1,
+        "sc": 22,
+        "scPwd": 1,
+        "st": 6,
+        "stPwd": null,
+        "obcA": 10,
+        "obcAPwd": 1,
+        "obcB": 7,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 106,
+      "totalSeats": 106,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Institute of Postgraduate Medical Education & Research, Kolkata",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 73,
+        "urPwd": 4,
+        "ews": 16,
+        "ewsPwd": 1,
+        "sc": 35,
+        "scPwd": 2,
+        "st": 9,
+        "stPwd": 1,
+        "obcA": 16,
+        "obcAPwd": 1,
+        "obcB": 11,
+        "obcBPwd": 1
+      },
+      "allocatedCategorySeats": 170,
+      "totalSeats": 170,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Jalpaiguri Government Medical College",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 35,
+        "urPwd": 2,
+        "ews": 9,
+        "ewsPwd": null,
+        "sc": 18,
+        "scPwd": 1,
+        "st": 5,
+        "stPwd": null,
+        "obcA": 9,
+        "obcAPwd": null,
+        "obcB": 6,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 85,
+      "totalSeats": 85,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Jhargram Government Medical College & Hospital, Jhargram",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 35,
+        "urPwd": 2,
+        "ews": 9,
+        "ewsPwd": null,
+        "sc": 18,
+        "scPwd": 1,
+        "st": 5,
+        "stPwd": null,
+        "obcA": 9,
+        "obcAPwd": null,
+        "obcB": 6,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 85,
+      "totalSeats": 85,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Coochbehar Government Medical College & Hospital, Coochbehar, WB",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 46,
+        "urPwd": 2,
+        "ews": 10,
+        "ewsPwd": 1,
+        "sc": 22,
+        "scPwd": 1,
+        "st": 6,
+        "stPwd": null,
+        "obcA": 10,
+        "obcAPwd": 1,
+        "obcB": 7,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 106,
+      "totalSeats": 106,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Malda Medical College & Hospital, Malda",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 46,
+        "urPwd": 2,
+        "ews": 10,
+        "ewsPwd": 1,
+        "sc": 22,
+        "scPwd": 1,
+        "st": 6,
+        "stPwd": null,
+        "obcA": 10,
+        "obcAPwd": 1,
+        "obcB": 7,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 106,
+      "totalSeats": 106,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Govt. Medical College, Kolkata",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 90,
+        "urPwd": 5,
+        "ews": 20,
+        "ewsPwd": 1,
+        "sc": 44,
+        "scPwd": 2,
+        "st": 12,
+        "stPwd": 1,
+        "obcA": 20,
+        "obcAPwd": 1,
+        "obcB": 14,
+        "obcBPwd": 1
+      },
+      "allocatedCategorySeats": 211,
+      "totalSeats": 211,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Midnapore Medical College, Midnapore",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 73,
+        "urPwd": 4,
+        "ews": 16,
+        "ewsPwd": 1,
+        "sc": 35,
+        "scPwd": 2,
+        "st": 9,
+        "stPwd": 1,
+        "obcA": 16,
+        "obcAPwd": 1,
+        "obcB": 11,
+        "obcBPwd": 1
+      },
+      "allocatedCategorySeats": 170,
+      "totalSeats": 170,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Murshidabad Medical College & Hospitals, Murshidabad",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 46,
+        "urPwd": 2,
+        "ews": 10,
+        "ewsPwd": 1,
+        "sc": 22,
+        "scPwd": 1,
+        "st": 6,
+        "stPwd": null,
+        "obcA": 10,
+        "obcAPwd": 1,
+        "obcB": 7,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 106,
+      "totalSeats": 106,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Nilratan Sircar Medical College, Kolkata",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 90,
+        "urPwd": 5,
+        "ews": 20,
+        "ewsPwd": 1,
+        "sc": 45,
+        "scPwd": 2,
+        "st": 12,
+        "stPwd": 1,
+        "obcA": 20,
+        "obcAPwd": 1,
+        "obcB": 14,
+        "obcBPwd": 1
+      },
+      "allocatedCategorySeats": 212,
+      "totalSeats": 212,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "North Bengal Medical College, Darjeeling",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 69,
+        "urPwd": 4,
+        "ews": 16,
+        "ewsPwd": 1,
+        "sc": 35,
+        "scPwd": 2,
+        "st": 9,
+        "stPwd": 1,
+        "obcA": 16,
+        "obcAPwd": 1,
+        "obcB": 11,
+        "obcBPwd": 1
+      },
+      "allocatedCategorySeats": 166,
+      "totalSeats": 166,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Prafulla Chandra Sen Government Medical College & Hospital",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 35,
+        "urPwd": 2,
+        "ews": 9,
+        "ewsPwd": null,
+        "sc": 18,
+        "scPwd": 1,
+        "st": 5,
+        "stPwd": null,
+        "obcA": 9,
+        "obcAPwd": null,
+        "obcB": 6,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 85,
+      "totalSeats": 85,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "RG Kar Medical College, Kolkata",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 88,
+        "urPwd": 5,
+        "ews": 20,
+        "ewsPwd": 1,
+        "sc": 43,
+        "scPwd": 2,
+        "st": 11,
+        "stPwd": 1,
+        "obcA": 20,
+        "obcAPwd": 1,
+        "obcB": 13,
+        "obcBPwd": 1
+      },
+      "allocatedCategorySeats": 206,
+      "totalSeats": 206,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Raiganj Government Medical College & Hospital, Raiganj",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 46,
+        "urPwd": 2,
+        "ews": 10,
+        "ewsPwd": 1,
+        "sc": 22,
+        "scPwd": 1,
+        "st": 6,
+        "stPwd": null,
+        "obcA": 10,
+        "obcAPwd": 1,
+        "obcB": 7,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 106,
+      "totalSeats": 106,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Rampurhat Government Medical College & Hospital, Rampurhat",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 46,
+        "urPwd": 2,
+        "ews": 10,
+        "ewsPwd": 1,
+        "sc": 22,
+        "scPwd": 1,
+        "st": 6,
+        "stPwd": null,
+        "obcA": 10,
+        "obcAPwd": 1,
+        "obcB": 7,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 106,
+      "totalSeats": 106,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Sarat Chandra Chattopadhyay Government Medical College & Hospital",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 35,
+        "urPwd": 2,
+        "ews": 9,
+        "ewsPwd": null,
+        "sc": 18,
+        "scPwd": 1,
+        "st": 5,
+        "stPwd": null,
+        "obcA": 9,
+        "obcAPwd": null,
+        "obcB": 6,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 85,
+      "totalSeats": 85,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Tamralipto Government Medical College & Hospital",
+      "year": 2025,
+      "instituteType": "State Government",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 35,
+        "urPwd": 2,
+        "ews": 9,
+        "ewsPwd": null,
+        "sc": 18,
+        "scPwd": 1,
+        "st": 5,
+        "stPwd": null,
+        "obcA": 9,
+        "obcAPwd": null,
+        "obcB": 6,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 85,
+      "totalSeats": 85,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "JIS School of Medical Science & Research, Howrah",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 21,
+        "urPwd": 1,
+        "ews": 5,
+        "ewsPwd": null,
+        "sc": 10,
+        "scPwd": 1,
+        "st": 3,
+        "stPwd": null,
+        "obcA": 5,
+        "obcAPwd": null,
+        "obcB": 4,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 50,
+      "totalSeats": 50,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "JIS School of Medical Science & Research, Howrah",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 100,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 100,
+      "totalSeats": 100,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "JMN Medical College, Nadia",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 100,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 100,
+      "totalSeats": 100,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "JMN Medical College, Nadia",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 21,
+        "urPwd": 1,
+        "ews": 5,
+        "ewsPwd": null,
+        "sc": 10,
+        "scPwd": 1,
+        "st": 3,
+        "stPwd": null,
+        "obcA": 5,
+        "obcAPwd": null,
+        "obcB": 4,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 50,
+      "totalSeats": 50,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Krishnanagar Institute of Medical Sciences Pvt. Ltd Krishnanagar, Nadia (WB)",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 28,
+        "urPwd": 1,
+        "ews": 7,
+        "ewsPwd": null,
+        "sc": 14,
+        "scPwd": 1,
+        "st": 4,
+        "stPwd": null,
+        "obcA": 7,
+        "obcAPwd": null,
+        "obcB": 5,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 67,
+      "totalSeats": 67,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Krishnanagar Institute of Medical Sciences Pvt. Ltd Krishnanagar, Nadia (WB)",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 103,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 103,
+      "totalSeats": 133,
+      "hasSourceMismatch": true
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "East West Institute of Medical Sciences and Research, Burdwan",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 67,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 67,
+      "totalSeats": 67,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "East West Institute of Medical Sciences and Research, Burdwan",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 16,
+        "urPwd": null,
+        "ews": 3,
+        "ewsPwd": null,
+        "sc": 7,
+        "scPwd": null,
+        "st": 2,
+        "stPwd": null,
+        "obcA": 3,
+        "obcAPwd": null,
+        "obcB": 2,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 33,
+      "totalSeats": 33,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Jakir Hossain Medical College, Burdwan",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 16,
+        "urPwd": null,
+        "ews": 3,
+        "ewsPwd": null,
+        "sc": 7,
+        "scPwd": null,
+        "st": 2,
+        "stPwd": null,
+        "obcA": 3,
+        "obcAPwd": null,
+        "obcB": 2,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 33,
+      "totalSeats": 33,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Jakir Hossain Medical College, Burdwan",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 67,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 67,
+      "totalSeats": 67,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "PKG Medical College & Hospital",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 33,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 33,
+      "totalSeats": null,
+      "hasSourceMismatch": true
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "PKG Medical College & Hospital",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 7,
+        "urPwd": null,
+        "ews": 2,
+        "ewsPwd": null,
+        "sc": 4,
+        "scPwd": null,
+        "st": 1,
+        "stPwd": null,
+        "obcA": 2,
+        "obcAPwd": null,
+        "obcB": 1,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 17,
+      "totalSeats": 17,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "RANIGANJ INSTITUTE OF MEDICAL SCIENCE",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 67,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 67,
+      "totalSeats": 67,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "RANIGANJ INSTITUTE OF MEDICAL SCIENCE",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 16,
+        "urPwd": null,
+        "ews": 3,
+        "ewsPwd": null,
+        "sc": 7,
+        "scPwd": null,
+        "st": 2,
+        "stPwd": null,
+        "obcA": 3,
+        "obcAPwd": null,
+        "obcB": 2,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 33,
+      "totalSeats": 33,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Jagannath Gupta Institute of Medical Sciences and Hospital",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "Private Management Quota",
+      "categorySeats": {
+        "ur": 67,
+        "urPwd": null,
+        "ews": null,
+        "ewsPwd": null,
+        "sc": null,
+        "scPwd": null,
+        "st": null,
+        "stPwd": null,
+        "obcA": null,
+        "obcAPwd": null,
+        "obcB": null,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 67,
+      "totalSeats": 67,
+      "hasSourceMismatch": false
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Jagannath Gupta Institute of Medical Sciences and Hospital",
+      "year": 2025,
+      "instituteType": "Private University / Institute",
+      "quota": "State Quota",
+      "categorySeats": {
+        "ur": 16,
+        "urPwd": null,
+        "ews": 3,
+        "ewsPwd": null,
+        "sc": 7,
+        "scPwd": null,
+        "st": 2,
+        "stPwd": null,
+        "obcA": 3,
+        "obcAPwd": null,
+        "obcB": 2,
+        "obcBPwd": null
+      },
+      "allocatedCategorySeats": 33,
+      "totalSeats": 33,
+      "hasSourceMismatch": false
+    }
+  ],
+  "cutoffs": [
+    {
+      "state": "West Bengal",
+      "collegeName": "Bankura Sammilani Medical College, Bankura",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 527,
+          "round1Rank": 25770,
+          "round2Score": 528,
+          "round2Rank": 28158,
+          "round3Score": 522,
+          "round3Rank": 29841,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 485,
+          "round1Rank": 70926,
+          "round2Score": 480,
+          "round2Rank": 76896,
+          "round3Score": 480,
+          "round3Rank": 77726,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 512,
+          "round1Rank": 38956,
+          "round2Score": 511,
+          "round2Rank": 40379,
+          "round3Score": 506,
+          "round3Rank": 45194,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 520,
+          "round1Rank": 31460,
+          "round2Score": 520,
+          "round2Rank": 32326,
+          "round3Score": 519,
+          "round3Rank": 32640,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 442,
+          "round1Rank": 134741,
+          "round2Score": 436,
+          "round2Rank": 145651,
+          "round3Score": 426,
+          "round3Rank": 162495,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 283,
+          "round1Rank": 491915,
+          "round2Score": 278,
+          "round2Rank": 508827,
+          "round3Score": 258,
+          "round3Rank": 575183,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Barasat Government Medical College & Hospital",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 529,
+          "round1Rank": 24720,
+          "round2Score": 528,
+          "round2Rank": 25635,
+          "round3Score": 527,
+          "round3Rank": 26273,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 488,
+          "round1Rank": 67123,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 473,
+          "round3Rank": 87517,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 519,
+          "round1Rank": 33212,
+          "round2Score": 518,
+          "round2Rank": 34001,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 524,
+          "round1Rank": 28741,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 451,
+          "round1Rank": 120316,
+          "round2Score": 452,
+          "round2Rank": 119120,
+          "round3Score": 448,
+          "round3Rank": 124592,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 282,
+          "round1Rank": 497294,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Burdwan Medical College, Burdwan",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 534,
+          "round1Rank": 20946,
+          "round2Score": 533,
+          "round2Rank": 21869,
+          "round3Score": 533,
+          "round3Rank": 21959,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 493,
+          "round1Rank": 60287,
+          "round2Score": 490,
+          "round2Rank": 64351,
+          "round3Score": 490,
+          "round3Rank": 65693,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 522,
+          "round1Rank": 30369,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 521,
+          "round3Rank": 30665,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 529,
+          "round1Rank": 24636,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 527,
+          "round3Rank": 26438,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 454,
+          "round1Rank": 116323,
+          "round2Score": 447,
+          "round2Rank": 126888,
+          "round3Score": 446,
+          "round3Rank": 127863,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 284,
+          "round1Rank": 489433,
+          "round2Score": 298,
+          "round2Rank": 448261,
+          "round3Score": 263,
+          "round3Rank": 557819,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Calcutta National Medical College, Kolkata",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 543,
+          "round1Rank": 15419,
+          "round2Score": 542,
+          "round2Rank": 16403,
+          "round3Score": 540,
+          "round3Rank": 17213,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 504,
+          "round1Rank": 47434,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 499,
+          "round3Rank": 53239,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 529,
+          "round1Rank": 24772,
+          "round2Score": 542,
+          "round2Rank": 15897,
+          "round3Score": 528,
+          "round3Rank": 25478,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 535,
+          "round1Rank": 20282,
+          "round2Score": 539,
+          "round2Rank": 18142,
+          "round3Score": 534,
+          "round3Rank": 21026,
+          "strayScore": 501,
+          "strayRank": 50489
+        },
+        {
+          "category": "SC",
+          "round1Score": 469,
+          "round1Rank": 93664,
+          "round2Score": 464,
+          "round2Rank": 100297,
+          "round3Score": 462,
+          "round3Rank": 103154,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 312,
+          "round1Rank": 410247,
+          "round2Score": 304,
+          "round2Rank": 433569,
+          "round3Score": 293,
+          "round3Rank": 464263,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "College of Medicine and JNM Hospital, Kalyani, Nadia",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 531,
+          "round1Rank": 23429,
+          "round2Score": 528,
+          "round2Rank": 25585,
+          "round3Score": 527,
+          "round3Rank": 26075,
+          "strayScore": 510,
+          "strayRank": 41086
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 489,
+          "round1Rank": 64988,
+          "round2Score": 484,
+          "round2Rank": 72609,
+          "round3Score": 476,
+          "round3Rank": 83071,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 521,
+          "round1Rank": 31379,
+          "round2Score": 519,
+          "round2Rank": 33158,
+          "round3Score": 515,
+          "round3Rank": 36751,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 526,
+          "round1Rank": 26998,
+          "round2Score": 524,
+          "round2Rank": 28413,
+          "round3Score": 524,
+          "round3Rank": 28787,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 457,
+          "round1Rank": 110525,
+          "round2Score": 449,
+          "round2Rank": 123477,
+          "round3Score": 443,
+          "round3Rank": 133632,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 284,
+          "round1Rank": 491054,
+          "round2Score": 276,
+          "round2Rank": 515788,
+          "round3Score": 269,
+          "round3Rank": 538565,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "College of Medicine and Sagore Dutta Hospital, Kolkata",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 537,
+          "round1Rank": 19433,
+          "round2Score": 535,
+          "round2Rank": 20554,
+          "round3Score": 532,
+          "round3Rank": 22418,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 498,
+          "round1Rank": 54372,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 484,
+          "round3Rank": 72353,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 523,
+          "round1Rank": 29172,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 528,
+          "round3Rank": 25488,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 533,
+          "round1Rank": 21923,
+          "round2Score": 536,
+          "round2Rank": 20078,
+          "round3Score": 528,
+          "round3Rank": 25398,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 462,
+          "round1Rank": 102943,
+          "round2Score": 460,
+          "round2Rank": 105701,
+          "round3Score": 449,
+          "round3Rank": 123477,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 291,
+          "round1Rank": 469662,
+          "round2Score": 290,
+          "round2Rank": 471353,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Purulia Government Medical College & Hospital",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 514,
+          "round1Rank": 37221,
+          "round2Score": 511,
+          "round2Rank": 40301,
+          "round3Score": 507,
+          "round3Rank": 44375,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 464,
+          "round1Rank": 99758,
+          "round2Score": 467,
+          "round2Rank": 95746,
+          "round3Score": 457,
+          "round3Rank": 111250,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 505,
+          "round1Rank": 46742,
+          "round2Score": 504,
+          "round2Rank": 47403,
+          "round3Score": 501,
+          "round3Rank": 51022,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 507,
+          "round1Rank": 44651,
+          "round2Score": 506,
+          "round2Rank": 45011,
+          "round3Score": 503,
+          "round3Rank": 49172,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 430,
+          "round1Rank": 155066,
+          "round2Score": 424,
+          "round2Rank": 165174,
+          "round3Score": 419,
+          "round3Rank": 175314,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 256,
+          "round1Rank": 581409,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 248,
+          "round3Rank": 610036,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Diamond Harbour Government Medical College and Hospital, West Bengal",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 525,
+          "round1Rank": 27522,
+          "round2Score": 519,
+          "round2Rank": 33257,
+          "round3Score": 515,
+          "round3Rank": 36426,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 476,
+          "round1Rank": 82618,
+          "round2Score": 471,
+          "round2Rank": 90366,
+          "round3Score": 467,
+          "round3Rank": 95585,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 514,
+          "round1Rank": 37154,
+          "round2Score": 511,
+          "round2Rank": 40635,
+          "round3Score": 511,
+          "round3Rank": 39760,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 516,
+          "round1Rank": 35084,
+          "round2Score": 513,
+          "round2Rank": 38119,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 447,
+          "round1Rank": 127129,
+          "round2Score": 436,
+          "round2Rank": 144028,
+          "round3Score": 434,
+          "round3Rank": 149074,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 275,
+          "round1Rank": 517975,
+          "round2Score": 259,
+          "round2Rank": 569151,
+          "round3Score": 249,
+          "round3Rank": 604259,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Employees State Insurance Corporation Medical College, Joka, Kolkata",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 532,
+          "round1Rank": 22388,
+          "round2Score": 532,
+          "round2Rank": 22555,
+          "round3Score": 530,
+          "round3Rank": 24134,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 483,
+          "round1Rank": 72746,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": 508,
+          "round2Rank": 43539,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": 508,
+          "round2Rank": 43568,
+          "round3Score": 505,
+          "round3Rank": 46833,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 456,
+          "round1Rank": 111602,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 451,
+          "round3Rank": 120627,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 286,
+          "round1Rank": 483421,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 256,
+          "round3Rank": 580491,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Institute of Postgraduate Medical Education & Research, Kolkata",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 562,
+          "round1Rank": 7598,
+          "round2Score": 559,
+          "round2Rank": 8609,
+          "round3Score": 559,
+          "round3Rank": 8857,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 525,
+          "round1Rank": 27371,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 527,
+          "round3Rank": 27690,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 546,
+          "round1Rank": 14258,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 497,
+          "round1Rank": 54924,
+          "round2Score": 491,
+          "round2Rank": 63461,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 368,
+          "round1Rank": 277127,
+          "round2Score": 330,
+          "round2Rank": 363756,
+          "round3Score": 306,
+          "round3Rank": 426221,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Jalpaiguri Government Medical College",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 510,
+          "round1Rank": 41180,
+          "round2Score": 509,
+          "round2Rank": 42738,
+          "round3Score": 506,
+          "round3Rank": 45707,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 458,
+          "round1Rank": 109683,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 455,
+          "round3Rank": 114597,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 504,
+          "round1Rank": 47402,
+          "round2Score": 502,
+          "round2Rank": 49548,
+          "round3Score": 501,
+          "round3Rank": 50415,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 506,
+          "round1Rank": 45712,
+          "round2Score": 505,
+          "round2Rank": 46603,
+          "round3Score": 503,
+          "round3Rank": 49281,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 427,
+          "round1Rank": 161172,
+          "round2Score": 425,
+          "round2Rank": 164299,
+          "round3Score": 419,
+          "round3Rank": 174943,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 256,
+          "round1Rank": 581331,
+          "round2Score": 253,
+          "round2Rank": 592820,
+          "round3Score": 249,
+          "round3Rank": 603896,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Jhargram Government Medical College & Hospital, Jhargram",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 511,
+          "round1Rank": 40160,
+          "round2Score": 510,
+          "round2Rank": 41588,
+          "round3Score": 507,
+          "round3Rank": 44151,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 462,
+          "round1Rank": 103134,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 458,
+          "round3Rank": 110019,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 504,
+          "round1Rank": 48097,
+          "round2Score": 504,
+          "round2Rank": 48217,
+          "round3Score": 501,
+          "round3Rank": 51164,
+          "strayScore": 500,
+          "strayRank": 51598
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 502,
+          "round3Rank": 50371,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 427,
+          "round1Rank": 161003,
+          "round2Score": 424,
+          "round2Rank": 165767,
+          "round3Score": 420,
+          "round3Rank": 172755,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 263,
+          "round1Rank": 556364,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 254,
+          "round3Rank": 589395,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Coochbehar Government Medical College & Hospital, Coochbehar, WB",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 510,
+          "round1Rank": 41522,
+          "round2Score": 508,
+          "round2Rank": 42879,
+          "round3Score": 505,
+          "round3Rank": 46820,
+          "strayScore": 504,
+          "strayRank": 47367
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 459,
+          "round1Rank": 107922,
+          "round2Score": 467,
+          "round2Rank": 95484,
+          "round3Score": 452,
+          "round3Rank": 118329,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 503,
+          "round1Rank": 48942,
+          "round2Score": 502,
+          "round2Rank": 49803,
+          "round3Score": 501,
+          "round3Rank": 50399,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 506,
+          "round1Rank": 45104,
+          "round2Score": 505,
+          "round2Rank": 46402,
+          "round3Score": 502,
+          "round3Rank": 49705,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 427,
+          "round1Rank": 161258,
+          "round2Score": 425,
+          "round2Rank": 164441,
+          "round3Score": 420,
+          "round3Rank": 172525,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 254,
+          "round1Rank": 586593,
+          "round2Score": 254,
+          "round2Rank": 586647,
+          "round3Score": 244,
+          "round3Rank": 624775,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Malda Medical College & Hospital, Malda",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 519,
+          "round1Rank": 32604,
+          "round2Score": 514,
+          "round2Rank": 37007,
+          "round3Score": 511,
+          "round3Rank": 40016,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 469,
+          "round1Rank": 92495,
+          "round2Score": 467,
+          "round2Rank": 96037,
+          "round3Score": 456,
+          "round3Rank": 113155,
+          "strayScore": 452,
+          "strayRank": 118910
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 511,
+          "round1Rank": 39997,
+          "round2Score": 511,
+          "round2Rank": 40433,
+          "round3Score": 508,
+          "round3Rank": 43010,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 514,
+          "round1Rank": 37623,
+          "round2Score": 514,
+          "round2Rank": 37652,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 436,
+          "round1Rank": 144748,
+          "round2Score": 435,
+          "round2Rank": 147274,
+          "round3Score": 432,
+          "round3Rank": 151736,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 270,
+          "round1Rank": 532825,
+          "round2Score": 258,
+          "round2Rank": 574331,
+          "round3Score": 245,
+          "round3Rank": 618061,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Govt. Medical College, Kolkata",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 569,
+          "round1Rank": 5684,
+          "round2Score": 559,
+          "round2Rank": 8597,
+          "round3Score": 558,
+          "round3Rank": 8982,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 526,
+          "round1Rank": 26745,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 542,
+          "round3Rank": 16310,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 552,
+          "round1Rank": 11217,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 554,
+          "round1Rank": 10472,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 506,
+          "round1Rank": 45518,
+          "round2Score": 495,
+          "round2Rank": 57645,
+          "round3Score": 490,
+          "round3Rank": 63612,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 342,
+          "round1Rank": 334354,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 338,
+          "round3Rank": 344376,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Midnapore Medical College, Midnapore",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 523,
+          "round1Rank": 29489,
+          "round2Score": 520,
+          "round2Rank": 31894,
+          "round3Score": 518,
+          "round3Rank": 34098,
+          "strayScore": 506,
+          "strayRank": 45539
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 482,
+          "round1Rank": 74689,
+          "round2Score": 483,
+          "round2Rank": 73134,
+          "round3Score": 472,
+          "round3Rank": 87972,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 510,
+          "round1Rank": 41843,
+          "round2Score": 506,
+          "round2Rank": 45809,
+          "round3Score": 504,
+          "round3Rank": 48097,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 515,
+          "round1Rank": 36701,
+          "round2Score": 513,
+          "round2Rank": 38500,
+          "round3Score": 508,
+          "round3Rank": 43265,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 439,
+          "round1Rank": 139222,
+          "round2Score": 431,
+          "round2Rank": 153967,
+          "round3Score": 425,
+          "round3Rank": 163167,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 277,
+          "round1Rank": 513230,
+          "round2Score": 276,
+          "round2Rank": 513358,
+          "round3Score": 254,
+          "round3Rank": 586593,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Murshidabad Medical College & Hospitals, Murshidabad",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 522,
+          "round1Rank": 30544,
+          "round2Score": 520,
+          "round2Rank": 32218,
+          "round3Score": 517,
+          "round3Rank": 34700,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 473,
+          "round1Rank": 87606,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 478,
+          "round3Rank": 80259,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 515,
+          "round1Rank": 36599,
+          "round2Score": 514,
+          "round2Rank": 37131,
+          "round3Score": 512,
+          "round3Rank": 39511,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 514,
+          "round1Rank": 37837,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 512,
+          "round3Rank": 39114,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 437,
+          "round1Rank": 143201,
+          "round2Score": 434,
+          "round2Rank": 148848,
+          "round3Score": 436,
+          "round3Rank": 145199,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 268,
+          "round1Rank": 541458,
+          "round2Score": 261,
+          "round2Rank": 565025,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Nilratan Sircar Medical College, Kolkata",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 556,
+          "round1Rank": 9842,
+          "round2Score": 554,
+          "round2Rank": 10597,
+          "round3Score": 553,
+          "round3Rank": 10945,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 521,
+          "round1Rank": 31262,
+          "round2Score": 542,
+          "round2Rank": 16310,
+          "round3Score": 515,
+          "round3Rank": 36608,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 541,
+          "round1Rank": 16958,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 544,
+          "round1Rank": 15124,
+          "round2Score": 544,
+          "round2Rank": 15161,
+          "round3Score": 543,
+          "round3Rank": 15478,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 486,
+          "round1Rank": 69101,
+          "round2Score": 480,
+          "round2Rank": 77044,
+          "round3Score": 477,
+          "round3Rank": 81140,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 325,
+          "round1Rank": 375983,
+          "round2Score": 318,
+          "round2Rank": 394941,
+          "round3Score": 294,
+          "round3Rank": 460054,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "North Bengal Medical College, Darjeeling",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 523,
+          "round1Rank": 29129,
+          "round2Score": 523,
+          "round2Rank": 29783,
+          "round3Score": 520,
+          "round3Rank": 32359,
+          "strayScore": 505,
+          "strayRank": 46849
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 473,
+          "round1Rank": 87826,
+          "round2Score": 472,
+          "round2Rank": 88118,
+          "round3Score": 465,
+          "round3Rank": 98393,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 515,
+          "round1Rank": 36117,
+          "round2Score": 515,
+          "round2Rank": 36288,
+          "round3Score": 513,
+          "round3Rank": 37923,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 515,
+          "round1Rank": 36055,
+          "round2Score": 516,
+          "round2Rank": 35326,
+          "round3Score": 514,
+          "round3Rank": 37837,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 441,
+          "round1Rank": 135749,
+          "round2Score": 446,
+          "round2Rank": 127788,
+          "round3Score": 438,
+          "round3Rank": 141537,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 287,
+          "round1Rank": 479804,
+          "round2Score": 294,
+          "round2Rank": 470801,
+          "round3Score": 279,
+          "round3Rank": 504680,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Prafulla Chandra Sen Government Medical College & Hospital",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 518,
+          "round1Rank": 33725,
+          "round2Score": 515,
+          "round2Rank": 36318,
+          "round3Score": 521,
+          "round3Rank": 31446,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 473,
+          "round1Rank": 87517,
+          "round2Score": 471,
+          "round2Rank": 90510,
+          "round3Score": 465,
+          "round3Rank": 98634,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 509,
+          "round1Rank": 42019,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 511,
+          "round3Rank": 40379,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 513,
+          "round1Rank": 38722,
+          "round2Score": 510,
+          "round2Rank": 41323,
+          "round3Score": 507,
+          "round3Rank": 44529,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 434,
+          "round1Rank": 148019,
+          "round2Score": 430,
+          "round2Rank": 154835,
+          "round3Score": 424,
+          "round3Rank": 165000,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 261,
+          "round1Rank": 565199,
+          "round2Score": 254,
+          "round2Rank": 589245,
+          "round3Score": 251,
+          "round3Rank": 598978,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Raiganj Government Medical College & Hospital, Raiganj",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 513,
+          "round1Rank": 38656,
+          "round2Score": 510,
+          "round2Rank": 41826,
+          "round3Score": 506,
+          "round3Rank": 45652,
+          "strayScore": 504,
+          "strayRank": 47373
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 462,
+          "round1Rank": 102669,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 453,
+          "round3Rank": 117164,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 506,
+          "round1Rank": 45470,
+          "round2Score": 505,
+          "round2Rank": 46015,
+          "round3Score": 502,
+          "round3Rank": 49898,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 510,
+          "round1Rank": 41134,
+          "round2Score": 509,
+          "round2Rank": 42410,
+          "round3Score": 504,
+          "round3Rank": 47937,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 428,
+          "round1Rank": 158974,
+          "round2Score": 425,
+          "round2Rank": 164037,
+          "round3Score": 419,
+          "round3Rank": 174104,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 260,
+          "round1Rank": 569151,
+          "round2Score": 253,
+          "round2Rank": 589837,
+          "round3Score": 242,
+          "round3Rank": 629941,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Rampurhat Government Medical College & Hospital, Rampurhat",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 515,
+          "round1Rank": 36146,
+          "round2Score": 512,
+          "round2Rank": 38942,
+          "round3Score": 508,
+          "round3Rank": 43860,
+          "strayScore": 504,
+          "strayRank": 47156
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 466,
+          "round1Rank": 96508,
+          "round2Score": 463,
+          "round2Rank": 101708,
+          "round3Score": 456,
+          "round3Rank": 112869,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 507,
+          "round1Rank": 44530,
+          "round2Score": 504,
+          "round2Rank": 47207,
+          "round3Score": 502,
+          "round3Rank": 49915,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 510,
+          "round1Rank": 41544,
+          "round2Score": 513,
+          "round2Rank": 38554,
+          "round3Score": 504,
+          "round3Rank": 47595,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 431,
+          "round1Rank": 152991,
+          "round2Score": 426,
+          "round2Rank": 162431,
+          "round3Score": 422,
+          "round3Rank": 168923,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 260,
+          "round1Rank": 569133,
+          "round2Score": 253,
+          "round2Rank": 589395,
+          "round3Score": 246,
+          "round3Rank": 615418,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "RG Kar Medical College, Kolkata",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 545,
+          "round1Rank": 14534,
+          "round2Score": 543,
+          "round2Rank": 15494,
+          "round3Score": 542,
+          "round3Rank": 15897,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 505,
+          "round1Rank": 46005,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 500,
+          "round3Rank": 52284,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 534,
+          "round1Rank": 21448,
+          "round2Score": 544,
+          "round2Rank": 15039,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 538,
+          "round1Rank": 18526,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 535,
+          "round3Rank": 20688,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 471,
+          "round1Rank": 90545,
+          "round2Score": 466,
+          "round2Rank": 97188,
+          "round3Score": 462,
+          "round3Rank": 102593,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 305,
+          "round1Rank": 427715,
+          "round2Score": 294,
+          "round2Rank": 460054,
+          "round3Score": 270,
+          "round3Rank": 532825,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Sarat Chandra Chattopadhyay Government Medical College & Hospital",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 518,
+          "round1Rank": 33843,
+          "round2Score": 515,
+          "round2Rank": 36811,
+          "round3Score": 513,
+          "round3Rank": 38045,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 472,
+          "round1Rank": 88787,
+          "round2Score": 468,
+          "round2Rank": 94210,
+          "round3Score": 472,
+          "round3Rank": 89054,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 509,
+          "round1Rank": 42817,
+          "round2Score": 510,
+          "round2Rank": 41676,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 513,
+          "round1Rank": 38278,
+          "round2Score": 513,
+          "round2Rank": 38722,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 436,
+          "round1Rank": 145169,
+          "round2Score": 430,
+          "round2Rank": 155446,
+          "round3Score": 424,
+          "round3Rank": 166013,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 264,
+          "round1Rank": 555113,
+          "round2Score": 254,
+          "round2Rank": 586593,
+          "round3Score": 253,
+          "round3Rank": 592820,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Tamralipto Government Medical College & Hospital",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 515,
+          "round1Rank": 36065,
+          "round2Score": 514,
+          "round2Rank": 37134,
+          "round3Score": 513,
+          "round3Rank": 38036,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 469,
+          "round1Rank": 92901,
+          "round2Score": 469,
+          "round2Rank": 92495,
+          "round3Score": 467,
+          "round3Rank": 95746,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 506,
+          "round1Rank": 45025,
+          "round2Score": 511,
+          "round2Rank": 40586,
+          "round3Score": 504,
+          "round3Rank": 48056,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 508,
+          "round1Rank": 43265,
+          "round2Score": 508,
+          "round2Rank": 43369,
+          "round3Score": 503,
+          "round3Rank": 48350,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 432,
+          "round1Rank": 152346,
+          "round2Score": 428,
+          "round2Rank": 158056,
+          "round3Score": 424,
+          "round3Rank": 165224,
+          "strayScore": 418,
+          "strayRank": 176264
+        },
+        {
+          "category": "ST",
+          "round1Score": 258,
+          "round1Rank": 575678,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 248,
+          "round3Rank": 607639,
+          "strayScore": null,
+          "strayRank": null
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "KPC Medical College, Jadavpur, Kolkata",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 527,
+          "round1Rank": 25770,
+          "round2Score": 507,
+          "round2Rank": 44025,
+          "round3Score": 504,
+          "round3Rank": 47232,
+          "strayScore": 505,
+          "strayRank": 46913
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 453,
+          "round1Rank": 117459,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 450,
+          "round3Rank": 122300,
+          "strayScore": 440,
+          "strayRank": 137734
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 501,
+          "round1Rank": 51142,
+          "round2Score": 501,
+          "round2Rank": 50713,
+          "round3Score": 499,
+          "round3Rank": 52895,
+          "strayScore": 496,
+          "strayRank": 56963
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 503,
+          "round1Rank": 48303,
+          "round2Score": 504,
+          "round2Rank": 47828,
+          "round3Score": 499,
+          "round3Rank": 52919,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 422,
+          "round1Rank": 169340,
+          "round2Score": 422,
+          "round2Rank": 169537,
+          "round3Score": 417,
+          "round3Rank": 178665,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 239,
+          "round1Rank": 640476,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 233,
+          "round3Rank": 662262,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "Management",
+          "round1Score": 457,
+          "round1Rank": 111301,
+          "round2Score": 463,
+          "round2Rank": 101785,
+          "round3Score": 464,
+          "round3Rank": 100707,
+          "strayScore": 399,
+          "strayRank": 211553
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Jagannath Gupta Institute of Medical Sciences & Hospital, Kolkata",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 505,
+          "round1Rank": 46881,
+          "round2Score": 504,
+          "round2Rank": 48122,
+          "round3Score": 497,
+          "round3Rank": 54920,
+          "strayScore": 492,
+          "strayRank": 61291
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 440,
+          "round1Rank": 137319,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 437,
+          "round3Rank": 143086,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 492,
+          "round1Rank": 61329,
+          "round2Score": 496,
+          "round2Rank": 56070,
+          "round3Score": 493,
+          "round3Rank": 60211,
+          "strayScore": 489,
+          "strayRank": 66011
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 495,
+          "round1Rank": 57311,
+          "round2Score": 496,
+          "round2Rank": 56356,
+          "round3Score": 483,
+          "round3Rank": 73599,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 416,
+          "round1Rank": 180753,
+          "round2Score": 417,
+          "round2Rank": 179130,
+          "round3Score": 404,
+          "round3Rank": 202938,
+          "strayScore": 389,
+          "strayRank": 232920
+        },
+        {
+          "category": "ST",
+          "round1Score": 185,
+          "round1Rank": 868487,
+          "round2Score": 179,
+          "round2Rank": 899991,
+          "round3Score": 195,
+          "round3Rank": 820814,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "Management",
+          "round1Score": 283,
+          "round1Rank": 491918,
+          "round2Score": 277,
+          "round2Rank": 511247,
+          "round3Score": 232,
+          "round3Rank": 667340,
+          "strayScore": 186,
+          "strayRank": 866080
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "ICARE Institute of Medical Sciences & Research, Haldia, Purba Midanpore",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 499,
+          "round1Rank": 52852,
+          "round2Score": 500,
+          "round2Rank": 52443,
+          "round3Score": 493,
+          "round3Rank": 60071,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 442,
+          "round1Rank": 134282,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 447,
+          "round3Rank": 126878,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 498,
+          "round1Rank": 54154,
+          "round2Score": 499,
+          "round2Rank": 53634,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 496,
+          "round1Rank": 56217,
+          "round2Score": 497,
+          "round2Rank": 54873,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 408,
+          "round1Rank": 195231,
+          "round2Score": 400,
+          "round2Rank": 209321,
+          "round3Score": 400,
+          "round3Rank": 210656,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 204,
+          "round1Rank": 781615,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 206,
+          "round3Rank": 773865,
+          "strayScore": 213,
+          "strayRank": 742957
+        },
+        {
+          "category": "Management",
+          "round1Score": 295,
+          "round1Rank": 457844,
+          "round2Score": 316,
+          "round2Rank": 399825,
+          "round3Score": 297,
+          "round3Rank": 451995,
+          "strayScore": 287,
+          "strayRank": 480227
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "JIS School of Medical Science & Research, Howrah",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 497,
+          "round1Rank": 55318,
+          "round2Score": 498,
+          "round2Rank": 54006,
+          "round3Score": 493,
+          "round3Rank": 60674,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 427,
+          "round1Rank": 160370,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 428,
+          "round3Rank": 158752,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 489,
+          "round1Rank": 65119,
+          "round2Score": 494,
+          "round2Rank": 58752,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 492,
+          "round1Rank": 61040,
+          "round2Score": 492,
+          "round2Rank": 62139,
+          "round3Score": 490,
+          "round3Rank": 64321,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 402,
+          "round1Rank": 206095,
+          "round2Score": 402,
+          "round2Rank": 206097,
+          "round3Score": 394,
+          "round3Rank": 222947,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 164,
+          "round1Rank": 981490,
+          "round2Score": 158,
+          "round2Rank": 1011645,
+          "round3Score": 151,
+          "round3Rank": 1054770,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "Management",
+          "round1Score": 220,
+          "round1Rank": 714253,
+          "round2Score": 260,
+          "round2Rank": 567668,
+          "round3Score": 222,
+          "round3Rank": 708777,
+          "strayScore": 190,
+          "strayRank": 848669
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "JMN Medical College, Nadia",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 493,
+          "round1Rank": 60563,
+          "round2Score": 494,
+          "round2Rank": 59588,
+          "round3Score": 488,
+          "round3Rank": 66927,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 419,
+          "round1Rank": 174663,
+          "round2Score": 418,
+          "round2Rank": 176791,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 482,
+          "round1Rank": 74724,
+          "round2Score": 482,
+          "round2Rank": 74951,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 487,
+          "round1Rank": 68030,
+          "round2Score": 483,
+          "round2Rank": 72728,
+          "round3Score": 478,
+          "round3Rank": 80647,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 400,
+          "round1Rank": 210612,
+          "round2Score": 399,
+          "round2Rank": 211535,
+          "round3Score": 393,
+          "round3Rank": 225059,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 172,
+          "round1Rank": 937096,
+          "round2Score": 215,
+          "round2Rank": 735718,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "Management",
+          "round1Score": 215,
+          "round1Rank": 734957,
+          "round2Score": 265,
+          "round2Rank": 551443,
+          "round3Score": 240,
+          "round3Rank": 637271,
+          "strayScore": 232,
+          "strayRank": 666719
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "IQ-City Medical College, Burdwan",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 501,
+          "round1Rank": 50924,
+          "round2Score": 500,
+          "round2Rank": 51633,
+          "round3Score": 492,
+          "round3Rank": 62098,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 437,
+          "round1Rank": 143086,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 419,
+          "round3Rank": 174765,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 490,
+          "round1Rank": 64241,
+          "round2Score": 489,
+          "round2Rank": 65004,
+          "round3Score": 480,
+          "round3Rank": 77831,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 490,
+          "round1Rank": 64655,
+          "round2Score": 493,
+          "round2Rank": 60544,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 408,
+          "round1Rank": 193783,
+          "round2Score": 409,
+          "round2Rank": 192271,
+          "round3Score": 396,
+          "round3Rank": 218504,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 194,
+          "round1Rank": 826562,
+          "round2Score": 159,
+          "round2Rank": 1007033,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "Management",
+          "round1Score": 224,
+          "round1Rank": 698903,
+          "round2Score": 261,
+          "round2Rank": 563371,
+          "round3Score": 214,
+          "round3Rank": 741064,
+          "strayScore": 190,
+          "strayRank": 844366
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Shri Ramkrishna Institute of Medical Sciences & Sanaka Hospitals, Durgapur",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 493,
+          "round1Rank": 60943,
+          "round2Score": 491,
+          "round2Rank": 63123,
+          "round3Score": 485,
+          "round3Rank": 70813,
+          "strayScore": 482,
+          "strayRank": 74558
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 415,
+          "round1Rank": 182829,
+          "round2Score": 414,
+          "round2Rank": 183330,
+          "round3Score": 414,
+          "round3Rank": 184179,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 477,
+          "round1Rank": 81073,
+          "round2Score": 477,
+          "round2Rank": 81975,
+          "round3Score": 475,
+          "round3Rank": 83625,
+          "strayScore": 469,
+          "strayRank": 93566
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 482,
+          "round1Rank": 74792,
+          "round2Score": 482,
+          "round2Rank": 74435,
+          "round3Score": 476,
+          "round3Rank": 82226,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 395,
+          "round1Rank": 220881,
+          "round2Score": 394,
+          "round2Rank": 221466,
+          "round3Score": 385,
+          "round3Rank": 240864,
+          "strayScore": 372,
+          "strayRank": 266547
+        },
+        {
+          "category": "ST",
+          "round1Score": 165,
+          "round1Rank": 975467,
+          "round2Score": 128,
+          "round2Rank": 1205907,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "Management",
+          "round1Score": 202,
+          "round1Rank": 791009,
+          "round2Score": 243,
+          "round2Rank": 627287,
+          "round3Score": 213,
+          "round3Rank": 745041,
+          "strayScore": 184,
+          "strayRank": 874690
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Gouri Devi Institute of Medical Sciences and Hospital, Durgapur",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 496,
+          "round1Rank": 56154,
+          "round2Score": 496,
+          "round2Rank": 56736,
+          "round3Score": 488,
+          "round3Rank": 66835,
+          "strayScore": 485,
+          "strayRank": 71162
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 419,
+          "round1Rank": 175093,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 417,
+          "round3Rank": 178748,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 484,
+          "round1Rank": 71660,
+          "round2Score": 480,
+          "round2Rank": 76725,
+          "round3Score": 477,
+          "round3Rank": 81089,
+          "strayScore": 474,
+          "strayRank": 86277
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 487,
+          "round1Rank": 68441,
+          "round2Score": 486,
+          "round2Rank": 68757,
+          "round3Score": 480,
+          "round3Rank": 77176,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 402,
+          "round1Rank": 206573,
+          "round2Score": 396,
+          "round2Rank": 217284,
+          "round3Score": 389,
+          "round3Rank": 231263,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "ST",
+          "round1Score": 185,
+          "round1Rank": 869745,
+          "round2Score": 161,
+          "round2Rank": 995438,
+          "round3Score": 136,
+          "round3Rank": 1146327,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "Management",
+          "round1Score": 221,
+          "round1Rank": 712188,
+          "round2Score": 266,
+          "round2Rank": 545545,
+          "round3Score": 225,
+          "round3Rank": 696101,
+          "strayScore": 189,
+          "strayRank": 851954
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Santiniketan Medical College, Bolpur, West Bengal",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 495,
+          "round1Rank": 57441,
+          "round2Score": 495,
+          "round2Rank": 57293,
+          "round3Score": 490,
+          "round3Rank": 63526,
+          "strayScore": 493,
+          "strayRank": 60930
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 421,
+          "round1Rank": 171793,
+          "round2Score": 414,
+          "round2Rank": 183246,
+          "round3Score": 414,
+          "round3Rank": 183246,
+          "strayScore": 413,
+          "strayRank": 185852
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 484,
+          "round1Rank": 72109,
+          "round2Score": 495,
+          "round2Rank": 57854,
+          "round3Score": 476,
+          "round3Rank": 82288,
+          "strayScore": 479,
+          "strayRank": 78492
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 490,
+          "round1Rank": 63836,
+          "round2Score": 494,
+          "round2Rank": 59652,
+          "round3Score": 482,
+          "round3Rank": 74847,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 398,
+          "round1Rank": 214181,
+          "round2Score": 403,
+          "round2Rank": 204620,
+          "round3Score": 392,
+          "round3Rank": 225096,
+          "strayScore": 380,
+          "strayRank": 251504
+        },
+        {
+          "category": "ST",
+          "round1Score": 233,
+          "round1Rank": 662262,
+          "round2Score": 149,
+          "round2Rank": 1067527,
+          "round3Score": 184,
+          "round3Rank": 877037,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "Management",
+          "round1Score": 195,
+          "round1Rank": 821038,
+          "round2Score": 231,
+          "round2Rank": 671414,
+          "round3Score": 210,
+          "round3Rank": 759256,
+          "strayScore": 180,
+          "strayRank": 893015
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Jakir Hossain Medical College, Burdwan",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 488,
+          "round1Rank": 66489,
+          "round2Score": 485,
+          "round2Rank": 69921,
+          "round3Score": 479,
+          "round3Rank": 79278,
+          "strayScore": 467,
+          "strayRank": 95512
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 405,
+          "round1Rank": 199720,
+          "round2Score": 425,
+          "round2Rank": 162959,
+          "round3Score": 394,
+          "round3Rank": 221314,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 474,
+          "round1Rank": 85112,
+          "round2Score": 468,
+          "round2Rank": 93703,
+          "round3Score": 473,
+          "round3Rank": 87099,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 487,
+          "round1Rank": 67848,
+          "round2Score": 478,
+          "round2Rank": 80706,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "SC",
+          "round1Score": 390,
+          "round1Rank": 229251,
+          "round2Score": 385,
+          "round2Rank": 240864,
+          "round3Score": 374,
+          "round3Rank": 263854,
+          "strayScore": 363,
+          "strayRank": 287278
+        },
+        {
+          "category": "ST",
+          "round1Score": 159,
+          "round1Rank": 1006024,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "Management",
+          "round1Score": 192,
+          "round1Rank": 836337,
+          "round2Score": 205,
+          "round2Rank": 776494,
+          "round3Score": 190,
+          "round3Rank": 845872,
+          "strayScore": 176,
+          "strayRank": 915803
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "East West Institute of Medical Sciences and Research, Burdwan",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 488,
+          "round1Rank": 66283,
+          "round2Score": 488,
+          "round2Rank": 66717,
+          "round3Score": 480,
+          "round3Rank": 78021,
+          "strayScore": 471,
+          "strayRank": 89941
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 405,
+          "round1Rank": 201059,
+          "round2Score": 405,
+          "round2Rank": 200497,
+          "round3Score": 397,
+          "round3Rank": 217044,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 480,
+          "round1Rank": 76725,
+          "round2Score": 467,
+          "round2Rank": 96426,
+          "round3Score": 466,
+          "round3Rank": 96567,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 482,
+          "round1Rank": 74447,
+          "round2Score": 479,
+          "round2Rank": 78357,
+          "round3Score": 471,
+          "round3Rank": 90337,
+          "strayScore": 459,
+          "strayRank": 107232
+        },
+        {
+          "category": "SC",
+          "round1Score": 390,
+          "round1Rank": 229013,
+          "round2Score": 390,
+          "round2Rank": 230992,
+          "round3Score": 376,
+          "round3Rank": 258042,
+          "strayScore": 365,
+          "strayRank": 282237
+        },
+        {
+          "category": "ST",
+          "round1Score": 236,
+          "round1Rank": 650639,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 161,
+          "round3Rank": 996670,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "Management",
+          "round1Score": 277,
+          "round1Rank": 512536,
+          "round2Score": 239,
+          "round2Rank": 642879,
+          "round3Score": 199,
+          "round3Rank": 804787,
+          "strayScore": 187,
+          "strayRank": 861300
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Krishnanagar Institute of Medical Sciences Pvt. Ltd Krishnanagar, Nadia (WB)",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": 489,
+          "round1Rank": 65947,
+          "round2Score": 488,
+          "round2Rank": 66382,
+          "round3Score": 482,
+          "round3Rank": 76119,
+          "strayScore": 475,
+          "strayRank": 84623
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": 414,
+          "round1Rank": 184179,
+          "round2Score": 414,
+          "round2Rank": 183684,
+          "round3Score": 397,
+          "round3Rank": 216592,
+          "strayScore": 404,
+          "strayRank": 203235
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": 475,
+          "round1Rank": 83625,
+          "round2Score": 469,
+          "round2Rank": 93019,
+          "round3Score": 472,
+          "round3Rank": 88934,
+          "strayScore": 466,
+          "strayRank": 96839
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": 480,
+          "round1Rank": 77176,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": 471,
+          "round3Rank": 89557,
+          "strayScore": 467,
+          "strayRank": 96271
+        },
+        {
+          "category": "SC",
+          "round1Score": 393,
+          "round1Rank": 224647,
+          "round2Score": 394,
+          "round2Rank": 222653,
+          "round3Score": 378,
+          "round3Rank": 254298,
+          "strayScore": 360,
+          "strayRank": 294384
+        },
+        {
+          "category": "ST",
+          "round1Score": 113,
+          "round1Rank": 1314333,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "Management",
+          "round1Score": 197,
+          "round1Rank": 814210,
+          "round2Score": 230,
+          "round2Rank": 676739,
+          "round3Score": 199,
+          "round3Rank": 807164,
+          "strayScore": 182,
+          "strayRank": 885599
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "RANIGANJ INSTITUTE OF MEDICAL SCIENCE",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": 487,
+          "round2Rank": 68380,
+          "round3Score": 481,
+          "round3Rank": 76247,
+          "strayScore": 473,
+          "strayRank": 87185
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": 408,
+          "round2Rank": 195723,
+          "round3Score": 395,
+          "round3Rank": 221015,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": 475,
+          "round2Rank": 83888,
+          "round3Score": 471,
+          "round3Rank": 90102,
+          "strayScore": 463,
+          "strayRank": 101785
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": 479,
+          "round2Rank": 78947,
+          "round3Score": 472,
+          "round3Rank": 88072,
+          "strayScore": 460,
+          "strayRank": 106162
+        },
+        {
+          "category": "SC",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": 390,
+          "round2Rank": 229057,
+          "round3Score": 377,
+          "round3Rank": 256836,
+          "strayScore": 358,
+          "strayRank": 298270
+        },
+        {
+          "category": "ST",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": 195,
+          "round2Rank": 820814,
+          "round3Score": 201,
+          "round3Rank": 794018,
+          "strayScore": 189,
+          "strayRank": 851824
+        },
+        {
+          "category": "Management",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": 214,
+          "round2Rank": 738904,
+          "round3Score": 193,
+          "round3Rank": 830358,
+          "strayScore": 183,
+          "strayRank": 882290
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "Jagannath Gupta Institute of Medical Sciences and Hospital",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": 478,
+          "strayRank": 80728
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": 410,
+          "strayRank": 190935
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": 469,
+          "strayRank": 93580
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": 469,
+          "strayRank": 92405
+        },
+        {
+          "category": "SC",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": 370,
+          "strayRank": 272893
+        },
+        {
+          "category": "ST",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "Management",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": 175,
+          "strayRank": 923270
+        }
+      ]
+    },
+    {
+      "state": "West Bengal",
+      "collegeName": "PKG Medical College & Hospital",
+      "year": 2025,
+      "categories": [
+        {
+          "category": "GEN",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": 476,
+          "strayRank": 82520
+        },
+        {
+          "category": "GEN-EWS",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": 394,
+          "strayRank": 222417
+        },
+        {
+          "category": "OBC-A",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": 465,
+          "strayRank": 99184
+        },
+        {
+          "category": "OBC-B",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": 467,
+          "strayRank": 95781
+        },
+        {
+          "category": "SC",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": 359,
+          "strayRank": 295664
+        },
+        {
+          "category": "ST",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": null,
+          "strayRank": null
+        },
+        {
+          "category": "Management",
+          "round1Score": null,
+          "round1Rank": null,
+          "round2Score": null,
+          "round2Rank": null,
+          "round3Score": null,
+          "round3Rank": null,
+          "strayScore": 177,
+          "strayRank": 912479
+        }
+      ]
+    }
+  ]
+}

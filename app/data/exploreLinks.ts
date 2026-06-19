@@ -212,10 +212,24 @@ export function getMBBSIndiaStateAnchor(state: string) {
   return slugifyRouteSegment(state);
 }
 
+export function getMBBSIndiaStateSlug(state: string) {
+  return slugifyRouteSegment(state);
+}
+
+export function getMBBSIndiaStateHref(state: string) {
+  return `/mbbs-india/${getMBBSIndiaStateSlug(state)}/`;
+}
+
+export function getMBBSIndiaCollegeSlug(
+  college: Pick<MBBSIndiaCollege, "collegeName">
+) {
+  return slugifyRouteSegment(college.collegeName);
+}
+
 export function getMBBSIndiaCollegeAnchor(college: Pick<MBBSIndiaCollege, "state" | "collegeName">) {
   return `college-${slugifyRouteSegment(`${college.state}-${college.collegeName}`)}`;
 }
 
 export function getMBBSIndiaCollegeHref(college: Pick<MBBSIndiaCollege, "state" | "collegeName">) {
-  return `/mbbs-india/#${getMBBSIndiaCollegeAnchor(college)}`;
+  return `${getMBBSIndiaStateHref(college.state)}${getMBBSIndiaCollegeSlug(college)}/`;
 }
