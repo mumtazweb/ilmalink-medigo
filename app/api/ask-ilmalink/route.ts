@@ -143,7 +143,9 @@ export async function POST(request: NextRequest) {
         score: item.score,
       })),
     });
-  } catch {
+   } catch (error) {
+    console.error("Ask ILMALINK API error:", error);
+
     return Response.json(
       {
         answer:

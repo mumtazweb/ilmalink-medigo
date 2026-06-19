@@ -1263,7 +1263,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
     setAskError("");
 
     try {
-      const response = await fetch("/api/ask-ilmalink/", {
+     const response = await fetch("/api/ask-ilmalink", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -1271,6 +1271,11 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
         body: JSON.stringify({ question }),
         signal: controller.signal,
       });
+
+      if (!response.ok) {
+        throw new Error(`Ask ILMALINK API failed: ${response.status}`);
+      }
+
       const data = (await response.json()) as AskIlmalinkResponse;
 
       if (controller.signal.aborted) return;
