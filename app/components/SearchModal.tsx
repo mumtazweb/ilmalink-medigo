@@ -1535,7 +1535,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
                   autoFocus
                   value={query}
                   onChange={(event) => handleQueryChange(event.target.value)}
-                  placeholder="Message Ask ILMALINK..."
+                  placeholder="TEST SEARCH INPUT..."
                   className="min-h-12 w-full rounded-2xl border border-white/90 bg-white/85 py-2.5 pl-10 pr-3 text-sm font-semibold text-slate-900 shadow-[0_10px_30px_rgba(15,23,42,0.08)] outline-none transition placeholder:font-medium placeholder:text-slate-400 focus:border-[#00C896] focus:bg-white focus:ring-4 focus:ring-[#00C896]/15 sm:min-h-14 sm:pl-11 sm:pr-4 sm:text-base"
                 />
               </div>
