@@ -28,6 +28,15 @@ const checkboxSymbols = new Map([
   ["\u2713", true],
   ["\u2714", true],
 ]);
+function slugifyHeading(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+}
 
 function renderLink(key: number, linkText: string, linkHref: string) {
   const cleanText = linkText.trim();
@@ -497,11 +506,12 @@ function renderMediaBlock(block: Extract<ContentBlock, { type: "image" }>) {
   );
 }
 
-function renderHeading(block: Extract<ContentBlock, { type: "heading" }>) {
+function renderHeading(block: Extract<ContentBlock, { type: "heading" }>, index: number) {
+  const headingId = `${slugifyHeading(block.text)}-${index}`;
   if (block.level <= 2) {
     return (
       <div className="pt-3">
-        <h2 className="border-l-4 border-[#00C896] pl-4 text-2xl font-black leading-tight text-[#0B2244] md:text-3xl">
+        <h2 id={headingId} className="scroll-mt-28 border-l-4 border-[#00C896] pl-4 text-2xl font-black leading-tight text-[#0B2244] md:text-3xl">
           {renderInline(block.text)}
         </h2>
       </div>
@@ -510,14 +520,14 @@ function renderHeading(block: Extract<ContentBlock, { type: "heading" }>) {
 
   if (block.level === 3) {
     return (
-      <h3 className="pt-2 text-xl font-black leading-snug text-[#0B2244] md:text-2xl">
+      <h3 id={headingId} className="scroll-mt-28 pt-2 text-xl font-black leading-snug text-[#0B2244] md:text-2xl">
         {renderInline(block.text)}
       </h3>
     );
   }
 
   return (
-    <h4 className="text-lg font-black leading-snug text-[#0B2244] md:text-xl">
+    <h4 id={headingId} className="scroll-mt-28 text-lg font-black leading-snug text-[#0B2244] md:text-xl">
       {renderInline(block.text)}
     </h4>
   );
@@ -601,7 +611,7 @@ function renderListItems(items: ListItem[]) {
 
 function renderBlock(block: ContentBlock, index: number): ReactNode {
   if (block.type === "heading") {
-    return <div key={index}>{renderHeading(block)}</div>;
+   return <div key={index}>{renderHeading(block, index)}</div>;
   }
 
   if (block.type === "image") {

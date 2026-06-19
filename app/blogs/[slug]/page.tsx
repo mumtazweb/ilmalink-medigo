@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     };
   }
 
-  const url = `https://www.ilmalink.com/blogs/${post.slug}`;
+  const url = `https://www.ilmalink.com/blogs/${post.slug}/`;
   const featuredImage = post.featuredImage?.trim();
   const hasSocialImage = Boolean(featuredImage && isImageFile(featuredImage));
 
@@ -87,7 +87,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
     notFound();
   }
 
-  const articleUrl = `https://www.ilmalink.com/blogs/${post.slug}`;
+  const articleUrl = `https://www.ilmalink.com/blogs/${post.slug}/`;
   const encodedArticleUrl = encodeURIComponent(articleUrl);
   const encodedShareText = encodeURIComponent(`${post.title} - ${post.shortDescription}`);
 
@@ -200,7 +200,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
 
   const articleSchema = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     headline: post.title,
     description: post.metaDescription,
     articleSection: post.category,
@@ -257,13 +257,17 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
     <main className="min-h-screen bg-[#F5F8FC] pb-14 text-[#0F172A] sm:pb-0">
       <Navbar />
       <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify(articleSchema).replace(/</g, "\\u003c"),
+  }}
+/>
+<script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify(breadcrumbSchema).replace(/</g, "\\u003c"),
+  }}
+/>
 
       {/* BLOG SYSTEM: Single blog article layout. */}
       <article className="mx-auto max-w-5xl px-3 pb-12 pt-5 sm:px-6 sm:pb-16 md:pt-8 lg:px-8">

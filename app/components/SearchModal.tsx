@@ -108,6 +108,11 @@ const RECENT_SEARCH_KEY = "ilmalink-search-recent";
 const MAX_RESULTS = 16;
 const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
 const OPEN_RANK_PREDICTOR_EVENT = "ilmalink:open-rank-predictor";
+const personalisedCounsellingAnswer =
+  "This answer depends on your NEET marks/rank, budget, preferred country or state, eligibility, documents and admission route. ILMALINK expert counselling can guide you better after checking your profile and giving a personalised option.";
+
+const isColdNoMatchAnswer = (answer: string) =>
+  /not available|not yet available|no exact|no data|no result|information is not/i.test(answer);
 const answerDisclaimer =
   "Cutoffs, fees, counselling rules, accreditation, FMGE/NExT outcomes, and NMC/FMGL compliance can change. Use Connect ILMALINK for a personalised eligibility review before final admission.";
 const searchSpellingAliases: Record<string, string> = {
@@ -1149,6 +1154,16 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
 
   const selectedResultIndex =
     filteredResults.length > 0 ? Math.min(selectedIndex, filteredResults.length - 1) : -1;
+    const shouldShowPersonalisedCounselling = Boolean(
+  askError ||
+    askAnswer?.notFound ||
+    (askAnswer?.answer && isColdNoMatchAnswer(askAnswer.answer))
+);
+
+const displayedAskAnswer =
+  shouldShowPersonalisedCounselling
+    ? personalisedCounsellingAnswer
+    : askAnswer?.answer;
 
   const openCounselling = useCallback(() => {
     onClose();
@@ -1202,11 +1217,18 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
       if (controller.signal.aborted) return;
       setAskAnswer(data);
 
-      if (data.shouldAutoOpenCounselling) {
-        window.setTimeout(() => {
-          openCounselling();
-        }, 1_400);
-      }
+      const shouldOpenCounsellingAfterPreview =
+  data.notFound ||
+  data.shouldAutoOpenCounselling ||
+  isColdNoMatchAnswer(data.answer);
+
+if (shouldOpenCounsellingAfterPreview) {
+  window.setTimeout(() => {
+    if (!controller.signal.aborted) {
+      openCounselling();
+    }
+  }, 2_800);
+}
     } catch (error) {
       if (
         controller.signal.aborted ||
@@ -1215,10 +1237,12 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
         return;
       }
 
-      setAskError(
-        "AI answers are temporarily unavailable. You can still use the relevant pages below or connect with ILMALINK for personalised help."
-      );
-      setAskAnswer(null);
+     setAskError(personalisedCounsellingAnswer);
+setAskAnswer(null);
+
+window.setTimeout(() => {
+  openCounselling();
+}, 2_800);
     } finally {
       if (requestControllerRef.current === controller) {
         requestControllerRef.current = null;
@@ -1227,6 +1251,18 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
     }
   }, [openCounselling, query, storeRecentSearch]);
 
+  useEffect(() => {
+  if (!isOpen) return;
+  if (trimmedQuery.length < 3) return;
+  if (askLoading) return;
+  if (trimmedQuery === activeQuestion) return;
+
+  const timer = window.setTimeout(() => {
+    void runAskSearch(trimmedQuery);
+  }, 5_000);
+
+  return () => window.clearTimeout(timer);
+}, [activeQuestion, askLoading, isOpen, runAskSearch, trimmedQuery]);
   useEffect(() => {
     if (isOpen) return;
 
@@ -1470,7 +1506,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
                 {askLoading
                   ? "Analysing verified data"
                   : trimmedQuery && trimmedQuery !== activeQuestion
-                    ? "Answers when you finish typing"
+                    ? "Answer appears after 4 seconds or Search"
                     : "Ready for your next question"}
               </span>
               <span className="hidden text-[10px] font-semibold text-slate-400 sm:inline">
@@ -1545,7 +1581,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
                   }`}>
                     <div className="flex items-center justify-between gap-2">
                       <p className="text-xs font-black uppercase tracking-[0.14em] text-[#087a6a]">
-                        {askAnswer?.notFound ? "Counselling support" : "ILMALINK answer"}
+                        {shouldShowPersonalisedCounselling ? "Personalised counselling recommended" : "ILMALINK answer"}
                       </p>
                       {askAnswer && !askAnswer.notFound && (
                         <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-bold uppercase text-emerald-700">
@@ -1568,7 +1604,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
                     ) : askAnswer ? (
                       <>
                         <p className="mt-3 whitespace-pre-line text-sm leading-6 text-slate-800">
-                          {askAnswer.answer}
+                          {displayedAskAnswer}
                         </p>
 
                         {askAnswer.suggestedLinks.length > 0 && (
@@ -1607,19 +1643,19 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
                     ) : null}
 
                     <button
-                      type="button"
-                      onClick={handleConnectClick}
-                      className="mt-3 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00C896] to-[#098f91] px-4 text-xs font-extrabold text-white shadow-[0_10px_24px_rgba(0,168,120,0.22)] transition hover:-translate-y-0.5"
-                    >
-                      <MessageCircle size={15} />
-                      Connect ILMALINK
-                    </button>
+  type="button"
+  onClick={handleConnectClick}
+  className="mt-3 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00C896] to-[#098f91] px-4 text-xs font-extrabold text-white shadow-[0_10px_24px_rgba(0,168,120,0.22)] transition hover:-translate-y-0.5"
+>
+  <MessageCircle size={15} />
+  Connect ILMALINK Expert
+</button>
                   </div>
                 </div>
               </div>
             )}
 
-            {deferredTrimmedQuery.length >= 2 && (
+            {(hasAsked || askLoading || askError || askAnswer) && (
               <div className={hasAsked || askLoading || askError || askAnswer ? "mt-4" : ""}>
                 <div className="mb-2 flex items-center justify-between px-1">
                   <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
@@ -1668,20 +1704,22 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
                       </button>
                     ))
                   ) : (
-                    <div className="rounded-2xl border border-white/90 bg-white/65 px-4 py-6 text-center text-slate-500 shadow-sm">
-                      <p className="text-sm font-bold text-slate-800">No exact page match</p>
-                      <p className="mt-1 text-xs">
-                        This information is not available in ILMALINK data yet.
-                      </p>
-                      <button
-                        type="button"
-                        onClick={handleConnectClick}
-                        className="mt-3 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00C896] to-[#098f91] px-4 text-xs font-extrabold text-white"
-                      >
-                        <MessageCircle size={15} />
-                        Connect ILMALINK
-                      </button>
-                    </div>
+                   <div className="rounded-2xl border border-white/90 bg-white/65 px-4 py-6 text-center text-slate-500 shadow-sm">
+  <p className="text-sm font-bold text-slate-800">
+    Personalised ILMALINK counselling recommended
+  </p>
+  <p className="mt-1 text-xs leading-5">
+    This depends on your marks/rank, budget, country or state preference, eligibility, documents and admission route.
+  </p>
+  <button
+    type="button"
+    onClick={handleConnectClick}
+    className="mt-3 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00C896] to-[#098f91] px-4 text-xs font-extrabold text-white"
+  >
+    <MessageCircle size={15} />
+    Connect ILMALINK Expert
+  </button>
+</div>
                   )}
                 </div>
               </div>
