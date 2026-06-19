@@ -119,30 +119,36 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           </div>
 
           <div className="grid gap-3">
-            {results.map((result) => (
-              <Link
-                key={result.id}
-                href={result.url}
-                className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_14px_34px_rgba(8,27,53,0.06)] transition hover:-translate-y-0.5 hover:border-[#00C896]/50 hover:shadow-[0_18px_44px_rgba(8,27,53,0.10)]"
-              >
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <p className="text-[11px] font-black uppercase tracking-[0.14em] text-[#047857]">
-                      {result.matchedDataType}
-                    </p>
-                    <h3 className="mt-1 text-lg font-black text-[#081B35] group-hover:text-[#047857]">
-                      {result.title}
-                    </h3>
-                    <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
-                      {result.description}
-                    </p>
+            {results.length > 0 ? (
+              results.map((result) => (
+                <Link
+                  key={result.id}
+                  href={result.url}
+                  className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_14px_34px_rgba(8,27,53,0.06)] transition hover:-translate-y-0.5 hover:border-[#00C896]/50 hover:shadow-[0_18px_44px_rgba(8,27,53,0.10)]"
+                >
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <p className="text-[11px] font-black uppercase tracking-[0.14em] text-[#047857]">
+                        {result.matchedDataType}
+                      </p>
+                      <h3 className="mt-1 text-lg font-black text-[#081B35] group-hover:text-[#047857]">
+                        {result.title}
+                      </h3>
+                      <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
+                        {result.description}
+                      </p>
+                    </div>
+                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-black text-slate-600">
+                      Open <ArrowRight size={13} />
+                    </span>
                   </div>
-                  <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-black text-slate-600">
-                    Open <ArrowRight size={13} />
-                  </span>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))
+            ) : (
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 text-sm font-semibold text-slate-600 shadow-[0_14px_34px_rgba(8,27,53,0.06)]">
+                This information is not available in ILMALINK data yet.
+              </div>
+            )}
           </div>
         </div>
       </section>

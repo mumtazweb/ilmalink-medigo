@@ -21,6 +21,13 @@ import {
   getMBBSIndiaCollegeHref,
   getMBBSIndiaStateHref,
 } from "@/app/data/exploreLinks";
+import {
+  buildInternalSearchQueryProfile,
+  classifyInternalSearchRecord,
+  getInternalSearchRankingBoost,
+  passesInternalSearchRegionFilter,
+  type InternalSearchQueryProfile,
+} from "@/lib/internalSearchRanking";
 
 export type SearchConfidence = "high" | "medium" | "low";
 
@@ -35,6 +42,7 @@ export type SiteQuestionIntent =
   | "accreditation-status"
   | "fmge-data"
   | "nmc-fmgl-rules"
+  | "scholarship-loan"
   | "official-advisory"
   | "general-counselling";
 
@@ -512,6 +520,7 @@ export function detectSiteQuestionIntent(
   query: string
 ): SiteQuestionIntent {
   const text = normalizeSearchQueryWithCorrections(query);
+  const profile = buildInternalSearchQueryProfile(query);
   const hasNumericValue = /\b\d{2,7}\b/.test(text);
 
   if (
@@ -607,6 +616,19 @@ export function detectSiteQuestionIntent(
     return "mbbs-india-state-counselling";
   }
 
+  if (profile.intents.scholarship) {
+    return "scholarship-loan";
+  }
+
+  if (
+    profile.regionIntent === "india" &&
+    (profile.intents.college ||
+      profile.intents.course ||
+      text.includes("mbbs"))
+  ) {
+    return "mbbs-india-college-search";
+  }
+
   if (
     (text.includes("best") ||
       text.includes("recommend") ||
@@ -691,6 +713,37 @@ function buildBaseRecords() {
       },
       "Page",
       "ILMALINK MBBS India dataset"
+    ),
+    createRecord(
+      {
+        id: "ask-neet-rank-predictor",
+        title: "NEET Rank Predictor and MBBS India College Options",
+        description:
+          "Convert NEET marks into an estimated rank range, then compare with previous-year counselling cutoff ranks for MBBS India colleges.",
+        url: "/?rank-predictor=open",
+        category: "MBBS India",
+        group: "Pages",
+        type: "page",
+        tags: [
+          "NEET rank predictor",
+          "marks to rank",
+          "MBBS India college predictor",
+          "NEET counselling",
+          "closing rank",
+          "cutoff",
+        ],
+        content:
+          "NEET marks score rank predictor MBBS India college options government private medical college counselling cutoff closing rank category quota state domicile AIQ MCC",
+        priority: 125,
+      },
+      "Page",
+      "ILMALINK NEET rank predictor",
+      {
+        data: {
+          kind: "rank-predictor",
+          country: "India",
+        },
+      }
     ),
     ...navbarCountryDestinations.map((destination) =>
       createRecord(
@@ -1262,9 +1315,16 @@ function scoreRecord(
   record: SiteSearchRecord,
   normalizedQuery: string,
   queryTerms: string[],
-  intent: SiteQuestionIntent
+  intent: SiteQuestionIntent,
+  profile: InternalSearchQueryProfile
 ) {
   const searchableText = getSearchableText(record);
+  const classification = classifyInternalSearchRecord(record);
+
+  if (!passesInternalSearchRegionFilter(profile, classification)) {
+    return 0;
+  }
+
   const title = normalizeSiteSearchText(record.title);
   const description = normalizeSiteSearchText(record.description);
   const tags = normalizeSiteSearchText(record.tags.join(" "));
@@ -1283,7 +1343,15 @@ function scoreRecord(
     return 0;
   }
 
-  let score = record.priority + matchedTerms.length * 18;
+  let score =
+    record.priority +
+    matchedTerms.length * 18 +
+    getInternalSearchRankingBoost(
+      profile,
+      classification,
+      record,
+      searchableText
+    );
 
   if (title === normalizedQuery) score += 520;
   if (title.includes(normalizedQuery)) score += 220;
@@ -1344,6 +1412,10 @@ function scoreRecord(
     record.data?.kind === "mbbs-india-college"
   ) {
     score += 320;
+
+    if (record.data.counselling2025) {
+      score += 260;
+    }
   }
 
   if (
@@ -1457,6 +1529,7 @@ export function searchInternalSiteData(
   } = {}
 ): SiteDataSearchResponse {
   const normalizedQuery = normalizeSearchQueryWithCorrections(query);
+  const profile = buildInternalSearchQueryProfile(query);
   const queryTerms = getImportantQueryTerms(query);
   const limit = options.limit ?? 12;
   const intent = detectSiteQuestionIntent(query);
@@ -1465,7 +1538,7 @@ export function searchInternalSiteData(
     .map((record) => ({
       ...record,
       score: normalizedQuery
-        ? scoreRecord(record, normalizedQuery, queryTerms, intent)
+        ? scoreRecord(record, normalizedQuery, queryTerms, intent, profile)
         : record.priority,
     }))
     .filter((record) => record.score > 0)

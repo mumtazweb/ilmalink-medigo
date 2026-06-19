@@ -26,6 +26,13 @@ import { kyrgyzstanUniversities } from "../data/kyrgyzstanUniversities";
 import { georgiaUniversities } from "../data/georgiaUniversities";
 import { getMBBSIndiaCollegeHref, getMBBSIndiaStateHref } from "../data/exploreLinks";
 import { predictNeetRankRangeFromMarks } from "@/lib/neetRankPredictor";
+import {
+  buildInternalSearchQueryProfile,
+  classifyInternalSearchRecord,
+  getInternalSearchRankingBoost,
+  passesInternalSearchRegionFilter,
+  type InternalSearchRecordClassification,
+} from "@/lib/internalSearchRanking";
 
 type EnhancedSearchEntry = GlobalSearchEntry & {
   country?: string;
@@ -55,7 +62,7 @@ type SearchResult = EnhancedSearchEntry & {
 
 type PreparedSearchEntry = {
   entry: EnhancedSearchEntry;
-  region: ReturnType<typeof detectEntryRegion>;
+  classification: InternalSearchRecordClassification;
   title: string;
   description: string;
   category: string;
@@ -632,16 +639,20 @@ const georgiaUniversitySearchEntries: GlobalSearchEntry[] = georgiaUniversities.
   };
 });
 
-const siteSearchIndex: EnhancedSearchEntry[] = [
-  neetRankPredictorSearchEntry,
-  mbbsIndiaDirectorySearchEntry,
-  ...navbarDropdownSearchEntries,
-  ...kyrgyzstanUniversitySearchEntries,
-  ...georgiaUniversitySearchEntries,
-  ...mbbsIndiaStateSearchEntries,
-  ...mbbsIndiaCollegeSearchEntries,
-  ...globalSearchIndex,
-];
+const siteSearchIndex: EnhancedSearchEntry[] = Array.from(
+  new Map(
+    [
+      neetRankPredictorSearchEntry,
+      mbbsIndiaDirectorySearchEntry,
+      ...navbarDropdownSearchEntries,
+      ...kyrgyzstanUniversitySearchEntries,
+      ...georgiaUniversitySearchEntries,
+      ...mbbsIndiaStateSearchEntries,
+      ...mbbsIndiaCollegeSearchEntries,
+      ...globalSearchIndex,
+    ].map((entry) => [`${entry.id}|${entry.url}`, entry])
+  ).values()
+);
 
 const noiseSearchTerms = new Set([
   "a",
@@ -672,77 +683,6 @@ const noiseSearchTerms = new Set([
   "with",
 ]);
 
-const indianRegionAliases: Array<[string, string[]]> = [
-  ["Andhra Pradesh", ["andhra pradesh"]],
-  ["Arunachal Pradesh", ["arunachal pradesh"]],
-  ["Assam", ["assam", "guwahati"]],
-  ["Bihar", ["bihar", "patna"]],
-  ["Chhattisgarh", ["chhattisgarh", "chattisgarh"]],
-  ["Goa", ["goa"]],
-  ["Gujarat", ["gujarat", "ahmedabad"]],
-  ["Haryana", ["haryana"]],
-  ["Himachal Pradesh", ["himachal pradesh"]],
-  ["Jharkhand", ["jharkhand", "ranchi"]],
-  ["Karnataka", ["karnataka", "bengaluru", "bangalore", "mangalore"]],
-  ["Kerala", ["kerala", "kochi", "thiruvananthapuram"]],
-  ["Madhya Pradesh", ["madhya pradesh", "bhopal", "indore"]],
-  ["Maharashtra", ["maharashtra", "mumbai", "pune", "nagpur"]],
-  ["Manipur", ["manipur"]],
-  ["Meghalaya", ["meghalaya"]],
-  ["Mizoram", ["mizoram"]],
-  ["Nagaland", ["nagaland"]],
-  ["Odisha", ["odisha", "orissa", "bhubaneswar"]],
-  ["Punjab", ["punjab"]],
-  ["Rajasthan", ["rajasthan", "jaipur"]],
-  ["Sikkim", ["sikkim"]],
-  ["Tamil Nadu", ["tamil nadu", "chennai"]],
-  ["Telangana", ["telangana", "hyderabad"]],
-  ["Tripura", ["tripura"]],
-  ["Uttar Pradesh", ["uttar pradesh", "lucknow", "noida"]],
-  ["Uttarakhand", ["uttarakhand", "uttaranchal"]],
-  ["West Bengal", ["west bengal", "bengal", "kolkata", "calcutta", "wbjee"]],
-  ["Delhi", ["delhi", "new delhi", "ncr"]],
-  ["Chandigarh", ["chandigarh"]],
-  ["Jammu and Kashmir", ["jammu and kashmir", "jammu", "kashmir"]],
-  ["Ladakh", ["ladakh"]],
-  ["Puducherry", ["puducherry", "pondicherry"]],
-];
-
-const abroadCountryAliases: Array<[string, string[]]> = [
-  ["Kyrgyzstan", ["kyrgyzstan", "kirgizstan"]],
-  ["Georgia", ["georgia", "tbilisi"]],
-  ["Bangladesh", ["bangladesh", "dgme", "bmdc"]],
-  ["Nepal", ["nepal"]],
-  ["Russia", ["russia", "russian federation"]],
-  ["Kazakhstan", ["kazakhstan"]],
-  ["Uzbekistan", ["uzbekistan"]],
-  ["Tajikistan", ["tajikistan"]],
-  ["Malaysia", ["malaysia"]],
-  ["Egypt", ["egypt"]],
-  ["Saudi Arabia", ["saudi arabia"]],
-  ["Qatar", ["qatar"]],
-  ["UAE", ["uae", "united arab emirates", "dubai", "abu dhabi"]],
-  ["Iran", ["iran"]],
-  ["USA", ["usa", "united states", "america"]],
-  ["Canada", ["canada"]],
-  ["Australia", ["australia"]],
-  ["New Zealand", ["new zealand"]],
-  ["UK", ["uk", "united kingdom", "england"]],
-  ["Barbados", ["barbados"]],
-  ["Singapore", ["singapore"]],
-  ["Vietnam", ["vietnam"]],
-  ["Germany", ["germany"]],
-];
-
-const exactPhraseIncludes = (text: string, phrase: string) => {
-  const normalizedPhrase = normalizeQueryForSearch(phrase);
-  if (!normalizedPhrase) return false;
-  return ` ${text} `.includes(` ${normalizedPhrase} `);
-};
-
-const hasAnyPhrase = (text: string, phrases: string[]) =>
-  phrases.some((phrase) => exactPhraseIncludes(text, phrase));
-
 const normalizeSearchText = (value: string) =>
   normalizeQueryForSearch(value)
     .replace(/[^a-z0-9%]+/g, " ")
@@ -760,96 +700,6 @@ const tokenizeIndexedText = (value: string) => {
   return normalized ? normalized.split(" ") : [];
 };
 
-const getEntryText = (entry: EnhancedSearchEntry) =>
-  normalizeIndexedText(
-    [
-      entry.title,
-      entry.description,
-      entry.url,
-      entry.category,
-      entry.group,
-      entry.type,
-      ...(entry.tags ?? []),
-      entry.content,
-      entry.country,
-      entry.state,
-      entry.city,
-      entry.course,
-      entry.regionType,
-      ...(entry.searchIntent ?? []),
-      entry.collegeName,
-      entry.institutionName,
-      ...(entry.entityNames ?? []),
-      ...(entry.aliases ?? []),
-      ...(entry.feeData ?? []),
-      ...(entry.numericalData ?? []),
-      ...(entry.counsellingIndex ?? []),
-      entry.exam,
-      entry.quota,
-      entry.categoryType,
-      entry.budgetLevel,
-    ]
-      .filter(Boolean)
-      .join(" ")
-  );
-
-const detectIndianStateFromText = (text: string) => {
-  for (const [state, aliases] of indianRegionAliases) {
-    if (hasAnyPhrase(text, aliases)) return state;
-  }
-
-  return "";
-};
-
-const detectAbroadCountryFromText = (text: string) => {
-  for (const [country, aliases] of abroadCountryAliases) {
-    if (hasAnyPhrase(text, aliases)) return country;
-  }
-
-  return "";
-};
-
-const detectEntryRegion = (entry: EnhancedSearchEntry) => {
-  const entryText = getEntryText(entry);
-  const url = normalize(entry.url);
-
-  const state = entry.state || detectIndianStateFromText(entryText);
-  const foreignCountry =
-    entry.country && entry.country !== "India"
-      ? entry.country
-      : detectAbroadCountryFromText(entryText);
-
-  const isIndiaByUrl =
-    url.startsWith("/mbbs-india") ||
-    normalize(entry.category).includes("mbbs india");
-
-  const isAbroadByUrl =
-    url.startsWith("/mbbs-abroad") ||
-    normalize(entry.category).includes("universities") ||
-    normalize(entry.category).includes("mbbs abroad");
-
-  if (entry.country === "India" || state || isIndiaByUrl) {
-    return {
-      country: "India",
-      state,
-      regionType: "india" as const,
-    };
-  }
-
-  if (foreignCountry || isAbroadByUrl) {
-    return {
-      country: foreignCountry || entry.country || "",
-      state: "",
-      regionType: "abroad" as const,
-    };
-  }
-
-  return {
-    country: entry.country || "",
-    state: "",
-    regionType: entry.regionType || ("global" as const),
-  };
-};
 type PredictedRankRange = {
   source: "direct-rank" | "marks-prediction";
   marks?: number;
@@ -964,45 +814,26 @@ const rankMatchScore = (
 
   return -100;
 };
-const analyseSearchQuery = (rawQuery: string, normalizedQuery: string, terms: string[]) => {
+const analyseSearchQuery = (
+  rawQuery: string,
+  normalizedQuery: string,
+  terms: string[]
+) => {
   const queryText = normalizeSearchText(`${rawQuery} ${normalizedQuery} ${terms.join(" ")}`);
-  const state = detectIndianStateFromText(queryText);
-  const abroadCountry = detectAbroadCountryFromText(queryText);
-
-  const hasAbroadWord = hasAnyPhrase(queryText, [
-    "abroad",
-    "foreign",
-    "overseas",
-    "outside india",
-    "mbbs abroad",
-    "study abroad",
-  ]);
-
-  const hasIndiaWord = hasAnyPhrase(queryText, [
-    "india",
-    "neet",
-    "mcc",
-    "all india quota",
-    "state quota",
-    "government medical college",
-    "private medical college",
-    "deemed university",
-    "management quota",
-    "wbjee",
-  ]);
+  const internalProfile = buildInternalSearchQueryProfile(rawQuery);
 
   const intents = {
-    fees: hasAnyPhrase(queryText, ["fee", "fees", "fee structure", "cost", "budget", "low budget", "affordable", "tuition"]),
-    eligibility: hasAnyPhrase(queryText, ["eligibility", "eligible", "marks", "gpa", "percentage", "pcb", "neet qualification"]),
-    counselling: hasAnyPhrase(queryText, ["counselling", "choice filling", "mcc", "aiq", "all india quota", "state quota", "seat matrix", "closing rank", "cutoff", "cut off", "wbjee", "gmr", "pmr"]),
-    fmge: hasAnyPhrase(queryText, ["fmge", "nmc", "fmgl", "wdoms", "pass rate", "appeared", "passed"]),
-    college: hasAnyPhrase(queryText, ["college", "colleges", "university", "universities", "institute", "academy", "medical college"]),
-    scholarship: hasAnyPhrase(queryText, ["scholarship", "loan", "education loan", "financial aid"]),
-    documents: hasAnyPhrase(queryText, ["document", "documents", "passport", "scorecard", "admit card"]),
+    fees: internalProfile.intents.fees,
+    eligibility: internalProfile.intents.eligibility,
+    counselling: internalProfile.intents.counselling,
+    fmge: internalProfile.intents.fmgeNmc,
+    college: internalProfile.intents.college,
+    scholarship: internalProfile.intents.scholarship,
+    documents: internalProfile.intents.documents,
   };
 
-  const numbers = queryText.match(/\b\d[\d,.]*(?:%|k|lakh|lakhs|cr|crore|usd|inr|rank|marks|score|seats|gpa)?\b/g) ?? [];
-const rankRange = getQueryRankRange(queryText);
+  const numbers = internalProfile.numbers.map((number) => number.raw);
+  const rankRange = getQueryRankRange(queryText);
   const meaningfulTerms = terms.filter(
     (term) =>
       term.length > 1 &&
@@ -1010,20 +841,18 @@ const rankRange = getQueryRankRange(queryText);
       !["mbbs", "medical", "study"].includes(term)
   );
 
-  const isIndiaIntent = Boolean(state || (!abroadCountry && hasIndiaWord && !hasAbroadWord));
-  const isAbroadIntent = Boolean(abroadCountry || hasAbroadWord);
-
   return {
     queryText,
-    state,
-    abroadCountry,
-    isIndiaIntent,
-    isAbroadIntent,
+    state: internalProfile.state ?? "",
+    abroadCountry: internalProfile.country ?? "",
+    isIndiaIntent: internalProfile.regionIntent === "india",
+    isAbroadIntent: internalProfile.regionIntent === "abroad",
     intents,
     numbers,
     rankRange,
     meaningfulTerms,
-    hasComparisonIntent: hasAnyPhrase(queryText, ["compare", "comparison", "vs", "versus", "better than"]),
+    hasComparisonIntent: internalProfile.comparison,
+    internalProfile,
   };
 };
 
@@ -1067,7 +896,7 @@ const prepareSearchEntry = (entry: EnhancedSearchEntry): PreparedSearchEntry => 
 
   return {
     entry,
-    region: detectEntryRegion(entry),
+    classification: classifyInternalSearchRecord(entry),
     title,
     description,
     category,
@@ -1105,7 +934,7 @@ const scoreResult = (
 ) => {
   const {
     entry,
-    region: entryRegion,
+    classification: entryRegion,
     title,
     description,
     category,
@@ -1120,6 +949,15 @@ const scoreResult = (
     categoryTokens,
     metadataTokens,
   } = preparedEntry;
+
+  if (
+    !passesInternalSearchRegionFilter(
+      queryProfile.internalProfile,
+      entryRegion
+    )
+  ) {
+    return 0;
+  }
 
   if (queryProfile.state && entryRegion.regionType === "abroad" && !queryProfile.hasComparisonIntent) {
     return 0;
@@ -1153,6 +991,12 @@ const scoreResult = (
   if (usefulTerms.length > 0 && matchedUsefulTerms.length === 0) return 0;
 
   let score = Number(entry.priority || 0);
+  score += getInternalSearchRankingBoost(
+    queryProfile.internalProfile,
+    entryRegion,
+    entry,
+    searchableText
+  );
 
   if (title === normalizedQuery) score += 700;
   if (title.includes(normalizedQuery)) score += 280;
@@ -1358,10 +1202,10 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
       if (controller.signal.aborted) return;
       setAskAnswer(data);
 
-      if (data.notFound || data.shouldAutoOpenCounselling) {
+      if (data.shouldAutoOpenCounselling) {
         window.setTimeout(() => {
           openCounselling();
-        }, data.notFound ? 250 : 1_400);
+        }, 1_400);
       }
     } catch (error) {
       if (
@@ -1827,7 +1671,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
                     <div className="rounded-2xl border border-white/90 bg-white/65 px-4 py-6 text-center text-slate-500 shadow-sm">
                       <p className="text-sm font-bold text-slate-800">No exact page match</p>
                       <p className="mt-1 text-xs">
-                        Ask the question to get an answer or connect with counselling.
+                        This information is not available in ILMALINK data yet.
                       </p>
                       <button
                         type="button"

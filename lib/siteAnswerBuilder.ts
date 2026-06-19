@@ -46,7 +46,7 @@ type BuiltAnswer = {
 };
 
 const fallbackAnswer =
-  "This question can be answered better by our experts. Connect ILMALINK for a personalised reply, and you can ask any other MBBS question there too.";
+  "This information is not available in ILMALINK data yet.";
 
 function asNumber(value: unknown) {
   return typeof value === "number" && Number.isFinite(value)
@@ -456,6 +456,36 @@ function buildFmgeCollegeVolumeAnswer() {
 
 function buildCutoffAnswer(search: SiteDataSearchResponse): BuiltAnswer {
   const resolvedCollege = resolveIndiaCollege(search.query);
+  const numericValue = getFirstNumericQueryValue(search.query);
+  const normalizedQuery = normalizeSiteSearchText(search.query);
+  const isGenericRankOrMarksQuery =
+    !resolvedCollege &&
+    numericValue !== null &&
+    (normalizedQuery.includes("neet") ||
+      normalizedQuery.includes("rank") ||
+      normalizedQuery.includes("mark") ||
+      normalizedQuery.includes("score"));
+
+  if (isGenericRankOrMarksQuery) {
+    const rankPredictor = getTopByKind(search, "rank-predictor");
+    const directory = search.matchedItems.find(
+      (item) => item.url === "/mbbs-india/"
+    );
+    const suggestedLinks = [rankPredictor, directory]
+      .filter((item): item is SiteSearchMatch => Boolean(item))
+      .map((item) => toDirectLink(item));
+
+    return {
+      answer: `For ${
+        normalizedQuery.includes("rank")
+          ? `rank ${formatNumber(numericValue)}`
+          : `${numericValue} marks`
+      }, ILMALINK does not select one college without category, quota, domicile and counselling round. Use the NEET Rank Predictor and compare the India counselling/cutoff results listed below.`,
+      suggestedLinks,
+      shouldAutoOpenCounselling: false,
+    };
+  }
+
   const matchedCollege = getTopByKind(search, "mbbs-india-college");
   const collegeName = resolvedCollege?.collegeName ?? matchedCollege?.title;
 
@@ -493,8 +523,6 @@ function buildCutoffAnswer(search: SiteDataSearchResponse): BuiltAnswer {
       cutoff.categories
     );
     const requestedRound = getRequestedRound(search.query);
-    const numericValue = getFirstNumericQueryValue(search.query);
-    const normalizedQuery = normalizeSiteSearchText(search.query);
     const isRankQuery =
       normalizedQuery.includes("rank") ||
       (numericValue !== null && numericValue > 720);
@@ -1069,7 +1097,7 @@ export function buildSiteAnswerFromSearch(
       matchedItems: search.matchedItems,
       suggestedLinks: search.suggestedLinks,
       shouldShowConnectCTA: true,
-      shouldAutoOpenCounselling: true,
+      shouldAutoOpenCounselling: false,
       notFound: true,
     };
   }
