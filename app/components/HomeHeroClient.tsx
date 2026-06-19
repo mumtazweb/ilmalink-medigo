@@ -691,6 +691,23 @@ export default function HomeHeroClient() {
 
     return () => window.removeEventListener(OPEN_FMGE_EVENT, openExplorer);
   }, []);
+  useEffect(() => {
+  if (typeof window === "undefined") return;
+
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get("rank-predictor") === "open") {
+    setShowRankPredictor(true);
+
+    params.delete("rank-predictor");
+
+    const nextUrl = params.toString()
+      ? `${window.location.pathname}?${params.toString()}`
+      : window.location.pathname;
+
+    window.history.replaceState({}, "", nextUrl);
+  }
+}, []);
 
   return (
     <>

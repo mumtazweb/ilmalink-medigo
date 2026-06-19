@@ -18,8 +18,31 @@ import { navbarCountryDestinations } from "../data/navbarDestinations";
 import { kyrgyzstanUniversities } from "../data/kyrgyzstanUniversities";
 import { georgiaUniversities } from "../data/georgiaUniversities";
 import { getMBBSIndiaCollegeHref, getMBBSIndiaStateHref } from "../data/exploreLinks";
+import { predictNeetRankRangeFromMarks } from "@/lib/neetRankPredictor";
 
-type SearchResult = GlobalSearchEntry & {
+type EnhancedSearchEntry = GlobalSearchEntry & {
+  country?: string;
+  state?: string;
+  city?: string;
+  course?: string;
+  regionType?: "india" | "abroad" | "global";
+  searchIntent?: string[];
+  collegeName?: string;
+  institutionName?: string;
+  entityNames?: string[];
+  aliases?: string[];
+  feeData?: string[];
+  numericalData?: string[];
+  counsellingIndex?: string[];
+  exam?: string;
+  quota?: string;
+  categoryType?: string;
+  budgetLevel?: "low" | "medium" | "high";
+  dataSource?: "page" | "blog" | "fmge" | "manual" | "database";
+  canonicalKey?: string;
+};
+
+type SearchResult = EnhancedSearchEntry & {
   score: number;
 };
 
@@ -85,6 +108,45 @@ const searchSpellingAliases: Record<string, string> = {
   unversity: "university",
   uzbakistan: "uzbekistan",
   uzbekstan: "uzbekistan",
+    clg: "college",
+  cllge: "college",
+  cllege: "college",
+  medicle: "medical",
+  medicl: "medical",
+  universiti: "university",
+  univeristy: "university",
+  univesity: "university",
+  westbengal: "west bengal",
+  bangal: "bengal",
+  bengol: "bengal",
+  kalkata: "kolkata",
+  kalkutta: "kolkata",
+  calcutta: "kolkata",
+  maharastra: "maharashtra",
+  maharashta: "maharashtra",
+  karnatka: "karnataka",
+  tamilnadu: "tamil nadu",
+  telengana: "telangana",
+  uttarpradesh: "uttar pradesh",
+  madhyapradesh: "madhya pradesh",
+  andhrapradesh: "andhra pradesh",
+  chattisgarh: "chhattisgarh",
+  odissa: "odisha",
+  rajastan: "rajasthan",
+  gujrat: "gujarat",
+  uttrakhand: "uttarakhand",
+  bangaldesh: "bangladesh",
+  bangladeshmbbs: "bangladesh mbbs",
+  geogia: "georgia",
+  gerogia: "georgia",
+  russiaa: "russia",
+  kazakstan: "kazakhstan",
+  tajikstan: "tajikistan",
+  saudiarabia: "saudi arabia",
+  counsiling: "counselling",
+  councelling: "counselling",
+  eligiblity: "eligibility",
+  eligibilty: "eligibility",
 };
 const searchCorrectionVocabulary = [
   "abroad",
@@ -200,7 +262,7 @@ const slugifySearchId = (value: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-const mbbsIndiaDirectorySearchEntry: GlobalSearchEntry = {
+const mbbsIndiaDirectorySearchEntry: EnhancedSearchEntry = {
   id: "mbbs-india-directory",
   title: "Study MBBS in India - Full NMC Medical College List",
   description: "Open the complete state-wise MBBS India directory with government, private, seat intake, and college details.",
@@ -212,6 +274,56 @@ const mbbsIndiaDirectorySearchEntry: GlobalSearchEntry = {
   content:
     "Study MBBS in India full NMC medical college list state-wise government private colleges seats fees counselling 2025 prior-year data 5.5 year course 4.5 year academic study 1 year internship NEET 180 questions 720 marks Physics Chemistry Biology",
   priority: 100,
+  country: "India",
+  regionType: "india",
+  course: "MBBS",
+  searchIntent: ["college-search", "counselling", "rank-predictor"],
+  counsellingIndex: [
+    "neet",
+    "rank predictor",
+    "closing rank",
+    "cutoff",
+    "aiq",
+    "mcc",
+    "state quota",
+  ],
+  dataSource: "manual",
+};
+const neetRankPredictorSearchEntry: EnhancedSearchEntry = {
+  id: "neet-rank-predictor-search-entry",
+  title: "NEET Rank Predictor and MBBS India College Options",
+  description:
+    "Convert NEET marks into an estimated rank range, then compare with previous-year counselling cutoff ranks for MBBS India colleges.",
+  url: "/?rank-predictor=open",
+  category: "MBBS India",
+  group: "Pages",
+  type: "page",
+  tags: [
+    "NEET rank predictor",
+    "marks to rank",
+    "MBBS India college predictor",
+    "NEET counselling",
+    "closing rank",
+    "government medical college",
+    "private medical college",
+  ],
+  content:
+    "NEET marks score rank predictor MBBS India college options government medical college private medical college previous year counselling cutoff closing rank category quota state domicile AIQ MCC state quota",
+  priority: 125,
+  country: "India",
+  regionType: "india",
+  course: "MBBS",
+  searchIntent: ["rank-predictor", "counselling", "college-search"],
+  counsellingIndex: [
+    "neet",
+    "rank predictor",
+    "closing rank",
+    "cutoff",
+    "aiq",
+    "mcc",
+    "state quota",
+  ],
+  dataSource: "manual",
 };
 
 const navbarDropdownSearchEntries: GlobalSearchEntry[] = navbarCountryDestinations.map((destination) => ({
@@ -494,7 +606,8 @@ const georgiaUniversitySearchEntries: GlobalSearchEntry[] = georgiaUniversities.
   };
 });
 
-const siteSearchIndex: GlobalSearchEntry[] = [
+const siteSearchIndex: EnhancedSearchEntry[] = [
+  neetRankPredictorSearchEntry,
   mbbsIndiaDirectorySearchEntry,
   ...navbarDropdownSearchEntries,
   ...kyrgyzstanUniversitySearchEntries,
@@ -504,48 +617,539 @@ const siteSearchIndex: GlobalSearchEntry[] = [
   ...globalSearchIndex,
 ];
 
-const textIncludesAllTerms = (text: string, terms: string[]) =>
-  terms.every((term) => text.includes(term));
+const noiseSearchTerms = new Set([
+  "a",
+  "an",
+  "and",
+  "are",
+  "as",
+  "at",
+  "best",
+  "better",
+  "for",
+  "from",
+  "good",
+  "in",
+  "is",
+  "me",
+  "my",
+  "near",
+  "of",
+  "please",
+  "show",
+  "tell",
+  "the",
+  "to",
+  "top",
+  "what",
+  "which",
+  "with",
+]);
 
-const tokenScore = (tokens: string[], term: string, startsWithScore: number, includesScore: number) => {
-  if (tokens.some((token) => token === term)) return startsWithScore + includesScore;
+const indianRegionAliases: Array<[string, string[]]> = [
+  ["Andhra Pradesh", ["andhra pradesh"]],
+  ["Arunachal Pradesh", ["arunachal pradesh"]],
+  ["Assam", ["assam", "guwahati"]],
+  ["Bihar", ["bihar", "patna"]],
+  ["Chhattisgarh", ["chhattisgarh", "chattisgarh"]],
+  ["Goa", ["goa"]],
+  ["Gujarat", ["gujarat", "ahmedabad"]],
+  ["Haryana", ["haryana"]],
+  ["Himachal Pradesh", ["himachal pradesh"]],
+  ["Jharkhand", ["jharkhand", "ranchi"]],
+  ["Karnataka", ["karnataka", "bengaluru", "bangalore", "mangalore"]],
+  ["Kerala", ["kerala", "kochi", "thiruvananthapuram"]],
+  ["Madhya Pradesh", ["madhya pradesh", "bhopal", "indore"]],
+  ["Maharashtra", ["maharashtra", "mumbai", "pune", "nagpur"]],
+  ["Manipur", ["manipur"]],
+  ["Meghalaya", ["meghalaya"]],
+  ["Mizoram", ["mizoram"]],
+  ["Nagaland", ["nagaland"]],
+  ["Odisha", ["odisha", "orissa", "bhubaneswar"]],
+  ["Punjab", ["punjab"]],
+  ["Rajasthan", ["rajasthan", "jaipur"]],
+  ["Sikkim", ["sikkim"]],
+  ["Tamil Nadu", ["tamil nadu", "chennai"]],
+  ["Telangana", ["telangana", "hyderabad"]],
+  ["Tripura", ["tripura"]],
+  ["Uttar Pradesh", ["uttar pradesh", "lucknow", "noida"]],
+  ["Uttarakhand", ["uttarakhand", "uttaranchal"]],
+  ["West Bengal", ["west bengal", "bengal", "kolkata", "calcutta", "wbjee"]],
+  ["Delhi", ["delhi", "new delhi", "ncr"]],
+  ["Chandigarh", ["chandigarh"]],
+  ["Jammu and Kashmir", ["jammu and kashmir", "jammu", "kashmir"]],
+  ["Ladakh", ["ladakh"]],
+  ["Puducherry", ["puducherry", "pondicherry"]],
+];
+
+const abroadCountryAliases: Array<[string, string[]]> = [
+  ["Kyrgyzstan", ["kyrgyzstan", "kirgizstan"]],
+  ["Georgia", ["georgia", "tbilisi"]],
+  ["Bangladesh", ["bangladesh", "dgme", "bmdc"]],
+  ["Nepal", ["nepal"]],
+  ["Russia", ["russia", "russian federation"]],
+  ["Kazakhstan", ["kazakhstan"]],
+  ["Uzbekistan", ["uzbekistan"]],
+  ["Tajikistan", ["tajikistan"]],
+  ["Malaysia", ["malaysia"]],
+  ["Egypt", ["egypt"]],
+  ["Saudi Arabia", ["saudi arabia"]],
+  ["Qatar", ["qatar"]],
+  ["UAE", ["uae", "united arab emirates", "dubai", "abu dhabi"]],
+  ["Iran", ["iran"]],
+  ["USA", ["usa", "united states", "america"]],
+  ["Canada", ["canada"]],
+  ["Australia", ["australia"]],
+  ["New Zealand", ["new zealand"]],
+  ["UK", ["uk", "united kingdom", "england"]],
+  ["Barbados", ["barbados"]],
+  ["Singapore", ["singapore"]],
+  ["Vietnam", ["vietnam"]],
+  ["Germany", ["germany"]],
+];
+
+const exactPhraseIncludes = (text: string, phrase: string) => {
+  const normalizedPhrase = normalizeQueryForSearch(phrase);
+  if (!normalizedPhrase) return false;
+  return ` ${text} `.includes(` ${normalizedPhrase} `);
+};
+
+const hasAnyPhrase = (text: string, phrases: string[]) =>
+  phrases.some((phrase) => exactPhraseIncludes(text, phrase));
+
+const normalizeSearchText = (value: string) =>
+  normalizeQueryForSearch(value)
+    .replace(/[^a-z0-9%]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const getEntryText = (entry: EnhancedSearchEntry) =>
+  normalizeSearchText(
+    [
+      entry.title,
+      entry.description,
+      entry.url,
+      entry.category,
+      entry.group,
+      entry.type,
+      ...(entry.tags ?? []),
+      entry.content,
+      entry.country,
+      entry.state,
+      entry.city,
+      entry.course,
+      entry.regionType,
+      ...(entry.searchIntent ?? []),
+      entry.collegeName,
+      entry.institutionName,
+      ...(entry.entityNames ?? []),
+      ...(entry.aliases ?? []),
+      ...(entry.feeData ?? []),
+      ...(entry.numericalData ?? []),
+      ...(entry.counsellingIndex ?? []),
+      entry.exam,
+      entry.quota,
+      entry.categoryType,
+      entry.budgetLevel,
+    ]
+      .filter(Boolean)
+      .join(" ")
+  );
+
+const detectIndianStateFromText = (text: string) => {
+  for (const [state, aliases] of indianRegionAliases) {
+    if (hasAnyPhrase(text, aliases)) return state;
+  }
+
+  return "";
+};
+
+const detectAbroadCountryFromText = (text: string) => {
+  for (const [country, aliases] of abroadCountryAliases) {
+    if (hasAnyPhrase(text, aliases)) return country;
+  }
+
+  return "";
+};
+
+const detectEntryRegion = (entry: EnhancedSearchEntry) => {
+  const entryText = getEntryText(entry);
+  const url = normalize(entry.url);
+
+  const state = entry.state || detectIndianStateFromText(entryText);
+  const foreignCountry =
+    entry.country && entry.country !== "India"
+      ? entry.country
+      : detectAbroadCountryFromText(entryText);
+
+  const isIndiaByUrl =
+    url.startsWith("/mbbs-india") ||
+    normalize(entry.category).includes("mbbs india");
+
+  const isAbroadByUrl =
+    url.startsWith("/mbbs-abroad") ||
+    normalize(entry.category).includes("universities") ||
+    normalize(entry.category).includes("mbbs abroad");
+
+  if (entry.country === "India" || state || isIndiaByUrl) {
+    return {
+      country: "India",
+      state,
+      regionType: "india" as const,
+    };
+  }
+
+  if (foreignCountry || isAbroadByUrl) {
+    return {
+      country: foreignCountry || entry.country || "",
+      state: "",
+      regionType: "abroad" as const,
+    };
+  }
+
+  return {
+    country: entry.country || "",
+    state: "",
+    regionType: entry.regionType || ("global" as const),
+  };
+};
+type PredictedRankRange = {
+  source: "direct-rank" | "marks-prediction";
+  marks?: number;
+  estimatedRank?: number;
+  minRank: number;
+  maxRank: number;
+  label?: string;
+};
+
+const extractNumberValue = (value: string) => {
+  const clean = value.replace(/,/g, "");
+  const number = Number(clean);
+  return Number.isFinite(number) ? number : null;
+};
+
+const extractDirectNeetRank = (queryText: string) => {
+  const rankMatch =
+    queryText.match(/\brank\s+([0-9][0-9,]*)\b/i) ??
+    queryText.match(/\b([0-9][0-9,]*)\s+rank\b/i);
+
+  if (!rankMatch?.[1]) return null;
+
+  const rank = extractNumberValue(rankMatch[1]);
+  return rank && rank > 0 ? rank : null;
+};
+
+const extractNeetMarks = (queryText: string) => {
+  const hasMarksSignal = /\b(mark|marks|score|scored|neet)\b/i.test(queryText);
+
+  if (!hasMarksSignal) return null;
+
+  const matches = [...queryText.matchAll(/\b([0-9]{2,3})\b/g)]
+    .map((match) => Number(match[1]))
+    .filter((value) => value >= 0 && value <= 720);
+
+  return matches[0] ?? null;
+};
+
+const getQueryRankRange = (queryText: string): PredictedRankRange | null => {
+  const directRank = extractDirectNeetRank(queryText);
+
+  if (directRank) {
+    return {
+      source: "direct-rank",
+      minRank: Math.max(1, Math.floor(directRank * 0.9)),
+      maxRank: Math.ceil(directRank * 1.1),
+      label: `Direct rank query around ${directRank.toLocaleString("en-IN")}`,
+    };
+  }
+
+  const marks = extractNeetMarks(queryText);
+
+  if (marks === null) return null;
+
+  const prediction = predictNeetRankRangeFromMarks(marks);
+
+  if (!prediction) return null;
+
+  return {
+    source: "marks-prediction",
+    marks,
+    estimatedRank: prediction.estimatedRank,
+    minRank: prediction.minRank,
+    maxRank: prediction.maxRank,
+    label: prediction.rankZoneLabel,
+  };
+};
+
+const extractClosingRanksFromEntry = (entry: EnhancedSearchEntry) => {
+  const raw = [entry.description, entry.content, ...(entry.numericalData ?? [])]
+    .filter(Boolean)
+    .join(" ");
+
+  return [...raw.matchAll(/\brank\s+([0-9][0-9,]*)\b/gi)]
+    .map((match) => extractNumberValue(match[1]))
+    .filter((rank): rank is number => Boolean(rank && rank > 0));
+};
+
+const rankMatchScore = (
+  entry: EnhancedSearchEntry,
+  rankRange: PredictedRankRange | null
+) => {
+  if (!rankRange) return 0;
+
+  const text = getEntryText(entry);
+  const ranks = extractClosingRanksFromEntry(entry);
+
+  if (entry.id === "neet-rank-predictor-search-entry") {
+    return 700;
+  }
+
+  if (!/mbbs india|medical college|counselling|closing rank|cutoff|seat matrix|state quota|aiq|mcc/i.test(text)) {
+    return 0;
+  }
+
+  if (!ranks.length) {
+    return /mbbs india|counselling|college predictor|rank predictor/i.test(text)
+      ? 140
+      : 0;
+  }
+
+  const mostOpenClosingRank = Math.max(...ranks);
+  const bestClosingRank = Math.min(...ranks);
+
+  if (mostOpenClosingRank >= rankRange.maxRank) return 360;
+  if (mostOpenClosingRank >= rankRange.minRank) return 250;
+
+  if (bestClosingRank <= rankRange.maxRank && mostOpenClosingRank >= rankRange.minRank) {
+    return 220;
+  }
+
+  if (mostOpenClosingRank >= Math.floor(rankRange.minRank * 0.75)) return 100;
+
+  return -100;
+};
+const analyseSearchQuery = (rawQuery: string, normalizedQuery: string, terms: string[]) => {
+  const queryText = normalizeSearchText(`${rawQuery} ${normalizedQuery} ${terms.join(" ")}`);
+  const state = detectIndianStateFromText(queryText);
+  const abroadCountry = detectAbroadCountryFromText(queryText);
+
+  const hasAbroadWord = hasAnyPhrase(queryText, [
+    "abroad",
+    "foreign",
+    "overseas",
+    "outside india",
+    "mbbs abroad",
+    "study abroad",
+  ]);
+
+  const hasIndiaWord = hasAnyPhrase(queryText, [
+    "india",
+    "neet",
+    "mcc",
+    "all india quota",
+    "state quota",
+    "government medical college",
+    "private medical college",
+    "deemed university",
+    "management quota",
+    "wbjee",
+  ]);
+
+  const intents = {
+    fees: hasAnyPhrase(queryText, ["fee", "fees", "fee structure", "cost", "budget", "low budget", "affordable", "tuition"]),
+    eligibility: hasAnyPhrase(queryText, ["eligibility", "eligible", "marks", "gpa", "percentage", "pcb", "neet qualification"]),
+    counselling: hasAnyPhrase(queryText, ["counselling", "choice filling", "mcc", "aiq", "all india quota", "state quota", "seat matrix", "closing rank", "cutoff", "cut off", "wbjee", "gmr", "pmr"]),
+    fmge: hasAnyPhrase(queryText, ["fmge", "nmc", "fmgl", "wdoms", "pass rate", "appeared", "passed"]),
+    college: hasAnyPhrase(queryText, ["college", "colleges", "university", "universities", "institute", "academy", "medical college"]),
+    scholarship: hasAnyPhrase(queryText, ["scholarship", "loan", "education loan", "financial aid"]),
+    documents: hasAnyPhrase(queryText, ["document", "documents", "passport", "scorecard", "admit card"]),
+  };
+
+  const numbers = queryText.match(/\b\d[\d,.]*(?:%|k|lakh|lakhs|cr|crore|usd|inr|rank|marks|score|seats|gpa)?\b/g) ?? [];
+const rankRange = getQueryRankRange(queryText);
+  const meaningfulTerms = terms.filter(
+    (term) =>
+      term.length > 1 &&
+      !noiseSearchTerms.has(term) &&
+      !["mbbs", "medical", "study"].includes(term)
+  );
+
+  const isIndiaIntent = Boolean(state || (!abroadCountry && hasIndiaWord && !hasAbroadWord));
+  const isAbroadIntent = Boolean(abroadCountry || hasAbroadWord);
+
+  return {
+    queryText,
+    state,
+    abroadCountry,
+    isIndiaIntent,
+    isAbroadIntent,
+    intents,
+    numbers,
+    rankRange,
+    meaningfulTerms,
+    hasComparisonIntent: hasAnyPhrase(queryText, ["compare", "comparison", "vs", "versus", "better than"]),
+  };
+};
+
+const tokenScore = (tokens: string[], term: string, exactScore: number, startsWithScore: number, includesScore: number) => {
+  if (tokens.some((token) => token === term)) return exactScore;
   if (tokens.some((token) => token.startsWith(term))) return startsWithScore;
   if (tokens.some((token) => token.includes(term))) return includesScore;
   return 0;
 };
 
-const scoreResult = (entry: GlobalSearchEntry, normalizedQuery: string, queryTerms: string[]) => {
-  const title = normalize(entry.title);
-  const description = normalize(entry.description);
-  const category = normalize(entry.category);
-  const tags = normalize(entry.tags.join(" "));
-  const content = normalize(entry.content);
-  const url = normalize(entry.url);
-  const searchableText = [title, description, category, tags, content, url].join(" ");
+const scoreResult = (entry: EnhancedSearchEntry, normalizedQuery: string, queryTerms: string[], rawQuery = "") => {
+  const queryProfile = analyseSearchQuery(rawQuery || normalizedQuery, normalizedQuery, queryTerms);
+  const entryRegion = detectEntryRegion(entry);
 
-  if (!textIncludesAllTerms(searchableText, queryTerms)) return 0;
+  if (queryProfile.state && entryRegion.regionType === "abroad" && !queryProfile.hasComparisonIntent) {
+    return 0;
+  }
+
+  if (
+    queryProfile.isIndiaIntent &&
+    !queryProfile.isAbroadIntent &&
+    entryRegion.regionType === "abroad" &&
+    !queryProfile.hasComparisonIntent
+  ) {
+    return 0;
+  }
+
+  if (
+    queryProfile.abroadCountry &&
+    entryRegion.country &&
+    entryRegion.country !== queryProfile.abroadCountry &&
+    !queryProfile.hasComparisonIntent
+  ) {
+    return 0;
+  }
+
+  const title = normalizeSearchText(entry.title);
+  const description = normalizeSearchText(entry.description);
+  const category = normalizeSearchText(entry.category);
+  const tags = normalizeSearchText(entry.tags.join(" "));
+  const content = normalizeSearchText(entry.content);
+  const url = normalizeSearchText(entry.url);
+  const metadataText = normalizeSearchText(
+    [
+      entry.country,
+      entry.state,
+      entry.city,
+      entry.course,
+      entry.regionType,
+      ...(entry.searchIntent ?? []),
+      entry.collegeName,
+      entry.institutionName,
+      ...(entry.entityNames ?? []),
+      ...(entry.aliases ?? []),
+      ...(entry.feeData ?? []),
+      ...(entry.numericalData ?? []),
+      ...(entry.counsellingIndex ?? []),
+      entry.exam,
+      entry.quota,
+      entry.categoryType,
+      entry.budgetLevel,
+    ]
+      .filter(Boolean)
+      .join(" ")
+  );
+
+  const searchableText = [
+    title,
+    description,
+    category,
+    tags,
+    content,
+    url,
+    metadataText,
+  ].join(" ");
+
+  const usefulTerms = queryProfile.meaningfulTerms.length
+    ? queryProfile.meaningfulTerms
+    : queryTerms.filter((term) => !noiseSearchTerms.has(term));
+
+  const matchedUsefulTerms = usefulTerms.filter((term) => searchableText.includes(term));
+
+  if (usefulTerms.length >= 3 && matchedUsefulTerms.length < 2) return 0;
+  if (usefulTerms.length > 0 && matchedUsefulTerms.length === 0) return 0;
 
   const titleTokens = tokenize(entry.title);
   const descriptionTokens = tokenize(entry.description);
   const tagTokens = tokenize(entry.tags.join(" "));
-  let score = entry.priority;
+  const categoryTokens = tokenize(entry.category);
+  const metadataTokens = tokenize(metadataText);
 
-  if (title === normalizedQuery) score += 500;
-  if (title.includes(normalizedQuery)) score += 220;
-  if (tags.includes(normalizedQuery)) score += 180;
-  if (description.includes(normalizedQuery)) score += 120;
-  if (category.includes(normalizedQuery)) score += 90;
-  if (url.includes(normalizedQuery)) score += 60;
-  if (content.includes(normalizedQuery)) score += 25;
+  let score = Number(entry.priority || 0);
 
-  queryTerms.forEach((term) => {
-    score += tokenScore(titleTokens, term, 90, 55);
-    score += tokenScore(tagTokens, term, 70, 40);
-    score += tokenScore(descriptionTokens, term, 45, 25);
-    if (content.includes(term)) score += 10;
+  if (title === normalizedQuery) score += 700;
+  if (title.includes(normalizedQuery)) score += 280;
+  if (tags.includes(normalizedQuery)) score += 220;
+  if (metadataText.includes(normalizedQuery)) score += 210;
+  if (description.includes(normalizedQuery)) score += 140;
+  if (category.includes(normalizedQuery)) score += 100;
+  if (url.includes(normalizedQuery)) score += 70;
+  if (content.includes(normalizedQuery)) score += 30;
+
+  usefulTerms.forEach((term) => {
+    score += tokenScore(titleTokens, term, 140, 95, 65);
+    score += tokenScore(metadataTokens, term, 130, 85, 55);
+    score += tokenScore(tagTokens, term, 100, 70, 45);
+    score += tokenScore(categoryTokens, term, 75, 50, 30);
+    score += tokenScore(descriptionTokens, term, 55, 35, 22);
+    if (content.includes(term)) score += 12;
   });
 
-  return score;
+  if (queryProfile.state && entryRegion.state === queryProfile.state) score += 450;
+  if (queryProfile.state && entryRegion.country === "India") score += 180;
+  if (queryProfile.isIndiaIntent && entryRegion.regionType === "india") score += 260;
+  if (queryProfile.abroadCountry && entryRegion.country === queryProfile.abroadCountry) score += 450;
+  if (queryProfile.isAbroadIntent && entryRegion.regionType === "abroad") score += 180;
+
+  if (queryProfile.intents.college && /college|university|institute|academy/i.test(entry.title)) score += 140;
+  if (queryProfile.intents.fees && /fee|fees|tuition|cost|budget|hostel|mess|usd|inr|lakh/i.test(searchableText)) score += 170;
+  if (queryProfile.intents.eligibility && /eligibility|eligible|neet|gpa|pcb|marks|percentage|requirement/i.test(searchableText)) score += 160;
+  if (queryProfile.intents.counselling && /counselling|seat matrix|closing rank|cutoff|quota|round|gmr|pmr|wbjee|mcc|aiq/i.test(searchableText)) score += 180;
+  if (queryProfile.intents.fmge && /fmge|nmc|fmgl|wdoms|appeared|passed|pass rate/i.test(searchableText)) score += 170;
+  if (queryProfile.intents.scholarship && /scholarship|loan|financial aid|education loan/i.test(searchableText)) score += 160;
+  if (queryProfile.intents.documents && /document|documents|passport|scorecard|admit card/i.test(searchableText)) score += 140;
+
+  if (queryProfile.rankRange) {
+  score += rankMatchScore(entry, queryProfile.rankRange);
+
+  if (entryRegion.regionType === "india") score += 220;
+  if (entry.category === "MBBS India") score += 220;
+  if (entry.url.startsWith("/mbbs-india")) score += 220;
+
+  if (/government/i.test(searchableText)) score += 45;
+  if (/private/i.test(searchableText)) score += 45;
+
+  if (/closing rank|cutoff|seat matrix|round|quota/i.test(searchableText)) {
+    score += 120;
+  }
+} else if (queryProfile.numbers.length > 0 && /\d/.test(searchableText)) {
+  score += 60;
+}
+
+  if (queryProfile.isIndiaIntent && entry.category === "MBBS India") score += 220;
+  if (queryProfile.isIndiaIntent && entry.url.startsWith("/mbbs-india")) score += 220;
+
+  if (
+    queryProfile.isIndiaIntent &&
+    !queryProfile.isAbroadIntent &&
+    /FMGE Data|Kyrgyzstan Universities|Georgia Universities|MBBS Abroad/i.test(entry.category)
+  ) {
+    score -= 500;
+  }
+
+  if (
+    queryProfile.abroadCountry &&
+    entryRegion.country &&
+    entryRegion.country !== queryProfile.abroadCountry
+  ) {
+    score -= 500;
+  }
+
+  return Math.max(0, score);
 };
 
 const getIcon = (type: string) => {
@@ -614,12 +1218,12 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
     return siteSearchIndex
       .map((result) => ({
         ...result,
-        score: scoreResult(result, searchTerms, queryTokens),
+        score: scoreResult(result, searchTerms, queryTokens, query),
       }))
       .filter((result) => result.score > 0)
       .sort((a, b) => b.score - a.score || b.priority - a.priority || a.title.localeCompare(b.title))
       .slice(0, MAX_RESULTS);
-  }, [queryTokens, searchTerms]);
+  }, [query, queryTokens, searchTerms]);
 
   const selectedResultIndex =
     filteredResults.length > 0 ? Math.min(selectedIndex, filteredResults.length - 1) : -1;
@@ -738,6 +1342,11 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
 
         if (result.url.includes("counselling=open")) {
           openCounselling();
+          return;
+        }
+        if (result.url.includes("rank-predictor=open")) {
+          onClose();
+          router.push("/?rank-predictor=open");
           return;
         }
       }
