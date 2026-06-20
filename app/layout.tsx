@@ -1,5 +1,7 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Inter, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import Footer from "./components/Footer";
 import FloatingContactButton from "./components/FloatingContactButton";
@@ -104,6 +106,9 @@ export default function RootLayout({
 
         <FloatingContactButton />
         <div id="modal-root" />
+
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

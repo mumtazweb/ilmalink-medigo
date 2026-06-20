@@ -40,8 +40,12 @@ export default function BlogShareFollow({
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
+  const timer = window.setTimeout(() => {
     setPageUrl(window.location.href);
-  }, []);
+  }, 0);
+
+  return () => window.clearTimeout(timer);
+}, []);
 
   const shareText = useMemo(() => {
     return description ? `${title} - ${description}` : title;
