@@ -9,8 +9,9 @@ import {
   useRef,
 } from "react";
 import { createPortal } from "react-dom";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, X, FileText, MapPin, BookOpen, Loader2, MessageCircle, Sparkles } from "lucide-react";
+import { Search, X, Loader2, MessageCircle, Sparkles } from "lucide-react";
 import {
   globalSearchIndex,
   type GlobalSearchEntry,
@@ -86,11 +87,14 @@ type AskSuggestedLink = {
   sourceLabel: string;
   dataType: string;
   lastUpdated?: string | null;
+  details?: string[];
+  whySuggested?: string;
 };
 
 type AskIlmalinkResponse = {
   answer: string;
   confidence: "high" | "medium" | "low";
+  detectedFilters: string[];
   matchedItems: unknown[];
   suggestedLinks: AskSuggestedLink[];
   shouldShowConnectCTA: true;
@@ -108,8 +112,8 @@ const RECENT_SEARCH_KEY = "ilmalink-search-recent";
 const MAX_RESULTS = 16;
 const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
 const OPEN_RANK_PREDICTOR_EVENT = "ilmalink:open-rank-predictor";
-const personalisedCounsellingAnswer =
-  "This answer depends on your NEET marks/rank, budget, preferred country or state, eligibility, documents and admission route. ILMALINK expert counselling can guide you better after checking your profile and giving a personalised option.";
+const noMatchAnswer =
+  "I could not find a confident match in ILMALINK data. You can ask in another way or connect with ILMALINK MEDIGO for counselling support.";
 
 const isColdNoMatchAnswer = (answer: string) =>
   /not available|not yet available|no exact|no data|no result|information is not/i.test(answer);
@@ -1074,19 +1078,6 @@ const scoreResult = (
   return Math.max(0, score);
 };
 
-const getIcon = (type: string) => {
-  switch (type) {
-    case "page":
-      return <FileText size={16} className="text-slate-400" />;
-    case "destination":
-      return <MapPin size={16} className="text-slate-400" />;
-    case "blog":
-      return <BookOpen size={16} className="text-slate-400" />;
-    default:
-      return <Search size={16} className="text-slate-400" />;
-  }
-};
-
 export default function SearchModal({ isOpen, onClose, onOpenCounselling }: SearchModalProps) {
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -1132,8 +1123,6 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
     [deferredQuery, queryTokens, searchTerms]
   );
   const trimmedQuery = query.trim();
-  const deferredTrimmedQuery = deferredQuery.trim();
-
   const filteredResults = useMemo<SearchResult[]>(() => {
     if (!searchTerms) {
       return [...siteSearchIndex]
@@ -1160,10 +1149,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
     (askAnswer?.answer && isColdNoMatchAnswer(askAnswer.answer))
 );
 
-const displayedAskAnswer =
-  shouldShowPersonalisedCounselling
-    ? personalisedCounsellingAnswer
-    : askAnswer?.answer;
+const displayedAskAnswer = askAnswer?.answer;
 
   const openCounselling = useCallback(() => {
     onClose();
@@ -1218,9 +1204,7 @@ const displayedAskAnswer =
       setAskAnswer(data);
 
       const shouldOpenCounsellingAfterPreview =
-  data.notFound ||
-  data.shouldAutoOpenCounselling ||
-  isColdNoMatchAnswer(data.answer);
+  data.shouldAutoOpenCounselling;
 
 if (shouldOpenCounsellingAfterPreview) {
   window.setTimeout(() => {
@@ -1237,7 +1221,7 @@ if (shouldOpenCounsellingAfterPreview) {
         return;
       }
 
-     setAskError(personalisedCounsellingAnswer);
+     setAskError(noMatchAnswer);
 setAskAnswer(null);
 
 window.setTimeout(() => {
@@ -1603,25 +1587,65 @@ window.setTimeout(() => {
                       <p className="mt-3 text-sm leading-6 text-slate-700">{askError}</p>
                     ) : askAnswer ? (
                       <>
+                        {askAnswer.detectedFilters.length > 0 && (
+                          <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                            <span className="text-[10px] font-black uppercase tracking-[0.12em] text-slate-400">
+                              Detected:
+                            </span>
+                            {askAnswer.detectedFilters.map((filter) => (
+                              <span
+                                key={filter}
+                                className="rounded-full border border-emerald-100 bg-emerald-50 px-2 py-1 text-[10px] font-bold text-emerald-800"
+                              >
+                                {filter}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
                         <p className="mt-3 whitespace-pre-line text-sm leading-6 text-slate-800">
                           {displayedAskAnswer}
                         </p>
 
                         {askAnswer.suggestedLinks.length > 0 && (
                           <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                            {askAnswer.suggestedLinks.slice(0, 3).map((link) => (
+                            {askAnswer.suggestedLinks.slice(0, 6).map((link, index) => (
                               <button
                                 key={`${link.url}-${link.title}`}
                                 type="button"
                                 onClick={() => handleSelectSuggestedLink(link)}
                                 className="min-w-0 rounded-xl border border-slate-200/80 bg-white/80 px-3 py-2.5 text-left transition hover:border-[#00C896]/60 hover:bg-white"
                               >
-                                <span className="line-clamp-2 block text-xs font-bold leading-4 text-slate-900">
-                                  {link.title}
+                                <span className="flex items-start gap-2">
+                                  <span className="inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-[#00C896]/12 px-1 text-[9px] font-black text-[#087a6a]">
+                                    {index + 1}
+                                  </span>
+                                  <span className="line-clamp-2 block text-xs font-bold leading-4 text-slate-900">
+                                    {link.title}
+                                  </span>
                                 </span>
-                                <span className="mt-1 line-clamp-1 block text-[11px] leading-4 text-slate-500">
-                                  {link.description}
-                                </span>
+                                {(link.details?.length ?? 0) > 0 ? (
+                                  <span className="mt-1.5 block space-y-0.5 pl-7">
+                                    {link.details?.map((detail) => (
+                                      <span
+                                        key={detail}
+                                        className="block text-[10px] leading-4 text-slate-500"
+                                      >
+                                        {detail}
+                                      </span>
+                                    ))}
+                                  </span>
+                                ) : (
+                                  <span className="mt-1.5 line-clamp-2 block pl-7 text-[10px] leading-4 text-slate-500">
+                                    {link.description}
+                                  </span>
+                                )}
+                                {link.whySuggested && (
+                                  <span className="mt-1.5 block pl-7 text-[10px] leading-4 text-slate-600">
+                                    <span className="font-bold text-slate-700">Why suggested: </span>
+                                    {link.whySuggested}
+                                  </span>
+                                )}
                                 <span className="mt-2 inline-flex text-[10px] font-black uppercase tracking-[0.12em] text-[#087a6a]">
                                   Open full page
                                 </span>
@@ -1642,85 +1666,21 @@ window.setTimeout(() => {
                       </>
                     ) : null}
 
-                    <button
-  type="button"
-  onClick={handleConnectClick}
-  className="mt-3 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00C896] to-[#098f91] px-4 text-xs font-extrabold text-white shadow-[0_10px_24px_rgba(0,168,120,0.22)] transition hover:-translate-y-0.5"
->
-  <MessageCircle size={15} />
-  Connect ILMALINK Expert
-</button>
+                    <Link
+                      href="/?counselling=open"
+                      data-open-counselling
+                      onClick={(event) => {
+                        event.preventDefault();
+                        handleConnectClick();
+                      }}
+                      className="mt-3 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00C896] to-[#098f91] px-4 text-xs font-extrabold text-white shadow-[0_10px_24px_rgba(0,168,120,0.22)] transition hover:-translate-y-0.5"
+                    >
+                      <MessageCircle size={15} />
+                      {askAnswer?.notFound || askError
+                        ? "Let’s Connect"
+                        : "Connect ILMALINK Expert"}
+                    </Link>
                   </div>
-                </div>
-              </div>
-            )}
-
-            {(hasAsked || askLoading || askError || askAnswer) && (
-              <div className={hasAsked || askLoading || askError || askAnswer ? "mt-4" : ""}>
-                <div className="mb-2 flex items-center justify-between px-1">
-                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-500">
-                    Relevant pages
-                  </p>
-                  <span className="text-[10px] font-semibold text-slate-400">
-                    {filteredResults.length} matches
-                  </span>
-                </div>
-
-                <div className="grid gap-2">
-                  {filteredResults.length > 0 ? (
-                    filteredResults.map((result, index) => (
-                      <button
-                        key={result.id}
-                        type="button"
-                        onClick={() => handleSelectResult(result)}
-                        className={`group flex w-full items-start gap-2.5 rounded-2xl border px-3 py-2.5 text-left shadow-sm transition sm:gap-3 sm:px-4 sm:py-3 ${
-                          index === selectedResultIndex
-                            ? "border-[#00C896]/40 bg-[#effaf5]/90"
-                            : "border-white/90 bg-white/65 hover:border-[#00C896]/30 hover:bg-white"
-                        }`}
-                      >
-                        <div
-                          className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl sm:h-10 sm:w-10 ${
-                            index === selectedResultIndex
-                              ? "bg-[#00C896]/15 text-[#0E766A]"
-                              : "bg-slate-100 text-slate-500"
-                          }`}
-                        >
-                          {getIcon(result.type)}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex min-w-0 items-center gap-2">
-                            <h3 className="truncate text-xs font-bold text-slate-900 sm:text-sm">
-                              {result.title}
-                            </h3>
-                            <span className="hidden shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.1em] text-slate-500 sm:inline-flex">
-                              {result.category}
-                            </span>
-                          </div>
-                          <p className="mt-1 line-clamp-1 text-[11px] leading-4 text-slate-500 sm:text-xs sm:leading-5">
-                            {result.description}
-                          </p>
-                        </div>
-                      </button>
-                    ))
-                  ) : (
-                   <div className="rounded-2xl border border-white/90 bg-white/65 px-4 py-6 text-center text-slate-500 shadow-sm">
-  <p className="text-sm font-bold text-slate-800">
-    Personalised ILMALINK counselling recommended
-  </p>
-  <p className="mt-1 text-xs leading-5">
-    This depends on your marks/rank, budget, country or state preference, eligibility, documents and admission route.
-  </p>
-  <button
-    type="button"
-    onClick={handleConnectClick}
-    className="mt-3 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00C896] to-[#098f91] px-4 text-xs font-extrabold text-white"
-  >
-    <MessageCircle size={15} />
-    Connect ILMALINK Expert
-  </button>
-</div>
-                  )}
                 </div>
               </div>
             )}

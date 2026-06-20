@@ -1670,7 +1670,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Private",
-    collegeName: "Akash Institute of Medical Sciences & Research Centre, Devanhalli, Bangalore, Karnataka",
+    collegeName: "Akash Institute of Medical Sciences & Research Centre, Devanhalli, Bengaluru, Karnataka",
     seatCapacity: 250,
     establishmentYear: 2016,
     fees: "To be updated"
@@ -1686,7 +1686,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Government",
-    collegeName: "Bangalore Medical College and Research Institute, Bangalore",
+    collegeName: "Bengaluru Medical College and Research Institute, Bengaluru",
     seatCapacity: 250,
     establishmentYear: 1955,
     fees: "To be updated"
@@ -1710,7 +1710,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Private",
-    collegeName: "BGS Global Institute of Medical Sciences, Bangalore",
+    collegeName: "BGS Global Institute of Medical Sciences, Bengaluru",
     seatCapacity: 150,
     establishmentYear: 2013,
     fees: "To be updated"
@@ -1766,7 +1766,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Private",
-    collegeName: "Dr BR Ambedkar Medical College, Bangalore",
+    collegeName: "Dr BR Ambedkar Medical College, Bengaluru",
     seatCapacity: 150,
     establishmentYear: 1980,
     fees: "To be updated"
@@ -1782,7 +1782,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Private",
-    collegeName: "East Point College of Medical Sciences & Research Centre, Bangalore",
+    collegeName: "East Point College of Medical Sciences & Research Centre, Bengaluru",
     seatCapacity: 200,
     establishmentYear: 2017,
     fees: "To be updated"
@@ -1790,7 +1790,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Government",
-    collegeName: "Employees State Insurance Corporation Medical College, Bangalore",
+    collegeName: "Employees State Insurance Corporation Medical College, Bengaluru",
     seatCapacity: 150,
     establishmentYear: 2012,
     fees: "To be updated"
@@ -1942,7 +1942,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Private",
-    collegeName: "Kempegowda Institute of Medical Sciences, Bangalore",
+    collegeName: "Kempegowda Institute of Medical Sciences, Bengaluru",
     seatCapacity: 250,
     establishmentYear: 1980,
     fees: "To be updated"
@@ -1974,7 +1974,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Private",
-    collegeName: "M S Ramaiah Medical College, Bangalore",
+    collegeName: "M S Ramaiah Medical College, Bengaluru",
     seatCapacity: 150,
     establishmentYear: 1979,
     fees: "To be updated"
@@ -1998,7 +1998,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Private",
-    collegeName: "MVJ Medical College and Research Hospital, Bangalore",
+    collegeName: "MVJ Medical College and Research Hospital, Bengaluru",
     seatCapacity: 250,
     establishmentYear: 1997,
     fees: "To be updated"
@@ -2022,7 +2022,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Private",
-    collegeName: "PES University Institute of Medical Sciences and Reseach Bangalore",
+    collegeName: "PES University Institute of Medical Sciences and Reseach Bengaluru",
     seatCapacity: 150,
     establishmentYear: 2024,
     fees: "To be updated"
@@ -2038,7 +2038,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Private",
-    collegeName: "Raja Rajeswari Medical College & Hospital, Bangalore",
+    collegeName: "Raja Rajeswari Medical College & Hospital, Bengaluru",
     seatCapacity: 250,
     establishmentYear: 2005,
     fees: "To be updated"
@@ -2062,7 +2062,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Private",
-    collegeName: "Sapthagiri Institute of Medical Sciences & Research Centre, Bangalore",
+    collegeName: "Sapthagiri Institute of Medical Sciences & Research Centre, Bengaluru",
     seatCapacity: 250,
     establishmentYear: 2011,
     fees: "To be updated"
@@ -2150,7 +2150,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Private",
-    collegeName: "Sri siddhartha Institute of Medical Sciences & Research Centre, Bangalore",
+    collegeName: "Sri siddhartha Institute of Medical Sciences & Research Centre, Bengaluru",
     seatCapacity: 150,
     establishmentYear: 2019,
     fees: "To be updated"
@@ -2174,7 +2174,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Private",
-    collegeName: "St. Johns Medical College, Bangalore",
+    collegeName: "St. Johns Medical College, Bengaluru",
     seatCapacity: 150,
     establishmentYear: 1963,
     fees: "To be updated"
@@ -2190,7 +2190,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Private",
-    collegeName: "The Oxford Medical College, Hospital & Research Centre, Bangalore",
+    collegeName: "The Oxford Medical College, Hospital & Research Centre, Bengaluru",
     seatCapacity: 200,
     establishmentYear: 2014,
     fees: "To be updated"
@@ -2206,7 +2206,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
   {
     state: "Karnataka",
     category: "Private",
-    collegeName: "Vydehi Institute Of Medical Sciences & Research Centre, Bangalore",
+    collegeName: "Vydehi Institute Of Medical Sciences & Research Centre, Bengaluru",
     seatCapacity: 250,
     establishmentYear: 2002,
     fees: "To be updated"

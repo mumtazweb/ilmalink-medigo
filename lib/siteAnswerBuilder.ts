@@ -32,6 +32,7 @@ import {
 export type AskIlmalinkAnswer = {
   answer: string;
   confidence: SearchConfidence;
+  detectedFilters: string[];
   matchedItems: SiteSearchMatch[];
   suggestedLinks: SuggestedSiteLink[];
   shouldShowConnectCTA: true;
@@ -46,7 +47,7 @@ type BuiltAnswer = {
 };
 
 const fallbackAnswer =
-  "This information is not available in ILMALINK data yet.";
+  "I could not find a confident match in ILMALINK data. You can ask in another way or connect with ILMALINK MEDIGO for counselling support.";
 
 function asNumber(value: unknown) {
   return typeof value === "number" && Number.isFinite(value)
@@ -78,6 +79,129 @@ function toDirectLink(
     dataType: item.matchedDataType,
     lastUpdated: item.lastUpdated,
   };
+}
+
+function buildIntentBasedCounsellingAnswer(
+  search: SiteDataSearchResponse
+): BuiltAnswer | null {
+  const intent = search.counsellingIntent;
+
+  if (intent.greeting === "greeting") {
+    return {
+      answer:
+        "Hello! I can help you search MBBS India colleges, MBBS Abroad countries, FMGE data, fees, official advisories and counselling options. What are you looking for?",
+      suggestedLinks: [],
+    };
+  }
+
+  if (intent.greeting === "islamic-greeting") {
+    return {
+      answer:
+        "Wa Alaikum Assalam. I can help you with MBBS India, MBBS Abroad, NEET counselling, FMGE data, fees and admission guidance. What would you like to search?",
+      suggestedLinks: [],
+    };
+  }
+
+  if (intent.greeting === "thanks") {
+    return {
+      answer:
+        "You’re welcome. Ask me anytime about MBBS India, MBBS Abroad, NEET counselling, FMGE data or university selection.",
+      suggestedLinks: [],
+    };
+  }
+
+  if (intent.ambiguousBest) {
+    return {
+      answer:
+        "Which location should I use for the comparison? Choose MBBS India, MBBS Abroad countries, Kyrgyzstan, Georgia or Bangladesh so I can apply the right counselling filters before ranking.",
+      suggestedLinks: [
+        {
+          title: "Best MBBS India",
+          description:
+            "Compare Indian medical colleges using institution type, established year, seats and available counselling data.",
+          url: "/mbbs-india",
+          sourceLabel: "ILMALINK MBBS India dataset",
+          dataType: "MBBS India College",
+        },
+        {
+          title: "Best MBBS Abroad countries",
+          description:
+            "Start with country-wise MBBS Abroad comparison and guidance.",
+          url: "/mbbs-abroad",
+          sourceLabel: "ILMALINK destination pages",
+          dataType: "Country Page",
+        },
+        {
+          title: "Best Kyrgyzstan universities",
+          description:
+            "Compare Kyrgyzstan options using ILMALINK counselling priority and FMGE references.",
+          url: "/mbbs-abroad/kyrgyzstan",
+          sourceLabel: "ILMALINK Kyrgyzstan university data",
+          dataType: "University",
+        },
+        {
+          title: "Best Georgia universities",
+          description:
+            "Compare Georgia options using ILMALINK counselling priority and available university data.",
+          url: "/mbbs-abroad/georgia",
+          sourceLabel: "ILMALINK Georgia university data",
+          dataType: "University",
+        },
+        {
+          title: "Best Bangladesh colleges",
+          description:
+            "Compare featured Bangladesh medical colleges and FMGE references.",
+          url: "/mbbs-abroad/bangladesh",
+          sourceLabel: "ILMALINK Bangladesh university data",
+          dataType: "University",
+        },
+      ],
+    };
+  }
+
+  if (!intent.directed || search.matchedItems.length === 0) {
+    return null;
+  }
+
+  if (intent.region === "india") {
+    const location =
+      (intent.city
+        ? intent.city.replace(/\b\w/g, (character) =>
+            character.toUpperCase()
+          )
+        : undefined) ??
+      intent.state ??
+      "India";
+    const filterText = [
+      intent.collegeType,
+      intent.course,
+      location,
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    return {
+      answer: intent.best
+        ? `Suggested order based on ILMALINK data for ${filterText}. Location and college-type filters were applied before ranking, followed by institution priority, established year, seat count and available data. Verify official counselling data; final admission depends on official rules.`
+        : `Showing only ${filterText} results from the current ILMALINK dataset. Results are ordered by location fit, requested college type, established year, seats and available counselling data. Verify official counselling data before choice filling.`,
+      suggestedLinks: search.suggestedLinks,
+    };
+  }
+
+  if (intent.country) {
+    const subject = intent.entity ?? `${intent.country} institutions`;
+
+    return {
+      answer: intent.best
+        ? `Suggested order based on ILMALINK ranking logic, FMGE appearance volume, available data and counselling priority for ${intent.country}. This is indicative guidance, not an absolute “best” claim.`
+        : intent.fmgePreference
+          ? `Based on ILMALINK data, these are the closest ${intent.country} FMGE and institution matches, ordered using country-level relevance and available FMGE appearance volume.`
+          : `Showing only ${subject} from the current ILMALINK dataset. Country filtering was applied before ranking; compare FMGE references, recognition, fees, course structure and NMC/FMGL requirements before admission.`,
+      suggestedLinks: search.suggestedLinks,
+    };
+  }
+
+  return null;
 }
 
 function formatNumber(value: number) {
@@ -1051,12 +1175,45 @@ function buildGeneralAnswer(search: SiteDataSearchResponse) {
 export function buildSiteAnswerFromSearch(
   search: SiteDataSearchResponse
 ): AskIlmalinkAnswer {
+  const intentBasedAnswer = buildIntentBasedCounsellingAnswer(search);
+
+  if (intentBasedAnswer) {
+    return {
+      answer: intentBasedAnswer.answer,
+      confidence: search.confidence,
+      detectedFilters: search.detectedFilters,
+      matchedItems: search.matchedItems,
+      suggestedLinks:
+        intentBasedAnswer.suggestedLinks ?? search.suggestedLinks,
+      shouldShowConnectCTA: true,
+      shouldAutoOpenCounselling: false,
+      notFound: false,
+    };
+  }
+
+  if (
+    search.counsellingIntent.directed &&
+    search.matchedItems.length === 0
+  ) {
+    return {
+      answer: fallbackAnswer,
+      confidence: "low",
+      detectedFilters: search.detectedFilters,
+      matchedItems: [],
+      suggestedLinks: [],
+      shouldShowConnectCTA: true,
+      shouldAutoOpenCounselling: false,
+      notFound: true,
+    };
+  }
+
   if (search.intent === "mbbs-abroad-university-recommendation") {
     const built = buildUniversityRecommendationAnswer();
 
     return {
       answer: built.answer,
       confidence: "high",
+      detectedFilters: search.detectedFilters,
       matchedItems: search.matchedItems,
       suggestedLinks: built.suggestedLinks ?? [],
       shouldShowConnectCTA: true,
@@ -1078,6 +1235,7 @@ export function buildSiteAnswerFromSearch(
       answer: built.answer,
       confidence:
         search.matchedItems.length > 0 ? search.confidence : "medium",
+      detectedFilters: search.detectedFilters,
       matchedItems: search.matchedItems,
       suggestedLinks: built.suggestedLinks ?? search.suggestedLinks,
       shouldShowConnectCTA: true,
@@ -1094,6 +1252,7 @@ export function buildSiteAnswerFromSearch(
     return {
       answer: fallbackAnswer,
       confidence: search.confidence,
+      detectedFilters: search.detectedFilters,
       matchedItems: search.matchedItems,
       suggestedLinks: search.suggestedLinks,
       shouldShowConnectCTA: true,
@@ -1124,6 +1283,7 @@ export function buildSiteAnswerFromSearch(
   return {
     answer: built.answer,
     confidence: search.confidence,
+    detectedFilters: search.detectedFilters,
     matchedItems: search.matchedItems,
     suggestedLinks: built.suggestedLinks ?? search.suggestedLinks,
     shouldShowConnectCTA: true,

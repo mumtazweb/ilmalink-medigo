@@ -2,36 +2,62 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import type { LucideIcon } from "lucide-react";
 import {
   ArrowUpRight,
+  BadgeIndianRupee,
   BadgeCheck,
+  BaggageClaim,
   BarChart3,
+  BrainCircuit,
   BookOpen,
+  Building2,
   CalendarDays,
   ChevronLeft,
   ChevronRight,
+  CheckCircle2,
+  ClipboardCheck,
   ClipboardList,
+  Compass,
   FileCheck2,
+  FileBadge,
   FolderOpen,
   Globe2,
   GraduationCap,
   Headset,
+  Landmark,
+  ListChecks,
+  MailCheck,
   MapPin,
+  PlaneTakeoff,
   Route,
   Search,
   SearchCheck,
+  Send,
   ShieldCheck,
   Sparkles,
+  Stamp,
   TrendingUp,
   UserRound,
+  WalletCards,
+  Workflow,
   X,
 } from "lucide-react";
 import CounsellingPopup from "./CounsellingPopup";
 import FMGEExplorerModal from "./FMGEExplorerModal";
 import HeroGlobeV2 from "./HeroGlobeV2";
 import NeetRankPredictorTool from "./NeetRankPredictorTool";
+import NeetDecisionCenter from "./home/NeetDecisionCenter";
+import DecisionIntelligenceSection from "./home/DecisionIntelligenceSection";
+import ReadyToMoveSection from "./home/ReadyToMoveSection";
 import { countryGeoFacts } from "../data/geo";
 import { navbarCountryDestinations } from "../data/navbarDestinations";
+import {
+  getNeetPathway,
+  getNeetPathwayEmptyState,
+  getNeetPathwayInvalidState,
+} from "../data/neetPathwayGuide";
+import { mbbsCostInsights } from "../data/mbbsDecisionIntelligence";
 
 const OPEN_FMGE_EVENT = "ilmalink:open-fmge-explorer";
 const OPEN_RANK_PREDICTOR_EVENT = "ilmalink:open-rank-predictor";
@@ -709,37 +735,334 @@ function PremiumDecisionIcon({
 }
 
 const liveMetrics = [
-  { label: "Applications Submitted", value: "5000+" },
-  { label: "Offer Letters Issued", value: "2000+" },
-  { label: "Visas Approved", value: "1900+" },
-  { label: "Universities Active", value: "480+" },
+  {
+    label: "Applications",
+    value: "5000+",
+    icon: Send,
+    tone: "from-blue-500 to-indigo-600",
+  },
+  {
+    label: "Offer Letters",
+    value: "2000+",
+    icon: MailCheck,
+    tone: "from-violet-500 to-fuchsia-600",
+  },
+  {
+    label: "Visas Approved",
+    value: "1900+",
+    icon: Stamp,
+    tone: "from-cyan-500 to-teal-600",
+  },
+  {
+    label: "Universities",
+    value: "480+",
+    icon: Building2,
+    tone: "from-amber-400 to-orange-500",
+  },
 ];
 
-const costInsights = [
-  { label: "India Private Management", fee: "70L+", hostel: "₹5L", living: "₹5L" },
-  { label: "Georgia", fee: "₹28L", hostel: "₹2.6L", living: "₹10L-15L" },
-  { label: "Kyrgyzstan", fee: "₹16L", hostel: "₹4L", living: "₹4L" },
-  { label: "Bangladesh", fee: "₹30L", hostel: "₹3.5L", living: "₹3.5L" },
-  { label: "Russia", fee: "₹18L", hostel: "₹5L", living: "₹5L" },
-  { label: "Uzbekistan", fee: "₹16L", hostel: "₹4L", living: "₹4L" },
-];
-
-const journeySteps = [
-  "NEET Score Analysis",
-  "University Discovery",
-  "Application Submission",
-  "Offer Letter",
-  "Visa Support",
-  "Pre-Departure Prep",
-];
-
-const computeOutcome = (score: number) => {
-  if (!score || score < 1) return "Enter a valid NEET score to see tailored pathways.";
-  if (score >= 560) return "Top government MBBS, premium abroad universities, and scholarship pathways.";
-  if (score >= 480) return "Strong private MBBS and high-consideration abroad options with mentoring.";
-  if (score >= 420) return "Private MBBS and cost-efficient MBBS abroad destinations available.";
-  return "AYUSH, supportive NEET coaching, and strong guidance for future medical admissions.";
+type JourneyStep = {
+  title: string;
+  detail: string;
+  icon: LucideIcon;
+  connect?: boolean;
 };
+
+const abroadJourneySteps: JourneyStep[] = [
+  {
+    title: "Connect ILMALINK",
+    detail: "Open personalised counselling and share your goal.",
+    icon: Headset,
+    connect: true,
+  },
+  {
+    title: "Profile Analysis",
+    detail: "NEET score, eligibility, budget and preferences.",
+    icon: BrainCircuit,
+  },
+  {
+    title: "Best-fit Discovery",
+    detail: "Compare suitable countries, colleges and universities.",
+    icon: Compass,
+  },
+  {
+    title: "Application",
+    detail: "Application form, document review and submission support.",
+    icon: Send,
+  },
+  {
+    title: "Offer Letter",
+    detail: "Track university review and official offer-letter process.",
+    icon: MailCheck,
+  },
+  {
+    title: "Visa Approval",
+    detail: "Visa file preparation, checks and application guidance.",
+    icon: Stamp,
+  },
+  {
+    title: "Government Permissions",
+    detail: "Required permissions and official compliance support.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Pre-departure",
+    detail: "Travel, documents, packing and arrival preparation.",
+    icon: BaggageClaim,
+  },
+  {
+    title: "Fly Abroad",
+    detail: "Travel coordination for the selected destination.",
+    icon: PlaneTakeoff,
+  },
+  {
+    title: "Reach College",
+    detail: "Arrival and college-reaching support from the ILMALINK team.",
+    icon: GraduationCap,
+  },
+  {
+    title: "Academic Observation",
+    detail:
+      "Study under ILMALINK team observation with add-on Indian faculty support.",
+    icon: UserRound,
+  },
+  {
+    title: "FMGE / NExT-I / NEET PG",
+    detail:
+      "Preparation support with Indian faculties at no extra cost.",
+    icon: BookOpen,
+  },
+  {
+    title: "24×7 Course Support",
+    detail:
+      "ILMALINK assistance throughout the entire foreign medical course.",
+    icon: Headset,
+  },
+];
+
+const indiaJourneySteps: JourneyStep[] = [
+  {
+    title: "Connect ILMALINK",
+    detail: "Open personalised counselling and share your goal.",
+    icon: Headset,
+    connect: true,
+  },
+  {
+    title: "Profile Analysis",
+    detail: "NEET score, rank, budget, domicile and preferences.",
+    icon: BrainCircuit,
+  },
+  {
+    title: "Best-fit Planning",
+    detail: "Compare government, private, deemed and BDS pathways.",
+    icon: SearchCheck,
+  },
+  {
+    title: "Counselling Registration",
+    detail: "Register for MCC central and applicable state counselling.",
+    icon: Landmark,
+  },
+  {
+    title: "Choice Filling",
+    detail: "Prepare aspirational, realistic and safe college choices.",
+    icon: ListChecks,
+  },
+  {
+    title: "Government Allotment",
+    detail: "Track rounds and download the official allotment letter.",
+    icon: FileBadge,
+  },
+  {
+    title: "Document Verification",
+    detail: "Prepare and verify the required originals and certificates.",
+    icon: ClipboardCheck,
+  },
+  {
+    title: "Report & Pay Fees",
+    detail: "Report to the allotted college and complete official payment.",
+    icon: BadgeIndianRupee,
+  },
+  {
+    title: "Admission Support",
+    detail: "Complete joining with the ILMALINK support system.",
+    icon: CheckCircle2,
+  },
+  {
+    title: "On-campus Support",
+    detail: "Continued assistance throughout the complete MBBS course.",
+    icon: GraduationCap,
+  },
+  {
+    title: "NEET PG / NExT-I Helpline",
+    detail: "Preparation guidance and academic-support helpline.",
+    icon: BookOpen,
+  },
+];
+
+type JourneyFlowLaneProps = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  steps: JourneyStep[];
+  icon: LucideIcon;
+  accent: "abroad" | "india";
+  onConnect: () => void;
+};
+
+function JourneyFlowLane({
+  eyebrow,
+  title,
+  description,
+  steps,
+  icon: LaneIcon,
+  accent,
+  onConnect,
+}: JourneyFlowLaneProps) {
+  const isAbroad = accent === "abroad";
+  const shellClass = isAbroad
+    ? "border-cyan-200/70 bg-[radial-gradient(circle_at_96%_0%,rgba(34,211,238,0.2),transparent_28%),linear-gradient(145deg,#effcff_0%,#ffffff_48%,#eef4ff_100%)]"
+    : "border-emerald-200/70 bg-[radial-gradient(circle_at_96%_0%,rgba(16,185,129,0.18),transparent_28%),linear-gradient(145deg,#effdf7_0%,#ffffff_48%,#f1f7ff_100%)]";
+  const badgeClass = isAbroad
+    ? "border-cyan-200 bg-cyan-50 text-cyan-800"
+    : "border-emerald-200 bg-emerald-50 text-emerald-800";
+  const nodeClass = isAbroad
+    ? "border-cyan-200 bg-[linear-gradient(145deg,#ffffff,#e6fbff)] text-cyan-700 shadow-[inset_0_2px_2px_rgba(255,255,255,1),inset_-8px_-10px_18px_rgba(6,182,212,0.1),0_12px_25px_rgba(8,145,178,0.2)]"
+    : "border-emerald-200 bg-[linear-gradient(145deg,#ffffff,#e8fff5)] text-emerald-700 shadow-[inset_0_2px_2px_rgba(255,255,255,1),inset_-8px_-10px_18px_rgba(16,185,129,0.1),0_12px_25px_rgba(5,150,105,0.2)]";
+  const connectorClass = isAbroad
+    ? "border-cyan-400/75"
+    : "border-emerald-400/75";
+  const connectorBackground = isAbroad
+    ? "bg-[repeating-linear-gradient(90deg,#22d3ee_0_7px,transparent_7px_12px)]"
+    : "bg-[repeating-linear-gradient(90deg,#34d399_0_7px,transparent_7px_12px)]";
+  const activeTextClass = isAbroad
+    ? "text-cyan-700"
+    : "text-emerald-700";
+
+  const renderMilestone = (
+    step: JourneyStep,
+    index: number,
+    mobile: boolean
+  ) => {
+    const Icon = step.icon;
+    const isLast = index === steps.length - 1;
+    const isMobileRowEnd = index % 3 === 2;
+    const isMobileRowStart = index > 0 && index % 3 === 0;
+    const content = (
+      <>
+        <span
+          className={`journey-node relative z-20 flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border-[3px] sm:h-12 sm:w-12 ${nodeClass} ${
+            step.connect ? "cursor-pointer ring-4 ring-blue-100/70" : ""
+          }`}
+          style={{ animationDelay: `${index * 180}ms` }}
+        >
+          <span className="pointer-events-none absolute left-1.5 top-1 h-2 w-4 rounded-full bg-white/90 blur-[1px]" />
+          <span className="journey-node-shine pointer-events-none absolute inset-y-0 -left-full w-1/2 skew-x-[-20deg] bg-white/55 blur-[2px]" />
+          <Icon className="relative h-[18px] w-[18px] drop-shadow-[0_2px_2px_rgba(15,45,91,0.18)] sm:h-5 sm:w-5" />
+        </span>
+        <span className="mt-2 block text-center text-[9px] font-black leading-[1.15] text-[#071B44] sm:text-[10px]">
+          {step.title}
+        </span>
+        <span className="mt-0.5 block text-center text-[7px] font-medium leading-[1.3] text-slate-500 sm:text-[8px]">
+          {step.detail}
+        </span>
+        {step.connect && (
+          <span
+            className={`mt-1.5 inline-flex items-center gap-0.5 text-[8px] font-black uppercase tracking-[0.08em] ${activeTextClass}`}
+          >
+            Open counselling
+            <ArrowUpRight className="h-2.5 w-2.5" />
+          </span>
+        )}
+      </>
+    );
+
+    return (
+      <div
+        key={`${mobile ? "mobile" : "desktop"}-${step.title}`}
+        className={`relative flex min-w-0 flex-col items-center ${
+          mobile ? "min-h-[112px]" : ""
+        }`}
+      >
+        {!isLast && (!mobile || !isMobileRowEnd) && (
+          <span
+            className={`journey-connector pointer-events-none absolute left-[calc(50%+22px)] right-[calc(-50%+22px)] top-[21px] z-0 h-[2px] sm:left-[calc(50%+24px)] sm:right-[calc(-50%+24px)] sm:top-[23px] ${connectorBackground}`}
+            style={{ animationDelay: `${index * 180}ms` }}
+          />
+        )}
+
+        {mobile && isMobileRowEnd && !isLast && (
+          <span
+            className={`journey-turn pointer-events-none absolute -bottom-2 right-1/2 top-[21px] z-0 w-[calc(200%+1rem)] rounded-br-2xl border-b-2 border-r-2 border-dashed ${connectorClass}`}
+            style={{ animationDelay: `${index * 180}ms` }}
+          />
+        )}
+
+        {mobile && isMobileRowStart && (
+          <span
+            className={`journey-turn pointer-events-none absolute -top-2 left-1/2 z-0 h-[31px] border-l-2 border-dashed ${connectorClass}`}
+            style={{ animationDelay: `${index * 180}ms` }}
+          />
+        )}
+
+        {step.connect ? (
+          <button
+            type="button"
+            data-open-counselling
+            onClick={onConnect}
+            className="group flex w-full flex-col items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60"
+          >
+            {content}
+          </button>
+        ) : (
+          content
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <article
+      className={`journey-glass-lane relative isolate overflow-hidden rounded-[25px] border p-2.5 shadow-[0_20px_45px_rgba(15,45,91,0.11),inset_0_1px_0_rgba(255,255,255,1)] backdrop-blur-xl sm:rounded-[28px] sm:p-4 ${shellClass}`}
+    >
+      <div className="pointer-events-none absolute inset-0 opacity-[0.35] [background-image:radial-gradient(circle_at_center,rgba(15,76,255,0.14)_1px,transparent_1px)] [background-size:18px_18px]" />
+      <div className="relative flex items-start gap-2.5">
+        <div
+          className={`journey-node flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border-[3px] sm:h-11 sm:w-11 ${nodeClass}`}
+        >
+          <LaneIcon className="h-5 w-5 drop-shadow-[0_3px_3px_rgba(0,0,0,0.2)]" />
+        </div>
+        <div>
+          <p
+            className={`inline-flex rounded-full border px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.15em] ${badgeClass}`}
+          >
+            {eyebrow}
+          </p>
+          <h3 className="mt-1.5 text-lg font-black tracking-[-0.03em] text-[#071B44] sm:text-xl">
+            {title}
+          </h3>
+          <p className="mt-0.5 text-[10px] font-medium leading-4 text-slate-600 sm:text-[11px]">
+            {description}
+          </p>
+        </div>
+      </div>
+
+      <div className="relative mt-4 lg:hidden">
+        <div className="grid grid-cols-3 gap-x-2 gap-y-4">
+          {steps.map((step, index) => renderMilestone(step, index, true))}
+        </div>
+      </div>
+
+      <div
+        className="relative mt-4 hidden gap-0 lg:grid"
+        style={{
+          gridTemplateColumns: `repeat(${steps.length}, minmax(0, 1fr))`,
+        }}
+      >
+        {steps.map((step, index) => renderMilestone(step, index, false))}
+      </div>
+    </article>
+  );
+}
 
 function UniversityIcon() {
   return (
@@ -896,9 +1219,12 @@ export default function HomeHeroClient() {
   const [isDestinationSearchOpen, setIsDestinationSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [neetScore, setNeetScore] = useState("");
+  const [analysedNeetScore, setAnalysedNeetScore] = useState("");
+  const [neetAttempted, setNeetAttempted] = useState(false);
   const topMarketplaceScrollRef = useRef<HTMLDivElement | null>(null);
   const bottomMarketplaceScrollRef = useRef<HTMLDivElement | null>(null);
   const destinationSearchInputRef = useRef<HTMLInputElement | null>(null);
+  const neetScoreInputRef = useRef<HTMLInputElement | null>(null);
 
   const filteredDestinations = useMemo(
     () =>
@@ -910,6 +1236,42 @@ export default function HomeHeroClient() {
   const marketplaceRows = searchQuery.trim()
     ? splitDestinationsIntoRows(filteredDestinations)
     : destinationRows;
+  const parsedNeetScore = Number(analysedNeetScore);
+  const neetPathway = analysedNeetScore
+    ? getNeetPathway(parsedNeetScore)
+    : null;
+  const neetScoreIsInvalid =
+    neetAttempted &&
+    (!neetScore ||
+      !Number.isFinite(Number(neetScore)) ||
+      Number(neetScore) < 1 ||
+      Number(neetScore) > 720);
+
+  const analyseNeetScore = () => {
+    setNeetAttempted(true);
+    const score = Number(neetScore);
+
+    if (!Number.isFinite(score) || score < 1 || score > 720) {
+      setAnalysedNeetScore("");
+      return;
+    }
+
+    setAnalysedNeetScore(neetScore);
+  };
+
+  const resetNeetScore = () => {
+    setNeetScore("");
+    setAnalysedNeetScore("");
+    setNeetAttempted(false);
+    window.requestAnimationFrame(() => neetScoreInputRef.current?.focus());
+  };
+
+  const focusNeetDecisionCenter = () => {
+    document
+      .getElementById("neet-decision-center")
+      ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    window.setTimeout(() => neetScoreInputRef.current?.focus(), 500);
+  };
 
   const scrollDestinationRow = (rowIndex: 0 | 1, direction: -1 | 1) => {
     const target =
@@ -1266,6 +1628,102 @@ export default function HomeHeroClient() {
               }
             }
 
+            @keyframes premium-card-float {
+              0%,
+              100% {
+                transform: perspective(900px) rotateX(0deg) rotateY(0deg)
+                  translateY(0);
+              }
+              50% {
+                transform: perspective(900px) rotateX(1.4deg) rotateY(-1.2deg)
+                  translateY(-5px);
+              }
+            }
+
+            @keyframes route-glow {
+              0%,
+              100% {
+                opacity: 0.35;
+                transform: scaleX(0.78);
+              }
+              50% {
+                opacity: 0.9;
+                transform: scaleX(1);
+              }
+            }
+
+            @keyframes score-ring {
+              0%,
+              100% {
+                box-shadow:
+                  0 0 0 0 rgba(34, 211, 238, 0.18),
+                  0 20px 55px rgba(15, 76, 255, 0.26);
+              }
+              50% {
+                box-shadow:
+                  0 0 0 12px rgba(34, 211, 238, 0),
+                  0 28px 70px rgba(15, 76, 255, 0.38);
+              }
+            }
+
+            @keyframes journey-node-pulse {
+              0%,
+              72%,
+              100% {
+                transform: translateY(0) scale(1);
+              }
+              80% {
+                transform: translateY(-4px) scale(1.06);
+              }
+              88% {
+                transform: translateY(0) scale(1);
+              }
+            }
+
+            @keyframes journey-line-flow {
+              from {
+                background-position: 0 0;
+              }
+              to {
+                background-position: 24px 0;
+              }
+            }
+
+            @keyframes journey-turn-pulse {
+              0%,
+              100% {
+                opacity: 0.38;
+              }
+              50% {
+                opacity: 1;
+              }
+            }
+
+            @keyframes journey-node-shine {
+              0%,
+              42% {
+                left: -100%;
+              }
+              62%,
+              100% {
+                left: 145%;
+              }
+            }
+
+            @keyframes journey-lane-breathe {
+              0%,
+              100% {
+                box-shadow:
+                  inset 0 1px 0 rgba(255, 255, 255, 1),
+                  0 20px 45px rgba(15, 45, 91, 0.11);
+              }
+              50% {
+                box-shadow:
+                  inset 0 1px 0 rgba(255, 255, 255, 1),
+                  0 24px 54px rgba(15, 76, 255, 0.17);
+              }
+            }
+
             .animate-spin-slow {
               animation: spin-slow 26s linear infinite;
             }
@@ -1280,6 +1738,42 @@ export default function HomeHeroClient() {
 
             .animate-float {
               animation: float 3.8s ease-in-out infinite;
+            }
+
+            .premium-card-float {
+              animation: premium-card-float 5.5s ease-in-out infinite;
+              transform-style: preserve-3d;
+            }
+
+            .route-glow {
+              animation: route-glow 2.8s ease-in-out infinite;
+              transform-origin: center;
+            }
+
+            .score-ring {
+              animation: score-ring 3.2s ease-in-out infinite;
+            }
+
+            .journey-node {
+              animation: journey-node-pulse 4.6s ease-in-out infinite;
+              transform-style: preserve-3d;
+            }
+
+            .journey-connector {
+              animation: journey-line-flow 1.1s linear infinite;
+              background-size: 24px 2px;
+            }
+
+            .journey-turn {
+              animation: journey-turn-pulse 2.2s ease-in-out infinite;
+            }
+
+            .journey-node-shine {
+              animation: journey-node-shine 3.8s ease-in-out infinite;
+            }
+
+            .journey-glass-lane {
+              animation: journey-lane-breathe 5.8s ease-in-out infinite;
             }
 
             .globe-surface {
@@ -1315,6 +1809,19 @@ export default function HomeHeroClient() {
 
             .destination-marketplace-scroll::-webkit-scrollbar {
               display: none;
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+              .premium-card-float,
+              .route-glow,
+              .score-ring,
+              .journey-node,
+              .journey-connector,
+              .journey-turn,
+              .journey-node-shine,
+              .journey-glass-lane {
+                animation: none;
+              }
             }
           `}</style>
 
@@ -1459,32 +1966,33 @@ export default function HomeHeroClient() {
                   </div>
                 </div>
               </section>
-              <section className="relative isolate overflow-hidden rounded-[28px] border border-slate-200/90 bg-[linear-gradient(145deg,#ffffff_0%,#fbfdff_48%,#f4f8ff_100%)] p-3 text-[#071B44] shadow-[0_22px_60px_rgba(15,45,91,0.12),inset_0_1px_0_rgba(255,255,255,0.98)] sm:rounded-[32px] sm:p-6">
-                <div className="pointer-events-none absolute -left-20 top-20 h-48 w-48 rounded-full bg-blue-100/45 blur-3xl" />
-                <div className="pointer-events-none absolute -right-20 top-1/3 h-48 w-48 rounded-full bg-cyan-100/45 blur-3xl" />
+              <section className="relative isolate overflow-hidden rounded-[28px] border border-cyan-300/30 bg-[radial-gradient(circle_at_8%_0%,rgba(79,70,229,.34),transparent_28%),radial-gradient(circle_at_94%_14%,rgba(0,200,150,.24),transparent_28%),linear-gradient(145deg,#030b26_0%,#06245a_52%,#07143a_100%)] p-3 text-white shadow-[0_30px_80px_rgba(3,12,45,0.42),inset_0_1px_0_rgba(255,255,255,0.16)] sm:rounded-[34px] sm:p-6">
+                <div className="pointer-events-none absolute -left-20 top-20 h-48 w-48 rounded-full bg-blue-400/20 blur-3xl" />
+                <div className="pointer-events-none absolute -right-20 top-1/3 h-48 w-48 rounded-full bg-cyan-300/20 blur-3xl" />
+                <div className="pointer-events-none absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,.28)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.28)_1px,transparent_1px)] [background-size:26px_26px]" />
                 <Sparkles className="pointer-events-none absolute right-5 top-5 h-5 w-5 text-amber-400/70 sm:right-8 sm:top-8" />
 
                 <div className="relative text-center">
                   <div className="flex items-center justify-center gap-2 sm:gap-4">
                     <span className="h-px w-6 bg-gradient-to-r from-transparent to-amber-400 sm:w-20" />
-                    <p className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-white/90 px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#071B44] shadow-[0_8px_22px_rgba(15,45,91,0.09)] sm:px-5 sm:text-xs sm:tracking-[0.22em]">
+                    <p className="inline-flex items-center gap-2 rounded-full border border-cyan-200/30 bg-white/10 px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,.18),0_10px_24px_rgba(0,0,0,.2)] backdrop-blur-xl sm:px-5 sm:text-xs sm:tracking-[0.22em]">
                       <Sparkles className="h-3.5 w-3.5 text-amber-500" />
                       WHY ILMALINK MEDIGO
                     </p>
                     <span className="h-px w-6 bg-gradient-to-l from-transparent to-amber-400 sm:w-20" />
                   </div>
 
-                  <h2 className="mx-auto mt-4 max-w-3xl text-[27px] font-black leading-[1.06] tracking-[-0.035em] text-[#071B44] sm:mt-5 sm:text-4xl lg:text-[44px]">
+                  <h2 className="mx-auto mt-4 max-w-3xl text-[27px] font-black leading-[1.06] tracking-[-0.035em] text-white sm:mt-5 sm:text-4xl lg:text-[44px]">
                     Smart tools for safer{" "}
-                    <span className="text-[#0F4CFF]">MBBS</span> decisions.
+                    <span className="bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent">MBBS</span> decisions.
                   </h2>
-                  <p className="mx-auto mt-3 max-w-3xl text-[11px] font-medium leading-[1.65] text-slate-600 sm:mt-4 sm:text-sm sm:leading-6">
+                  <p className="mx-auto mt-3 max-w-3xl text-[11px] font-medium leading-[1.65] text-blue-100/82 sm:mt-4 sm:text-sm sm:leading-6">
                     ILMALINK MEDIGO helps students and parents compare MBBS India and MBBS
                     Abroad options with practical tools, eligibility checks, scholarship
                     support and transparent guidance before taking admission decisions.
                   </p>
 
-                  <div className="mx-auto mt-4 grid max-w-2xl grid-cols-3 overflow-hidden rounded-2xl border border-slate-200 bg-white/90 shadow-[0_10px_24px_rgba(15,45,91,0.09)] sm:mt-5 sm:rounded-full">
+                  <div className="mx-auto mt-4 grid max-w-2xl grid-cols-3 overflow-hidden rounded-2xl border border-white/15 bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,.13),0_12px_28px_rgba(0,0,0,.18)] backdrop-blur-xl sm:mt-5 sm:rounded-full">
                     {[
                       ["Transparent", ShieldCheck],
                       ["Practical", SearchCheck],
@@ -1492,8 +2000,8 @@ export default function HomeHeroClient() {
                     ].map(([label, Icon], index) => (
                       <div
                         key={label as string}
-                        className={`flex min-h-10 items-center justify-center gap-1 px-1 text-[9px] font-extrabold text-[#071B44] sm:min-h-12 sm:gap-2 sm:text-sm ${
-                          index > 0 ? "border-l border-slate-200" : ""
+                        className={`flex min-h-10 items-center justify-center gap-1 px-1 text-[9px] font-extrabold text-blue-50 sm:min-h-12 sm:gap-2 sm:text-sm ${
+                          index > 0 ? "border-l border-white/15" : ""
                         }`}
                       >
                         <Icon className="h-3.5 w-3.5 text-[#0F4CFF] sm:h-5 sm:w-5" />
@@ -1566,8 +2074,8 @@ export default function HomeHeroClient() {
                   })}
                 </div>
 
-                <div className="relative mt-4 rounded-[20px] border border-blue-100 bg-[linear-gradient(135deg,#eef5ff_0%,#ffffff_52%,#edf8ff_100%)] px-3 py-3 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.95)] sm:mt-6 sm:px-5 sm:py-4">
-                  <p className="text-[11px] font-bold leading-5 text-[#15315f] sm:text-sm">
+                <div className="relative mt-4 rounded-[20px] border border-cyan-200/25 bg-white/[0.08] px-3 py-3 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] backdrop-blur-xl sm:mt-6 sm:px-5 sm:py-4">
+                  <p className="text-[11px] font-bold leading-5 text-blue-50 sm:text-sm">
                     Student decisions should be guided by fit, rules and transparency — not
                     only by admission pressure.
                   </p>
@@ -1576,91 +2084,353 @@ export default function HomeHeroClient() {
             </div>
 
             <aside className="space-y-8">
-              <section className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
-                <p className="text-sm uppercase tracking-[0.24em] text-[#0B1D39]">
-                  NEET decision center
-                </p>
-                <h3 className="mt-3 text-2xl font-semibold text-[#081B35]">
-                  Score-based pathway guidance
-                </h3>
-                <p className="mt-4 text-sm leading-7 text-slate-600">
-                  Enter your NEET score to see the most likely admission pathway across
-                  India and Abroad.
-                </p>
-                <div className="mt-6 space-y-4">
-                  <label className="space-y-2 text-sm text-slate-600">
-                    NEET Score
-                    <input
-                      id="home-hero-neet-score"
-                      name="homeHeroNeetScore"
-                      type="number"
-                      min={1}
-                      max={720}
-                      value={neetScore}
-                      onChange={(event) => setNeetScore(event.target.value)}
-                      placeholder="e.g. 512"
-                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-[#0F4CFF] focus:ring-2 focus:ring-[#0F4CFF]/15"
-                    />
-                  </label>
-                  <div className="rounded-[24px] bg-[#eff6ff] p-4 text-sm text-slate-700">
-                    {computeOutcome(Number(neetScore))}
+              <NeetDecisionCenter
+                neetScore={neetScore}
+                neetPathway={neetPathway}
+                isInvalid={neetScoreIsInvalid}
+                inputRef={neetScoreInputRef}
+                onScoreChange={(value) => {
+                  setNeetScore(value);
+                  setAnalysedNeetScore("");
+                  setNeetAttempted(false);
+                }}
+                onAnalyse={analyseNeetScore}
+                onReset={resetNeetScore}
+                onCounselling={() => setShowPopup(true)}
+              />
+              {false && (
+              <section className="relative isolate overflow-hidden rounded-[30px] border border-cyan-200/25 bg-[radial-gradient(circle_at_12%_0%,rgba(34,211,238,0.24),transparent_31%),radial-gradient(circle_at_95%_16%,rgba(99,102,241,0.3),transparent_34%),linear-gradient(145deg,#04152f_0%,#082c5c_50%,#071b44_100%)] p-3.5 text-white shadow-[0_30px_75px_rgba(3,20,50,0.38),inset_0_1px_0_rgba(255,255,255,0.16)] sm:rounded-[34px] sm:p-6">
+                <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full border border-cyan-200/20 bg-cyan-300/10 blur-[1px]" />
+                <div className="pointer-events-none absolute -right-7 -top-7 h-28 w-28 rounded-full border border-white/10" />
+                <div className="pointer-events-none absolute inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,.35)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.35)_1px,transparent_1px)] [background-size:24px_24px]" />
+
+                <div className="relative">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="inline-flex items-center gap-2 rounded-full border border-cyan-200/25 bg-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-cyan-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.16)] backdrop-blur-xl sm:text-xs">
+                      <BrainCircuit className="h-4 w-4 text-cyan-300" />
+                      NEET Decision Center
+                    </p>
+                    <span className="inline-flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.12em] text-emerald-200">
+                      <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.9)]" />
+                      Live guidance
+                    </span>
                   </div>
+
+                  <h3 className="mt-4 max-w-sm text-[25px] font-black leading-[1.04] tracking-[-0.035em] text-white sm:text-[32px]">
+                    Turn your score into a{" "}
+                    <span className="bg-gradient-to-r from-cyan-300 via-white to-emerald-200 bg-clip-text text-transparent">
+                      clear MBBS plan.
+                    </span>
+                  </h3>
+                  <p className="mt-3 text-xs font-medium leading-5 text-blue-100/82 sm:text-sm sm:leading-6">
+                    Compare India, Abroad, BDS, AYUSH, paramedical and repeat-NEET
+                    pathways from one practical score analysis.
+                  </p>
+
+                  <div className="premium-card-float relative mt-5 rounded-[25px] border border-white/75 bg-[linear-gradient(145deg,rgba(255,255,255,0.98),rgba(238,248,255,0.94))] p-3 text-[#071B44] shadow-[inset_0_1px_0_rgba(255,255,255,1),inset_-10px_-14px_28px_rgba(15,76,255,0.07),0_26px_55px_rgba(0,9,35,0.36)] sm:p-4">
+                    <span className="pointer-events-none absolute left-5 top-2 h-2 w-24 rounded-full bg-white blur-[2px]" />
+                    <label
+                      htmlFor="home-hero-neet-score"
+                      className="flex items-center justify-between gap-3 text-[10px] font-black uppercase tracking-[0.16em] text-[#0F4CFF]"
+                    >
+                      Enter NEET Score
+                      <span className="rounded-full bg-blue-50 px-2 py-1 text-[9px] tracking-normal text-slate-500">
+                        Valid range 1–720
+                      </span>
+                    </label>
+
+                    <div className="relative mt-2">
+                      <input
+                        id="home-hero-neet-score"
+                        name="homeHeroNeetScore"
+                        type="number"
+                        min={1}
+                        max={720}
+                        inputMode="numeric"
+                        value={neetScore}
+                        onChange={(event) => setNeetScore(event.target.value)}
+                        placeholder="512"
+                        className="score-ring w-full rounded-[20px] border border-blue-100 bg-[linear-gradient(145deg,#ffffff,#eef6ff)] px-4 py-3 pr-16 text-4xl font-black tracking-[-0.05em] text-[#071B44] outline-none transition [appearance:textfield] placeholder:text-slate-300 focus:border-cyan-300 focus:ring-4 focus:ring-cyan-300/15 sm:py-4 sm:text-5xl [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                      />
+                      <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-slate-400">
+                        / 720
+                      </span>
+                    </div>
+
+                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-blue-100 shadow-inner">
+                      <div
+                        className="h-full rounded-full bg-[linear-gradient(90deg,#0F4CFF,#22d3ee,#00C896)] shadow-[0_0_16px_rgba(34,211,238,0.8)] transition-all duration-700"
+                        style={{
+                          width: neetPathway
+                            ? `${Math.max(
+                                2,
+                                Math.min(100, (parsedNeetScore / 720) * 100)
+                              )}%`
+                            : "0%",
+                        }}
+                      />
+                    </div>
+                    <div className="mt-1.5 flex justify-between text-[8px] font-bold uppercase tracking-[0.1em] text-slate-400">
+                      <span>Qualifying zone</span>
+                      <span>Top priority zone</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    {!neetScore && (
+                      <div className="rounded-[22px] border border-white/15 bg-white/[0.08] p-3 backdrop-blur-xl sm:p-4">
+                        <p className="text-xs font-semibold leading-5 text-blue-50">
+                          {getNeetPathwayEmptyState}
+                        </p>
+                        <div className="mt-3 grid grid-cols-2 gap-2">
+                          {[
+                            ["India routes", Landmark],
+                            ["Abroad backup", Globe2],
+                            ["Budget fit", WalletCards],
+                            ["Next action", Workflow],
+                          ].map(([label, Icon]) => (
+                            <div
+                              key={label as string}
+                              className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.07] px-2.5 py-2 text-[10px] font-bold text-blue-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
+                            >
+                              <Icon className="h-3.5 w-3.5 text-cyan-300" />
+                              {label as string}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {neetScoreIsInvalid && (
+                      <div className="rounded-[22px] border border-amber-300/45 bg-amber-300/12 p-4 text-xs font-bold leading-5 text-amber-100 backdrop-blur-xl">
+                        {getNeetPathwayInvalidState}
+                      </div>
+                    )}
+
+                    {neetPathway && (
+                      <div className="space-y-3">
+                        <div className="relative overflow-hidden rounded-[24px] border border-cyan-200/30 bg-[linear-gradient(135deg,rgba(15,76,255,0.34),rgba(34,211,238,0.13))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.16)]">
+                          <div className="pointer-events-none absolute -right-7 -top-7 h-24 w-24 rounded-full bg-cyan-300/15 blur-2xl" />
+                          <div className="relative flex items-start gap-3">
+                            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[19px] border border-white/20 bg-white/12 text-xl font-black text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_15px_30px_rgba(0,0,0,0.2)]">
+                              {neetPathway?.bandLabel}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-[9px] font-black uppercase tracking-[0.16em] text-cyan-200">
+                                Your score band
+                              </p>
+                              <p className="mt-1 text-sm font-black leading-5 text-white">
+                                {neetPathway?.headline}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {[
+                          {
+                            label: "Likely India Route",
+                            value: neetPathway?.indiaRoute ?? "",
+                            icon: Landmark,
+                            style:
+                              "border-blue-200/25 bg-blue-400/10 text-blue-100",
+                            iconStyle: "bg-blue-400/20 text-blue-200",
+                          },
+                          {
+                            label: "Abroad / Backup Route",
+                            value: neetPathway?.abroadBackup ?? "",
+                            icon: Globe2,
+                            style:
+                              "border-violet-200/25 bg-violet-400/10 text-violet-100",
+                            iconStyle: "bg-violet-400/20 text-violet-200",
+                          },
+                          {
+                            label: "Budget Advice",
+                            value: neetPathway?.budgetAdvice ?? "",
+                            icon: WalletCards,
+                            style:
+                              "border-amber-200/25 bg-amber-300/10 text-amber-100",
+                            iconStyle: "bg-amber-300/20 text-amber-200",
+                          },
+                          {
+                            label: "Recommended Next Step",
+                            value: neetPathway?.nextStep ?? "",
+                            icon: Workflow,
+                            style:
+                              "border-emerald-200/25 bg-emerald-300/10 text-emerald-100",
+                            iconStyle: "bg-emerald-300/20 text-emerald-200",
+                          },
+                        ].map(({ label, value, icon: Icon, style, iconStyle }) => (
+                          <div
+                            key={label}
+                            className={`rounded-[20px] border p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] backdrop-blur-xl ${style}`}
+                          >
+                            <div className="flex items-start gap-2.5">
+                              <span
+                                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl ${iconStyle}`}
+                              >
+                                <Icon className="h-4 w-4" />
+                              </span>
+                              <div>
+                                <p className="text-[9px] font-black uppercase tracking-[0.14em]">
+                                  {label}
+                                </p>
+                                <p className="mt-1 text-[11px] font-medium leading-[1.55] text-white/88 sm:text-xs">
+                                  {value}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+
+                        <div className="rounded-[20px] border border-amber-300/35 bg-amber-300/12 p-3 text-amber-50">
+                          <p className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.14em] text-amber-200">
+                            <ShieldCheck className="h-4 w-4" />
+                            Guidance note
+                          </p>
+                          <p className="mt-1.5 text-[11px] font-medium leading-[1.55] text-amber-50/90">
+                            {neetPathway?.warning}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPopup(true)}
+                    className="group relative mt-4 inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-[20px] border border-emerald-200/60 bg-[linear-gradient(135deg,#70f5d4_0%,#00C896_48%,#00a9a8_100%)] px-4 py-3.5 text-center text-xs font-black text-[#04152f] shadow-[inset_0_1px_0_rgba(255,255,255,0.72),0_18px_35px_rgba(0,200,150,0.28)] transition duration-300 hover:-translate-y-1 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_25px_45px_rgba(0,200,150,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200 sm:text-sm"
+                  >
+                    <span className="absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-18deg] bg-white/45 blur-md transition duration-700 group-hover:left-[115%]" />
+                    <Headset className="relative h-4 w-4" />
+                    <span className="relative">
+                      Get Personalised Guidance for Your Plan
+                    </span>
+                    <ArrowUpRight className="relative h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </button>
                 </div>
               </section>
+              )}
 
-              <section className="rounded-[32px] border border-slate-200 bg-[#f8fafc] p-6 shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
-                <p className="text-sm uppercase tracking-[0.24em] text-[#0B1D39]">
-                  Live admission dashboard
-                </p>
-                <div className="mt-6 grid gap-4">
-                  {liveMetrics.map((metric) => (
-                    <div
-                      key={metric.label}
-                      className="rounded-[24px] bg-white p-5 shadow-[0_12px_28px_rgba(15,23,42,0.08)]"
-                    >
-                      <p className="text-3xl font-semibold text-[#081B35]">
-                        {metric.value}
-                      </p>
-                      <p className="mt-2 text-sm text-slate-500">{metric.label}</p>
-                    </div>
-                  ))}
+              <section className="relative overflow-hidden rounded-[28px] border border-slate-200/80 bg-[linear-gradient(145deg,#ffffff_0%,#f2f7ff_52%,#ecfeff_100%)] p-3.5 shadow-[0_22px_52px_rgba(15,45,91,0.14),inset_0_1px_0_rgba(255,255,255,1)] sm:rounded-[32px] sm:p-5">
+                <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-cyan-200/40 blur-3xl" />
+                <div className="relative flex items-center justify-between gap-3">
+                  <div>
+                    <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em] text-[#0B1D39] sm:text-xs">
+                      <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)]" />
+                      Live admission dashboard
+                    </p>
+                    <p className="mt-1 text-[10px] font-semibold text-slate-500">
+                      ILMALINK support activity
+                    </p>
+                  </div>
+                  <BarChart3 className="h-6 w-6 text-[#0F4CFF]" />
                 </div>
-                <p className="mt-3 text-[10px] font-medium leading-4 text-slate-500">
-                  Data compiled from ILMALINK MEDIGO student guidance records and official public sources.
+
+                <div className="relative mt-3 grid grid-cols-2 gap-2.5 sm:mt-5 sm:gap-3">
+                  {liveMetrics.map((metric, index) => {
+                    const Icon = metric.icon;
+
+                    return (
+                      <div
+                        key={metric.label}
+                        className={`group relative min-w-0 overflow-hidden rounded-[20px] border border-white/90 bg-white/88 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,1),0_13px_26px_rgba(15,45,91,0.1)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_34px_rgba(15,76,255,0.16)] sm:p-4 ${
+                          index % 2 === 0
+                            ? "[transform:perspective(600px)_rotateX(2deg)_rotateY(-2deg)]"
+                            : "[transform:perspective(600px)_rotateX(2deg)_rotateY(2deg)]"
+                        }`}
+                      >
+                        <span
+                          className={`absolute -right-5 -top-5 h-16 w-16 rounded-full bg-gradient-to-br opacity-15 blur-xl ${metric.tone}`}
+                        />
+                        <div
+                          className={`relative flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.38),0_8px_16px_rgba(15,45,91,0.18)] ${metric.tone}`}
+                        >
+                          <Icon className="h-4 w-4" />
+                        </div>
+                        <p className="relative mt-2 text-xl font-black tracking-[-0.04em] text-[#081B35] sm:text-3xl">
+                          {metric.value}
+                        </p>
+                        <p className="relative mt-0.5 truncate text-[9px] font-bold uppercase tracking-[0.08em] text-slate-500 sm:text-[11px]">
+                          {metric.label}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="relative mt-3 text-[9px] font-medium leading-4 text-slate-500">
+                  Compiled from ILMALINK MEDIGO guidance records and official public sources.
                 </p>
               </section>
             </aside>
           </div>
 
-          <section className="mt-12 rounded-[32px] bg-white p-6 shadow-[0_18px_44px_rgba(15,23,42,0.08)]">
-            <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-              <div>
-                <p className="text-sm uppercase tracking-[0.24em] text-[#0B1D39]">
-                  Admission journey
-                </p>
-                <h2 className="mt-3 text-3xl font-semibold text-[#081B35]">
-                  Your end-to-end MBBS application roadmap
-                </h2>
-              </div>
-              <Link
-                href="/create-account"
-                className="inline-flex items-center justify-center rounded-full bg-[#0F4CFF] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0b3fd6]"
+          <section className="relative mt-10 overflow-hidden rounded-[28px] border border-blue-100/80 bg-[radial-gradient(circle_at_50%_-20%,rgba(15,76,255,0.15),transparent_38%),linear-gradient(145deg,#f8fbff_0%,#ffffff_45%,#f0fbfa_100%)] p-2.5 shadow-[0_30px_75px_rgba(15,45,91,0.14),inset_0_1px_0_rgba(255,255,255,1)] sm:rounded-[34px] sm:p-5">
+            <div className="pointer-events-none absolute -left-20 top-24 h-56 w-56 rounded-full bg-blue-200/30 blur-3xl" />
+            <div className="pointer-events-none absolute -right-20 top-1/3 h-56 w-56 rounded-full bg-emerald-200/35 blur-3xl" />
+
+            <div className="relative mx-auto max-w-4xl text-center">
+              <p className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-white/90 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-[#0F4CFF] shadow-[0_10px_25px_rgba(15,76,255,0.1)] sm:text-xs">
+                <Workflow className="h-4 w-4" />
+                Your admission journey
+              </p>
+              <h2 className="mx-auto mt-3 max-w-3xl text-[25px] font-black leading-[1.08] tracking-[-0.04em] text-[#071B44] sm:text-4xl">
+                One support system.{" "}
+                <span className="bg-gradient-to-r from-[#0F4CFF] via-cyan-500 to-[#00A876] bg-clip-text text-transparent">
+                  Two smart pathways.
+                </span>
+              </h2>
+              <p className="mx-auto mt-2 max-w-3xl text-[11px] font-medium leading-5 text-slate-600 sm:text-sm">
+                ILMALINK MEDIGO helps identify whether India or Abroad is the
+                stronger fit, then supports each official step from profile
+                analysis to college joining.
+              </p>
+
+              <button
+                type="button"
+                data-open-counselling
+                onClick={() => setShowPopup(true)}
+                className="group relative mt-3.5 inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-blue-400/40 bg-[linear-gradient(135deg,#0F4CFF,#0879e8_48%,#00A876)] px-5 py-2.5 text-xs font-black text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_18px_36px_rgba(15,76,255,0.28)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_25px_45px_rgba(15,76,255,0.36)] sm:px-7 sm:text-sm"
               >
-                Start your journey
-              </Link>
+                <span className="absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-18deg] bg-white/35 blur-md transition duration-700 group-hover:left-[115%]" />
+                <Headset className="relative h-4 w-4" />
+                <span className="relative">Connect ILMALINK</span>
+                <ArrowUpRight className="relative h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </button>
             </div>
-            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {journeySteps.map((step, index) => (
-                <div key={step} className="rounded-[24px] border border-slate-200 bg-[#f8fafc] p-5">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#0F4CFF]/10 font-semibold text-[#0F4CFF]">
-                    {index + 1}
-                  </div>
-                  <p className="mt-4 text-sm font-semibold text-[#081B35]">{step}</p>
-                </div>
-              ))}
+
+            <div className="relative mt-5 grid gap-3.5">
+              <JourneyFlowLane
+                eyebrow="MBBS Abroad pathway"
+                title="India to international campus"
+                description="University discovery, application, visa, permissions, travel and on-arrival support."
+                steps={abroadJourneySteps}
+                icon={PlaneTakeoff}
+                accent="abroad"
+                onConnect={() => setShowPopup(true)}
+              />
+              <JourneyFlowLane
+                eyebrow="MBBS India pathway"
+                title="NEET counselling to college reporting"
+                description="MCC/state registration, choice filling, allotment, verification and joining support."
+                steps={indiaJourneySteps}
+                icon={Landmark}
+                accent="india"
+                onConnect={() => setShowPopup(true)}
+              />
+            </div>
+
+            <div className="relative mx-auto mt-3.5 flex max-w-3xl items-center justify-center gap-2 rounded-[18px] border border-white bg-white/82 px-3 py-2.5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,1),0_12px_28px_rgba(15,45,91,0.08)] backdrop-blur-xl">
+              <ShieldCheck className="h-5 w-5 shrink-0 text-[#00A876]" />
+              <p className="text-[10px] font-bold leading-4 text-[#15315f] sm:text-xs">
+                ILMALINK support follows the applicable official counselling,
+                university, visa and government processes for the student’s
+                selected pathway.
+              </p>
             </div>
           </section>
 
+          <DecisionIntelligenceSection />
+          {false && (
           <section className="mt-12 grid gap-8 xl:grid-cols-[1.2fr_0.8fr]">
             <div className="rounded-[32px] border border-slate-200 bg-[#f8fafc] p-6 shadow-[0_18px_44px_rgba(15,23,42,0.08)]">
               <div className="flex items-center justify-between gap-4">
@@ -1677,7 +2447,7 @@ export default function HomeHeroClient() {
                 </span>
               </div>
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                {costInsights.map((item) => (
+                {mbbsCostInsights.map((item) => (
                   <div
                     key={item.label}
                     className="rounded-[24px] bg-white p-5 shadow-[0_12px_28px_rgba(15,23,42,0.08)]"
@@ -1685,7 +2455,7 @@ export default function HomeHeroClient() {
                     <p className="text-lg font-semibold text-[#081B35]">{item.label}</p>
                     <div className="mt-4 grid gap-2 text-sm text-slate-600">
                       <p>
-                        Tuition: <span className="font-semibold text-[#0B1D39]">{item.fee}</span>
+                        Tuition: <span className="font-semibold text-[#0B1D39]">{item.tuition}</span>
                       </p>
                       <p>
                         Hostel:{" "}
@@ -1752,7 +2522,13 @@ export default function HomeHeroClient() {
               </div>
             </div>
           </section>
+          )}
 
+          <ReadyToMoveSection
+            onCounselling={() => setShowPopup(true)}
+            onCheckScore={focusNeetDecisionCenter}
+          />
+          {false && (
           <section className="mt-12 rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_18px_44px_rgba(15,23,42,0.08)]">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
@@ -1786,6 +2562,7 @@ export default function HomeHeroClient() {
               </div>
             </div>
           </section>
+          )}
 
       <NeetRankPredictorTool
         isOpen={showRankPredictor}

@@ -96,7 +96,7 @@ const indiaRegions: RegionAlias[] = [
   { state: "Himachal Pradesh", aliases: ["himachal pradesh"], cities: ["shimla"] },
   { state: "Jammu and Kashmir", aliases: ["jammu and kashmir", "jammu kashmir"], cities: ["jammu", "srinagar"] },
   { state: "Jharkhand", aliases: ["jharkhand"], cities: ["ranchi", "jamshedpur", "dhanbad"] },
-  { state: "Karnataka", aliases: ["karnataka"], cities: ["bengaluru", "bangalore", "mangalore", "mysuru", "mysore"] },
+  { state: "Karnataka", aliases: ["karnataka"], cities: ["bengaluru", "Bengaluru", "mangalore", "mysuru", "mysore"] },
   { state: "Kerala", aliases: ["kerala"], cities: ["kochi", "cochin", "thiruvananthapuram", "trivandrum", "kozhikode"] },
   { state: "Ladakh", aliases: ["ladakh"], cities: ["leh"] },
   { state: "Madhya Pradesh", aliases: ["madhya pradesh"], cities: ["bhopal", "indore", "jabalpur", "gwalior"] },

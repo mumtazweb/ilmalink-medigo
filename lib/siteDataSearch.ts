@@ -14,6 +14,7 @@ import { getMBBSIndiaAdmissionAccess } from "@/app/data/mbbsIndiaAdmissionAccess
 import { navbarCountryDestinations } from "@/app/data/navbarDestinations";
 import { kyrgyzstanUniversities } from "@/app/data/kyrgyzstanUniversities";
 import { georgiaUniversities } from "@/app/data/georgiaUniversities";
+import { bangladeshFeaturedUniversities } from "@/app/data/bangladeshUniversities";
 import { fmgeCountries } from "@/app/data/fmgeData";
 import {
   getFmgeCollegeDetailHref,
@@ -79,11 +80,43 @@ export type SuggestedSiteLink = {
   sourceLabel: string;
   dataType: SiteSearchDataType;
   lastUpdated?: string | null;
+  details?: string[];
+  whySuggested?: string;
+};
+
+export type CounsellingGreetingIntent =
+  | "greeting"
+  | "islamic-greeting"
+  | "thanks";
+
+export type CounsellingCollegeTypeIntent =
+  | "Government"
+  | "Private"
+  | "Deemed";
+
+export type CounsellingSearchIntent = {
+  greeting: CounsellingGreetingIntent | null;
+  region: "india" | "abroad" | "global";
+  country?: string;
+  state?: string;
+  city?: string;
+  collegeType?: CounsellingCollegeTypeIntent;
+  course?: "MBBS" | "BDS";
+  entity?: string;
+  best: boolean;
+  oldCollege: boolean;
+  seatPreference: boolean;
+  fmgePreference: boolean;
+  ambiguousBest: boolean;
+  directed: boolean;
+  detectedFilters: string[];
 };
 
 export type SiteDataSearchResponse = {
   query: string;
   intent: SiteQuestionIntent;
+  counsellingIntent: CounsellingSearchIntent;
+  detectedFilters: string[];
   matchedItems: SiteSearchMatch[];
   matchedPages: SiteSearchMatch[];
   matchedDataType: SiteSearchDataType[];
@@ -92,6 +125,177 @@ export type SiteDataSearchResponse = {
   sourceLabels: string[];
   lastUpdated?: string | null;
 };
+
+const cityLabels: Record<string, string> = {
+  Bengaluru: "Bengaluru",
+  bengaluru: "Bengaluru",
+  calcutta: "Kolkata",
+  kolkata: "Kolkata",
+};
+
+const entityCountryAliases = [
+  {
+    entity: "Green Life Medical College and Hospital",
+    country: "Bangladesh",
+    aliases: ["green life", "green life medical college"],
+  },
+  {
+    entity: "Jahurul Islam Medical College and Hospital",
+    country: "Bangladesh",
+    aliases: ["jahurul islam", "jahurul islam medical college"],
+  },
+  {
+    entity: "ALTE University",
+    country: "Georgia",
+    aliases: ["alte", "alte university"],
+  },
+] as const;
+
+function includesPhrase(text: string, phrase: string) {
+  return ` ${text} `.includes(` ${normalizeSiteSearchText(phrase)} `);
+}
+
+function detectGreetingIntent(
+  query: string
+): CounsellingGreetingIntent | null {
+  const raw = query.trim().toLowerCase();
+  const normalized = normalizeSiteSearchText(query);
+
+  if (
+    ["assalamualaikum", "as salamu alaykum", "salam"].includes(normalized) ||
+    raw === "السلام عليكم"
+  ) {
+    return "islamic-greeting";
+  }
+
+  if (["hi", "hello", "hey", "hii", "helo"].includes(normalized)) {
+    return "greeting";
+  }
+
+  if (["thanks", "thank you"].includes(normalized)) {
+    return "thanks";
+  }
+
+  return null;
+}
+
+export function detectCounsellingSearchIntent(
+  query: string
+): CounsellingSearchIntent {
+  const normalized = normalizeSearchQueryWithCorrections(query);
+  const profile = buildInternalSearchQueryProfile(query);
+  const greeting = detectGreetingIntent(query);
+  const localEntity = entityCountryAliases.find((item) =>
+    item.aliases.some((alias) => includesPhrase(normalized, alias))
+  );
+  const country = profile.country ?? localEntity?.country;
+  const entity = profile.entity?.canonicalName ?? localEntity?.entity;
+  const best = includesPhrase(normalized, "best") ||
+    includesPhrase(normalized, "recommended") ||
+    includesPhrase(normalized, "suggest");
+  const collegeType: CounsellingCollegeTypeIntent | undefined =
+    includesPhrase(normalized, "private")
+      ? "Private"
+      : includesPhrase(normalized, "government") ||
+          includesPhrase(normalized, "govt")
+        ? "Government"
+        : includesPhrase(normalized, "deemed")
+          ? "Deemed"
+          : undefined;
+  const course = includesPhrase(normalized, "bds")
+    ? "BDS"
+    : includesPhrase(normalized, "mbbs")
+      ? "MBBS"
+      : undefined;
+  const region = country
+    ? "abroad"
+    : profile.regionIntent === "india"
+      ? "india"
+      : profile.regionIntent === "abroad"
+        ? "abroad"
+        : "global";
+  const asksForInstitution =
+    profile.intents.college ||
+    /\bcollege|university|institute|academy\b/.test(normalized);
+  const ambiguousBest =
+    best &&
+    asksForInstitution &&
+    !country &&
+    !profile.state &&
+    !profile.city &&
+    region === "global";
+  const explicitIndia =
+    includesPhrase(normalized, "india") ||
+    includesPhrase(normalized, "mbbs india") ||
+    includesPhrase(normalized, "mbbs in india");
+  const detectedFilters = greeting
+    ? [
+        greeting === "islamic-greeting"
+          ? "Islamic greeting"
+          : greeting === "thanks"
+            ? "Thanks"
+            : "Greeting",
+      ]
+    : [
+        region === "india" ? "India" : undefined,
+        country,
+        profile.state,
+        profile.city
+          ? cityLabels[profile.city] ??
+            profile.city.replace(/\b\w/g, (character) =>
+              character.toUpperCase()
+            )
+          : undefined,
+        collegeType,
+        course,
+        best
+          ? /\bcollege|colleges\b/.test(normalized)
+            ? "Best college"
+            : country
+              ? "Best university"
+              : "Best college"
+          : undefined,
+        /\bold|oldest|legacy|established\b/.test(normalized)
+          ? "Older institutions first"
+          : undefined,
+        /\bseat|seats|intake\b/.test(normalized)
+          ? "Higher seat count"
+          : undefined,
+        /\bfmge|nbems|appeared|pass rate|passed\b/.test(normalized)
+          ? "FMGE data"
+          : undefined,
+        entity,
+      ].filter((value): value is string => Boolean(value));
+
+  return {
+    greeting,
+    region,
+    country,
+    state: profile.state,
+    city: profile.city,
+    collegeType,
+    course,
+    entity,
+    best,
+    oldCollege: /\bold|oldest|legacy|established\b/.test(normalized),
+    seatPreference: /\bseat|seats|intake\b/.test(normalized),
+    fmgePreference: /\bfmge|nbems|appeared|pass rate|passed\b/.test(
+      normalized
+    ),
+    ambiguousBest,
+    directed: Boolean(
+      greeting ||
+        ambiguousBest ||
+        country ||
+        entity ||
+        profile.state ||
+        profile.city ||
+        collegeType ||
+        (region === "india" && (asksForInstitution || explicitIndia))
+    ),
+    detectedFilters: Array.from(new Set(detectedFilters)),
+  };
+}
 
 const stopWords = new Set([
   "a",
@@ -687,6 +891,54 @@ function getCountryAliases(country: string) {
   return [];
 }
 
+function summarizeFmgePerformance(
+  performance:
+    | {
+        appeared: number;
+        passed: number;
+        passRate: string;
+      }[]
+    | undefined
+) {
+  if (!performance?.length) {
+    return {
+      appeared: 0,
+      passed: 0,
+      passRate: 0,
+    };
+  }
+
+  const appeared = performance.reduce(
+    (total, item) => total + item.appeared,
+    0
+  );
+  const passed = performance.reduce(
+    (total, item) => total + item.passed,
+    0
+  );
+
+  return {
+    appeared,
+    passed,
+    passRate: appeared > 0 ? (passed / appeared) * 100 : 0,
+  };
+}
+
+function countAvailableValues(values: unknown[]) {
+  return values.reduce<number>(
+    (count, value) =>
+      count +
+      (Array.isArray(value)
+        ? value.length > 0
+          ? 1
+          : 0
+        : value !== undefined && value !== null && value !== ""
+          ? 1
+          : 0),
+    0
+  );
+}
+
 function buildBaseRecords() {
   const records: SiteSearchRecord[] = [
     createRecord(
@@ -771,10 +1023,83 @@ function buildBaseRecords() {
           priority: destination.badge === "Top" ? 101 : 96,
         },
         "Country Page",
-        "ILMALINK destination pages"
+        "ILMALINK destination pages",
+        {
+          data: {
+            kind: "country-page",
+            country: destination.label,
+          },
+        }
       )
     ),
   ];
+
+  bangladeshFeaturedUniversities.forEach((university, index) => {
+    records.push(
+      createRecord(
+        {
+          id: `ask-bangladesh-university-${slugify(university.name)}`,
+          title: university.name,
+          description: `${university.city}, Bangladesh. ${university.summary}`,
+          url: `/mbbs-abroad/bangladesh?q=${encodeURIComponent(
+            university.name
+          )}#bangladesh-universities`,
+          category: "Bangladesh Universities",
+          group: "Destinations",
+          type: "destination",
+          tags: [
+            "Bangladesh",
+            "MBBS in Bangladesh",
+            university.name,
+            university.city,
+            "private medical college",
+            "FMGE",
+          ],
+          content: [
+            university.name,
+            university.city,
+            university.fees,
+            university.summary,
+            `${university.fmge.appeared} appeared`,
+            `${university.fmge.passed} passed`,
+            `${university.fmge.passRate} pass rate`,
+            "Bangladesh MBBS private medical college FMGE admission fees",
+          ].join(" "),
+          priority: 104 - index,
+        },
+        "University",
+        "ILMALINK Bangladesh university data",
+        {
+          keyFacts: [
+            "Private medical college",
+            `${university.city}, Bangladesh`,
+            `${university.fmge.appeared.toLocaleString("en-IN")} FMGE appeared`,
+            `${university.fmge.passed.toLocaleString("en-IN")} FMGE passed`,
+            `${university.fmge.passRate} pass rate`,
+          ],
+          data: {
+            kind: "bangladesh-university",
+            country: "Bangladesh",
+            city: university.city,
+            institutionType: "Private medical college",
+            fees: university.fees,
+            appeared: university.fmge.appeared,
+            passed: university.fmge.passed,
+            passRate: university.fmge.passRate,
+            featured: true,
+            projectOrder: index,
+            pageExists: false,
+            dataCompleteness: countAvailableValues([
+              university.city,
+              university.fees,
+              university.summary,
+              university.fmge,
+            ]),
+          },
+        }
+      )
+    );
+  });
 
   for (const group of mbbsIndiaCollegesByState) {
     const access = getMBBSIndiaAdmissionAccess(
@@ -944,21 +1269,36 @@ function buildBaseRecords() {
           ],
           data: {
             kind: "mbbs-india-college",
+            country: "India",
             state: college.state,
             category: college.category,
+            institutionType: /deemed/i.test(college.collegeName)
+              ? "Deemed"
+              : college.category,
             seatCapacity: college.seatCapacity,
             establishmentYear: college.establishmentYear,
             fees: college.fees,
             counselling2025: counselling,
+            dataCompleteness: countAvailableValues([
+              college.state,
+              college.category,
+              college.seatCapacity,
+              college.establishmentYear,
+              college.fees !== "To be updated" ? college.fees : undefined,
+              counselling,
+            ]),
           },
         }
       )
     );
   }
 
-  for (const university of kyrgyzstanUniversities) {
+  for (const [projectOrder, university] of kyrgyzstanUniversities.entries()) {
     const aliases = universityAliases[university.slug] ?? [];
     const firstFee = university.feeRows[0];
+    const fmgeStats = summarizeFmgePerformance(
+      university.fmgePerformance
+    );
     const fmgeSummary = university.fmgePerformance
       ?.map(
         (item) =>
@@ -1026,24 +1366,44 @@ function buildBaseRecords() {
           ].filter(Boolean),
           data: {
             kind: "kyrgyz-university",
+            country: "Kyrgyzstan",
             slug: university.slug,
             name: university.name,
             location: university.location,
+            institutionType: "University",
             accreditationLabel: university.accreditationLabel,
             recommendationLevel: university.recommendationLevel,
             recommendationMessage: university.recommendationMessage,
             feeRows: university.feeRows,
             feeNotes: university.feeNotes,
             fmgePerformance: university.fmgePerformance,
+            appeared: fmgeStats.appeared,
+            passed: fmgeStats.passed,
+            passRate: `${fmgeStats.passRate.toFixed(2)}%`,
+            pageExists: Boolean(university.pageExists),
+            projectOrder,
+            dataCompleteness: countAvailableValues([
+              university.location,
+              university.program,
+              university.accreditationLabel,
+              university.recommendationLevel,
+              university.feeRows,
+              university.fmgePerformance,
+              university.highlights,
+              university.entryRequirements,
+            ]),
           },
         }
       )
     );
   }
 
-  for (const university of georgiaUniversities) {
+  for (const [projectOrder, university] of georgiaUniversities.entries()) {
     const aliases = universityAliases[university.slug] ?? [];
     const firstFee = university.feeRows[0];
+    const fmgeStats = summarizeFmgePerformance(
+      university.fmgePerformance
+    );
     const fmgeSummary = university.fmgePerformance
       ?.map(
         (item) =>
@@ -1126,13 +1486,34 @@ function buildBaseRecords() {
           ].filter(Boolean) as string[],
           data: {
             kind: "georgia-university",
+            country: "Georgia",
             slug: university.slug,
             name: university.name,
+            city: university.city,
             location: university.location,
+            institutionType: "University",
+            recommendationLabel: university.recommendationLabel,
             feeSummary: university.feeSummary,
             feeRows: university.feeRows,
             feeNotes: university.feeNotes,
             fmgePerformance: university.fmgePerformance,
+            appeared: fmgeStats.appeared,
+            passed: fmgeStats.passed,
+            passRate: `${fmgeStats.passRate.toFixed(2)}%`,
+            pageExists: Boolean(university.pageExists),
+            projectOrder,
+            dataCompleteness: countAvailableValues([
+              university.city,
+              university.program,
+              university.duration,
+              university.medium,
+              university.feeSummary,
+              university.accreditationLabel,
+              university.recommendationLabel,
+              university.fmgePerformance,
+              university.highlights,
+              university.entryRequirements,
+            ]),
           },
         }
       )
@@ -1485,6 +1866,534 @@ function scoreRecord(
   return score;
 }
 
+function getRecordKind(record: SiteSearchRecord) {
+  return typeof record.data?.kind === "string" ? record.data.kind : "";
+}
+
+function getRecordString(record: SiteSearchRecord, key: string) {
+  const value = record.data?.[key];
+  return typeof value === "string" ? value : undefined;
+}
+
+function getRecordNumber(record: SiteSearchRecord, key: string) {
+  const value = record.data?.[key];
+  return typeof value === "number" && Number.isFinite(value)
+    ? value
+    : undefined;
+}
+
+function getPassRateNumber(record: SiteSearchRecord) {
+  const value = record.data?.passRate;
+
+  if (typeof value === "number") return value;
+  if (typeof value === "string") {
+    const parsed = Number.parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  return 0;
+}
+
+function matchesCity(record: SiteSearchRecord, city: string) {
+  const normalizedTitle = normalizeSiteSearchText(record.title);
+  const cityOptions =
+    city === "kolkata" || city === "calcutta"
+      ? ["kolkata", "calcutta"]
+      : city === "bengaluru" || city === "Bengaluru"
+        ? ["bengaluru", "Bengaluru"]
+        : [city];
+
+  return cityOptions.some((option) =>
+    includesPhrase(normalizedTitle, option)
+  );
+}
+
+function matchesEntity(record: SiteSearchRecord, entity: string) {
+  const title = normalizeSiteSearchText(record.title);
+  const aliases: Record<string, string[]> = {
+    "kyrgyz state medical academy": [
+      "kyrgyz state medical academy",
+      "i k akhunbaev kyrgyz state medical academy",
+    ],
+    "international higher school of medicine": [
+      "international higher school of medicine",
+    ],
+    "east european university": ["east european university"],
+    "georgian american university": ["georgian american university"],
+    "tbilisi state medical university": [
+      "tbilisi state medical university",
+    ],
+    "green life medical college and hospital": [
+      "green life medical college",
+    ],
+    "jahurul islam medical college and hospital": [
+      "jahurul islam medical college",
+    ],
+    "alte university": ["alte university"],
+  };
+  const normalizedEntity = normalizeSiteSearchText(entity);
+
+  return (aliases[normalizedEntity] ?? [normalizedEntity]).some((alias) =>
+    title.includes(alias)
+  );
+}
+
+function filterCounsellingRecords(
+  records: SiteSearchRecord[],
+  intent: CounsellingSearchIntent
+) {
+  if (intent.greeting || intent.ambiguousBest) return [];
+
+  if (intent.region === "india") {
+    if (intent.course === "BDS") return [];
+
+    return records.filter((record) => {
+      const kind = getRecordKind(record);
+      const isIndiaResult =
+        kind === "mbbs-india-college" ||
+        kind === "mbbs-india-state" ||
+        record.id === "ask-mbbs-india-directory";
+
+      if (!isIndiaResult) return false;
+
+      if (intent.state) {
+        const state = getRecordString(record, "state");
+        if (state !== intent.state) return false;
+      }
+
+      if (intent.city) {
+        if (
+          kind !== "mbbs-india-college" ||
+          !matchesCity(record, intent.city)
+        ) {
+          return false;
+        }
+      }
+
+      if (intent.collegeType) {
+        if (kind !== "mbbs-india-college") return false;
+        const institutionType =
+          getRecordString(record, "institutionType") ??
+          getRecordString(record, "category");
+
+        if (institutionType !== intent.collegeType) return false;
+      }
+
+      return true;
+    });
+  }
+
+  if (intent.country) {
+    let countryRecords = records.filter((record) => {
+      const classification = classifyInternalSearchRecord(record);
+      const kind = getRecordKind(record);
+      const isInstitution =
+        kind === "kyrgyz-university" ||
+        kind === "georgia-university" ||
+        kind === "bangladesh-university" ||
+        kind === "fmge-college";
+      const isCountryGuide =
+        kind === "country-page" || kind === "fmge-country";
+
+      if (
+        classification.regionType !== "abroad" ||
+        classification.country !== intent.country ||
+        (!isInstitution && !isCountryGuide)
+      ) {
+        return false;
+      }
+
+      if (intent.best && !isInstitution) return false;
+
+      return true;
+    });
+    const richInstitutionTitles = new Set(
+      countryRecords
+        .filter((record) =>
+          [
+            "kyrgyz-university",
+            "georgia-university",
+            "bangladesh-university",
+          ].includes(getRecordKind(record))
+        )
+        .map((record) => normalizeSiteSearchText(record.title))
+    );
+
+    countryRecords = countryRecords.filter(
+      (record) =>
+        getRecordKind(record) !== "fmge-college" ||
+        !richInstitutionTitles.has(normalizeSiteSearchText(record.title))
+    );
+
+    if (intent.entity) {
+      const entityRecords = countryRecords.filter((record) =>
+        matchesEntity(record, intent.entity!)
+      );
+      const richEntityRecords = entityRecords.filter((record) =>
+        [
+          "kyrgyz-university",
+          "georgia-university",
+          "bangladesh-university",
+        ].includes(getRecordKind(record))
+      );
+
+      countryRecords = richEntityRecords.length
+        ? richEntityRecords
+        : entityRecords;
+    }
+
+    return countryRecords;
+  }
+
+  return records;
+}
+
+function indiaPremiumPriority(record: SiteSearchRecord) {
+  const title = normalizeSiteSearchText(record.title);
+
+  if (title.includes("all india institute of medical sciences")) {
+    return title.includes("new delhi") ? 0 : 1;
+  }
+
+  if (
+    title.includes(
+      "jawaharlal institute of postgraduate medical education and research"
+    )
+  ) {
+    return 2;
+  }
+
+  if (title.includes("institute of medical sciences bhu")) {
+    return 3;
+  }
+
+  return 4;
+}
+
+function isMedicalCollegeKolkata(record: SiteSearchRecord) {
+  const title = normalizeSiteSearchText(record.title);
+  return (
+    title === "govt medical college kolkata" ||
+    title === "medical college kolkata" ||
+    title === "kolkata medical college"
+  );
+}
+
+function compareIndiaRecords(
+  a: SiteSearchRecord,
+  b: SiteSearchRecord,
+  intent: CounsellingSearchIntent
+) {
+  const aKind = getRecordKind(a);
+  const bKind = getRecordKind(b);
+  const prefersCollegeFirst = Boolean(
+    intent.best ||
+      intent.state ||
+      intent.city ||
+      intent.collegeType ||
+      intent.oldCollege ||
+      intent.seatPreference
+  );
+  const kindRank = (record: SiteSearchRecord) => {
+    const kind = getRecordKind(record);
+    if (prefersCollegeFirst) {
+      return kind === "mbbs-india-college"
+        ? 0
+        : kind === "mbbs-india-state"
+          ? 1
+          : 2;
+    }
+
+    return record.id === "ask-mbbs-india-directory"
+      ? 0
+      : kind === "mbbs-india-college"
+        ? 1
+        : 2;
+  };
+  const kindDifference = kindRank(a) - kindRank(b);
+  if (kindDifference !== 0) return kindDifference;
+
+  if (
+    intent.best &&
+    (intent.state === "West Bengal" || intent.city === "kolkata")
+  ) {
+    const kolkataDifference =
+      Number(isMedicalCollegeKolkata(b)) -
+      Number(isMedicalCollegeKolkata(a));
+    if (kolkataDifference !== 0) return kolkataDifference;
+  }
+
+  if (intent.best && !intent.state && !intent.city) {
+    const premiumDifference =
+      indiaPremiumPriority(a) - indiaPremiumPriority(b);
+    if (premiumDifference !== 0) return premiumDifference;
+  }
+
+  const categoryRank = (record: SiteSearchRecord) =>
+    getRecordString(record, "category") === "Government" ? 0 : 1;
+  const categoryDifference = categoryRank(a) - categoryRank(b);
+  if (
+    categoryDifference !== 0 &&
+    aKind === "mbbs-india-college" &&
+    bKind === "mbbs-india-college"
+  ) {
+    return categoryDifference;
+  }
+
+  const aYear = getRecordNumber(a, "establishmentYear") ?? 9999;
+  const bYear = getRecordNumber(b, "establishmentYear") ?? 9999;
+  const aSeats = getRecordNumber(a, "seatCapacity") ?? 0;
+  const bSeats = getRecordNumber(b, "seatCapacity") ?? 0;
+
+  if (intent.seatPreference && bSeats !== aSeats) return bSeats - aSeats;
+  if (aYear !== bYear) return aYear - bYear;
+  if (bSeats !== aSeats) return bSeats - aSeats;
+
+  const completenessDifference =
+    (getRecordNumber(b, "dataCompleteness") ?? 0) -
+    (getRecordNumber(a, "dataCompleteness") ?? 0);
+
+  return completenessDifference || a.title.localeCompare(b.title);
+}
+
+function abroadCustomPriority(
+  record: SiteSearchRecord,
+  intent: CounsellingSearchIntent
+) {
+  if (!intent.best || !intent.country) return 99;
+  const title = normalizeSiteSearchText(record.title);
+
+  if (intent.country === "Kyrgyzstan") {
+    if (title === "kyrgyz state medical academy") return 0;
+    if (title === "international higher school of medicine ihsm") return 1;
+    if (title.includes("international higher school of medicine")) return 2;
+  }
+
+  if (intent.country === "Georgia") {
+    if (title === "georgian american university") return 0;
+    if (title === "east european university") return 1;
+    if (title === "alte university") return 2;
+  }
+
+  if (intent.country === "Bangladesh") {
+    if (title.includes("green life medical college")) return 0;
+    if (title.includes("jahurul islam medical college")) return 1;
+  }
+
+  return 99;
+}
+
+function compareAbroadRecords(
+  a: SiteSearchRecord,
+  b: SiteSearchRecord,
+  intent: CounsellingSearchIntent
+) {
+  if (intent.entity) {
+    const normalizedEntity = normalizeSiteSearchText(intent.entity);
+    const exactEntityRank = (record: SiteSearchRecord) => {
+      const title = normalizeSiteSearchText(record.title);
+
+      if (title === normalizedEntity) return 0;
+      if (
+        normalizedEntity === "international higher school of medicine" &&
+        title.startsWith(normalizedEntity) &&
+        !title.includes("campus")
+      ) {
+        return 0;
+      }
+
+      return matchesEntity(record, intent.entity!) ? 1 : 2;
+    };
+    const entityDifference =
+      exactEntityRank(a) - exactEntityRank(b);
+    if (entityDifference !== 0) return entityDifference;
+  }
+
+  if (
+    !intent.best &&
+    !intent.entity &&
+    !intent.fmgePreference
+  ) {
+    const countryGuideRank = (record: SiteSearchRecord) =>
+      getRecordKind(record) === "country-page" ? 0 : 1;
+    const countryGuideDifference =
+      countryGuideRank(a) - countryGuideRank(b);
+    if (countryGuideDifference !== 0) return countryGuideDifference;
+  }
+
+  if (intent.fmgePreference) {
+    const fmgeCountryRank = (record: SiteSearchRecord) =>
+      getRecordKind(record) === "fmge-country" ? 0 : 1;
+    const fmgeCountryDifference =
+      fmgeCountryRank(a) - fmgeCountryRank(b);
+    if (fmgeCountryDifference !== 0) return fmgeCountryDifference;
+  }
+
+  const customDifference =
+    abroadCustomPriority(a, intent) - abroadCustomPriority(b, intent);
+  if (customDifference !== 0) return customDifference;
+
+  const appearedDifference =
+    (getRecordNumber(b, "appeared") ?? 0) -
+    (getRecordNumber(a, "appeared") ?? 0);
+  if (appearedDifference !== 0) return appearedDifference;
+
+  const passRateDifference =
+    getPassRateNumber(b) - getPassRateNumber(a);
+  if (passRateDifference !== 0) return passRateDifference;
+
+  const recommendedRank = (record: SiteSearchRecord) => {
+    const recommendation = normalizeSiteSearchText(
+      getRecordString(record, "recommendationLevel") ??
+        getRecordString(record, "recommendationLabel") ??
+        ""
+    );
+    return recommendation.startsWith("recommended") ||
+      recommendation.includes("featured")
+      ? 0
+      : 1;
+  };
+  const recommendedDifference =
+    recommendedRank(a) - recommendedRank(b);
+  if (recommendedDifference !== 0) return recommendedDifference;
+
+  const pageDifference =
+    Number(Boolean(b.data?.pageExists)) -
+    Number(Boolean(a.data?.pageExists));
+  if (pageDifference !== 0) return pageDifference;
+
+  const featuredDifference =
+    Number(Boolean(b.data?.featured)) -
+    Number(Boolean(a.data?.featured));
+  if (featuredDifference !== 0) return featuredDifference;
+
+  const completenessDifference =
+    (getRecordNumber(b, "dataCompleteness") ?? 0) -
+    (getRecordNumber(a, "dataCompleteness") ?? 0);
+  if (completenessDifference !== 0) return completenessDifference;
+
+  const projectOrderDifference =
+    (getRecordNumber(a, "projectOrder") ?? 9999) -
+    (getRecordNumber(b, "projectOrder") ?? 9999);
+
+  return projectOrderDifference || a.title.localeCompare(b.title);
+}
+
+function getWhySuggested(
+  record: SiteSearchRecord,
+  intent: CounsellingSearchIntent
+) {
+  const kind = getRecordKind(record);
+
+  if (kind === "country-page") {
+    return `Official ILMALINK ${intent.country ?? "MBBS Abroad"} country guide.`;
+  }
+
+  if (kind === "fmge-country") {
+    return "Country-level FMGE volume and pass-rate reference from the current ILMALINK dataset.";
+  }
+
+  if (kind === "mbbs-india-state") {
+    return "State counselling overview with college counts, seats and admission-access guidance.";
+  }
+
+  if (record.id === "ask-mbbs-india-directory") {
+    return "Starting point for the state-wise ILMALINK MBBS India college directory.";
+  }
+
+  if (isMedicalCollegeKolkata(record)) {
+    return "Old government medical college with strong legacy value and West Bengal counselling relevance.";
+  }
+
+  const premium = indiaPremiumPriority(record);
+  if (intent.best && premium < 4) {
+    return "Premium government institution prioritised by ILMALINK’s India ranking logic.";
+  }
+
+  if (kind === "mbbs-india-college") {
+    const category =
+      getRecordString(record, "institutionType") ??
+      getRecordString(record, "category") ??
+      "Medical";
+    return `${category} college ordered by location fit, established year, seat count and available data.`;
+  }
+
+  const customPriority = abroadCustomPriority(record, intent);
+  if (customPriority < 99) {
+    return `${intent.country} priority option in ILMALINK’s counselling ranking logic.`;
+  }
+
+  const appeared = getRecordNumber(record, "appeared") ?? 0;
+  if (appeared > 0) {
+    return "Suggested using FMGE appearance volume, pass-rate reference and available university data.";
+  }
+
+  return "Suggested from the available ILMALINK country and university dataset.";
+}
+
+function toCounsellingSuggestedLink(
+  item: SiteSearchMatch,
+  intent: CounsellingSearchIntent
+): SuggestedSiteLink {
+  const kind = getRecordKind(item);
+  const details: string[] = [];
+
+  if (kind === "mbbs-india-college") {
+    const type =
+      getRecordString(item, "institutionType") ??
+      getRecordString(item, "category");
+    const state = getRecordString(item, "state");
+    const year = getRecordNumber(item, "establishmentYear");
+    const seats = getRecordNumber(item, "seatCapacity");
+
+    if (type || state) {
+      details.push([type, state].filter(Boolean).join(" | "));
+    }
+    if (year) details.push(`Established: ${year}`);
+    if (seats) details.push(`MBBS seats: ${seats.toLocaleString("en-IN")}`);
+  } else {
+    const institutionType = getRecordString(item, "institutionType");
+    const location =
+      getRecordString(item, "location") ??
+      [
+        getRecordString(item, "city"),
+        getRecordString(item, "country"),
+      ]
+        .filter(Boolean)
+        .join(", ");
+    const appeared = getRecordNumber(item, "appeared") ?? 0;
+    const passed = getRecordNumber(item, "passed") ?? 0;
+    const passRate =
+      typeof item.data?.passRate === "string"
+        ? item.data.passRate
+        : undefined;
+
+    if (institutionType || location) {
+      details.push(
+        [institutionType, location].filter(Boolean).join(" | ")
+      );
+    }
+    if (appeared > 0) {
+      details.push(
+        `FMGE: ${appeared.toLocaleString("en-IN")} appeared, ${passed.toLocaleString(
+          "en-IN"
+        )} passed${passRate ? `, ${passRate} pass rate` : ""}`
+      );
+    }
+  }
+
+  return {
+    title: item.title,
+    description: details[0] ?? item.description,
+    url: item.url,
+    sourceLabel: item.sourceLabel,
+    dataType: item.matchedDataType,
+    lastUpdated: item.lastUpdated,
+    details,
+    whySuggested: getWhySuggested(item, intent),
+  };
+}
+
 function getConfidence(topScore: number, matchedCount: number) {
   if (topScore >= 360 || matchedCount >= 5) return "high";
   if (topScore >= 180 || matchedCount >= 2) return "medium";
@@ -1530,53 +2439,85 @@ export function searchInternalSiteData(
 ): SiteDataSearchResponse {
   const normalizedQuery = normalizeSearchQueryWithCorrections(query);
   const profile = buildInternalSearchQueryProfile(query);
+  const counsellingIntent = detectCounsellingSearchIntent(query);
   const queryTerms = getImportantQueryTerms(query);
   const limit = options.limit ?? 12;
   const intent = detectSiteQuestionIntent(query);
   const allRecords = buildInternalSiteSearchIndex(options.extraRecords);
-  const scored = allRecords
+  const candidateRecords = counsellingIntent.directed
+    ? filterCounsellingRecords(allRecords, counsellingIntent)
+    : allRecords;
+  const scored = candidateRecords
     .map((record) => ({
       ...record,
       score: normalizedQuery
         ? scoreRecord(record, normalizedQuery, queryTerms, intent, profile)
         : record.priority,
     }))
-    .filter((record) => record.score > 0)
-    .sort(
-      (a, b) =>
+    .filter((record) =>
+      counsellingIntent.directed ? true : record.score > 0
+    )
+    .sort((a, b) => {
+      if (counsellingIntent.directed) {
+        return counsellingIntent.region === "india"
+          ? compareIndiaRecords(a, b, counsellingIntent)
+          : compareAbroadRecords(a, b, counsellingIntent);
+      }
+
+      return (
         b.score -
           a.score ||
         b.priority -
           a.priority ||
         a.title.localeCompare(b.title)
-    )
-    .slice(0, limit);
+      );
+    })
+    .slice(0, limit)
+    .map((record, index) =>
+      counsellingIntent.directed
+        ? {
+            ...record,
+            score: Math.max(1, 1_000 - index),
+          }
+        : record
+    );
   const matchedDataType = Array.from(
     new Set(scored.map((item) => item.matchedDataType))
   );
   const sourceLabels = Array.from(
     new Set(scored.map((item) => item.sourceLabel))
   );
-  const suggestedLinks = scored.slice(0, 6).map((item) => ({
-    title: item.title,
-    description: item.description,
-    url: item.url,
-    sourceLabel: item.sourceLabel,
-    dataType: item.matchedDataType,
-    lastUpdated: item.lastUpdated,
-  }));
+  const suggestedLinks = scored.slice(0, 6).map((item) =>
+    counsellingIntent.directed
+      ? toCounsellingSuggestedLink(item, counsellingIntent)
+      : {
+          title: item.title,
+          description: item.description,
+          url: item.url,
+          sourceLabel: item.sourceLabel,
+          dataType: item.matchedDataType,
+          lastUpdated: item.lastUpdated,
+        }
+  );
   const lastUpdated =
     scored.find((item) => item.lastUpdated)?.lastUpdated ?? null;
 
   return {
     query,
     intent,
+    counsellingIntent,
+    detectedFilters: counsellingIntent.detectedFilters,
     matchedItems: scored,
     matchedPages: scored.filter((item) =>
       ["page", "destination", "blog"].includes(item.type)
     ),
     matchedDataType,
-    confidence: getConfidence(scored[0]?.score ?? 0, scored.length),
+    confidence:
+      counsellingIntent.greeting || counsellingIntent.ambiguousBest
+        ? "high"
+        : counsellingIntent.directed && scored.length > 0
+          ? "high"
+          : getConfidence(scored[0]?.score ?? 0, scored.length),
     suggestedLinks,
     sourceLabels,
     lastUpdated,

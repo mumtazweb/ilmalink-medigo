@@ -117,6 +117,7 @@ export async function POST(request: NextRequest) {
           answer:
             "Please type a keyword or MBBS-related question.",
           confidence: "low",
+          detectedFilters: [],
           matchedItems: [],
           suggestedLinks: [],
           shouldShowConnectCTA: true,
@@ -149,12 +150,13 @@ export async function POST(request: NextRequest) {
     return Response.json(
       {
         answer:
-          "This question can be answered better by our experts. Connect ILMALINK for a personalised reply, and you can ask any other MBBS question there too.",
+          "I could not find a confident match in ILMALINK data. You can ask in another way or connect with ILMALINK MEDIGO for counselling support.",
         confidence: "low",
+        detectedFilters: [],
         matchedItems: [],
         suggestedLinks: [],
         shouldShowConnectCTA: true,
-        shouldAutoOpenCounselling: true,
+        shouldAutoOpenCounselling: false,
         notFound: true,
       },
       { status: 500 }

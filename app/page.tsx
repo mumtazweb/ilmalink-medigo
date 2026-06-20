@@ -35,6 +35,7 @@ export default async function Home() {
     { label: "MBBS Abroad", href: "/mbbs-abroad" },
     { label: "MBBS India", href: "/mbbs-india" },
     { label: "NEET Hub", href: "/neet" },
+    { label: "MBBS Decision Intelligence", href: "/mbbs-decision-intelligence" },
     { label: "Scholarships & Loans", href: "/scholarships-loans" },
     { label: "Trust Center", href: "/trust-center" },
     { label: "Student Alerts", href: "/alert/" },
