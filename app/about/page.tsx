@@ -5,13 +5,13 @@ import { buildBreadcrumbSchema } from "../lib/schema";
 
 // --- METADATA for SEO ---
 export const metadata: Metadata = {
-  title: "About ILMALINK MEDIGO | Medical Education Consultant for MBBS Abroad & India",
-  description: "ILMALINK MEDIGO provides expert guidance for MBBS admissions abroad and in India. Evidence-based career counselling, verified university partnerships, and transparent admission processes.",
-  keywords: "MBBS admission consultant, medical education counselling, study MBBS abroad, MBBS in India guidance, career counselling for doctors, medical university admission, NEET counselling",
+  title: "About ILMALINK MEDIGO | Student-First MBBS Admission Consultancy",
+  description: "ILMALINK MEDIGO is a student-first MBBS admission consultancy in India for MBBS Abroad, MBBS India, NEET counselling, eligibility, documents, scholarships and loans.",
+  keywords: "MBBS admission consultancy in India, MBBS abroad consultant for Indian students, student-first medical admission consultancy, MBBS India counselling support, NEET counselling guidance",
   authors: [{ name: "Injamul Hoque Middya", url: "https://x.com/middyaofficial" }],
   openGraph: {
-    title: "ILMALINK MEDIGO | Expert Medical Education Counselling",
-    description: "Navigate your medical career journey with confidence. Comprehensive guidance for MBBS admissions in India and abroad.",
+    title: "ILMALINK MEDIGO | Student-First MBBS Admission Consultancy",
+    description: "Transparent MBBS admission consultancy and medical education guidance for Indian students planning MBBS in India or abroad.",
     url: "https://www.ilmalink.com/about",
     siteName: "ILMALINK MEDIGO",
     images: [{ url: "https://www.ilmalink.com/og-about.jpg", width: 1200, height: 630 }],
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ILMALINK MEDIGO | Medical Education Consultant",
-    description: "Expert guidance for MBBS admissions and medical education pathways.",
+    title: "ILMALINK MEDIGO | MBBS Admission Consultancy in India",
+    description: "Student-first MBBS consultancy, NEET counselling, eligibility, document, scholarship and loan support.",
     images: ["https://www.ilmalink.com/twitter-about.jpg"],
     site: "@middyaofficial",
     creator: "@middyaofficial",
@@ -52,8 +52,11 @@ export default function AboutPage() {
             </h1>
             <div className="w-24 h-1 bg-gradient-to-r from-emerald-500 via-red-500 to-blue-500 mx-auto rounded-full mb-6"></div>
             <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Free and seamless medical admission guidance. We provide accurate information, verified university options, 
-              and transparent ethical counselling to help students secure MBBS seats in India and abroad.
+              ILMALINK MEDIGO is a student-first MBBS admission consultancy and
+              medical education guidance platform for Indian students. We help
+              students and parents compare MBBS India and MBBS Abroad options
+              with practical tools, eligibility checks, scholarship support and
+              transparent guidance before taking admission decisions.
             </p>
           </div>
 
@@ -70,13 +73,21 @@ export default function AboutPage() {
               </div>
               
               <p className="text-gray-700 leading-relaxed mb-4">
-                <strong className="text-emerald-700">ILMALINK MEDIGO</strong> is a unit of ilmaLink Foundation, 
-                a societal enterprise specializing in education. Through the voluntary engagement of top Indian 
-                and international education experts, we bridge the gap between dreams and reality for medical aspirants.
+                <strong className="text-emerald-700">ILMALINK MEDIGO</strong> is
+                a student-first medical admission consultancy and a unit of
+                ilmaLink Foundation, a societal enterprise specializing in
+                education. It provides consultancy and guidance support for MBBS
+                India, MBBS Abroad, NEET counselling, scholarships, loans,
+                eligibility checks, documents and post-admission planning.
               </p>
 
               <p className="text-gray-700 leading-relaxed mb-4">
-                ilmaLink is the parent education guidance ecosystem, and ILMALINK MEDIGO is its dedicated medical education platform for MBBS Abroad, MBBS India, NEET counselling, scholarships and student support.
+                ilmaLink is the parent education guidance ecosystem, and
+                ILMALINK MEDIGO is its dedicated MBBS admission consultancy and
+                medical education guidance platform. Students use it as an MBBS
+                abroad consultant for Indian students and for MBBS India
+                counselling support, NEET counselling guidance and transparent
+                college-wise comparison.
               </p>
               
               <p className="text-gray-700 leading-relaxed mb-4">
@@ -87,8 +98,11 @@ export default function AboutPage() {
               </p>
               
               <p className="text-gray-700 leading-relaxed">
-                We combine deep industry knowledge with personalized counselling to ensure every student receives 
-                accurate information and genuine admission pathways to recognized medical institutions.
+                Unlike commission-first agencies, ILMALINK MEDIGO combines
+                counselling, eligibility tools, document support and transparent
+                comparison so students can choose colleges based on fit, rules,
+                budget and long-term safety. Our work is focused on the best
+                available outcome for each eligible student.
               </p>
               
               {/* Trust Indicators */}
@@ -121,17 +135,18 @@ export default function AboutPage() {
               </h2>
               <div className="mt-4 space-y-4 text-base leading-8 text-gray-700">
                 <p>
-                  ILMALINK MEDIGO is the MBBS admission counselling, MBBS
-                  abroad guidance, MBBS India counselling support, medical
-                  education data bank and student support platform of ILMALINK.
+                  ILMALINK MEDIGO is the student-first MBBS admission
+                  consultancy, MBBS abroad guidance, MBBS India counselling
+                  support, medical education data bank and student support
+                  platform of ILMALINK.
                 </p>
                 <p>
                   Mumtaz Educational Institutions is an associated educational
                   ecosystem where applicable. ILMALINK MEDIGO and Mumtaz
                   Educational Institutions should not be merged as the same
                   entity. Students should treat ILMALINK MEDIGO as the primary
-                  counselling and guidance platform for information on
-                  ilmalink.com.
+                  consultancy and guidance platform for information and
+                  college-wise support on ilmalink.com.
                 </p>
               </div>
               <div className="mt-5 flex flex-wrap gap-3">
@@ -224,9 +239,9 @@ export default function AboutPage() {
               </div>
               
               <p className="text-gray-700 leading-relaxed mb-4">
-                <strong className="text-emerald-700">ILMALINK MEDIGO operates on a student-first, society-driven model.</strong> 
-                We do not promote any particular college or pathway. We do not charge hidden commissions. 
-                We listen to your NEET score, your budget, and your dreams - then guide you toward genuinely achievable options.
+                <strong className="text-emerald-700">ILMALINK MEDIGO operates as a student-first, transparent MBBS counselling platform.</strong>
+                {" "}We do not push one college or country only because of admission pressure.
+                We listen to your NEET score, eligibility, budget and goals, then provide the best available consultancy support for college-wise guidance.
               </p>
               
               <p className="text-gray-700 leading-relaxed mb-5">

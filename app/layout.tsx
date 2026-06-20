@@ -36,13 +36,17 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.ilmalink.com"),
-  title: "ILMALINK MEDIGO | Global Medical Education Platform",
+  title: "ILMALINK MEDIGO | Student-First MBBS Admission Consultancy",
   description:
-    "ILMALINK MEDIGO is a premium medical education platform for MBBS admissions, university discovery, NEET intelligence, and global student support.",
+    "Student-first MBBS admission consultancy in India for MBBS Abroad, MBBS India, NEET counselling, eligibility, documents, scholarships and loans.",
   keywords: [
     "ILMALINK MEDIGO",
     "MBBS Abroad",
     "MBBS India",
+    "MBBS admission consultancy in India",
+    "MBBS abroad consultant for Indian students",
+    "student-first medical admission consultancy",
+    "transparent MBBS counselling platform",
     "MBBS admission guidance",
     "FMGE data",
     "NMC guidelines",
@@ -57,9 +61,9 @@ export const metadata: Metadata = {
     "scholarship guidance for MBBS",
   ],
   openGraph: {
-    title: "ILMALINK MEDIGO | Global Medical Education Platform",
+    title: "ILMALINK MEDIGO | Student-First MBBS Admission Consultancy",
     description:
-      "Premium MBBS admission guidance, NEET intelligence, university discovery, FMGE data, scholarships and student support.",
+      "Transparent MBBS consultancy for Indian students planning MBBS India, MBBS Abroad, NEET counselling, eligibility, documents, scholarships and loans.",
     url: "https://www.ilmalink.com",
     siteName: "ILMALINK MEDIGO",
     type: "website",

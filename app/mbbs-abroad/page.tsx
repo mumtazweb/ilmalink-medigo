@@ -13,9 +13,9 @@ import { navbarCountryDestinations } from "../data/navbarDestinations";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "MBBS Abroad Countries | FMGE Country Explorer | ILMALINK MEDIGO",
+  title: "MBBS Abroad Consultant for Indian Students | ILMALINK MEDIGO",
   description:
-    "Explore MBBS abroad countries, FMGE performance data, destination pages, and counselling support for medical admission planning.",
+    "Student-first MBBS abroad consultancy for Indian students with country comparison, FMGE data, eligibility, document support and transparent counselling.",
   alternates: {
     canonical: "https://www.ilmalink.com/mbbs-abroad",
   },
@@ -50,8 +50,11 @@ export default function MBBSAbroadPage() {
             Explore MBBS Abroad Countries with FMGE Data
           </h1>
           <p className="mt-5 max-w-3xl text-base font-medium leading-7 text-slate-200 md:text-lg md:leading-8">
-            Open destination pages, compare FMGE country performance, and review
-            institute-wise data before shortlisting a medical university.
+            ILMALINK MEDIGO works as a student-first MBBS abroad consultant for
+            Indian students, combining country-wise and college-wise comparison,
+            FMGE data, NMC/FMGL rule checks, eligibility, document support,
+            scholarships, loans and transparent counselling before shortlisting
+            a medical university.
           </p>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

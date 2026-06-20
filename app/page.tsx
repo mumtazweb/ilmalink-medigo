@@ -10,16 +10,16 @@ import {
 } from "./lib/blog/store";
 
 export const metadata: Metadata = {
-  title: "ILMALINK MEDIGO by ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
+  title: "Student-First MBBS Admission Consultancy in India | ILMALINK MEDIGO",
   description:
-    "Official medical education platform of ilmaLink for MBBS Abroad, MBBS India, NEET counselling, scholarships and university guidance.",
+    "ILMALINK MEDIGO is a student-first MBBS admission consultancy in India for MBBS Abroad, MBBS India, NEET counselling, eligibility, documents, scholarships and loans.",
   alternates: {
     canonical: "https://www.ilmalink.com/",
   },
   openGraph: {
-    title: "ILMALINK MEDIGO by ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
+    title: "Student-First MBBS Admission Consultancy in India | ILMALINK MEDIGO",
     description:
-      "Official medical education platform of ilmaLink for MBBS Abroad, MBBS India, NEET counselling, scholarships and university guidance.",
+      "Transparent MBBS consultancy and medical education guidance for Indian students comparing MBBS India and MBBS Abroad options.",
     url: "https://www.ilmalink.com/",
     siteName: "ILMALINK MEDIGO",
     locale: "en_IN",
@@ -105,15 +105,29 @@ export default async function Home() {
               Platform Overview
             </p>
             <h2 className="mt-2 text-3xl font-black tracking-normal text-[#081B35] md:text-4xl">
-              ILMALINK MEDIGO is the MBBS counselling and medical admission
-              guidance platform of ILMALINK.
+              ILMALINK MEDIGO is a student-first MBBS admission consultancy and
+              medical education guidance platform for Indian students.
             </h2>
             <p className="mt-4 text-base font-medium leading-8 text-slate-700">
-              Students use ILMALINK MEDIGO for MBBS abroad counselling, MBBS
-              India counselling support, NEET guidance, eligibility review,
-              documentation help, university comparison, scholarship and loan
-              guidance, and student support across India and major medical
-              education destinations.
+              As an MBBS abroad consultant for Indian students, ILMALINK MEDIGO
+              combines MBBS India counselling support, NEET counselling
+              guidance, MBBS abroad eligibility and document support,
+              scholarships, loans and transparent college-wise and country-wise
+              comparison before admission decisions.
+            </p>
+            <p className="mt-4 text-base font-medium leading-8 text-slate-700">
+              Unlike commission-first agencies, this transparent MBBS
+              counselling platform helps families choose colleges based on fit,
+              rules, budget and long-term safety, with best available
+              consultancy support for college-wise guidance.
+            </p>
+            <p className="mt-4 text-sm font-black leading-7 text-[#081B35]">
+              Student-first MBBS consultancy • NEET counselling • MBBS abroad
+              guidance • Scholarship and loan support
+            </p>
+            <p className="mt-3 text-sm font-semibold leading-7 text-slate-600">
+              Student decisions should be guided by fit, rules, budget and
+              transparency — not only by admission pressure.
             </p>
           </div>
 

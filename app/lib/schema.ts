@@ -21,6 +21,10 @@ type SiteNavigationItem = {
 
 const siteNavigationItems: SiteNavigationItem[] = [
   { name: "Home", url: "/" },
+  {
+    name: "MBBS Admission Consultancy in India",
+    url: "/mbbs-admission-consultancy-india",
+  },
   { name: "Explore All Pages", url: "/site-hierarchy" },
   { name: "MBBS Abroad", url: "/mbbs-abroad" },
   { name: "Study MBBS in Georgia", url: "/mbbs-abroad/georgia" },
@@ -100,7 +104,7 @@ export function buildOrganizationSchema() {
     url: ilmaLinkEntityData.url,
     logo: absoluteUrl(ilmaLinkEntityData.logo),
     description:
-      "MBBS admission guidance and counselling platform for India and abroad.",
+      "Student-first MBBS admission consultancy and medical education guidance platform for MBBS India, MBBS Abroad, NEET counselling, eligibility, documents, scholarships and loans.",
     areaServed: "India and international medical education destinations",
     sameAs: ilmaLinkEntityData.sameAs,
     department: ilmaLinkEntityData.offices.map((office) => ({
@@ -122,7 +126,7 @@ export function buildEducationalOrganizationSchema() {
     url: ilmaLinkEntityData.url,
     logo: absoluteUrl(ilmaLinkEntityData.logo),
     description:
-      "Student counselling and guidance platform for MBBS admission in India and abroad, including MBBS admission consultancy, MBBS abroad consultancy, MBBS admission data bank support and medical education information guidance.",
+      "Student-first MBBS admission consultancy in India providing transparent MBBS India and MBBS Abroad counselling, eligibility, document, scholarship, loan and college-comparison support.",
     areaServed: [
       "West Bengal",
       "Maharashtra",

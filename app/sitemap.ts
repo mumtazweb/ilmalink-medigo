@@ -33,6 +33,7 @@ const staticRoutes = [
   "/data-methodology",
   "/geo-profile",
   "/official-links",
+  "/mbbs-admission-consultancy-india",
   "/best-available-counselling",
   "/mbbs-abroad-eligibility",
   "/document-checklist",
