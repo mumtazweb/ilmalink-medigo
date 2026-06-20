@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Inter, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import Footer from "./components/Footer";
 import FloatingContactButton from "./components/FloatingContactButton";
 import JsonLd from "./components/JsonLd";
@@ -100,6 +101,7 @@ export default function RootLayout({
 
         <FloatingContactButton />
         <div id="modal-root" />
+        <Analytics />
       </body>
     </html>
   );
