@@ -2,7 +2,24 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Globe2, Search, X } from "lucide-react";
+import {
+  ArrowUpRight,
+  BadgeIndianRupee,
+  CalendarCheck2,
+  ChartLine,
+  ChevronLeft,
+  ChevronRight,
+  ClipboardCheck,
+  FolderCheck,
+  Globe2,
+  GraduationCap,
+  Headphones,
+  Search,
+  SearchCheck,
+  ShieldCheck,
+  Sparkles,
+  X,
+} from "lucide-react";
 import CounsellingPopup from "./CounsellingPopup";
 import FMGEExplorerModal from "./FMGEExplorerModal";
 import HeroGlobeV2 from "./HeroGlobeV2";
@@ -419,24 +436,95 @@ const heroCountryCards = [
   },
 ];
 
-const featureBlocks = [
+const decisionTools = [
   {
-  title: "Verified University Options",
-  desc: "Compare medical university options with recognition, fee and NMC/FMGL rule checks.",
-},
-  {
-  title: "Application Follow-up Support",
-  desc: "Get step-by-step application, offer letter and document follow-up support.",
-},
-  {
-    title: "NEET Intelligence Center",
-    desc: "Get score-based pathways and scholarship recommendations for MBBS admissions.",
+    title: "Find My Supports",
+    description: "Find scholarship, loan and support options that fit your profile.",
+    href: "/scholarships-loans#finder",
+    icon: BadgeIndianRupee,
+    accent: "blue",
   },
   {
-    title: "Global Student Support",
-    desc: "Dedicated mentors, document guidance, and 24/7 admissions assistance.",
+    title: "NEET Rank Predictor",
+    description: "Predict your NEET rank and explore realistic MBBS pathways.",
+    href: "/?rank-predictor=open",
+    icon: ChartLine,
+    accent: "teal",
+    opensRankPredictor: true,
   },
-];
+  {
+    title: "Best Available Counselling",
+    description: "College-wise guidance and counselling support based on your goals.",
+    href: "/best-available-counselling",
+    icon: Headphones,
+    accent: "violet",
+  },
+  {
+    title: "Country Compare",
+    description: "Compare countries on fees, safety, recognition, FMGE data and more.",
+    href: "/mbbs-abroad",
+    icon: Globe2,
+    accent: "blue",
+  },
+  {
+    title: "MBBS Abroad Eligibility",
+    description: "Check eligibility, documents and NMC/FMGL rule requirements.",
+    href: "/mbbs-abroad-eligibility",
+    icon: ClipboardCheck,
+    accent: "teal",
+  },
+  {
+    title: "Document Checklist",
+    description: "Get a complete list of documents required for admission and visa.",
+    href: "/document-checklist",
+    icon: FolderCheck,
+    accent: "amber",
+  },
+  {
+    title: "FMGE Explorer",
+    description: "Explore FMGE data, country-wise results and pass percentages.",
+    href: "/mbbs-abroad/explorer",
+    icon: SearchCheck,
+    accent: "violet",
+  },
+  {
+    title: "Official Advisory Check",
+    description: "Review official links, notices and trusted regulatory sources.",
+    href: "/official-links",
+    icon: ShieldCheck,
+    accent: "blue",
+  },
+  {
+    title: "Career Planner",
+    description: "Plan your MBBS journey with budget, timeline and career roadmap.",
+    href: "/career-planner",
+    icon: CalendarCheck2,
+    accent: "teal",
+  },
+] as const;
+
+const decisionToolAccents = {
+  blue: {
+    icon: "border-blue-100 bg-[linear-gradient(145deg,#ffffff_0%,#eaf2ff_52%,#cfe1ff_100%)] text-[#0F4CFF] shadow-[inset_0_1px_0_rgba(255,255,255,0.98),inset_-6px_-8px_16px_rgba(15,76,255,0.12),0_10px_22px_rgba(15,76,255,0.18)]",
+    number: "bg-blue-50 text-blue-700",
+    action: "text-[#0F4CFF]",
+  },
+  teal: {
+    icon: "border-teal-100 bg-[linear-gradient(145deg,#ffffff_0%,#e7fffb_52%,#c4f5ea_100%)] text-teal-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.98),inset_-6px_-8px_16px_rgba(13,148,136,0.12),0_10px_22px_rgba(13,148,136,0.18)]",
+    number: "bg-teal-50 text-teal-700",
+    action: "text-teal-700",
+  },
+  violet: {
+    icon: "border-violet-100 bg-[linear-gradient(145deg,#ffffff_0%,#f1edff_52%,#ddd4ff_100%)] text-violet-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.98),inset_-6px_-8px_16px_rgba(109,40,217,0.12),0_10px_22px_rgba(109,40,217,0.18)]",
+    number: "bg-violet-50 text-violet-700",
+    action: "text-violet-700",
+  },
+  amber: {
+    icon: "border-amber-100 bg-[linear-gradient(145deg,#ffffff_0%,#fff8e7_52%,#ffe6b2_100%)] text-amber-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.98),inset_-6px_-8px_16px_rgba(217,119,6,0.12),0_10px_22px_rgba(217,119,6,0.18)]",
+    number: "bg-amber-50 text-amber-700",
+    action: "text-amber-700",
+  },
+} as const;
 
 const liveMetrics = [
   { label: "Applications Submitted", value: "5000+" },
@@ -1189,34 +1277,124 @@ export default function HomeHeroClient() {
                   </div>
                 </div>
               </section>
-              <section className="rounded-[32px] border border-slate-200 bg-[#0B1D39] p-6 text-white shadow-[0_18px_44px_rgba(15,23,42,0.18)]">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-sm uppercase tracking-[0.24em] text-[#7DD3FC]">
-                      Why ILMALINK MEDIGO
+              <section className="relative isolate overflow-hidden rounded-[28px] border border-slate-200/90 bg-[linear-gradient(145deg,#ffffff_0%,#fbfdff_48%,#f4f8ff_100%)] p-3 text-[#071B44] shadow-[0_22px_60px_rgba(15,45,91,0.12),inset_0_1px_0_rgba(255,255,255,0.98)] sm:rounded-[32px] sm:p-6">
+                <div className="pointer-events-none absolute -left-20 top-20 h-48 w-48 rounded-full bg-blue-100/45 blur-3xl" />
+                <div className="pointer-events-none absolute -right-20 top-1/3 h-48 w-48 rounded-full bg-cyan-100/45 blur-3xl" />
+                <Sparkles className="pointer-events-none absolute right-5 top-5 h-5 w-5 text-amber-400/70 sm:right-8 sm:top-8" />
+
+                <div className="relative text-center">
+                  <div className="flex items-center justify-center gap-2 sm:gap-4">
+                    <span className="h-px w-6 bg-gradient-to-r from-transparent to-amber-400 sm:w-20" />
+                    <p className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-white/90 px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#071B44] shadow-[0_8px_22px_rgba(15,45,91,0.09)] sm:px-5 sm:text-xs sm:tracking-[0.22em]">
+                      <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+                      WHY ILMALINK MEDIGO
                     </p>
-                    <h2 className="mt-3 text-2xl font-semibold">
-                      Premium student-first admission support.
-                    </h2>
-                    <p className="mt-4 max-w-3xl text-sm leading-6 text-slate-300">
-                      ILMALINK MEDIGO is the official medical education and MBBS admission
-                      guidance platform of ilmaLink, helping Indian students compare MBBS
-                      Abroad, MBBS India, NEET updates, scholarships, university options
-                      and counselling routes.
-                    </p>
+                    <span className="h-px w-6 bg-gradient-to-l from-transparent to-amber-400 sm:w-20" />
                   </div>
-                  <div className="rounded-full bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/90">
-                    Trusted globally
+
+                  <h2 className="mx-auto mt-4 max-w-3xl text-[27px] font-black leading-[1.06] tracking-[-0.035em] text-[#071B44] sm:mt-5 sm:text-4xl lg:text-[44px]">
+                    Smart tools for safer{" "}
+                    <span className="text-[#0F4CFF]">MBBS</span> decisions.
+                  </h2>
+                  <p className="mx-auto mt-3 max-w-3xl text-[11px] font-medium leading-[1.65] text-slate-600 sm:mt-4 sm:text-sm sm:leading-6">
+                    ILMALINK MEDIGO helps students and parents compare MBBS India and MBBS
+                    Abroad options with practical tools, eligibility checks, scholarship
+                    support and transparent guidance before taking admission decisions.
+                  </p>
+
+                  <div className="mx-auto mt-4 grid max-w-2xl grid-cols-3 overflow-hidden rounded-2xl border border-slate-200 bg-white/90 shadow-[0_10px_24px_rgba(15,45,91,0.09)] sm:mt-5 sm:rounded-full">
+                    {[
+                      ["Transparent", ShieldCheck],
+                      ["Practical", SearchCheck],
+                      ["Student-first", GraduationCap],
+                    ].map(([label, Icon], index) => (
+                      <div
+                        key={label as string}
+                        className={`flex min-h-10 items-center justify-center gap-1 px-1 text-[9px] font-extrabold text-[#071B44] sm:min-h-12 sm:gap-2 sm:text-sm ${
+                          index > 0 ? "border-l border-slate-200" : ""
+                        }`}
+                      >
+                        <Icon className="h-3.5 w-3.5 text-[#0F4CFF] sm:h-5 sm:w-5" />
+                        {label as string}
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                  {featureBlocks.map((feature) => (
-                    <div key={feature.title} className="rounded-[24px] bg-slate-950/10 p-5">
-                      <p className="text-lg font-semibold text-white">{feature.title}</p>
-                      <p className="mt-2 text-sm text-slate-300">{feature.desc}</p>
-                    </div>
-                  ))}
+                <div className="relative mt-4 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-3">
+                  {decisionTools.map((tool, index) => {
+                    const Icon = tool.icon;
+                    const accent = decisionToolAccents[tool.accent];
+                    const cardClassName =
+                      "group flex min-h-[142px] min-w-0 flex-col rounded-[18px] border border-slate-200/90 bg-white/95 p-2 shadow-[0_10px_25px_rgba(15,45,91,0.08)] transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_18px_34px_rgba(15,76,255,0.14)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F4CFF] sm:min-h-[238px] sm:rounded-[22px] sm:p-4";
+                    const cardContent = (
+                      <>
+                        <div className="flex items-start justify-between gap-1">
+                          <span
+                            className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-[15px] border sm:h-14 sm:w-14 sm:rounded-[18px] ${accent.icon}`}
+                          >
+                            <span className="pointer-events-none absolute left-2 top-1.5 h-1.5 w-3 rounded-full bg-white/90 blur-[1px]" />
+                            <Icon className="relative h-5 w-5 drop-shadow-sm sm:h-7 sm:w-7" strokeWidth={2.1} />
+                          </span>
+                          <span
+                            className={`rounded-full px-1.5 py-1 text-[9px] font-black leading-none sm:px-2.5 sm:text-[10px] ${accent.number}`}
+                          >
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                        </div>
+                        <h3 className="mt-2 break-words text-[11px] font-black leading-[1.16] text-[#071B44] sm:mt-4 sm:text-base sm:leading-5">
+                          {tool.title}
+                        </h3>
+                        <p
+                          id={`decision-tool-description-${index}`}
+                          className="sr-only text-xs font-medium leading-5 text-slate-600 sm:not-sr-only sm:mt-2"
+                        >
+                          {tool.description}
+                        </p>
+                        <span
+                          className={`mt-auto inline-flex items-center gap-0.5 pt-2 text-[9px] font-black sm:gap-1 sm:text-xs ${accent.action}`}
+                        >
+                          Open
+                          <ArrowUpRight className="h-3 w-3 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 sm:h-3.5 sm:w-3.5" />
+                        </span>
+                      </>
+                    );
+
+                    if ("opensRankPredictor" in tool && tool.opensRankPredictor) {
+                      return (
+                        <a
+                          key={tool.title}
+                          href={tool.href}
+                          aria-describedby={`decision-tool-description-${index}`}
+                          className={cardClassName}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            setShowRankPredictor(true);
+                          }}
+                        >
+                          {cardContent}
+                        </a>
+                      );
+                    }
+
+                    return (
+                      <Link
+                        key={tool.title}
+                        href={tool.href}
+                        aria-describedby={`decision-tool-description-${index}`}
+                        className={cardClassName}
+                      >
+                        {cardContent}
+                      </Link>
+                    );
+                  })}
+                </div>
+
+                <div className="relative mt-4 rounded-[20px] border border-blue-100 bg-[linear-gradient(135deg,#eef5ff_0%,#ffffff_52%,#edf8ff_100%)] px-3 py-3 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.95)] sm:mt-6 sm:px-5 sm:py-4">
+                  <p className="text-[11px] font-bold leading-5 text-[#15315f] sm:text-sm">
+                    Student decisions should be guided by fit, rules and transparency — not
+                    only by admission pressure.
+                  </p>
                 </div>
               </section>
             </div>
