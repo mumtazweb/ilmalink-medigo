@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { BellRing, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 
@@ -92,11 +92,6 @@ function TickerItems({
 }
 
 export default function AnnouncementTicker() {
-  const hasMounted = useSyncExternalStore(
-    () => () => undefined,
-    () => true,
-    () => false
-  );
   const [isPaused, setIsPaused] = useState(false);
   const [items, setItems] = useState<AnnouncementItem[]>(fallbackAnnouncements);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -139,7 +134,19 @@ export default function AnnouncementTicker() {
       active = false;
     };
   }, []);
+
   const marqueeItems = useMemo(() => repeatForMarquee(items), [items]);
+  const semanticItems = useMemo(() => {
+    const unique = new Map<string, AnnouncementItem>();
+
+    for (const item of items) {
+      if (!unique.has(item.id)) {
+        unique.set(item.id, item);
+      }
+    }
+
+    return Array.from(unique.values());
+  }, [items]);
 
   useEffect(() => {
     return () => {
@@ -226,17 +233,20 @@ export default function AnnouncementTicker() {
           onTouchStart={pauseThenResume}
           onWheel={pauseThenResume}
         >
-          <span className="sr-only">MBBS announcements ticker</span>
+          <ul className="sr-only">
+            {semanticItems.map((item) => (
+              <li key={`semantic-${item.id}`}>
+                <Link href={item.href} prefetch={item.href.startsWith("/") ? undefined : false}>
+                  {getTickerLabel(item)}
+                </Link>
+              </li>
+            ))}
+          </ul>
 
-          {hasMounted ? (
-            <div
-              className="ticker-content absolute left-0 top-0 flex w-max whitespace-nowrap"
-              aria-hidden="true"
-            >
-              <TickerItems items={marqueeItems} prefix="first" decorative />
-              <TickerItems items={marqueeItems} prefix="second" decorative />
-            </div>
-          ) : null}
+          <div className="ticker-content absolute left-0 top-0 flex w-max whitespace-nowrap">
+            <TickerItems items={marqueeItems} prefix="first" decorative />
+            <TickerItems items={marqueeItems} prefix="second" decorative />
+          </div>
         </div>
 
         <button

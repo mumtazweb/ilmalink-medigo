@@ -107,7 +107,7 @@ export default async function FmgeCountryPage({
         }}
       />
 
-      <section className="bg-[#031525] px-4 pb-14 pt-8 text-white sm:px-6 sm:pt-10 lg:px-8">
+      <section className="bg-[#031525] px-4 pb-14 pt-32 text-white sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <Link
             href="/mbbs-abroad"
