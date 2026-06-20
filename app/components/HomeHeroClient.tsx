@@ -4,20 +4,26 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowUpRight,
-  BadgeIndianRupee,
-  CalendarCheck2,
-  ChartLine,
+  BadgeCheck,
+  BarChart3,
+  BookOpen,
+  CalendarDays,
   ChevronLeft,
   ChevronRight,
-  ClipboardCheck,
-  FolderCheck,
+  ClipboardList,
+  FileCheck2,
+  FolderOpen,
   Globe2,
   GraduationCap,
-  Headphones,
+  Headset,
+  MapPin,
+  Route,
   Search,
   SearchCheck,
   ShieldCheck,
   Sparkles,
+  TrendingUp,
+  UserRound,
   X,
 } from "lucide-react";
 import CounsellingPopup from "./CounsellingPopup";
@@ -441,14 +447,14 @@ const decisionTools = [
     title: "Find My Supports",
     description: "Find scholarship, loan and support options that fit your profile.",
     href: "/scholarships-loans#finder",
-    icon: BadgeIndianRupee,
+    icon: "support",
     accent: "blue",
   },
   {
     title: "NEET Rank Predictor",
     description: "Predict your NEET rank and explore realistic MBBS pathways.",
     href: "/?rank-predictor=open",
-    icon: ChartLine,
+    icon: "rank",
     accent: "teal",
     opensRankPredictor: true,
   },
@@ -456,75 +462,251 @@ const decisionTools = [
     title: "Best Available Counselling",
     description: "College-wise guidance and counselling support based on your goals.",
     href: "/best-available-counselling",
-    icon: Headphones,
+    icon: "counselling",
     accent: "violet",
   },
   {
     title: "Country Compare",
     description: "Compare countries on fees, safety, recognition, FMGE data and more.",
     href: "/mbbs-abroad",
-    icon: Globe2,
+    icon: "country",
     accent: "blue",
   },
   {
     title: "MBBS Abroad Eligibility",
     description: "Check eligibility, documents and NMC/FMGL rule requirements.",
     href: "/mbbs-abroad-eligibility",
-    icon: ClipboardCheck,
+    icon: "eligibility",
     accent: "teal",
   },
   {
     title: "Document Checklist",
     description: "Get a complete list of documents required for admission and visa.",
     href: "/document-checklist",
-    icon: FolderCheck,
+    icon: "documents",
     accent: "amber",
   },
   {
     title: "FMGE Explorer",
     description: "Explore FMGE data, country-wise results and pass percentages.",
     href: "/mbbs-abroad/explorer",
-    icon: SearchCheck,
+    icon: "fmge",
     accent: "violet",
   },
   {
     title: "Official Advisory Check",
     description: "Review official links, notices and trusted regulatory sources.",
     href: "/official-links",
-    icon: ShieldCheck,
+    icon: "advisory",
     accent: "blue",
   },
   {
     title: "Career Planner",
     description: "Plan your MBBS journey with budget, timeline and career roadmap.",
     href: "/career-planner",
-    icon: CalendarCheck2,
+    icon: "career",
     accent: "teal",
   },
 ] as const;
 
 const decisionToolAccents = {
   blue: {
-    icon: "border-blue-100 bg-[linear-gradient(145deg,#ffffff_0%,#eaf2ff_52%,#cfe1ff_100%)] text-[#0F4CFF] shadow-[inset_0_1px_0_rgba(255,255,255,0.98),inset_-6px_-8px_16px_rgba(15,76,255,0.12),0_10px_22px_rgba(15,76,255,0.18)]",
     number: "bg-blue-50 text-blue-700",
     action: "text-[#0F4CFF]",
   },
   teal: {
-    icon: "border-teal-100 bg-[linear-gradient(145deg,#ffffff_0%,#e7fffb_52%,#c4f5ea_100%)] text-teal-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.98),inset_-6px_-8px_16px_rgba(13,148,136,0.12),0_10px_22px_rgba(13,148,136,0.18)]",
     number: "bg-teal-50 text-teal-700",
     action: "text-teal-700",
   },
   violet: {
-    icon: "border-violet-100 bg-[linear-gradient(145deg,#ffffff_0%,#f1edff_52%,#ddd4ff_100%)] text-violet-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.98),inset_-6px_-8px_16px_rgba(109,40,217,0.12),0_10px_22px_rgba(109,40,217,0.18)]",
     number: "bg-violet-50 text-violet-700",
     action: "text-violet-700",
   },
   amber: {
-    icon: "border-amber-100 bg-[linear-gradient(145deg,#ffffff_0%,#fff8e7_52%,#ffe6b2_100%)] text-amber-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.98),inset_-6px_-8px_16px_rgba(217,119,6,0.12),0_10px_22px_rgba(217,119,6,0.18)]",
     number: "bg-amber-50 text-amber-700",
     action: "text-amber-700",
   },
 } as const;
+
+type DecisionToolIcon = (typeof decisionTools)[number]["icon"];
+type DecisionToolAccent = (typeof decisionTools)[number]["accent"];
+
+const premiumIconPalettes = {
+  blue: {
+    shell:
+      "border-blue-100 bg-[linear-gradient(145deg,#ffffff_0%,#edf4ff_48%,#c9dcff_100%)] shadow-[inset_0_2px_1px_rgba(255,255,255,0.98),inset_-7px_-9px_17px_rgba(15,76,255,0.16),0_12px_24px_rgba(15,76,255,0.23)]",
+    primary: "text-[#0F4CFF]",
+    secondary: "text-[#082A72]",
+  },
+  teal: {
+    shell:
+      "border-teal-100 bg-[linear-gradient(145deg,#ffffff_0%,#e9fffb_48%,#bcefe4_100%)] shadow-[inset_0_2px_1px_rgba(255,255,255,0.98),inset_-7px_-9px_17px_rgba(13,148,136,0.16),0_12px_24px_rgba(13,148,136,0.22)]",
+    primary: "text-[#009F91]",
+    secondary: "text-[#075E59]",
+  },
+  violet: {
+    shell:
+      "border-violet-100 bg-[linear-gradient(145deg,#ffffff_0%,#f3efff_48%,#d9ceff_100%)] shadow-[inset_0_2px_1px_rgba(255,255,255,0.98),inset_-7px_-9px_17px_rgba(109,40,217,0.16),0_12px_24px_rgba(109,40,217,0.22)]",
+    primary: "text-[#6437E8]",
+    secondary: "text-[#32148F]",
+  },
+  amber: {
+    shell:
+      "border-amber-100 bg-[linear-gradient(145deg,#ffffff_0%,#fff9e9_48%,#ffe3a3_100%)] shadow-[inset_0_2px_1px_rgba(255,255,255,0.98),inset_-7px_-9px_17px_rgba(217,119,6,0.16),0_12px_24px_rgba(217,119,6,0.22)]",
+    primary: "text-[#E58A00]",
+    secondary: "text-[#9A4E00]",
+  },
+} as const;
+
+function PremiumDecisionIcon({
+  icon,
+  accent,
+}: {
+  icon: DecisionToolIcon;
+  accent: DecisionToolAccent;
+}) {
+  const palette = premiumIconPalettes[accent];
+
+  return (
+    <span
+      aria-hidden="true"
+      className={`relative flex h-12 w-12 shrink-0 items-center justify-center overflow-visible rounded-[16px] border sm:h-[68px] sm:w-[68px] sm:rounded-[21px] ${palette.shell}`}
+    >
+      <span className="pointer-events-none absolute left-2 top-1.5 h-2 w-4 rounded-full bg-white/95 blur-[1px] sm:left-3 sm:top-2 sm:h-2.5 sm:w-5" />
+      <span className="pointer-events-none absolute inset-[3px] rounded-[13px] border border-white/70 sm:rounded-[18px]" />
+
+      {icon === "support" && (
+        <>
+          <BookOpen
+            className={`absolute bottom-1.5 h-6 w-8 fill-white/80 drop-shadow-[0_3px_2px_rgba(8,42,114,0.2)] sm:bottom-2 sm:h-8 sm:w-10 ${palette.secondary}`}
+            strokeWidth={1.9}
+          />
+          <GraduationCap
+            className={`absolute left-1 top-1 h-7 w-9 fill-blue-200 drop-shadow-[0_4px_3px_rgba(15,76,255,0.28)] sm:left-1.5 sm:top-1.5 sm:h-10 sm:w-12 ${palette.primary}`}
+            strokeWidth={1.9}
+          />
+          <span className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-[linear-gradient(145deg,#ffd968,#f39b14)] text-[10px] font-black text-white shadow-[0_5px_10px_rgba(217,119,6,0.35)] sm:h-7 sm:w-7 sm:text-sm">
+            ₹
+          </span>
+        </>
+      )}
+
+      {icon === "rank" && (
+        <>
+          <BarChart3
+            className={`absolute bottom-2 left-1.5 h-7 w-7 fill-teal-100 drop-shadow-[0_3px_2px_rgba(7,94,89,0.18)] sm:bottom-3 sm:left-2 sm:h-9 sm:w-9 ${palette.secondary}`}
+            strokeWidth={1.8}
+          />
+          <TrendingUp
+            className={`absolute right-1.5 top-1.5 h-7 w-7 drop-shadow-[0_4px_3px_rgba(0,159,145,0.24)] sm:right-2 sm:top-2 sm:h-10 sm:w-10 ${palette.primary}`}
+            strokeWidth={2.5}
+          />
+          <span className="absolute -bottom-1 -right-1 rounded-md border border-white bg-[linear-gradient(145deg,#16c7ad,#008f84)] px-1.5 py-0.5 text-[7px] font-black text-white shadow-[0_5px_10px_rgba(0,143,132,0.32)] sm:text-[9px]">
+            NEET
+          </span>
+        </>
+      )}
+
+      {icon === "counselling" && (
+        <>
+          <UserRound
+            className={`absolute bottom-1 h-8 w-8 fill-violet-100 drop-shadow-[0_4px_3px_rgba(50,20,143,0.2)] sm:bottom-1.5 sm:h-11 sm:w-11 ${palette.secondary}`}
+            strokeWidth={1.8}
+          />
+          <Headset
+            className={`absolute top-1 h-9 w-9 drop-shadow-[0_4px_3px_rgba(100,55,232,0.28)] sm:top-1.5 sm:h-12 sm:w-12 ${palette.primary}`}
+            strokeWidth={2.2}
+          />
+          <span className="absolute -right-1 top-2 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-400 shadow-[0_2px_6px_rgba(16,185,129,0.4)] sm:h-3 sm:w-3" />
+        </>
+      )}
+
+      {icon === "country" && (
+        <>
+          <Globe2
+            className={`h-9 w-9 drop-shadow-[0_4px_3px_rgba(15,76,255,0.24)] sm:h-12 sm:w-12 ${palette.primary}`}
+            strokeWidth={2.2}
+          />
+          <MapPin
+            className="absolute -right-1 top-0 h-6 w-6 fill-[#0F4CFF] text-white drop-shadow-[0_5px_4px_rgba(15,76,255,0.34)] sm:-right-1.5 sm:h-8 sm:w-8"
+            strokeWidth={2}
+          />
+        </>
+      )}
+
+      {icon === "eligibility" && (
+        <>
+          <ClipboardList
+            className={`h-9 w-9 fill-white/75 drop-shadow-[0_4px_3px_rgba(7,94,89,0.2)] sm:h-12 sm:w-12 ${palette.secondary}`}
+            strokeWidth={1.9}
+          />
+          <ShieldCheck
+            className="absolute -bottom-1 -right-1 h-6 w-6 fill-[#2dd4bf] text-white drop-shadow-[0_5px_4px_rgba(13,148,136,0.34)] sm:h-8 sm:w-8"
+            strokeWidth={2}
+          />
+        </>
+      )}
+
+      {icon === "documents" && (
+        <>
+          <FolderOpen
+            className={`h-10 w-10 fill-amber-200 drop-shadow-[0_5px_3px_rgba(154,78,0,0.24)] sm:h-14 sm:w-14 ${palette.primary}`}
+            strokeWidth={1.8}
+          />
+          <FileCheck2
+            className="absolute -bottom-1 -right-1 h-6 w-6 rounded-md bg-white fill-white text-[#D97706] drop-shadow-[0_5px_4px_rgba(217,119,6,0.3)] sm:h-8 sm:w-8"
+            strokeWidth={2.1}
+          />
+        </>
+      )}
+
+      {icon === "fmge" && (
+        <>
+          <BarChart3
+            className={`absolute left-2 top-1.5 h-7 w-7 fill-violet-100 drop-shadow-[0_3px_2px_rgba(50,20,143,0.2)] sm:left-3 sm:top-2 sm:h-9 sm:w-9 ${palette.secondary}`}
+            strokeWidth={2}
+          />
+          <Search
+            className={`absolute bottom-0.5 right-0.5 h-9 w-9 drop-shadow-[0_5px_4px_rgba(100,55,232,0.3)] sm:bottom-1 sm:right-1 sm:h-12 sm:w-12 ${palette.primary}`}
+            strokeWidth={2.3}
+          />
+          <span className="absolute -bottom-1 left-0 rounded-md border border-white bg-[linear-gradient(145deg,#7c5cff,#5430d6)] px-1 py-0.5 text-[6px] font-black text-white shadow-sm sm:text-[8px]">
+            FMGE
+          </span>
+        </>
+      )}
+
+      {icon === "advisory" && (
+        <>
+          <ShieldCheck
+            className={`h-10 w-10 fill-blue-200 drop-shadow-[0_5px_4px_rgba(15,76,255,0.3)] sm:h-14 sm:w-14 ${palette.primary}`}
+            strokeWidth={1.9}
+          />
+          <BadgeCheck
+            className="absolute -bottom-1 -right-1 h-6 w-6 fill-white text-[#00A876] drop-shadow-[0_4px_4px_rgba(0,168,118,0.28)] sm:h-8 sm:w-8"
+            strokeWidth={2.1}
+          />
+        </>
+      )}
+
+      {icon === "career" && (
+        <>
+          <CalendarDays
+            className={`h-9 w-9 fill-white/80 drop-shadow-[0_4px_3px_rgba(7,94,89,0.2)] sm:h-12 sm:w-12 ${palette.primary}`}
+            strokeWidth={1.9}
+          />
+          <Route
+            className={`absolute bottom-1 right-0.5 h-6 w-6 drop-shadow-[0_4px_3px_rgba(0,159,145,0.26)] sm:bottom-1.5 sm:right-1 sm:h-8 sm:w-8 ${palette.secondary}`}
+            strokeWidth={2.3}
+          />
+          <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full border border-white bg-[linear-gradient(145deg,#35d6be,#009f91)] text-[9px] font-black text-white shadow-[0_4px_8px_rgba(0,159,145,0.3)] sm:h-7 sm:w-7 sm:text-xs">
+            ✓
+          </span>
+        </>
+      )}
+    </span>
+  );
+}
 
 const liveMetrics = [
   { label: "Applications Submitted", value: "5000+" },
@@ -1323,19 +1505,13 @@ export default function HomeHeroClient() {
 
                 <div className="relative mt-4 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-3">
                   {decisionTools.map((tool, index) => {
-                    const Icon = tool.icon;
                     const accent = decisionToolAccents[tool.accent];
                     const cardClassName =
                       "group flex min-h-[142px] min-w-0 flex-col rounded-[18px] border border-slate-200/90 bg-white/95 p-2 shadow-[0_10px_25px_rgba(15,45,91,0.08)] transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_18px_34px_rgba(15,76,255,0.14)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F4CFF] sm:min-h-[238px] sm:rounded-[22px] sm:p-4";
                     const cardContent = (
                       <>
                         <div className="flex items-start justify-between gap-1">
-                          <span
-                            className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-[15px] border sm:h-14 sm:w-14 sm:rounded-[18px] ${accent.icon}`}
-                          >
-                            <span className="pointer-events-none absolute left-2 top-1.5 h-1.5 w-3 rounded-full bg-white/90 blur-[1px]" />
-                            <Icon className="relative h-5 w-5 drop-shadow-sm sm:h-7 sm:w-7" strokeWidth={2.1} />
-                          </span>
+                          <PremiumDecisionIcon icon={tool.icon} accent={tool.accent} />
                           <span
                             className={`rounded-full px-1.5 py-1 text-[9px] font-black leading-none sm:px-2.5 sm:text-[10px] ${accent.number}`}
                           >
