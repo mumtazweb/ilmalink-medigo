@@ -1982,7 +1982,7 @@ export default function HomeHeroClient() {
                     <span className="h-px w-6 bg-gradient-to-l from-transparent to-amber-400 sm:w-20" />
                   </div>
 
-                  <h2 className="mx-auto mt-2 max-w-3xl text-[25px] font-black leading-[1.06] tracking-[-0.035em] text-white sm:mt-3 sm:text-4xl lg:text-[44px]">
+                  <h2 className="mx-auto mt-2 max-w-3xl text-[20px] font-black leading-[1.06] tracking-[-0.035em] text-white sm:mt-3 sm:text-4xl lg:text-[44px]">
                     Expert{" "}
                     <span className="bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent">MBBS</span>Admission Guidance
                   </h2>
