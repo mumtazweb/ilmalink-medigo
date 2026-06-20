@@ -1,3 +1,19 @@
+export type FMGECollege = {
+  name: string;
+  appeared: number;
+  passed: number;
+  passRate: string;
+};
+
+export type FmgeCountry = {
+  country: string;
+  appeared: number;
+  passed: number;
+  passRate: string;
+  colleges: FMGECollege[];
+};
+
+export const fmgeCountries: FmgeCountry[] =
 [
   {
     "country": "ANTIGUA AND BARBUDA",
@@ -3461,4 +3477,4 @@
       }
     ]
   }
-]
+];
