@@ -156,7 +156,7 @@ export default async function OfficialAdvisoriesPage() {
     <main className="min-h-screen bg-[#F8FAFC] text-[#0F172A]">
       <Navbar />
 
-      <section className="mx-auto max-w-7xl px-4 pb-16 pt-32 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 pb-16 pt-8 sm:px-6 sm:pt-10 lg:px-8">
         <div className="mb-8">
           <p className="text-sm font-bold uppercase tracking-widest text-[#0F4CFF]">
             Official update tracker

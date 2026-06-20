@@ -41,7 +41,7 @@ export default function MBBSAbroadPage() {
     <main className="min-h-screen bg-[#f8fafc] text-slate-950">
       <Navbar />
 
-      <section className="bg-[#031525] px-4 pb-14 pt-32 text-white sm:px-6 lg:px-8">
+      <section className="bg-[#031525] px-4 pb-14 pt-8 text-white sm:px-6 sm:pt-10 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#5EEAD4]">
             MBBS Abroad Directory

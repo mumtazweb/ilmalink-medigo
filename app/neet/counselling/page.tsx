@@ -35,7 +35,7 @@ export default function NeetCounsellingPage() {
     <main className="min-h-screen bg-[#F8FAFC] text-slate-950">
       <Navbar />
 
-      <section className="mx-auto max-w-5xl px-4 pb-12 pt-28 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-5xl px-4 pb-12 pt-8 sm:px-6 sm:pt-10 lg:px-8">
         <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#1D4ED8]">
           Home - NEET - Counselling
         </p>

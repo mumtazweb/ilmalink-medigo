@@ -94,7 +94,7 @@ export default function MalaysiaPage() {
         }}
       />
 
-      <section className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black px-6 py-20 text-white">
+      <section className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black px-6 pb-20 pt-8 text-white sm:pt-10">
         <div className="mx-auto max-w-7xl">
           <div className="mb-16 text-center">
             <h1 className="mb-6 text-5xl font-extrabold leading-tight md:text-6xl">

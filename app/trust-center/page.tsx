@@ -43,7 +43,7 @@ export default function TrustCenterPage() {
     <main className="min-h-screen bg-[#F8FAFC] text-slate-950">
       <Navbar />
 
-      <section className="bg-[#061D3F] px-4 pb-12 pt-28 text-white sm:px-6 lg:px-8">
+      <section className="bg-[#061D3F] px-4 pb-12 pt-8 text-white sm:px-6 sm:pt-10 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#5EEAD4]">
             Home - Trust Center

@@ -62,7 +62,7 @@ export default function GeoProfilePage() {
       />
       <Navbar />
 
-      <section className="px-4 pb-12 pt-28 sm:px-6 lg:px-8">
+      <section className="px-4 pb-12 pt-8 sm:px-6 sm:pt-10 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-[#0F4CFF]">
             GEO Profile

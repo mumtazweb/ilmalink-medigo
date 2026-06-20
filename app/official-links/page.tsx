@@ -189,7 +189,7 @@ export default function OfficialLinksPage() {
       <main className="min-h-screen bg-[#F8FAFC] text-slate-950">
         <Navbar />
 
-        <section className="bg-[#061D3F] px-4 pb-14 pt-32 text-white sm:px-6 lg:px-8">
+        <section className="bg-[#061D3F] px-4 pb-14 pt-8 text-white sm:px-6 sm:pt-10 lg:px-8">
           <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_22rem] lg:items-center">
             <div className="max-w-4xl">
               <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#5EEAD4]">

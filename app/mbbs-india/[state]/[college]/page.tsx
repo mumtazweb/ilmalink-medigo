@@ -193,7 +193,7 @@ export default async function MBBSIndiaCollegePage({
         }}
       />
 
-      <section className="bg-[#061D3F] px-4 pb-12 pt-32 text-white sm:px-6 lg:px-8">
+      <section className="bg-[#061D3F] px-4 pb-12 pt-8 text-white sm:px-6 sm:pt-10 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <nav className="text-sm font-semibold text-slate-300" aria-label="Breadcrumb">
             <Link href="/mbbs-india/" className="hover:text-white">
