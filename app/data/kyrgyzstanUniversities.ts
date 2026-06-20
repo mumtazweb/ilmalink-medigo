@@ -791,9 +791,9 @@ export const kyrgyzstanUniversities: KyrgyzUniversityPageData[] = [
     fmgePerformance: [
       {
         sourceName: "I K AKHUNBAEV KYRGYZ STATE MEDICAL ACADEMY FACULTY OF GENERAL MEDICINE",
-        appeared: 1816,
-        passed: 284,
-        passRate: "15.63%",
+        appeared: 1038,
+        passed: 237,
+        passRate: "22.83%",
       },
     ],
     history: [

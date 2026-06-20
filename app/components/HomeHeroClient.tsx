@@ -1672,7 +1672,7 @@ export default function HomeHeroClient() {
               100% {
                 transform: translateY(0) scale(1);
               }
-              80% {
+              80% {F
                 transform: translateY(-4px) scale(1.06);
               }
               88% {
@@ -1982,33 +1982,34 @@ export default function HomeHeroClient() {
                     <span className="h-px w-6 bg-gradient-to-l from-transparent to-amber-400 sm:w-20" />
                   </div>
 
-                  <h2 className="mx-auto mt-4 max-w-3xl text-[27px] font-black leading-[1.06] tracking-[-0.035em] text-white sm:mt-5 sm:text-4xl lg:text-[44px]">
-                    Smart tools for safer{" "}
-                    <span className="bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent">MBBS</span> decisions.
+                  <h2 className="mx-auto mt-2 max-w-3xl text-[25px] font-black leading-[1.06] tracking-[-0.035em] text-white sm:mt-3 sm:text-4xl lg:text-[44px]">
+                    Expert{" "}
+                    <span className="bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent">MBBS</span>Admission Guidance
                   </h2>
-                  <p className="mx-auto mt-3 max-w-3xl text-[11px] font-medium leading-[1.65] text-blue-100/82 sm:mt-4 sm:text-sm sm:leading-6">
-                    ILMALINK MEDIGO helps students and parents compare MBBS India and MBBS
-                    Abroad options with practical tools, eligibility checks, scholarship
-                    support and transparent guidance before taking admission decisions.
+                  <p className="mx-auto mt-2 max-w-3xl text-[11px] font-medium leading-[1.25] text-blue-100/82 sm:mt-3 sm:text-sm sm:leading-6">
+                    ILMALINK helps Indian students and parents  choose the best MBBS college in India & abroad 
+                    , NEET score & budget-based opportunities, scholarship and loan support,
+                     on-campus guidance, pre- and post-admission support, with FMGE/NEXT/NEET-PG preaparation
                   </p>
 
-                  <div className="mx-auto mt-4 grid max-w-2xl grid-cols-3 overflow-hidden rounded-2xl border border-white/15 bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,.13),0_12px_28px_rgba(0,0,0,.18)] backdrop-blur-xl sm:mt-5 sm:rounded-full">
-                    {[
-                      ["Transparent", ShieldCheck],
-                      ["Practical", SearchCheck],
-                      ["Student-first", GraduationCap],
-                    ].map(([label, Icon], index) => (
-                      <div
-                        key={label as string}
-                        className={`flex min-h-10 items-center justify-center gap-1 px-1 text-[9px] font-extrabold text-blue-50 sm:min-h-12 sm:gap-2 sm:text-sm ${
-                          index > 0 ? "border-l border-white/15" : ""
-                        }`}
-                      >
-                        <Icon className="h-3.5 w-3.5 text-[#0F4CFF] sm:h-5 sm:w-5" />
-                        {label as string}
-                      </div>
-                    ))}
-                  </div>
+                  <div className="mx-auto mt-3 inline-grid w-fit grid-cols-4 overflow-hidden rounded-full border border-white/15 bg-white/[0.08] shadow-[inset_0_1px_0_rgba(255,255,255,.13),0_8px_18px_rgba(0,0,0,.14)] backdrop-blur-xl sm:mt-4">
+  {[
+    ["Verified", ShieldCheck],
+    ["End to End", SearchCheck],
+    ["Student-first", GraduationCap],
+    ["Free Counselling", Headset],
+  ].map(([label, Icon], index) => (
+    <div
+      key={label as string}
+      className={`flex items-center justify-center gap-1 px-1.5 py-1 text-[8px] font-extrabold leading-none text-blue-50 sm:px-3 sm:py-1.5 sm:text-xs ${
+        index > 0 ? "border-l border-white/15" : ""
+      }`}
+    >
+      <Icon className="h-3 w-3 text-[#0F4CFF] sm:h-4 sm:w-4" />
+      {label as string}
+    </div>
+  ))}
+</div>
                 </div>
 
                 <div className="relative mt-4 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-3">
@@ -2074,12 +2075,11 @@ export default function HomeHeroClient() {
                   })}
                 </div>
 
-                <div className="relative mt-4 rounded-[20px] border border-cyan-200/25 bg-white/[0.08] px-3 py-3 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.14)] backdrop-blur-xl sm:mt-6 sm:px-5 sm:py-4">
-                  <p className="text-[11px] font-bold leading-5 text-blue-50 sm:text-sm">
-                    Student decisions should be guided by fit, rules and transparency — not
-                    only by admission pressure.
-                  </p>
-                </div>
+                <div className="relative mx-auto mt-3 max-w-3xl rounded-xl border border-cyan-200/20 bg-white/[0.06] px-3 py-1 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.10)] backdrop-blur-xl sm:mt-4 sm:px-4 sm:py-1.5">
+  <p className="text-[10px] font-bold leading-2.5 text-blue-50 sm:text-xs sm:leading-5">
+    Our role is simple: explain the choices clearly, show the risks honestly and help students move toward MBBS with confidence.
+  </p>
+</div>
               </section>
             </div>
 
