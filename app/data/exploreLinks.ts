@@ -1,4 +1,5 @@
-import { fmgeCountries, type FmgeCountry } from "./fmgeData";
+import { normalizeFmgeText } from "../lib/fmge";
+import { fmgeCountries, type FmgeCountry } from "./fmgeCountries";
 import {
   kyrgyzstanUniversities,
   type KyrgyzUniversityPageData,
@@ -23,14 +24,7 @@ export const slugifyRouteSegment = (value: string) =>
     .replace(/^-+|-+$/g, "");
 
 export const normalizeLookupKey = (value: string) =>
-  value
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/&/g, " and ")
-    .replace(/[^a-z0-9]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  normalizeFmgeText(value).toLowerCase();
 
 const toTitleCase = (value: string) =>
   value

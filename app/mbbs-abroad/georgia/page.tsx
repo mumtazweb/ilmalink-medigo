@@ -496,12 +496,17 @@ function UniversitiesSection() {
       className="scroll-mt-24 px-4 pb-3 pt-4 sm:px-6 sm:pt-5 lg:px-8"
     >
       <div className="mx-auto max-w-7xl">
-        <h2
-          id="georgia-universities-heading"
-          className="text-center text-2xl font-black tracking-tight text-[#071f3f] sm:text-3xl lg:text-4xl"
-        >
-          Medical (MBBS) Universities in Georgia
-        </h2>
+        <div className="flex justify-center">
+          <h2
+            id="georgia-universities-heading"
+            className="inline-flex max-w-full items-center justify-center gap-1.5 rounded-lg border border-[#00A878]/20 bg-white/90 px-2.5 py-2 text-center text-[13px] font-black leading-none tracking-normal text-[#071f3f] shadow-[0_10px_30px_rgba(8,45,67,0.08)] min-[360px]:text-sm min-[420px]:text-base sm:gap-2 sm:px-4 sm:py-3 sm:text-3xl sm:leading-tight lg:text-4xl"
+          >
+            <Building2 className="hidden h-4 w-4 shrink-0 text-[#00A878] min-[380px]:block sm:h-7 sm:w-7" />
+            <span className="whitespace-nowrap">
+              Medical (MBBS) Universities in Georgia
+            </span>
+          </h2>
+        </div>
         <div className="mt-2">
           <GeorgiaUniversityRail
             universities={georgiaUniversities}

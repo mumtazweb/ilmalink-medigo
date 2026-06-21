@@ -3,12 +3,13 @@ import Link from "next/link";
 
 import CounsellingActionButton from "../components/CounsellingActionButton";
 import Navbar from "../components/navbar";
-import { fmgeCountries } from "../data/fmgeData";
+import { fmgeCountries } from "../data/fmgeCountries";
 import {
   getFmgeCountryDisplayName,
   getFmgeCountryHref,
 } from "../data/exploreLinks";
 import { navbarCountryDestinations } from "../data/navbarDestinations";
+import { getOverallFmgeTotals } from "../lib/fmge";
 
 export const dynamic = "force-static";
 
@@ -22,6 +23,7 @@ export const metadata: Metadata = {
 };
 
 const numberFormatter = new Intl.NumberFormat("en-IN");
+const fmgeTotals = getOverallFmgeTotals();
 
 function parsePassRate(passRate: string) {
   return Number(passRate.replace("%", "")) || 0;
@@ -59,25 +61,10 @@ export default function MBBSAbroadPage() {
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              ["FMGE countries", `${fmgeCountries.length}+`],
-              [
-                "Institute entries",
-                numberFormatter.format(
-                  fmgeCountries.reduce((sum, country) => sum + country.colleges.length, 0)
-                ),
-              ],
-              [
-                "FMGE appeared",
-                numberFormatter.format(
-                  fmgeCountries.reduce((sum, country) => sum + country.appeared, 0)
-                ),
-              ],
-              [
-                "FMGE passed",
-                numberFormatter.format(
-                  fmgeCountries.reduce((sum, country) => sum + country.passed, 0)
-                ),
-              ],
+              ["FMGE countries", `${fmgeTotals.countries}+`],
+              ["Institute entries", numberFormatter.format(fmgeTotals.colleges)],
+              ["FMGE appeared", numberFormatter.format(fmgeTotals.appeared)],
+              ["FMGE passed", numberFormatter.format(fmgeTotals.passed)],
             ].map(([label, value]) => (
               <div key={label} className="rounded-lg border border-white/15 bg-white/10 p-4">
                 <p className="text-2xl font-extrabold text-white">{value}</p>
@@ -219,7 +206,7 @@ export default function MBBSAbroadPage() {
           <aside className="grid content-start gap-4">
             <div className="rounded-lg border border-emerald-200 bg-white p-5 shadow-sm">
               <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[#047857]">
-                Highest pass rates
+                FMGE pass-performance snapshot
               </p>
               <div className="mt-4 grid gap-3">
                 {bestPassRateRows.map((country) => (

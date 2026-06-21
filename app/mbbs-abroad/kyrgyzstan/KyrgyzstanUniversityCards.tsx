@@ -97,14 +97,14 @@ export function KyrgyzstanUniversityCard({
   return (
     <Link
       href={universityHref(university.slug)}
-      className="group block h-[360px] w-[calc(100vw-2rem)] min-w-[280px] max-w-[320px] flex-none snap-start"
+      className="group block h-[212px] w-[calc(100vw-2rem)] min-w-[280px] max-w-[320px] flex-none snap-start sm:h-[360px]"
       aria-label={`View the full ${displayName} profile`}
     >
       <article
         style={liquidStyle}
         className="kyrgyz-liquid-university-card flex h-full w-full flex-col overflow-hidden rounded-[1.4rem] transition duration-300 group-hover:-translate-y-1.5 group-hover:shadow-[0_28px_68px_rgba(8,45,67,0.22)]"
       >
-        <div className="relative h-20 shrink-0 overflow-hidden bg-[#082b54]">
+        <div className="relative h-16 shrink-0 overflow-hidden bg-[#082b54] sm:h-20">
           <Image
             src={kyrgyzstanUniversityImage(university.slug)}
             alt={`${displayName} campus`}
@@ -113,17 +113,17 @@ export function KyrgyzstanUniversityCard({
             className="object-cover transition duration-700 group-hover:scale-[1.04]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#031b35]/45 via-transparent to-black/5" />
-          <span className="absolute right-3 top-2 rounded-full border border-white/25 bg-[#031b35]/85 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-white shadow-lg backdrop-blur-md">
+          <span className="absolute right-2 top-2 rounded-full border border-white/25 bg-[#031b35]/85 px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.12em] text-white shadow-lg backdrop-blur-md sm:right-3 sm:px-2.5 sm:py-1 sm:text-[9px]">
             Full profile
           </span>
         </div>
 
-        <div className="grid min-h-0 flex-1 grid-rows-[112px_24px_28px] content-between p-5">
-          <h3 className="line-clamp-4 h-28 overflow-hidden text-lg font-black leading-6 tracking-tight text-[#071f3f] sm:text-xl sm:leading-7">
+        <div className="flex min-h-0 flex-1 flex-col gap-1.5 p-3.5 sm:grid sm:grid-rows-[112px_24px_28px] sm:content-between sm:gap-0 sm:p-5">
+          <h3 className="line-clamp-2 overflow-hidden text-[15px] font-black leading-5 tracking-normal text-[#071f3f] sm:line-clamp-4 sm:h-28 sm:text-xl sm:leading-7">
             {displayName}
           </h3>
 
-          <div className="flex h-6 min-w-0 flex-nowrap items-center gap-2 overflow-hidden text-[10px] font-bold sm:gap-3 sm:text-xs">
+          <div className="flex h-5 min-w-0 flex-nowrap items-center gap-1.5 overflow-hidden text-[9px] font-bold min-[360px]:text-[10px] sm:h-6 sm:gap-3 sm:text-xs">
             <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-slate-500">
               <MapPin size={14} className="shrink-0 text-rose-500" />
               <span>{displayCity(university)}</span>
@@ -142,7 +142,7 @@ export function KyrgyzstanUniversityCard({
             </span>
           </div>
 
-          <p className="h-7 overflow-hidden whitespace-nowrap text-lg font-black leading-7 tracking-tight text-[#00A878] sm:text-xl">
+          <p className="h-6 overflow-hidden whitespace-nowrap text-base font-black leading-6 tracking-normal text-[#00A878] sm:h-7 sm:text-xl sm:leading-7">
             {displayFee(university)}
           </p>
         </div>

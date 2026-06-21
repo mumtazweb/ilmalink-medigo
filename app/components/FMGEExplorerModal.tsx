@@ -12,7 +12,7 @@ import {
   SlidersHorizontal,
   X,
 } from "lucide-react";
-import { fmgeCountries, type FMGECollege, type FmgeCountry } from "../data/fmgeData";
+import { fmgeCountries, type FMGECollege, type FmgeCountry } from "../data/fmgeCountries";
 import {
   getFmgeCollegeConnectLabel,
   getFmgeCollegeContextHref,
@@ -21,6 +21,10 @@ import {
   getFmgeCountryHref,
   whatsappCounsellingUrl,
 } from "../data/exploreLinks";
+import {
+  FMGE_2025_DISCLAIMER,
+  getOverallFmgeTotals,
+} from "../lib/fmge";
 
 type FMGEExplorerModalProps = {
   isOpen: boolean;
@@ -34,14 +38,6 @@ type CollegeConnectPrompt = {
   college: string;
 };
 
-const headlineStats = [
-  { value: "54+", label: "Countries / Territories" },
-  { value: "486", label: "Foreign Institute Entries" },
-  { value: "79,000", label: "FMGE Appeared" },
-  { value: "20,382", label: "Passed" },
-  { value: "25.80%", label: "Overall Pass Rate" },
-];
-
 const sortLabels: Record<SortOption, string> = {
   appeared: "Highest Appeared",
   passRate: "Highest Pass %",
@@ -49,6 +45,18 @@ const sortLabels: Record<SortOption, string> = {
 };
 
 const numberFormatter = new Intl.NumberFormat("en-IN");
+const fmgeTotals = getOverallFmgeTotals();
+
+const headlineStats = [
+  { value: `${fmgeTotals.countries}+`, label: "Countries / Territories" },
+  {
+    value: numberFormatter.format(fmgeTotals.colleges),
+    label: "Foreign Institute Entries",
+  },
+  { value: numberFormatter.format(fmgeTotals.appeared), label: "FMGE Appeared" },
+  { value: numberFormatter.format(fmgeTotals.passed), label: "Passed" },
+  { value: fmgeTotals.passRate, label: "Overall Pass Rate" },
+];
 
 function parsePassRate(passRate: string) {
   return Number(passRate.replace("%", "")) || 0;
@@ -276,9 +284,10 @@ export default function FMGEExplorerModal({ isOpen, onClose, onConnect }: FMGEEx
           <section className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
             <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-[0_16px_36px_rgba(15,23,42,0.06)] sm:p-6">
               <p className="text-sm leading-7 text-slate-600">
-                According to the NBEMS FMGE 2024 country/institute-wise performance report, Indian foreign
-                medical graduates appeared across 54 country/territory categories and 486 listed foreign medical
-                institute entries. Choosing the right country and university from such a large pool can be
+                According to the NBEMS FMGE 2025 country/institute-wise performance records, Indian foreign
+                medical graduates appeared across {numberFormatter.format(fmgeTotals.countries)} country/territory
+                categories and {numberFormatter.format(fmgeTotals.colleges)} listed foreign medical institute entries.
+                Choosing the right country and university from such a large pool can be
                 confusing. Students should compare FMGE performance, course duration, internship structure,
                 English medium, local licence eligibility, safety, budget, and NMC/FMGL compliance before
                 admission.
@@ -664,9 +673,7 @@ export default function FMGEExplorerModal({ isOpen, onClose, onConnect }: FMGEEx
           </section>
 
           <div className="mt-5 rounded-3xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
-            FMGE data shows candidate appearance and performance only. It does not mean NMC approval. Students
-            must verify university-wise course duration, internship, English medium, local licence eligibility,
-            WDOMS listing, and latest NMC/FMGL compliance before admission.
+            {FMGE_2025_DISCLAIMER}
           </div>
         </div>
       </div>

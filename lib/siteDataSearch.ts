@@ -15,7 +15,7 @@ import { navbarCountryDestinations } from "@/app/data/navbarDestinations";
 import { kyrgyzstanUniversities } from "@/app/data/kyrgyzstanUniversities";
 import { georgiaUniversities } from "@/app/data/georgiaUniversities";
 import { bangladeshFeaturedUniversities } from "@/app/data/bangladeshUniversities";
-import { fmgeCountries } from "@/app/data/fmgeData";
+import { fmgeCountries } from "@/app/data/fmgeCountries";
 import {
   getFmgeCollegeDetailHref,
   getFmgeCountryHref,

@@ -5,10 +5,15 @@ import Link from "next/link";
 
 import CounsellingActionButton from "../../components/CounsellingActionButton";
 import Navbar from "../../components/navbar";
-import { fmgeCountries } from "../../data/fmgeData";
+import { fmgeCountries } from "../../data/fmgeCountries";
 import { getFmgeCountryDisplayName, getFmgeCountryHref } from "../../data/exploreLinks";
+import {
+  FMGE_2025_DISCLAIMER,
+  getOverallFmgeTotals,
+} from "../../lib/fmge";
 
 const numberFormatter = new Intl.NumberFormat("en-IN");
+const fmgeTotals = getOverallFmgeTotals();
 
 type SortOption = "appeared" | "passRate" | "az";
 
@@ -80,25 +85,10 @@ export default function FMGEExplorerPage() {
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              ["FMGE countries", `${fmgeCountries.length}+`],
-              [
-                "Institute entries",
-                numberFormatter.format(
-                  fmgeCountries.reduce((sum, country) => sum + country.colleges.length, 0)
-                ),
-              ],
-              [
-                "FMGE appeared",
-                numberFormatter.format(
-                  fmgeCountries.reduce((sum, country) => sum + country.appeared, 0)
-                ),
-              ],
-              [
-                "FMGE passed",
-                numberFormatter.format(
-                  fmgeCountries.reduce((sum, country) => sum + country.passed, 0)
-                ),
-              ],
+              ["FMGE countries", `${fmgeTotals.countries}+`],
+              ["Institute entries", numberFormatter.format(fmgeTotals.colleges)],
+              ["FMGE appeared", numberFormatter.format(fmgeTotals.appeared)],
+              ["FMGE passed", numberFormatter.format(fmgeTotals.passed)],
             ].map(([label, value]) => (
               <div key={label} className="rounded-lg border border-white/15 bg-white/10 p-4">
                 <p className="text-2xl font-extrabold text-white">{value}</p>
@@ -279,10 +269,7 @@ export default function FMGEExplorerPage() {
                 Data note
               </p>
               <p className="mt-4 text-sm leading-6 text-slate-200">
-                FMGE data shows candidate appearance and performance only. It does not
-                guarantee university recognition, current NMC/FMGL compliance, or
-                admission suitability. Use it as one part of your country and university
-                shortlisting process.
+                {FMGE_2025_DISCLAIMER}
               </p>
             </aside>
           </div>

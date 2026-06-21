@@ -7,7 +7,7 @@ import {
   type SiteSearchMatch,
   type SuggestedSiteLink,
 } from "./siteDataSearch";
-import { fmgeCountries } from "@/app/data/fmgeData";
+import { fmgeCountries } from "@/app/data/fmgeCountries";
 import type {
   MBBSIndiaCollegeCutoff,
   MBBSIndiaCutoffCategory,
