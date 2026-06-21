@@ -6,6 +6,7 @@ const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const appDir = path.join(rootDir, "app");
 const blogDbPath = path.join(rootDir, "data", "blog-db.json");
 const fmgeDataPath = path.join(rootDir, "app", "data", "fmgeData.ts");
+const neetSearchEntriesPath = path.join(rootDir, "app", "data", "neetSearchEntries.json");
 const outputPath = path.join(rootDir, "app", "data", "searchIndex.ts");
 const BLOG_METADATA_PREFIX = "<!-- BLOG_METADATA:";
 const BLOG_METADATA_SUFFIX = " -->";
@@ -955,6 +956,31 @@ function buildManualEntries() {
   }));
 }
 
+async function readNeetSearchEntries() {
+  try {
+    const entries = JSON.parse(await fs.readFile(neetSearchEntriesPath, "utf8"));
+
+    if (!Array.isArray(entries)) return [];
+
+    return entries.map((entry) => ({
+      ...entry,
+      content: normalizeText(
+        [
+          entry.title,
+          entry.description,
+          Array.isArray(entry.tags) ? entry.tags.join(" ") : "",
+          entry.content,
+        ].join(" ")
+      ),
+    }));
+  } catch (error) {
+    console.warn(
+      `Skipping NEET search records: ${error instanceof Error ? error.message : String(error)}`
+    );
+    return [];
+  }
+}
+
 function dedupeEntries(entries) {
   const seen = new Map();
 
@@ -983,6 +1009,7 @@ async function main() {
       ...(await buildRouteEntries()),
       ...(await buildBlogEntries()),
       ...(await buildFmgeEntries()),
+      ...(await readNeetSearchEntries()),
       ...buildManualEntries(),
     ].filter((entry) => isPublicSearchUrl(entry.url))
   );

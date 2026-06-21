@@ -5,7 +5,7 @@ import Link from "next/link";
 import AnnouncementTicker from "./AnnouncementTicker";
 import CounsellingPopup from "./CounsellingPopup";
 import SearchModal from "./SearchModal";
-import { Phone, Menu, X, ChevronDown, Search, Send, MessageSquare } from "lucide-react";
+import { Phone, Menu, X, ChevronDown, Search, Send, MessageSquare, GraduationCap } from "lucide-react";
 
 // Small inline SVG icons (under 100kb, minimal, optimized for UI)
 function IconHome() {
@@ -527,7 +527,10 @@ export default function Navbar() {
                   </button>
                 </div>
                 <Link href="/scholarships-loans" className="nav-link flex items-center gap-2"><IconScholarships /> <span>Scholarships & Loans</span></Link>
-                <a href="https://www.mumtazeducation.com" target="_blank" rel="noopener noreferrer" className="nav-link">NEET</a>
+                <Link href="/neet" className="nav-link flex items-center gap-2">
+                  <GraduationCap size={14} />
+                  <span>NEET</span>
+                </Link>
                 <Link href="/blogs" className="nav-link flex items-center gap-2"><IconBlog /> <span>Blogs</span></Link>
               </nav>
 
@@ -800,9 +803,9 @@ export default function Navbar() {
                   <Link href="/scholarships-loans" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
                     <div className="flex items-center gap-3"><IconScholarships /> <span>Scholarships & Loans</span></div>
                   </Link>
-                  <a href="https://www.mumtazeducation.com" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
-                    <div className="flex items-center gap-3"><IconScholarships /> <span>NEET</span></div>
-                  </a>
+                  <Link href="/neet" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
+                    <div className="flex items-center gap-3"><GraduationCap size={14} /> <span>NEET</span></div>
+                  </Link>
                   <Link href="/blogs" onClick={closeMobileMenu} className="block rounded-lg px-3.5 py-3 transition hover:bg-slate-50 hover:text-[#00C896]">
                     <div className="flex items-center gap-3"><IconBlog /> <span>Blogs</span></div>
                   </Link>

@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   CheckCircle2,
@@ -128,23 +129,6 @@ function displayFmge(college: BangladeshCollegeProfile) {
   return `${college.fmge.appeared.toLocaleString("en-IN")} appeared · ${college.fmge.passed.toLocaleString("en-IN")} passed · ${college.fmge.passRate}`;
 }
 
-function collegeVisualStyle(college: BangladeshCollegeProfile) {
-  const index = Math.abs(
-    college.slug.split("").reduce((total, char) => total + char.charCodeAt(0), 0),
-  );
-
-  const gradients = [
-    "linear-gradient(135deg, rgba(3,27,53,0.96), rgba(0,168,120,0.78)), radial-gradient(circle at 18% 10%, rgba(255,255,255,0.28), transparent 34%)",
-    "linear-gradient(135deg, rgba(3,27,53,0.96), rgba(15,76,255,0.72)), radial-gradient(circle at 78% 12%, rgba(81,230,179,0.28), transparent 32%)",
-    "linear-gradient(135deg, rgba(3,27,53,0.96), rgba(114,84,216,0.72)), radial-gradient(circle at 20% 20%, rgba(255,255,255,0.24), transparent 35%)",
-    "linear-gradient(135deg, rgba(3,27,53,0.96), rgba(207,23,49,0.66)), radial-gradient(circle at 72% 18%, rgba(255,255,255,0.24), transparent 35%)",
-  ];
-
-  return {
-    background: gradients[index % gradients.length],
-  } as CSSProperties;
-}
-
 export function BangladeshUniversityCard({
   university,
   motionIndex = 0,
@@ -167,11 +151,15 @@ export function BangladeshUniversityCard({
         style={liquidStyle}
         className="kyrgyz-liquid-university-card flex h-full w-full flex-col overflow-hidden rounded-[1.4rem] transition duration-300 group-hover:-translate-y-1.5 group-hover:shadow-[0_28px_68px_rgba(8,45,67,0.22)]"
       >
-        <div
-          className="relative h-16 shrink-0 overflow-hidden bg-[#082b54] sm:h-20"
-          style={collegeVisualStyle(university)}
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-[#031b35]/45 via-transparent to-black/5" />
+        <div className="relative h-16 shrink-0 overflow-hidden bg-[#082b54] sm:h-20">
+          <Image
+            src={university.image}
+            alt={university.imageAlt}
+            fill
+            sizes="(max-width: 640px) calc(100vw - 2rem), 320px"
+            className="object-cover transition duration-700 group-hover:scale-[1.04]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#031b35]/55 via-transparent to-black/10" />
           <span className="absolute right-2 top-2 rounded-full border border-white/25 bg-[#031b35]/85 px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.12em] text-white shadow-lg backdrop-blur-md sm:right-3 sm:px-2.5 sm:py-1 sm:text-[9px]">
             Full profile
           </span>

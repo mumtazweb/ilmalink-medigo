@@ -2,6 +2,7 @@ import {
   globalSearchIndex,
   type GlobalSearchEntry,
 } from "@/app/data/searchIndex";
+import neetSearchEntries from "@/app/data/neetSearchEntries.json";
 import {
   mbbsIndiaColleges,
   mbbsIndiaCollegesByState,
@@ -150,6 +151,8 @@ const entityCountryAliases = [
     aliases: ["alte", "alte university"],
   },
 ] as const;
+
+const neetSectionSearchEntries = neetSearchEntries as GlobalSearchEntry[];
 
 function includesPhrase(text: string, phrase: string) {
   return ` ${text} `.includes(` ${normalizeSiteSearchText(phrase)} `);
@@ -996,6 +999,15 @@ function buildBaseRecords() {
           country: "India",
         },
       }
+    ),
+    ...neetSectionSearchEntries.map((entry) =>
+      createRecord(entry, "Page Section", "ILMALINK NEET bulletin section", {
+        keyFacts: ["Specific NEET section", `Open: ${entry.url}`],
+        data: {
+          kind: "page-section",
+          country: "India",
+        },
+      })
     ),
     ...navbarCountryDestinations.map((destination) =>
       createRecord(

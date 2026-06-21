@@ -25,6 +25,8 @@ export type BangladeshFmgePerformance = {
 export type BangladeshCollegeProfile = {
   name: string;
   slug: string;
+  image: string;
+  imageAlt: string;
   city: string;
   location: string;
   program: string;
@@ -144,6 +146,10 @@ export const bangladeshFeaturedUniversities: BangladeshCollegeProfile[] = [
   {
     name: "Anwer Khan Modern Medical College",
     slug: "anwer-khan-modern-medical-college",
+    image:
+      "/bangladesh/universities/anwer-khan-modern-medical-college.webp",
+    imageAlt:
+      "Students and faculty at Anwer Khan Modern Medical College in Dhaka",
     city: "Dhaka",
     location: "Dhanmondi, Dhaka, Bangladesh",
     program: "MBBS for international students",
@@ -227,6 +233,8 @@ export const bangladeshFeaturedUniversities: BangladeshCollegeProfile[] = [
   {
     name: "Green Life Medical College",
     slug: "green-life-medical-college",
+    image: "/bangladesh/universities/green-life-medical-college.webp",
+    imageAlt: "Green Life Medical College building in Dhaka",
     city: "Dhaka",
     location: "Green Road, Dhanmondi, Dhaka, Bangladesh",
     program: "MBBS Course",
@@ -297,6 +305,10 @@ export const bangladeshFeaturedUniversities: BangladeshCollegeProfile[] = [
   {
     name: "Tairunnessa Memorial Medical College & Hospital",
     slug: "tairunnessa-memorial-medical-college",
+    image:
+      "/bangladesh/universities/tairunnessa-memorial-medical-college.webp",
+    imageAlt:
+      "Tairunnessa Memorial Medical College campus building in Gazipur",
     city: "Gazipur",
     location: "Konia, Board Bazar, Gazipur, Bangladesh",
     program: "MBBS",
@@ -368,6 +380,8 @@ export const bangladeshFeaturedUniversities: BangladeshCollegeProfile[] = [
   {
     name: "Sylhet Women's Medical College",
     slug: "sylhet-womens-medical-college",
+    image: "/bangladesh/universities/sylhet-womens-medical-college.webp",
+    imageAlt: "Sylhet Women's Medical College campus building in Sylhet",
     city: "Sylhet",
     location: "Mirboxtula, Sylhet, Bangladesh",
     program: "MBBS for overseas students",
@@ -438,6 +452,8 @@ export const bangladeshFeaturedUniversities: BangladeshCollegeProfile[] = [
   {
     name: "Ad-din Akij Medical College",
     slug: "ad-din-akij-medical-college",
+    image: "/bangladesh/universities/ad-din-akij-medical-college.webp",
+    imageAlt: "Ad-din Akij Medical College campus building in Khulna",
     city: "Khulna",
     location: "Khulna, Bangladesh",
     program: "Five-Year MBBS Program",
@@ -504,6 +520,8 @@ export const bangladeshFeaturedUniversities: BangladeshCollegeProfile[] = [
   {
     name: "Ad-din Momin Medical College",
     slug: "ad-din-momin-medical-college",
+    image: "/bangladesh/universities/ad-din-momin-medical-college.webp",
+    imageAlt: "Ad-din Momin Medical College campus building in Dhaka",
     city: "Dhaka",
     location: "Keraniganj, Dhaka, Bangladesh",
     program: "Five-Year MBBS Program",
@@ -571,6 +589,10 @@ export const bangladeshFeaturedUniversities: BangladeshCollegeProfile[] = [
   {
     name: "Ad-din Sakina Women's Medical College",
     slug: "ad-din-sakina-womens-medical-college",
+    image:
+      "/bangladesh/universities/ad-din-sakina-womens-medical-college.webp",
+    imageAlt:
+      "Ad-din Sakina Women's Medical College campus building in Jashore",
     city: "Jashore",
     location: "Pulerhat, Jashore, Bangladesh",
     program: "Five-Year MBBS Program",

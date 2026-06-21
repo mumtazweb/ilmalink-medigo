@@ -16,6 +16,7 @@ import {
   globalSearchIndex,
   type GlobalSearchEntry,
 } from "../data/searchIndex";
+import neetSearchEntries from "../data/neetSearchEntries.json";
 import {
   getMBBSIndiaCollegeCounselling2025,
   getMBBSIndiaStateCounselling2025,
@@ -648,11 +649,14 @@ const georgiaUniversitySearchEntries: GlobalSearchEntry[] = georgiaUniversities.
   };
 });
 
+const neetSectionSearchEntries = neetSearchEntries as GlobalSearchEntry[];
+
 const siteSearchIndex: EnhancedSearchEntry[] = Array.from(
   new Map(
     [
       neetRankPredictorSearchEntry,
       mbbsIndiaDirectorySearchEntry,
+      ...neetSectionSearchEntries,
       ...navbarDropdownSearchEntries,
       ...kyrgyzstanUniversitySearchEntries,
       ...georgiaUniversitySearchEntries,

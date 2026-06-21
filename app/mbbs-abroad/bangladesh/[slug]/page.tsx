@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -68,6 +69,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: college.summary,
       url: pageUrl,
       siteName: "ILMALINK MEDIGO",
+      images: [
+        {
+          url: college.image,
+          alt: college.imageAlt,
+        },
+      ],
       locale: "en_IN",
       type: "article",
     },
@@ -75,6 +82,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       card: "summary_large_image",
       title: `${college.name} | Bangladesh MBBS Profile`,
       description: college.summary,
+      images: [college.image],
     },
   };
 }
@@ -168,7 +176,7 @@ function CtaButtons({ collegeName }: { collegeName: string }) {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#0b4b7a] bg-white px-5 py-3 text-sm font-extrabold text-[#0b3a67] transition hover:border-[#00A878] hover:text-[#00A878]"
+        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#0b4b7a] bg-white px-5 py-3 text-sm font-extrabold !text-[#0b3a67] transition hover:border-[#00A878] hover:!text-[#00A878]"
       >
         Talk to Expert
         <MessageCircle size={16} />
@@ -209,7 +217,15 @@ export default async function BangladeshCollegeProfilePage({ params }: PageProps
       <Navbar />
 
       <section className="relative overflow-hidden bg-[#031b35] px-4 py-8 text-white sm:px-6 lg:px-8">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_0%,rgba(0,211,155,0.18),transparent_30%),radial-gradient(circle_at_85%_10%,rgba(15,76,255,0.18),transparent_30%),linear-gradient(110deg,#031b35,#063b70)]" />
+        <Image
+          src={college.image}
+          alt={college.imageAlt}
+          fill
+          preload
+          sizes="100vw"
+          className="absolute inset-0 h-full w-full object-cover opacity-50"
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_0%,rgba(0,211,155,0.2),transparent_30%),linear-gradient(100deg,rgba(3,27,53,0.99)_0%,rgba(6,59,112,0.93)_56%,rgba(3,27,53,0.56)_100%)]" />
         <div className="relative mx-auto max-w-7xl">
           <Link
             href="/mbbs-abroad/bangladesh/"
