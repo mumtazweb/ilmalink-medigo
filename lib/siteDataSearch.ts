@@ -1073,8 +1073,8 @@ function buildBaseRecords() {
           keyFacts: [
             "Private medical college",
             `${university.city}, Bangladesh`,
-            `${university.fmge.appeared.toLocaleString("en-IN")} FMGE appeared`,
-            `${university.fmge.passed.toLocaleString("en-IN")} FMGE passed`,
+            `${university.fmge.appeared?.toLocaleString("en-IN") ?? "Verify separately"} FMGE appeared`,
+`${university.fmge.passed?.toLocaleString("en-IN") ?? "Verify separately"} FMGE passed`,
             `${university.fmge.passRate} pass rate`,
           ],
           data: {

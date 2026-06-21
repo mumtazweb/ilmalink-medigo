@@ -36,7 +36,10 @@ import {
   bangladeshFraudWarnings,
   bangladeshGapRulePoints,
   bangladeshGovernmentQuotaPoints,
+  bangladeshHighlightedFeeRows,
+  bangladeshUniversityDirectory,
 } from "../../data/bangladeshUniversities";
+import BangladeshUniversityRail from "./BangladeshUniversityCards";
 
 export const dynamic = "force-static";
 
@@ -107,13 +110,6 @@ const whyBangladesh = [
   },
 ] as const;
 
-const highlightedFeeRows = [
-  { year: "Dhaka National", semester: "Total estimate", tuition: "₹25-40 Lakhs", hostel: "Included in estimate", total: "Range varies by intake" },
-  { year: "Tairunnessa Memorial", semester: "Total estimate", tuition: "₹28-40 Lakhs", hostel: "Included in estimate", total: "Range varies by intake" },
-  { year: "Holy Family Red Crescent", semester: "Total estimate", tuition: "₹35-45 Lakhs", hostel: "Included in estimate", total: "Range varies by intake" },
-  { year: "Jahurul Islam", semester: "Total estimate", tuition: "₹30-40 Lakhs", hostel: "Included in estimate", total: "Range varies by intake" },
-];
-
 export const metadata: Metadata = {
   title:
     "MBBS in Bangladesh 2026 | Fees, Eligibility, FMGE & College Comparison",
@@ -126,12 +122,13 @@ export const metadata: Metadata = {
     "Bangladesh BMDC and DGME admission guidance",
     "Bangladesh medical colleges for Indian students",
     "Bangladesh FMGE 2025",
-    "Dhaka National Medical College",
-    "Tairunnessa Memorial Medical College",
-    "Holy Family Red Crescent Medical College",
-    "Jahurul Islam Medical College",
-    "Anwer Khan Modern Medical College",
-    "Green Life Medical College",
+    "Sylhet Women's Medical College fee 2026",
+    "Anwer Khan Modern Medical College fee 2026",
+    "Green Life Medical College fee 2026",
+    "Tairunnessa Memorial Medical College fee 2026",
+    "Ad-din Akij Medical College fee 2026",
+    "Ad-din Momin Medical College fee 2026",
+    "Ad-din Sakina Women's Medical College fee 2026",
   ],
   alternates: {
     canonical: pageUrl,
@@ -183,12 +180,12 @@ function buildJsonLd() {
       "@context": "https://schema.org",
       "@type": "ItemList",
       name: "Featured Bangladesh medical colleges",
-      numberOfItems: bangladeshFeaturedUniversities.length,
-      itemListElement: bangladeshFeaturedUniversities.map((college, index) => ({
+      numberOfItems: bangladeshUniversityDirectory.length,
+      itemListElement: bangladeshUniversityDirectory.map((college, index) => ({
         "@type": "ListItem",
         position: index + 1,
         name: college.name,
-        url: `${pageUrl}#universities`,
+        url: `${pageUrl}${college.slug}/`,
       })),
     },
     {
@@ -436,45 +433,25 @@ function CollegesSection() {
   return (
     <section
       id="universities"
-      className="scroll-mt-24 px-4 pb-3 pt-4 sm:px-6 sm:pt-5 lg:px-8"
+      className="kyrgyz-liquid-card-stage scroll-mt-24 overflow-hidden px-4 pb-3 pt-4 sm:px-6 sm:pt-5 lg:px-8"
     >
-      <div className="mx-auto max-w-7xl">
-        <h2 className="text-center text-2xl font-black tracking-tight text-[#071f3f] sm:text-3xl lg:text-4xl">
-          Popular Medical Colleges in Bangladesh
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <h2
+          id="bangladesh-universities-heading"
+          className="text-center text-2xl font-black tracking-tight text-[#071f3f] sm:text-3xl lg:text-4xl"
+        >
+          Medical (MBBS) Colleges in Bangladesh
         </h2>
-        <p className="mx-auto mt-3 max-w-5xl text-center text-sm font-medium leading-7 text-slate-600 sm:text-base">
-          Students should compare BM&DC and DGME alignment, eligibility route, total fee structure, clinical exposure, hostel facilities, and payment terms before final shortlisting.
-        </p>
-
-        <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {bangladeshFeaturedUniversities.map((college) => (
-            <article
-              key={college.name}
-              className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
-            >
-              <h3 className="text-base font-black leading-6 text-[#071f3f]">
-                {college.name}
-              </h3>
-              <p className="mt-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                {college.city}
-              </p>
-              <p className="mt-3 text-sm font-black text-[#00A878]">
-                {college.fees}
-              </p>
-              <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
-                {college.summary}
-              </p>
-              <p className="mt-3 rounded-xl bg-[#f4f7fb] px-3 py-2 text-xs font-semibold text-[#243b5a]">
-                FMGE 2025: {college.fmge.appeared.toLocaleString("en-IN")} appeared, {college.fmge.passed.toLocaleString("en-IN")} passed ({college.fmge.passRate})
-              </p>
-            </article>
-          ))}
+        <div className="mt-2">
+          <BangladeshUniversityRail
+            universities={bangladeshUniversityDirectory}
+            labelledBy="bangladesh-universities-heading"
+          />
         </div>
       </div>
     </section>
   );
 }
-
 function AdmissionUpdate() {
   return (
     <section className="px-4 pt-4 sm:px-6 lg:px-8">
@@ -558,7 +535,7 @@ function FeeEligibilityDocuments() {
             Bangladesh MBBS fee ranges 2026
           </h2>
           <p className="mt-2 text-xs font-medium leading-5 text-slate-600">
-            Comparative total-fee estimates from popular private-college options used by Indian students for early budgeting.
+            Comparative total-fee estimates from uploaded 2026-2027 private-college fee letters for early budgeting.
           </p>
           <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200">
             <table className="w-full min-w-[580px] border-collapse text-left text-xs">
@@ -567,7 +544,7 @@ function FeeEligibilityDocuments() {
                   {[
                     "College",
                     "Fee view",
-                    "Tuition range",
+                    "Tuition / course range",
                     "Hostel & mess",
                     "Total note",
                   ].map((heading) => (
@@ -578,7 +555,7 @@ function FeeEligibilityDocuments() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {highlightedFeeRows.map((row) => (
+                {bangladeshHighlightedFeeRows.map((row) => (
                   <tr key={row.year}>
                     <td className="px-3 py-3 font-bold">{row.year}</td>
                     <td className="px-3 py-3">{row.semester}</td>
@@ -595,11 +572,11 @@ function FeeEligibilityDocuments() {
           <ul className="mt-4 grid gap-2">
             <li className="flex items-start gap-2 text-xs font-semibold leading-5 text-slate-600">
               <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[#00A878]" />
-              These are estimate ranges; exact payable structure varies by session, seat type, hostel, and payment schedule.
+              These are college-letter based figures; exact payable structure varies by session, seat type, hostel, payment schedule and exchange route.
             </li>
             <li className="flex items-start gap-2 text-xs font-semibold leading-5 text-slate-600">
               <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[#00A878]" />
-              Students should collect written fee breakups, refund policy, and payment route details before transfer.
+              Students should collect written fee breakups, refund policy, bank details, and payment route details before transfer.
             </li>
             <li className="flex items-start gap-2 text-xs font-semibold leading-5 text-slate-600">
               <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[#00A878]" />
@@ -716,7 +693,7 @@ function FmgeAndCounselling() {
             [bangladeshFeaturedUniversities.length.toString(), "Featured colleges", Building2],
             [bangladeshCountryFmge.appeared.toLocaleString("en-IN"), "FMGE 2025 appeared", Users],
             [bangladeshCountryFmge.passRate, "FMGE 2025 pass rate", TrendingUp],
-            ["6 colleges", "Mapped with FMGE records", Microscope],
+            ["7 colleges", "Fee letters mapped", Microscope],
             ["Private route", "Main admission pathway", GraduationCap],
           ].map(([value, label, Icon]) => {
             const IconComponent = Icon as typeof Building2;
@@ -801,14 +778,15 @@ function VerificationAndFaq() {
             Featured Bangladesh college references
           </h3>
           <div className="mt-3 grid gap-2">
-            {bangladeshFeaturedUniversities.slice(0, 4).map((college) => (
-              <div
+            {bangladeshUniversityDirectory.slice(0, 4).map((college) => (
+              <a
                 key={college.name}
-                className="inline-flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3 text-sm font-bold text-[#173452]"
+                href={`/mbbs-abroad/bangladesh/${college.slug}/`}
+                className="inline-flex items-center justify-between gap-4 rounded-xl border border-slate-200 px-4 py-3 text-sm font-bold text-[#173452] transition hover:border-[#00A878] hover:text-[#00A878]"
               >
                 {college.name}
                 <span className="text-xs font-black text-[#00A878]">{college.fees}</span>
-              </div>
+              </a>
             ))}
           </div>
         </div>
