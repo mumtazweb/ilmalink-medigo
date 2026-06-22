@@ -54,7 +54,10 @@ export default async function CounsellorDashboardPage() {
         <PortalStatCard label="Document pending" value={documentPending} icon={FileClock} tone="violet" />
         <PortalStatCard label="Application started" value={applicationStarted} icon={ClipboardList} tone="blue" />
       </section>
-      <PortalLeadTable initialLeads={assigned.slice(0, 12).map(toPortalLeadRow)} />
+      <PortalLeadTable
+        initialLeads={assigned.slice(0, 12).map(toPortalLeadRow)}
+        detailBasePath="/portal/counsellor/leads"
+      />
     </div>
   );
 }

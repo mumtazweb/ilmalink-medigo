@@ -117,6 +117,7 @@ export default async function ManagementReportsPage() {
       <PortalLeadTable
         initialLeads={students.map(toPortalLeadRow)}
         readOnly
+        detailBasePath="/portal/management/leads"
       />
     </div>
   );

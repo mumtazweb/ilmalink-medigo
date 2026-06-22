@@ -28,6 +28,7 @@ export default async function AdminFollowupsPage() {
       initialLeads={leads.map(toPortalLeadRow)}
       counsellors={counsellors.map(({ id, name }) => ({ id, name }))}
       canAssign
+      detailBasePath="/portal/admin/leads"
     />
   );
 }

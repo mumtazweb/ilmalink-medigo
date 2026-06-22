@@ -1,5 +1,6 @@
 import {
   CalendarClock,
+  Download,
   FileText,
   History,
   Mail,
@@ -10,6 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+import { portalDocumentDownloadHref } from "../../lib/portal/documentChecklist";
 import { statusLabel } from "../../lib/portal/constants";
 import { parseStoredInterests } from "../../lib/portal/validation";
 
@@ -204,12 +206,11 @@ export default function PortalLeadDetail({
                   ) : null}
                   {document.fileUrl ? (
                     <a
-                      href={document.fileUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mt-2 inline-flex text-xs font-black text-[#0B4AA2]"
+                      href={portalDocumentDownloadHref(document.id)}
+                      className="mt-2 inline-flex items-center gap-1.5 text-xs font-black text-[#0B4AA2]"
                     >
-                      Open document
+                      <Download className="h-3.5 w-3.5" />
+                      Download document
                     </a>
                   ) : null}
                 </div>

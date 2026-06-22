@@ -28,6 +28,13 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import PortalCallbackButton from "../../../components/portal/PortalCallbackButton";
+import {
+  PORTAL_DOCUMENT_REQUIREMENTS,
+  allRequiredPortalDocumentsUploaded,
+  findMatchingPortalDocument,
+  portalDocumentDownloadHref,
+  requirementApplies,
+} from "../../../lib/portal/documentChecklist";
 import { getCurrentPortalStudent } from "../../../lib/portal/session";
 import { parseStoredInterests } from "../../../lib/portal/validation";
 
@@ -51,10 +58,10 @@ const quickActions = [
   },
   {
     title: "Upload Documents",
-    text: "Document upload coming soon",
+    text: "Upload and download documents",
+    href: "/portal/student/documents",
     icon: Upload,
     tone: "green",
-    soon: true,
   },
   {
     title: "Check Eligibility",
@@ -80,18 +87,6 @@ const quickActions = [
   },
 ] as const;
 
-const documentRequirements = [
-  { label: "Class 10 Marksheet", keys: ["class 10", "10th"] },
-  { label: "Class 12 Marksheet", keys: ["class 12", "12th"] },
-  { label: "NEET Admit Card/Scorecard", keys: ["neet", "scorecard", "admit"] },
-  { label: "Aadhaar / Passport ID", keys: ["aadhaar", "identity", "passport id"] },
-  { label: "Passport (For Abroad)", keys: ["passport"] },
-  { label: "Photo", keys: ["photo", "photograph"] },
-  { label: "Signature", keys: ["signature"] },
-  { label: "Category Certificate (If any)", keys: ["category", "caste"] },
-  { label: "Domicile Certificate", keys: ["domicile"] },
-] as const;
-
 export default async function StudentDashboardPage() {
   let student;
 
@@ -107,9 +102,17 @@ export default async function StudentDashboardPage() {
 
   if (!student) redirect("/portal/login?tab=student");
 
-  const documents = Array.isArray(student.documents) ? student.documents : [];
+  const documents = Array.isArray(student.documents)
+    ? student.documents.map((document) => ({
+        ...document,
+        hasFile: Boolean(document.fileUrl),
+      }))
+    : [];
   const interests = parseStoredInterests(student.interests);
   const studentName = valueOr(student.name, "Student");
+  const preferredPath =
+    student.preferredCourse || interests.join(", ") || "Not added yet";
+  const preferredCountries = student.preferredCountry || "Not added yet";
   const essentialProfileValues = [
     student.name,
     student.email,
@@ -125,7 +128,11 @@ export default async function StudentDashboardPage() {
       8) *
       100
   );
-  const documentsUploaded = documents.length > 0;
+  const documentsUploaded = allRequiredPortalDocumentsUploaded(
+    documents,
+    preferredPath,
+    student.preferredCountry
+  );
   const currentStatus = dashboardStatus(student.status, profileComplete, documentsUploaded);
   const nextStep = recommendedNextStep({
     profileComplete,
@@ -140,9 +147,16 @@ export default async function StudentDashboardPage() {
     assigned: Boolean(student.assignedToId || student.assignedToName),
     status: student.status,
   });
-  const preferredPath =
-    student.preferredCourse || interests.join(", ") || "Not added yet";
-  const preferredCountries = student.preferredCountry || "Not added yet";
+  const quickActionsForStudent = quickActions.map((action) =>
+    action.title === "Upload Documents" && documents.length
+      ? {
+          ...action,
+          title: "View Uploads",
+          text: "View and download uploaded files",
+          href: "/portal/student/documents#uploaded-documents",
+        }
+      : action
+  );
 
   return (
     <div className="space-y-4">
@@ -218,7 +232,7 @@ export default async function StudentDashboardPage() {
       <section>
         <h2 className="mb-2 text-lg font-black text-[#0A1020]">Quick Actions</h2>
         <div className="grid grid-cols-5 gap-2 lg:gap-3">
-          {quickActions.map((action) => (
+          {quickActionsForStudent.map((action) => (
             <QuickAction key={action.title} {...action} />
           ))}
         </div>
@@ -251,20 +265,28 @@ export default async function StudentDashboardPage() {
           <CardHeading title="Documents Checklist" action="View All" href="/portal/student/documents" />
           <p className="mt-1 text-[11px] font-semibold text-[#6A768B]">
             {documentsUploaded
-              ? "Your submitted document records are shown below."
-              : "Document upload coming soon. Your counsellor will confirm the approved upload method."}
+              ? "All required document records are available."
+              : documents.length
+                ? "Some document records are available."
+                : "Upload academic, identity and admission documents."}
           </p>
           <ul className="mt-3 space-y-2.5">
-            {documentRequirements.map((requirement) => {
-              const record = findDocument(documents, requirement.keys);
-              const notRequired =
-                requirement.label.startsWith("Passport") &&
-                !/abroad/i.test(preferredPath) &&
-                !student.preferredCountry;
+            {PORTAL_DOCUMENT_REQUIREMENTS.map((requirement) => {
+              const record = findMatchingPortalDocument(
+                documents,
+                requirement.keys,
+                requirement.excludeKeys
+              );
+              const notRequired = !requirementApplies(
+                requirement,
+                preferredPath,
+                student.preferredCountry
+              );
               return (
                 <DocumentRow
                   key={requirement.label}
                   label={requirement.label}
+                  document={record}
                   status={record ? "Uploaded" : notRequired ? "Not required yet" : "Pending"}
                 />
               );
@@ -567,7 +589,15 @@ function ProgressRow({
   );
 }
 
-function DocumentRow({ label, status }: { label: string; status: "Uploaded" | "Pending" | "Not required yet" }) {
+function DocumentRow({
+  label,
+  document,
+  status,
+}: {
+  label: string;
+  document?: { id: string; fileName: string | null };
+  status: "Uploaded" | "Pending" | "Not required yet";
+}) {
   const uploaded = status === "Uploaded";
   const pending = status === "Pending";
   return (
@@ -575,11 +605,28 @@ function DocumentRow({ label, status }: { label: string; status: "Uploaded" | "P
       <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[#F0ECFF] text-[#7A51F5]">
         <FileText className="h-3.5 w-3.5" />
       </span>
-      <span className="font-medium text-[#28344E]">{label}</span>
-      <span className={`inline-flex items-center gap-1 font-medium ${uploaded ? "text-[#00A64F]" : pending ? "text-[#FF7A00]" : "text-[#8A94A6]"}`}>
-        {uploaded ? <CheckCircle2 className="h-3.5 w-3.5" /> : pending ? <Clock3 className="h-3.5 w-3.5" /> : <CircleHelp className="h-3.5 w-3.5" />}
-        {status}
+      <span className="min-w-0 font-medium text-[#28344E]">
+        <span className="block truncate">{label}</span>
+        {document?.fileName ? (
+          <span className="mt-0.5 block truncate text-[10px] font-semibold text-[#71839A]">
+            {document.fileName}
+          </span>
+        ) : null}
       </span>
+      {uploaded && document ? (
+        <a
+          href={portalDocumentDownloadHref(document.id)}
+          className="inline-flex items-center gap-1 font-black text-[#00A64F]"
+        >
+          <CheckCircle2 className="h-3.5 w-3.5" />
+          Uploaded
+        </a>
+      ) : (
+        <span className={`inline-flex items-center gap-1 font-medium ${pending ? "text-[#FF7A00]" : "text-[#8A94A6]"}`}>
+          {pending ? <Clock3 className="h-3.5 w-3.5" /> : <CircleHelp className="h-3.5 w-3.5" />}
+          {status}
+        </span>
+      )}
     </li>
   );
 }
@@ -608,16 +655,6 @@ function SnapshotRow({ icon: Icon, label, value }: { icon: LucideIcon; label: st
 function valueOr(value: string | null | undefined, fallback = "Not added yet") {
   const normalized = value?.trim();
   return normalized || fallback;
-}
-
-function findDocument(
-  documents: Array<{ documentType: string }>,
-  keys: readonly string[]
-) {
-  return documents.find((document) => {
-    const type = document.documentType.toLowerCase();
-    return keys.some((key) => type.includes(key));
-  });
 }
 
 function dashboardStatus(status: string, profileComplete: boolean, documentsUploaded: boolean) {
@@ -662,8 +699,8 @@ function recommendedNextStep({
   }
   if (!documentsUploaded) {
     return {
-      action: "Prepare Documents",
-      text: "Keep your academic and identity documents ready.",
+      action: "Upload Documents",
+      text: "Upload the required academic and identity documents.",
       href: "/portal/student/documents",
     };
   }

@@ -80,11 +80,15 @@ export async function POST(request: NextRequest) {
     // server error if signed sessions are not configured.
     assertPortalSessionConfigured();
 
-    const duplicate = await prisma.studentAccount.findFirst({
+    const duplicate = await prisma.studentAccount.findUnique({
       where: { mobile },
-      select: { mobile: true },
+      select: {
+        id: true,
+        leadCode: true,
+        password: true,
+      },
     });
-    if (duplicate) {
+    if (duplicate?.password) {
       return NextResponse.json(
         {
           message:
@@ -96,28 +100,46 @@ export async function POST(request: NextRequest) {
     }
 
     const hashedPassword = await bcrypt.hash(firstName, 12);
-    const leadCode = await createLeadCode();
-    const student = await prisma.studentAccount.create({
-      data: {
-        leadCode,
-        name,
-        mobile,
-        email: null,
-        password: hashedPassword,
-        mobileVerified: false,
-        whatsappAvailable: "same",
-        whatsappNumber: mobile,
-        interests: JSON.stringify([]),
-        category: audience,
-        activities: {
-          create: {
-            action: "student_signup",
-            note: `${audience} created a free profile using the simplified signup form.`,
-            createdBy: studentActor(leadCode),
+    const leadCode = duplicate?.leadCode ?? (await createLeadCode());
+    const student = duplicate
+      ? await prisma.studentAccount.update({
+          where: { id: duplicate.id },
+          data: {
+            name,
+            password: hashedPassword,
+            whatsappAvailable: "same",
+            whatsappNumber: mobile,
+            category: audience,
+            activities: {
+              create: {
+                action: "student_signup",
+                note: `${audience} upgraded an existing counselling lead into a free student profile.`,
+                createdBy: studentActor(leadCode),
+              },
+            },
           },
-        },
-      },
-    });
+        })
+      : await prisma.studentAccount.create({
+          data: {
+            leadCode,
+            name,
+            mobile,
+            email: null,
+            password: hashedPassword,
+            mobileVerified: false,
+            whatsappAvailable: "same",
+            whatsappNumber: mobile,
+            interests: JSON.stringify([]),
+            category: audience,
+            activities: {
+              create: {
+                action: "student_signup",
+                note: `${audience} created a free profile using the simplified signup form.`,
+                createdBy: studentActor(leadCode),
+              },
+            },
+          },
+        });
 
     await setStudentPortalSession(student.id);
 

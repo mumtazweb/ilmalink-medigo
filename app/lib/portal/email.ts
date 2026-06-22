@@ -10,10 +10,12 @@ type MailMessage = {
   text: string;
 };
 
-function mailFrom() {
+function mailFrom(provider: "smtp" | "resend") {
   return (
     process.env.MAIL_FROM?.trim() ||
-    "ILMALINK MEDIGO <middya@ilmalink.com>"
+    (provider === "smtp"
+      ? "ILMALINK MEDIGO <middya@ilmalink.com>"
+      : "ILMALINK MEDIGO <onboarding@resend.dev>")
   );
 }
 
@@ -32,7 +34,7 @@ async function sendMail(message: MailMessage) {
       secure,
       auth: { user: smtpUser, pass: smtpPass },
     });
-    await transporter.sendMail({ from: mailFrom(), ...message });
+    await transporter.sendMail({ from: mailFrom("smtp"), ...message });
     return;
   }
 
@@ -40,7 +42,7 @@ async function sendMail(message: MailMessage) {
   if (resendApiKey) {
     const resend = new Resend(resendApiKey);
     await resend.emails.send({
-      from: mailFrom(),
+      from: mailFrom("resend"),
       to: message.to,
       subject: message.subject,
       html: message.html,
@@ -151,6 +153,79 @@ export async function sendNewStudentAlert(student: LeadAlertStudent) {
             .join("")}
         </table>
         <p style="margin-top:20px"><a href="https://www.ilmalink.com/portal/admin/leads">Open Education Portal Leads</a></p>
+      </div>
+    `,
+  });
+}
+
+type CounsellingRequestAlert = {
+  leadCode: string;
+  name: string;
+  mobile: string;
+  course: string;
+  preference: string;
+  location: string;
+  message: string | null;
+  sourcePage: string | null;
+  submittedAt: Date;
+};
+
+export async function sendCounsellingRequestAlert(
+  request: CounsellingRequestAlert
+) {
+  const to =
+    process.env.LEAD_ALERT_TO?.trim() ||
+    "injamulhoquemiddya@gmail.com";
+  const fields = [
+    ["Lead ID", request.leadCode],
+    ["Name", request.name],
+    ["Mobile / WhatsApp", request.mobile],
+    ["Course", request.course],
+    ["Study Preference", request.preference],
+    [
+      request.preference === "India"
+        ? "Preferred State"
+        : "Preferred Country",
+      request.location,
+    ],
+    ["Message", request.message],
+    ["Source Page", request.sourcePage],
+    ["Submitted", request.submittedAt.toLocaleString("en-IN")],
+  ] as const;
+  const text = fields
+    .map(([label, value]) => `${label}: ${value || "Not provided"}`)
+    .join("\n");
+
+  await sendMail({
+    to,
+    subject: `New Counselling Request - ${request.name} - ${request.leadCode}`,
+    text: `${text}\n\nOpen lead: https://www.ilmalink.com/portal/admin/leads`,
+    html: `
+      <div style="background:#f3f8fc;padding:28px 12px;font-family:Arial,sans-serif;color:#17396e">
+        <div style="max-width:700px;margin:auto;overflow:hidden;border:1px solid #d8e4ef;border-radius:18px;background:#ffffff;box-shadow:0 12px 32px rgba(8,42,98,.08)">
+          <div style="padding:24px;background:linear-gradient(135deg,#087a60,#0b4aa2);color:#ffffff">
+            <p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">ILMALINK MEDIGO</p>
+            <h2 style="margin:0;font-size:24px">New counselling request</h2>
+            <p style="margin:8px 0 0;color:#dff7f0">The request was saved in the Education Portal before this alert was sent.</p>
+          </div>
+          <div style="padding:24px">
+            <table style="width:100%;border-collapse:collapse">
+              ${fields
+                .map(
+                  ([label, value]) =>
+                    `<tr><td style="width:34%;padding:10px;border:1px solid #dbe7f3;background:#f7faff;font-weight:700">${escapeHtml(
+                      label
+                    )}</td><td style="padding:10px;border:1px solid #dbe7f3">${escapeHtml(
+                      value || "Not provided"
+                    )}</td></tr>`
+                )
+                .join("")}
+            </table>
+            <p style="margin:22px 0 0">
+              <a href="https://www.ilmalink.com/portal/admin/leads" style="display:inline-block;border-radius:10px;background:#0b4aa2;padding:12px 18px;color:#ffffff;font-weight:700;text-decoration:none">Open Education Portal Leads</a>
+            </p>
+          </div>
+        </div>
       </div>
     `,
   });

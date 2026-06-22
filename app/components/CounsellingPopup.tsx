@@ -4,12 +4,16 @@ import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import { createPortal } from "react-dom";
 
 import {
+  ArrowRight,
   X,
   BadgeCheck,
   Calendar,
+  CheckCircle2,
   GraduationCap,
   BookOpen,
   Globe,
+  Loader2,
+  MessageCircle,
   Sparkles,
   Stethoscope
 } from "lucide-react";
@@ -19,7 +23,7 @@ type PopupProps = {
   onClose: () => void;
 };
 
-interface FormData {
+interface CounsellingFormData {
   name: string;
   mobile: string;
   course: string;
@@ -28,6 +32,27 @@ interface FormData {
   message: string;
 }
 
+type SubmissionResult = {
+  leadCode: string;
+  whatsappUrl: string;
+};
+
+type CounsellingResponse = {
+  ok?: boolean;
+  message?: string;
+  leadCode?: string;
+  whatsappUrl?: string;
+};
+
+const emptyForm: CounsellingFormData = {
+  name: "",
+  mobile: "",
+  course: "",
+  preference: "",
+  location: "",
+  message: "",
+};
+
 export default function CounsellingPopup({ isOpen, onClose }: PopupProps){
   const [mounted, setMounted] = useState(false);
 
@@ -35,49 +60,72 @@ useEffect(() => {
   const mountTimer = window.setTimeout(() => setMounted(true), 0);
   return () => window.clearTimeout(mountTimer);
 }, []);
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    mobile: "",
-    course: "",
-    preference: "",
-    location: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState<CounsellingFormData>(emptyForm);
+  const [busy, setBusy] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [submission, setSubmission] = useState<SubmissionResult | null>(null);
 
   if (!mounted || !isOpen) return null;
 
 const portalRoot = document.getElementById("modal-root") ?? document.body;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setErrorMessage("");
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleClose = () => {
+    if (busy) return;
+    setFormData(emptyForm);
+    setErrorMessage("");
+    setSubmission(null);
+    onClose();
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (busy) return;
 
-    const message = `
-New Counselling Request
+    setBusy(true);
+    setErrorMessage("");
 
-Name: ${formData.name}
-Mobile: ${formData.mobile}
-Course: ${formData.course}
-Study Preference: ${formData.preference}
-State/Country: ${formData.location}
-Message: ${formData.message}
-`;
+    try {
+      const response = await fetch("/api/counselling-request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          sourcePage: `${window.location.pathname}${window.location.search}`,
+        }),
+      });
+      const data = (await response.json()) as CounsellingResponse;
 
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (
+        !response.ok ||
+        !data.ok ||
+        !data.leadCode ||
+        !data.whatsappUrl
+      ) {
+        throw new Error(
+          data.message || "Unable to save your counselling request."
+        );
+      }
 
-    if (isMobile) {
-      window.open(
-        `https://wa.me/919563910223?text=${encodeURIComponent(message)}`,
-        "_blank"
+      setSubmission({
+        leadCode: data.leadCode,
+        whatsappUrl: data.whatsappUrl,
+      });
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to save your counselling request."
       );
-    } else {
-      window.location.href = `mailto:injamulhoquemiddya@gmail.com?subject=New Counselling Request&body=${encodeURIComponent(message)}`;
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -90,7 +138,7 @@ Message: ${formData.message}
       inset: 0,
       isolation: "isolate",
     }}
-    onClick={onClose}
+    onClick={handleClose}
 >
   <div
     className="relative w-full max-w-6xl max-h-[90vh] bg-white rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden flex flex-col"
@@ -100,7 +148,7 @@ Message: ${formData.message}
         
         {/* Close Button - Always Visible */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-3 right-3 z-50 bg-white/90 hover:bg-red-50 rounded-full p-2 shadow-md transition-all duration-200 hover:scale-110 group"
           aria-label="Close popup"
         >
@@ -140,7 +188,7 @@ Message: ${formData.message}
               </div>
 
               {/* Logo Section */}
-              <div className="flex justify-center">
+              <div className="hidden lg:flex justify-center">
                 <div className="bg-white rounded-2xl px-4 py-2 flex gap-3 items-center shadow-md">
                   <img
                     src="/logoimage.svg"
@@ -217,7 +265,8 @@ Message: ${formData.message}
                   { 
                     icon: <Globe size={16} />, 
                     title: "WDOMS-listed and NMC-regulation-aware university shortlisting", 
-                    desc: "Explore foreign opportunities with verified checks"
+                    desc: "Explore foreign opportunities with verified checks",
+                    desktopOnly: true,
                   },
                   { 
                     icon: <BadgeCheck size={16} />, 
@@ -232,10 +281,16 @@ Message: ${formData.message}
                   { 
                     icon: <Stethoscope size={16} />, 
                     title: "Career Guidance", 
-                    desc: "End-to-end support for success"
+                    desc: "End-to-end support for success",
+                    desktopOnly: true,
                   },
                 ].map((item, index) => (
-                  <div key={index} className="flex gap-2 md:gap-3 group cursor-pointer hover:translate-x-1 transition duration-200">
+                  <div
+                    key={index}
+                    className={`flex gap-2 md:gap-3 group cursor-pointer hover:translate-x-1 transition duration-200 ${
+                      item.desktopOnly ? "hidden lg:flex" : ""
+                    }`}
+                  >
                     <div className="relative">
                       <div className="absolute inset-0 bg-white/60 rounded-xl blur-md group-hover:blur-xl transition duration-300"></div>
                       <div className="relative bg-white/90 backdrop-blur-sm p-2 rounded-xl border border-white shadow-lg group-hover:scale-110 transition duration-200">
@@ -253,7 +308,7 @@ Message: ${formData.message}
               </div>
 
               {/* Student Card */}
-              <div className="bg-white rounded-2xl p-3 md:p-4 mt-4 md:mt-6 text-black">
+              <div className="hidden lg:block bg-white rounded-2xl p-3 md:p-4 mt-4 md:mt-6 text-black">
                 <div className="flex justify-between items-center">
                   <div className="flex -space-x-3">
                     {[
@@ -280,7 +335,7 @@ Message: ${formData.message}
               </div>
 
               {/* Trust Card */}
-              <div className="bg-black/20 rounded-xl p-3 md:p-4 mt-3 md:mt-4">
+              <div className="hidden lg:block bg-black/20 rounded-xl p-3 md:p-4 mt-3 md:mt-4">
                 <h4 className="font-semibold text-sm md:text-base">Trusted by Thousands</h4>
                 <p className="text-xs md:text-sm">Students & Parents Worldwide</p>
               </div>
@@ -288,15 +343,22 @@ Message: ${formData.message}
 
             {/* RIGHT PANEL - Form */}
             <div className="p-4 md:p-8 overflow-y-auto">
+              {submission ? (
+                <CounsellingSuccess
+                  leadCode={submission.leadCode}
+                  whatsappUrl={submission.whatsappUrl}
+                  onClose={handleClose}
+                />
+              ) : (
               <form onSubmit={handleSubmit}>
-                <h1 className="font-bold text-2xl md:text-4xl text-[#111827]">
+                <h1 className="hidden lg:block font-bold text-2xl md:text-4xl text-[#111827]">
                   Looking For
                   <span className="text-green-600"> MBBS</span>
                   <br />
                   Admission Guidance?
                 </h1>
                 <div className="w-[80px] md:w-[120px] h-[3px] md:h-[4px] rounded-full bg-red-500 mt-2 md:mt-3" />
-                <p className="mt-3 md:mt-4 text-gray-500 text-sm md:text-base">
+                <p className="hidden lg:block mt-3 md:mt-4 text-gray-500 text-sm md:text-base">
                   Fill in your details and our team will connect with you
                 </p>
 
@@ -313,7 +375,18 @@ Message: ${formData.message}
                     <input
                       name="mobile"
                       value={formData.mobile}
-                      onChange={handleChange}
+                      onChange={(event) => {
+                        setErrorMessage("");
+                        setFormData({
+                          ...formData,
+                          mobile: event.target.value
+                            .replace(/\D/g, "")
+                            .slice(0, 10),
+                        });
+                      }}
+                      inputMode="numeric"
+                      autoComplete="tel-national"
+                      maxLength={10}
                       placeholder="📱 Mobile"
                       className="w-full p-3 md:p-4 border rounded-xl bg-[#f8fafc] text-black focus:outline-none focus:ring-2 focus:ring-green-500 text-sm md:text-base"
                       required
@@ -371,17 +444,32 @@ Message: ${formData.message}
 
                   <button
                     type="submit"
+                    disabled={busy}
                     className="w-full py-3 md:py-4 rounded-xl bg-gradient-to-r from-green-600 to-green-500 text-white font-bold flex justify-center items-center gap-2 hover:shadow-lg transition text-sm md:text-base"
                   >
-                    <Calendar size={16} />
-                    Book Counselling Now
+                    {busy ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Calendar size={16} />
+                    )}
+                    {busy ? "Saving Your Request..." : "Book Counselling Now"}
                   </button>
+
+                  {errorMessage ? (
+                    <p
+                      aria-live="polite"
+                      className="rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-center text-sm font-bold text-red-700"
+                    >
+                      {errorMessage}
+                    </p>
+                  ) : null}
 
                   <div className="text-center text-xs md:text-sm text-gray-500">
                     🔒 Your information is 100% safe
                   </div>
                 </div>
               </form>
+              )}
             </div>
           </div>
 
@@ -441,4 +529,71 @@ Message: ${formData.message}
   </div>,
   portalRoot
 );
+}
+
+function CounsellingSuccess({
+  leadCode,
+  whatsappUrl,
+  onClose,
+}: {
+  leadCode: string;
+  whatsappUrl: string;
+  onClose: () => void;
+}) {
+  return (
+    <div className="flex min-h-full items-center">
+      <div className="w-full rounded-3xl border border-emerald-200 bg-[linear-gradient(145deg,#F4FFF9,#F4F9FF)] p-5 shadow-[0_24px_70px_rgba(8,122,96,.12)] md:p-8">
+        <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-[0_14px_34px_rgba(5,150,105,.28)]">
+          <CheckCircle2 className="h-8 w-8" />
+        </span>
+        <p className="mt-5 text-xs font-black uppercase tracking-[.16em] text-emerald-700">
+          Request saved successfully
+        </p>
+        <h1 className="mt-2 text-3xl font-black tracking-[-.04em] text-[#082A62] md:text-4xl">
+          Your counselling request is with our team.
+        </h1>
+        <p className="mt-3 text-sm font-semibold leading-6 text-[#60738F] md:text-base">
+          We saved your details in the ILMALINK MEDIGO counselling system.
+          Your request ID is{" "}
+          <strong className="text-[#0B4AA2]">{leadCode}</strong>.
+        </p>
+
+        <div className="mt-6 rounded-2xl border border-[#BFE8D9] bg-white p-4 shadow-sm md:p-5">
+          <div className="flex items-start gap-3">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E5FFF4] text-[#087A60]">
+              <MessageCircle className="h-6 w-6" />
+            </span>
+            <div>
+              <h2 className="text-lg font-black text-[#082A62]">
+                Want an instant reply?
+              </h2>
+              <p className="mt-1 text-sm font-semibold leading-6 text-[#60738F]">
+                Send this saved request to WhatsApp. Your entire form is
+                already included, so you will not need to fill anything again.
+              </p>
+            </div>
+          </div>
+
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-[linear-gradient(135deg,#16A765,#0A8B52)] px-5 text-sm font-black text-white shadow-[0_14px_28px_rgba(10,139,82,.24)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_34px_rgba(10,139,82,.3)] md:text-base"
+          >
+            <MessageCircle className="h-5 w-5" />
+            Get Instant Reply on WhatsApp
+            <ArrowRight className="h-5 w-5" />
+          </a>
+        </div>
+
+        <button
+          type="button"
+          onClick={onClose}
+          className="mt-4 w-full rounded-xl border border-[#D8E4EF] bg-white px-4 py-3 text-sm font-black text-[#46617F] transition hover:bg-[#F4F8FC]"
+        >
+          I&apos;ll wait for the team to contact me
+        </button>
+      </div>
+    </div>
+  );
 }

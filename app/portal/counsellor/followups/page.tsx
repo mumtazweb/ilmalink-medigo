@@ -19,5 +19,10 @@ export default async function CounsellorFollowupsPage() {
     },
     orderBy: [{ followUpDate: "asc" }, { createdAt: "desc" }],
   });
-  return <PortalLeadTable initialLeads={leads.map(toPortalLeadRow)} />;
+  return (
+    <PortalLeadTable
+      initialLeads={leads.map(toPortalLeadRow)}
+      detailBasePath="/portal/counsellor/leads"
+    />
+  );
 }

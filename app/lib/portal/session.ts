@@ -79,6 +79,24 @@ export async function getCurrentPortalStudent() {
   });
 }
 
+export async function getCurrentPortalStudentIdentity() {
+  const cookieStore = await cookies();
+  const token = verifyPortalToken(
+    cookieStore.get(PORTAL_STUDENT_COOKIE)?.value,
+    "student"
+  );
+  if (!token) return null;
+
+  return prisma.studentAccount.findUnique({
+    where: { id: token.sub },
+    select: {
+      id: true,
+      leadCode: true,
+      mobile: true,
+    },
+  });
+}
+
 export async function getCurrentPortalStaff() {
   const cookieStore = await cookies();
   const token = verifyPortalToken(

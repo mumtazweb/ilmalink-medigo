@@ -5,7 +5,7 @@ import {
   isTrustedPortalRequest,
   readJsonObject,
 } from "../../../../lib/portal/request";
-import { getCurrentPortalStudent } from "../../../../lib/portal/session";
+import { getCurrentPortalStudentIdentity } from "../../../../lib/portal/session";
 import {
   cleanOptionalText,
   cleanText,
@@ -18,7 +18,7 @@ export async function PATCH(request: NextRequest) {
   if (!isTrustedPortalRequest(request)) {
     return NextResponse.json({ message: "Invalid request origin." }, { status: 403 });
   }
-  const student = await getCurrentPortalStudent();
+  const student = await getCurrentPortalStudentIdentity();
   if (!student) {
     return NextResponse.json({ message: "Please log in again." }, { status: 401 });
   }

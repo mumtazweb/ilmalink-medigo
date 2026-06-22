@@ -1,10 +1,13 @@
 "use client";
 
 import { Loader2, Save } from "lucide-react";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { STUDENT_INTERESTS } from "../../lib/portal/constants";
 import PortalAuthMessage from "./PortalAuthMessage";
+
+const STUDENT_DASHBOARD_PATH = "/portal/student/dashboard/";
 
 export type StudentProfileFormData = {
   name: string;
@@ -30,16 +33,24 @@ export default function PortalProfileForm({
 }: {
   initialData: StudentProfileFormData;
 }) {
+  const router = useRouter();
   const [form, setForm] = useState(initialData);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    router.prefetch(STUDENT_DASHBOARD_PATH);
+  }, [router]);
 
   function update(key: keyof StudentProfileFormData, value: string | string[]) {
     setForm((current) => ({ ...current, [key]: value }));
   }
 
   async function save() {
+    if (busy) return;
+
+    let navigatingToDashboard = false;
     setBusy(true);
     setMessage("");
     try {
@@ -56,14 +67,16 @@ export default function PortalProfileForm({
         throw new Error(data.message || "Unable to update profile.");
       }
       setSuccess(true);
-      setMessage(data.message ?? "Profile updated.");
+      setMessage("Profile saved. Opening your dashboard...");
+      navigatingToDashboard = true;
+      router.replace(STUDENT_DASHBOARD_PATH);
     } catch (error) {
       setSuccess(false);
       setMessage(
         error instanceof Error ? error.message : "Unable to update profile."
       );
     } finally {
-      setBusy(false);
+      if (!navigatingToDashboard) setBusy(false);
     }
   }
 
@@ -203,7 +216,7 @@ export default function PortalProfileForm({
         ) : (
           <Save className="h-4 w-4" />
         )}
-        Save Profile
+        {busy ? "Saving..." : "Save Profile"}
       </button>
     </div>
   );
