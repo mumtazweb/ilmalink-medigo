@@ -3,7 +3,7 @@
 import { Loader2, PhoneCall } from "lucide-react";
 import { useState } from "react";
 
-export default function PortalCallbackButton() {
+export default function PortalCallbackButton({ compact = false }: { compact?: boolean }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -37,14 +37,18 @@ export default function PortalCallbackButton() {
         type="button"
         onClick={requestCallback}
         disabled={busy}
-        className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[linear-gradient(105deg,#0B4AA2,#087F9F)] px-5 text-sm font-black text-white shadow-[0_8px_18px_rgba(11,74,162,.18)]"
+        className={`inline-flex items-center justify-center gap-2 bg-[linear-gradient(105deg,#0B4AA2,#087F9F)] font-black text-white shadow-[0_8px_18px_rgba(11,74,162,.18)] ${
+          compact
+            ? "min-h-10 w-full rounded-lg px-3 text-xs"
+            : "h-11 rounded-xl px-5 text-sm"
+        }`}
       >
         {busy ? (
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
           <PhoneCall className="h-4 w-4" />
         )}
-        Request Callback
+        {compact ? "Request Call" : "Request Callback"}
       </button>
       {message ? (
         <p className="mt-2 text-xs font-semibold text-[#087B59]">{message}</p>
