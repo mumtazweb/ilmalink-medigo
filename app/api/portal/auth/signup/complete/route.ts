@@ -9,7 +9,6 @@ import {
   readJsonObject,
 } from "../../../../../lib/portal/request";
 import { setStudentPortalSession } from "../../../../../lib/portal/session";
-import { verifyPortalToken } from "../../../../../lib/portal/token";
 import {
   cleanOptionalText,
   cleanText,
@@ -44,37 +43,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: "Invalid signup data." }, { status: 400 });
   }
 
-  const verification = verifyPortalToken(
-    String(body.verificationToken ?? ""),
-    "signup_verification"
-  );
   const mobile = normalizeIndianMobile(body.mobile);
-  if (
-    !verification ||
-    !mobile ||
-    verification.mobile !== mobile ||
-    verification.sub !== mobile ||
-    !verification.otpId
-  ) {
+  if (!mobile) {
     return NextResponse.json(
-      { message: "Mobile verification expired. Please verify again." },
-      { status: 401 }
-    );
-  }
-
-  const verifiedOtp = await prisma.studentOtp.findFirst({
-    where: {
-      id: verification.otpId,
-      mobile,
-      purpose: "signup",
-      used: true,
-    },
-    select: { id: true },
-  });
-  if (!verifiedOtp) {
-    return NextResponse.json(
-      { message: "Mobile verification could not be confirmed." },
-      { status: 401 }
+      { message: "Enter a valid 10-digit Indian mobile number." },
+      { status: 400 }
     );
   }
 
@@ -163,7 +136,7 @@ export async function POST(request: NextRequest) {
       mobile,
       email,
       password: hashedPassword,
-      mobileVerified: true,
+      mobileVerified: false,
       whatsappAvailable,
       whatsappNumber,
       interests: JSON.stringify(interests),
@@ -180,7 +153,7 @@ export async function POST(request: NextRequest) {
       activities: {
         create: {
           action: "student_signup",
-          note: "Student completed mobile verification and created a free profile.",
+          note: "Student created a free profile without mobile verification.",
           createdBy: studentActor(leadCode),
         },
       },

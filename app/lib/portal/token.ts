@@ -6,16 +6,13 @@ import {
 
 type PortalTokenKind =
   | "student"
-  | "staff"
-  | "signup_verification";
+  | "staff";
 
 export type PortalTokenPayload = {
   v: 1;
   kind: PortalTokenKind;
   sub: string;
   role?: string;
-  mobile?: string;
-  otpId?: string;
   iat: number;
   exp: number;
   nonce: string;

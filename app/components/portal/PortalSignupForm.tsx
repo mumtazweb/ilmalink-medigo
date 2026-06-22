@@ -11,11 +11,9 @@ import {
   Loader2,
   MessageCircle,
   Phone,
-  RotateCw,
-  ShieldCheck,
   Stethoscope,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { STUDENT_INTERESTS } from "../../lib/portal/constants";
@@ -23,8 +21,6 @@ import PortalAuthMessage from "./PortalAuthMessage";
 
 type SignupState = {
   mobile: string;
-  otp: string;
-  verificationToken: string;
   password: string;
   confirmPassword: string;
   whatsappAvailable: "same" | "different" | "none";
@@ -46,8 +42,6 @@ type SignupState = {
 
 const initialState: SignupState = {
   mobile: "",
-  otp: "",
-  verificationToken: "",
   password: "",
   confirmPassword: "",
   whatsappAvailable: "same",
@@ -69,7 +63,6 @@ const initialState: SignupState = {
 
 const stepNames = [
   "Mobile",
-  "Verify",
   "Password",
   "WhatsApp",
   "Interest",
@@ -94,42 +87,8 @@ export default function PortalSignupForm({
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
-  const [countdown, setCountdown] = useState(0);
 
-  useEffect(() => {
-    if (countdown <= 0) return;
-    const timer = window.setInterval(
-      () => setCountdown((current) => Math.max(0, current - 1)),
-      1000
-    );
-    return () => window.clearInterval(timer);
-  }, [countdown]);
-
-  useEffect(() => {
-    if (step !== 2 || !("OTPCredential" in window)) return;
-    const controller = new AbortController();
-    const credentials = navigator.credentials as CredentialsContainer & {
-      get(options: {
-        otp: { transport: string[] };
-        signal: AbortSignal;
-      }): Promise<{ code?: string } | null>;
-    };
-
-    credentials
-      .get({
-        otp: { transport: ["sms"] },
-        signal: controller.signal,
-      })
-      .then((credential) => {
-        const code = credential?.code?.replace(/\D/g, "").slice(0, 4);
-        if (code) setForm((current) => ({ ...current, otp: code }));
-      })
-      .catch(() => {});
-
-    return () => controller.abort();
-  }, [step]);
-
-  const progress = useMemo(() => `${(step / 6) * 100}%`, [step]);
+  const progress = useMemo(() => `${(step / 5) * 100}%`, [step]);
 
   function update<K extends keyof SignupState>(
     key: K,
@@ -149,9 +108,6 @@ export default function PortalSignupForm({
     const data = (await response.json()) as {
       ok?: boolean;
       message?: string;
-      resendAfter?: number;
-      retryAfter?: number;
-      verificationToken?: string;
       redirectTo?: string;
     };
     if (!response.ok || !data.ok) {
@@ -160,45 +116,13 @@ export default function PortalSignupForm({
     return data;
   }
 
-  async function sendOtp() {
-    setBusy(true);
-    setMessage("");
-    try {
-      const data = await post("/api/portal/auth/signup/send-otp", {
-        mobile: form.mobile,
-      });
-      setCountdown(data.resendAfter ?? 45);
-      setSuccess(true);
-      setMessage(data.message ?? "Verification code sent.");
-      setStep(2);
-    } catch (error) {
-      setSuccess(false);
-      setMessage(error instanceof Error ? error.message : "Unable to send OTP.");
-    } finally {
-      setBusy(false);
+  function continueMobile() {
+    if (form.mobile.length !== 10) {
+      setMessage("Enter a valid 10-digit Indian mobile number.");
+      return;
     }
-  }
-
-  async function verifyOtp() {
-    setBusy(true);
+    setStep(2);
     setMessage("");
-    try {
-      const data = await post("/api/portal/auth/signup/verify-otp", {
-        mobile: form.mobile,
-        otp: form.otp,
-      });
-      update("verificationToken", data.verificationToken ?? "");
-      setSuccess(true);
-      setMessage("Mobile number verified.");
-      setStep(3);
-    } catch (error) {
-      setSuccess(false);
-      setMessage(
-        error instanceof Error ? error.message : "Unable to verify OTP."
-      );
-    } finally {
-      setBusy(false);
-    }
   }
 
   function continuePassword() {
@@ -214,7 +138,7 @@ export default function PortalSignupForm({
       setMessage("Password and confirm password do not match.");
       return;
     }
-    setStep(4);
+    setStep(3);
     setMessage("");
   }
 
@@ -226,7 +150,7 @@ export default function PortalSignupForm({
       setMessage("Enter a valid WhatsApp number.");
       return;
     }
-    setStep(5);
+    setStep(4);
     setMessage("");
   }
 
@@ -235,7 +159,7 @@ export default function PortalSignupForm({
       setMessage("Select at least one guidance interest.");
       return;
     }
-    setStep(6);
+    setStep(5);
     setMessage("");
   }
 
@@ -265,9 +189,9 @@ export default function PortalSignupForm({
       <div className="mb-5">
         <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-[.12em] text-[#6A7F99]">
           <span>
-            Step {step} of 6 · {stepNames[step - 1]}
+            Step {step} of 5 · {stepNames[step - 1]}
           </span>
-          <span>{Math.round((step / 6) * 100)}%</span>
+          <span>{Math.round((step / 5) * 100)}%</span>
         </div>
         <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#E6EEF6]">
           <div
@@ -278,8 +202,8 @@ export default function PortalSignupForm({
       </div>
 
       {step === 1 ? (
-        <Step title="Verify your mobile number" icon={Phone}>
-          <Field label="Mobile number">
+        <Step title="Enter your mobile number" icon={Phone}>
+          <Field label="Mobile number(Whatsapp preffered)">
             <div className="flex">
               <span className="flex h-12 items-center rounded-l-xl border border-r-0 border-[#CCD9E7] bg-[#F3F7FB] px-3 text-sm font-bold text-[#17396E]">
                 +91
@@ -301,61 +225,15 @@ export default function PortalSignupForm({
             </div>
           </Field>
           <PrimaryButton
-            onClick={sendOtp}
-            busy={busy}
+            onClick={continueMobile}
             disabled={form.mobile.length !== 10}
           >
-            Send 4-digit OTP
+            Continue
           </PrimaryButton>
         </Step>
       ) : null}
 
       {step === 2 ? (
-        <Step title="Enter the verification code" icon={ShieldCheck}>
-          <p className="text-sm font-medium leading-6 text-[#60738F]">
-            Code sent to +91 {form.mobile}. SMS autofill may appear above your
-            keyboard; manual entry always works.
-          </p>
-          <input
-            value={form.otp}
-            onChange={(event) =>
-              update("otp", event.target.value.replace(/\D/g, "").slice(0, 4))
-            }
-            inputMode="numeric"
-            autoComplete="one-time-code"
-            maxLength={4}
-            aria-label="4-digit OTP"
-            className="h-14 w-full rounded-xl border border-[#B9CEE5] bg-[#F8FBFF] text-center text-2xl font-black tracking-[.65em] text-[#0B4AA2]"
-          />
-          <div className="flex items-center justify-between gap-3">
-            <button
-              type="button"
-              onClick={sendOtp}
-              disabled={busy || countdown > 0}
-              className="inline-flex items-center gap-1.5 text-xs font-black text-[#0B4AA2] disabled:text-slate-400"
-            >
-              <RotateCw className="h-3.5 w-3.5" />
-              {countdown > 0 ? `Resend in ${countdown}s` : "Resend OTP"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setStep(1)}
-              className="text-xs font-black text-[#60738F]"
-            >
-              Change number
-            </button>
-          </div>
-          <PrimaryButton
-            onClick={verifyOtp}
-            busy={busy}
-            disabled={form.otp.length !== 4}
-          >
-            Verify OTP
-          </PrimaryButton>
-        </Step>
-      ) : null}
-
-      {step === 3 ? (
         <Step title="Create your password" icon={CheckCircle2}>
           <Field label="Create password">
             <input
@@ -382,7 +260,7 @@ export default function PortalSignupForm({
         </Step>
       ) : null}
 
-      {step === 4 ? (
+      {step === 3 ? (
         <Step title="WhatsApp preference" icon={MessageCircle}>
           <Choice
             selected={form.whatsappAvailable === "same"}
@@ -420,7 +298,7 @@ export default function PortalSignupForm({
         </Step>
       ) : null}
 
-      {step === 5 ? (
+      {step === 4 ? (
         <Step title="What guidance do you need?" icon={GraduationCap}>
           <div className="grid gap-2 sm:grid-cols-2">
             {STUDENT_INTERESTS.map((interest) => {
@@ -466,7 +344,7 @@ export default function PortalSignupForm({
         </Step>
       ) : null}
 
-      {step === 6 ? (
+      {step === 5 ? (
         <Step title="Complete your basic profile" icon={Stethoscope}>
           <div className="grid gap-3 sm:grid-cols-2">
             <TextInput
@@ -552,7 +430,7 @@ export default function PortalSignupForm({
             setStep((current) => Math.max(1, current - 1));
             setMessage("");
           }}
-          disabled={busy || step === 2}
+          disabled={busy}
           className="mt-4 inline-flex items-center gap-1.5 text-xs font-black text-[#60738F] disabled:hidden"
         >
           <ArrowLeft className="h-4 w-4" />
