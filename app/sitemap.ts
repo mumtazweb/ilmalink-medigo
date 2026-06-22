@@ -42,6 +42,7 @@ const staticRoutes = [
   "/mbbs-abroad/kyrgyzstan/kyrgyz-state-medical-academy",
   "/scholarships-loans",
   "/neet",
+  "/neet/information-bulletin",
   "/neet/admit-card",
   "/neet/result",
   "/neet/discussion-centre",

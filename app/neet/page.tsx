@@ -105,21 +105,21 @@ const hubCards = [
   {
     title: "NEET Decision Centre",
     description: "Use NEET score, rank and admission decision tools.",
-    href: "/neet/decision-centre",
+    href: "/#neet-decision-center",
     icon: BarChart3,
     iconClass: "bg-[#F5ECFF] text-[#8433E7]",
   },
   {
     title: "Counselling, Loan & Scholarships",
     description: "Explore NEET counselling, education loan and scholarship guidance.",
-    href: "/neet/counselling-loan-scholarships",
+    href: "/scholarships-loans#finder",
     icon: GraduationCap,
     iconClass: "bg-[#FFF0F4] text-[#E33D69]",
   },
   {
     title: "MBBS Admission Centre",
     description: "Plan MBBS admission in India or abroad after NEET.",
-    href: "/neet/mbbs-admission-centre",
+    href: "/",
     icon: Stethoscope,
     iconClass: "bg-[#E8F8F5] text-[#009B91]",
   },
@@ -164,8 +164,8 @@ const tools = [
   { title: "Question Search", description: "Search topic-wise or question-wise NEET content.", href: "/neet/questions", icon: Search, tone: "text-[#0D4BA3] bg-[#EEF5FF]" },
   { title: "Previous Year Papers", description: "Access and practise past NEET question papers.", href: "/neet/previous-year-questions", icon: FileQuestion, tone: "text-[#6931CB] bg-[#F3EDFF]" },
   { title: "Discussion Hub", description: "Join student discussions and expert insights.", href: "/neet/discussion-centre", icon: MessageSquareText, tone: "text-[#1769E8] bg-[#EDF4FF]" },
-  { title: "Scholarships", description: "Find scholarships and financial support options.", href: "/neet/counselling-loan-scholarships", icon: GraduationCap, tone: "text-[#6531BC] bg-[#F4EEFF]" },
-  { title: "Decision Centre", description: "Use tools for rank, college and branch decisions.", href: "/neet/decision-centre", icon: BarChart3, tone: "text-[#7E31DC] bg-[#F5EDFF]" },
+  { title: "Scholarships", description: "Find scholarships and financial support options.", href: "/scholarships-loans#finder", icon: GraduationCap, tone: "text-[#6531BC] bg-[#F4EEFF]" },
+  { title: "Decision Centre", description: "Use tools for rank, college and branch decisions.", href: "/#neet-decision-center", icon: BarChart3, tone: "text-[#7E31DC] bg-[#F5EDFF]" },
 ] as const;
 
 const faqs = [
@@ -522,7 +522,7 @@ export default function NeetHubPage() {
 
             <nav aria-label="NEET footer resources">
               <h2 className="text-xs font-extrabold">Resources</h2>
-              <div className="mt-2 grid gap-1 text-[11px] font-medium"><Link href="/neet/answer-key" className="!text-blue-100">Answer Key</Link><Link href="/neet/result" className="!text-blue-100">Cut Offs</Link><Link href="/neet/counselling" className="!text-blue-100">Counselling</Link><Link href="/neet/counselling-loan-scholarships" className="!text-blue-100">Scholarships</Link></div>
+              <div className="mt-2 grid gap-1 text-[11px] font-medium"><Link href="/neet/answer-key" className="!text-blue-100">Answer Key</Link><Link href="/neet/result" className="!text-blue-100">Cut Offs</Link><Link href="/neet/counselling" className="!text-blue-100">Counselling</Link><Link href="/scholarships-loans#finder" className="!text-blue-100">Scholarships</Link></div>
             </nav>
 
             <nav aria-label="Company links">

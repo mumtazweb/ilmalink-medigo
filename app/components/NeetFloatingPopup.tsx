@@ -21,6 +21,8 @@ const hiddenRoutePrefixes = [
 function shouldHideForPath(pathname: string | null) {
   if (!pathname) return true;
 
+  if (pathname === "/neet" || pathname === "/neet/") return true;
+
   return hiddenRoutePrefixes.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
   );
