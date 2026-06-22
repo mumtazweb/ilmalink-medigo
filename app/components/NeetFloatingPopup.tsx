@@ -67,7 +67,7 @@ export default function NeetFloatingPopup() {
   return (
     <aside
       aria-label="NEET 2026 updates"
-      className="fixed inset-x-3 bottom-3 z-[9000] mx-auto max-h-[25vh] max-w-[420px] sm:inset-x-auto sm:bottom-6 sm:right-6 sm:mx-0 sm:max-h-none"
+      className="fixed left-1/2 top-1/2 z-[9000] w-[calc(100vw-24px)] max-w-[420px] -translate-x-1/2 -translate-y-1/2 sm:w-[420px]"
     >
       <div className="neet-floating-popup group relative rounded-[24px] bg-[linear-gradient(135deg,rgba(255,255,255,.94),rgba(235,249,255,.86)_48%,rgba(224,255,248,.82))] p-[1px] shadow-[0_20px_58px_rgba(5,35,82,.22),0_0_34px_rgba(0,200,150,.18)] ring-1 ring-white/70 backdrop-blur-xl">
         <div className="pointer-events-none absolute -inset-1 rounded-[26px] bg-[conic-gradient(from_180deg_at_50%_50%,rgba(0,200,150,.0),rgba(0,200,150,.32),rgba(245,158,11,.26),rgba(23,105,232,.3),rgba(0,200,150,.0))] opacity-60 blur-xl" />
@@ -101,16 +101,17 @@ export default function NeetFloatingPopup() {
             in one place.
           </p>
 
-          <div className="relative mt-2.5 flex items-center justify-between gap-3">
+          <div className="relative mt-2.5 flex items-center justify-end gap-3">
+            <span className="hidden items-center gap-1.5 rounded-full bg-[#EEF5FF] px-2.5 py-1 text-[10px] font-extrabold text-[#0B4AA2] sm:inline-flex">
+              <BarChart3 className="h-3.5 w-3.5" />
+              Rank predictor
+            </span>
+
             <span className="inline-flex items-center gap-1.5 text-[11px] font-black text-[#0B4AA2] sm:text-sm">
               Open NEET Updates
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[linear-gradient(135deg,#0B4AA2,#009C95)] text-white shadow-[0_8px_16px_rgba(11,74,162,.26)]">
                 <ArrowRight className="h-3.5 w-3.5" />
               </span>
-            </span>
-            <span className="hidden items-center gap-1.5 rounded-full bg-[#EEF5FF] px-2.5 py-1 text-[10px] font-extrabold text-[#0B4AA2] sm:inline-flex">
-              <BarChart3 className="h-3.5 w-3.5" />
-              Rank predictor
             </span>
           </div>
         </Link>

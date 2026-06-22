@@ -1444,13 +1444,7 @@ export default function HomeHeroClient() {
                 >
                   NEET Rank Predictor
                 </button>
-                <Link
-                  href="/portal/signup"
-                  className="inline-flex min-w-0 flex-none items-center justify-center whitespace-nowrap rounded-xl border border-cyan-200/40 bg-[#0F4CFF] px-2 py-2 text-[11px] font-bold text-white shadow-[0_14px_34px_rgba(15,76,255,.28)] transition hover:-translate-y-0.5 hover:bg-[#0B3FD6] sm:px-3 sm:text-xs md:flex-1 lg:min-w-[190px] lg:flex-none lg:rounded-[16px] lg:px-5 lg:py-3.5 lg:text-sm"
-                >
-                  Create Free Profile
-                </Link>
-              </div>
+                </div>
             </div>
 
             {/* Globe */}
