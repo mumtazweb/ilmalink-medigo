@@ -6,7 +6,6 @@ import {
   CalendarDays,
   CheckCircle2,
   Circle,
-  CircleHelp,
   ClipboardCheck,
   Clock3,
   FileBadge,
@@ -30,10 +29,9 @@ import { redirect } from "next/navigation";
 import PortalCallbackButton from "../../../components/portal/PortalCallbackButton";
 import {
   PORTAL_DOCUMENT_REQUIREMENTS,
-  allRequiredPortalDocumentsUploaded,
   findMatchingPortalDocument,
+  getPortalDocumentUploadProgress,
   portalDocumentDownloadHref,
-  requirementApplies,
 } from "../../../lib/portal/documentChecklist";
 import { getCurrentPortalStudent } from "../../../lib/portal/session";
 import { parseStoredInterests } from "../../../lib/portal/validation";
@@ -128,11 +126,12 @@ export default async function StudentDashboardPage() {
       8) *
       100
   );
-  const documentsUploaded = allRequiredPortalDocumentsUploaded(
+  const documentProgress = getPortalDocumentUploadProgress(
     documents,
     preferredPath,
     student.preferredCountry
   );
+  const documentsUploaded = documentProgress.complete;
   const currentStatus = dashboardStatus(student.status, profileComplete, documentsUploaded);
   const nextStep = recommendedNextStep({
     profileComplete,
@@ -146,14 +145,17 @@ export default async function StudentDashboardPage() {
     documentsUploaded,
     assigned: Boolean(student.assignedToId || student.assignedToName),
     status: student.status,
+    documentProgress,
   });
   const quickActionsForStudent = quickActions.map((action) =>
-    action.title === "Upload Documents" && documents.length
+    action.title === "Upload Documents" && documentProgress.uploaded
       ? {
           ...action,
-          title: "View Uploads",
-          text: "View and download uploaded files",
-          href: "/portal/student/documents#uploaded-documents",
+          title: `Uploaded ${documentProgress.uploaded}/${documentProgress.total}`,
+          text: documentProgress.complete
+            ? "View and download documents"
+            : `${documentProgress.pending}/${documentProgress.total} pending`,
+          href: "/portal/student/documents",
         }
       : action
   );
@@ -265,10 +267,10 @@ export default async function StudentDashboardPage() {
           <CardHeading title="Documents Checklist" action="View All" href="/portal/student/documents" />
           <p className="mt-1 text-[11px] font-semibold text-[#6A768B]">
             {documentsUploaded
-              ? "All required document records are available."
-              : documents.length
-                ? "Some document records are available."
-                : "Upload academic, identity and admission documents."}
+              ? `Uploaded ${documentProgress.uploaded}/${documentProgress.total} documents.`
+              : documentProgress.uploaded
+                ? `Uploaded ${documentProgress.uploaded}/${documentProgress.total}; ${documentProgress.pending}/${documentProgress.total} pending.`
+                : `${documentProgress.pending}/${documentProgress.total} pending. Upload academic, identity and admission documents.`}
           </p>
           <ul className="mt-3 space-y-2.5">
             {PORTAL_DOCUMENT_REQUIREMENTS.map((requirement) => {
@@ -277,17 +279,12 @@ export default async function StudentDashboardPage() {
                 requirement.keys,
                 requirement.excludeKeys
               );
-              const notRequired = !requirementApplies(
-                requirement,
-                preferredPath,
-                student.preferredCountry
-              );
               return (
                 <DocumentRow
                   key={requirement.label}
                   label={requirement.label}
                   document={record}
-                  status={record ? "Uploaded" : notRequired ? "Not required yet" : "Pending"}
+                  status={record ? "Uploaded" : "Pending"}
                 />
               );
             })}
@@ -596,10 +593,9 @@ function DocumentRow({
 }: {
   label: string;
   document?: { id: string; fileName: string | null };
-  status: "Uploaded" | "Pending" | "Not required yet";
+  status: "Uploaded" | "Pending";
 }) {
   const uploaded = status === "Uploaded";
-  const pending = status === "Pending";
   return (
     <li className="grid grid-cols-[22px_1fr_auto] items-center gap-2 text-xs">
       <span className="flex h-5 w-5 items-center justify-center rounded-md bg-[#F0ECFF] text-[#7A51F5]">
@@ -622,8 +618,8 @@ function DocumentRow({
           Uploaded
         </a>
       ) : (
-        <span className={`inline-flex items-center gap-1 font-medium ${pending ? "text-[#FF7A00]" : "text-[#8A94A6]"}`}>
-          {pending ? <Clock3 className="h-3.5 w-3.5" /> : <CircleHelp className="h-3.5 w-3.5" />}
+        <span className="inline-flex items-center gap-1 font-medium text-[#FF7A00]">
+          <Clock3 className="h-3.5 w-3.5" />
           {status}
         </span>
       )}
@@ -717,12 +713,14 @@ function buildProgressSteps({
   documentsUploaded,
   assigned,
   status,
+  documentProgress,
 }: {
   mobileVerified: boolean;
   profileComplete: boolean;
   documentsUploaded: boolean;
   assigned: boolean;
   status: string;
+  documentProgress: { uploaded: number; total: number };
 }) {
   const applicationStarted = ["application-started", "admitted"].includes(status);
   const eligibilityChecked = ["interested", "follow-up", "document-pending", "application-started", "admitted"].includes(status);
@@ -730,7 +728,10 @@ function buildProgressSteps({
     { label: "Signup Completed", done: true },
     { label: "Mobile Verified", done: mobileVerified },
     { label: "Profile Completed", done: profileComplete },
-    { label: "Documents Uploaded", done: documentsUploaded },
+    {
+      label: `Documents Uploaded ${documentProgress.uploaded}/${documentProgress.total}`,
+      done: documentsUploaded,
+    },
     { label: "Counsellor Review", done: assigned },
     { label: "Eligibility Checked", done: eligibilityChecked },
     { label: "Application Submitted", done: applicationStarted },

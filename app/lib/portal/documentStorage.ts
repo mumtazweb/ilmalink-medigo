@@ -1,8 +1,8 @@
 import "server-only";
 
 import { randomUUID } from "crypto";
-import { createReadStream } from "fs";
-import { mkdir, unlink, writeFile } from "fs/promises";
+import { createReadStream, createWriteStream } from "fs";
+import { mkdir, unlink } from "fs/promises";
 import {
   dirname,
   extname,
@@ -11,6 +11,9 @@ import {
   relative,
   resolve,
 } from "path";
+import { Readable } from "stream";
+import { pipeline } from "stream/promises";
+import type { ReadableStream as NodeReadableStream } from "stream/web";
 
 const STORAGE_PREFIX = "portal-documents";
 
@@ -65,10 +68,14 @@ export function createPortalDocumentStorageKey(
 
 export async function writePortalDocumentFile(storageKey: string, file: File) {
   const filePath = resolvePortalDocumentPath(storageKey);
-  const buffer = Buffer.from(await file.arrayBuffer());
 
   await mkdir(dirname(filePath), { recursive: true });
-  await writeFile(filePath, buffer);
+  await pipeline(
+    Readable.fromWeb(
+      file.stream() as unknown as NodeReadableStream<Uint8Array>
+    ),
+    createWriteStream(filePath)
+  );
 }
 
 export function createPortalDocumentReadStream(storageKey: string) {

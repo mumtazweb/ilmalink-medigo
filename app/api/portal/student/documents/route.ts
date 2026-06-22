@@ -14,8 +14,6 @@ import {
   writePortalDocumentFile,
 } from "../../../../lib/portal/documentStorage";
 import {
-  PORTAL_DOCUMENT_MAX_BYTES,
-  PORTAL_DOCUMENT_REQUIREMENTS,
   PORTAL_OTHER_DOCUMENT_LABEL,
   isSupportedPortalDocumentFile,
   portalDocumentDownloadHref,
@@ -59,17 +57,11 @@ export async function POST(request: NextRequest) {
   }
 
   const selectedType = cleanText(formData.get("documentType"), 120);
-  const allowedDocumentTypes = new Set([
-    ...PORTAL_DOCUMENT_REQUIREMENTS.map((requirement) => requirement.label),
-    PORTAL_OTHER_DOCUMENT_LABEL,
-  ]);
-
-  if (!allowedDocumentTypes.has(selectedType)) {
-    return NextResponse.json(
-      { message: "Select a valid document type." },
-      { status: 400 }
-    );
-  }
+  const customType = cleanText(formData.get("customDocumentType"), 120);
+  const documentType =
+    selectedType === PORTAL_OTHER_DOCUMENT_LABEL
+      ? customType
+      : selectedType || customType;
 
   if (!isSupportedPortalDocumentFile(file)) {
     return NextResponse.json(
@@ -77,17 +69,6 @@ export async function POST(request: NextRequest) {
       { status: 415 }
     );
   }
-
-  if (file.size > PORTAL_DOCUMENT_MAX_BYTES) {
-    return NextResponse.json(
-      { message: "The document must be 25 MB or smaller." },
-      { status: 413 }
-    );
-  }
-
-  const customType = cleanText(formData.get("customDocumentType"), 120);
-  const documentType =
-    selectedType === PORTAL_OTHER_DOCUMENT_LABEL ? customType : selectedType;
 
   if (documentType.length < 2) {
     return NextResponse.json(

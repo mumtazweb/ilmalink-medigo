@@ -1,0 +1,24 @@
+
+> ilmalink-medigo@0.1.0 predev
+> npm run search:index
+
+
+> ilmalink-medigo@0.1.0 search:index
+> node scripts/generate-search-index.mjs
+
+Generated app\data\searchIndex.ts with 646 entries.
+
+> ilmalink-medigo@0.1.0 dev
+> next dev --port 3000
+
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.140.22.23:3000
+- Environments: .env.development.local, .env.local, .env
+✓ Ready in 849ms
+Creating turbopack project { dir: 'C:\\Users\\91956\\ilmalink-medigo', testMode: true }
+- Experiments (use with caution):
+  · proxyClientMaxBodySize: "100mb"
+  · serverActions
+
+✓ Compiled in 311ms

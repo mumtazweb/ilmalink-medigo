@@ -29,7 +29,6 @@ export const PORTAL_DOCUMENT_REQUIREMENTS: readonly PortalDocumentRequirement[] 
     label: "Passport (For Abroad)",
     keys: ["passport"],
     excludeKeys: ["passport id", "aadhaar"],
-    optionalFor: "abroad",
   },
   { label: "Photo", keys: ["photo", "photograph"] },
   { label: "Signature", keys: ["signature"] },
@@ -39,7 +38,6 @@ export const PORTAL_DOCUMENT_REQUIREMENTS: readonly PortalDocumentRequirement[] 
 
 export const PORTAL_OTHER_DOCUMENT_LABEL = "Other Document";
 export const PORTAL_DOCUMENT_ACCEPT = "image/*,application/pdf,.pdf";
-export const PORTAL_DOCUMENT_MAX_BYTES = 25 * 1024 * 1024;
 
 const PORTAL_IMAGE_EXTENSIONS = new Set([
   ".arw",
@@ -120,18 +118,35 @@ export function allRequiredPortalDocumentsUploaded(
   preferredPath: string | null | undefined,
   preferredCountry: string | null | undefined
 ) {
-  const required = getRequiredPortalDocuments(preferredPath, preferredCountry);
-
-  return (
-    required.length > 0 &&
-    required.every((requirement) =>
-      findMatchingPortalDocument(
-        documents,
-        requirement.keys,
-        requirement.excludeKeys
-      )
-    )
+  const progress = getPortalDocumentUploadProgress(
+    documents,
+    preferredPath,
+    preferredCountry
   );
+
+  return progress.complete;
+}
+
+export function getPortalDocumentUploadProgress(
+  documents: PortalDocumentListItem[],
+  preferredPath: string | null | undefined,
+  preferredCountry: string | null | undefined
+) {
+  const required = getRequiredPortalDocuments(preferredPath, preferredCountry);
+  const uploaded = required.filter((requirement) =>
+    findMatchingPortalDocument(
+      documents,
+      requirement.keys,
+      requirement.excludeKeys
+    )
+  ).length;
+
+  return {
+    total: required.length,
+    uploaded,
+    pending: Math.max(required.length - uploaded, 0),
+    complete: required.length > 0 && uploaded === required.length,
+  };
 }
 
 export function portalDocumentDownloadHref(documentId: string) {
@@ -143,10 +158,9 @@ export function isSupportedPortalDocumentFile(file: {
   type: string;
 }) {
   const mimeType = file.type.trim().toLowerCase();
-  const extension = file.name
-    .slice(file.name.lastIndexOf("."))
-    .trim()
-    .toLowerCase();
+  const dotIndex = file.name.lastIndexOf(".");
+  const extension =
+    dotIndex >= 0 ? file.name.slice(dotIndex).trim().toLowerCase() : "";
 
   return (
     mimeType.startsWith("image/") ||
