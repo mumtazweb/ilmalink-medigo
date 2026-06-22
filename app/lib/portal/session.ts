@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { prisma } from "../prisma";
 import {
+  getEffectivePortalStaffRole,
   isPortalStaffRole,
   portalRoleHome,
   PORTAL_STAFF_COOKIE,
@@ -24,7 +25,10 @@ const cookieOptions = {
   priority: "high" as const,
 };
 
-export async function setStudentPortalSession(studentId: string) {
+export async function setStudentPortalSession(
+  studentId: string,
+  options: { preserveStaffSession?: boolean } = {}
+) {
   const cookieStore = await cookies();
   cookieStore.set(
     PORTAL_STUDENT_COOKIE,
@@ -34,7 +38,9 @@ export async function setStudentPortalSession(studentId: string) {
     ),
     cookieOptions
   );
-  cookieStore.delete(PORTAL_STAFF_COOKIE);
+  if (!options.preserveStaffSession) {
+    cookieStore.delete(PORTAL_STAFF_COOKIE);
+  }
 }
 
 export async function setStaffPortalSession(
@@ -57,6 +63,11 @@ export async function clearPortalSessions() {
   const cookieStore = await cookies();
   cookieStore.delete(PORTAL_STUDENT_COOKIE);
   cookieStore.delete(PORTAL_STAFF_COOKIE);
+}
+
+export async function clearStudentPortalSession() {
+  const cookieStore = await cookies();
+  cookieStore.delete(PORTAL_STUDENT_COOKIE);
 }
 
 export async function getCurrentPortalStudent() {
@@ -92,6 +103,7 @@ export async function getCurrentPortalStudentIdentity() {
     select: {
       id: true,
       leadCode: true,
+      name: true,
       mobile: true,
     },
   });
@@ -109,16 +121,22 @@ export async function getCurrentPortalStaff() {
     where: { id: token.sub },
   });
 
+  if (!user) return null;
+  const effectiveRole = getEffectivePortalStaffRole(user);
+
   if (
-    !user ||
-    !user.portalAccess ||
-    !isPortalStaffRole(user.portalRole) ||
-    user.portalRole !== token.role
+    !effectiveRole ||
+    !isPortalStaffRole(token.role) ||
+    effectiveRole !== token.role
   ) {
     return null;
   }
 
-  return { ...user, portalRole: user.portalRole };
+  return {
+    ...user,
+    portalAccess: true,
+    portalRole: effectiveRole,
+  };
 }
 
 export async function requirePortalStudent() {
@@ -130,7 +148,10 @@ export async function requirePortalStudent() {
 export async function requirePortalStaff(allowedRoles: PortalStaffRole[]) {
   const staff = await getCurrentPortalStaff();
   if (!staff) redirect("/portal/login?tab=staff");
-  if (!allowedRoles.includes(staff.portalRole)) {
+  if (
+    staff.portalRole !== "super_admin" &&
+    !allowedRoles.includes(staff.portalRole)
+  ) {
     redirect(portalRoleHome(staff.portalRole));
   }
   return staff;

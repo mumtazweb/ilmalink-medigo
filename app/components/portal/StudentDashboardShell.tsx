@@ -17,6 +17,7 @@ import {
   Settings,
   UserRound,
   UsersRound,
+  ShieldCheck,
   X,
 } from "lucide-react";
 import Image from "next/image";
@@ -54,13 +55,33 @@ const mobileNavItems: StudentNavItem[] = [
 
 export default function StudentDashboardShell({
   children,
+  adminPreview,
 }: {
   children: React.ReactNode;
+  adminPreview?: {
+    studentName: string;
+    studentCode: string;
+  };
 }) {
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [leavingPreview, setLeavingPreview] = useState(false);
+
+  async function returnToAdmin() {
+    setLeavingPreview(true);
+    try {
+      const response = await fetch("/api/portal/admin/student-preview", {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Unable to close student preview.");
+      router.push("/portal/admin/dashboard");
+      router.refresh();
+    } finally {
+      setLeavingPreview(false);
+    }
+  }
 
   async function logout() {
     setLoggingOut(true);
@@ -94,6 +115,24 @@ export default function StudentDashboardShell({
       </aside>
 
       <div className="min-w-0 pb-20 lg:pb-0">
+        {adminPreview ? (
+          <div className="sticky top-0 z-50 flex min-h-12 items-center justify-between gap-3 bg-[#082A62] px-4 py-2 text-white sm:px-6 lg:static lg:px-9">
+            <p className="flex min-w-0 items-center gap-2 text-xs font-bold sm:text-sm">
+              <ShieldCheck className="h-4 w-4 shrink-0 text-[#77F2D1]" />
+              <span className="truncate">
+                Super Admin student preview: {adminPreview.studentName} · {adminPreview.studentCode}
+              </span>
+            </p>
+            <button
+              type="button"
+              onClick={returnToAdmin}
+              disabled={leavingPreview}
+              className="shrink-0 rounded-lg bg-white px-3 py-2 text-[10px] font-black text-[#082A62] disabled:opacity-60 sm:text-xs"
+            >
+              {leavingPreview ? "Returning..." : "Return to Admin"}
+            </button>
+          </div>
+        ) : null}
         <header className="sticky top-0 z-40 border-b border-[#E1E7F0] bg-white/95 backdrop-blur lg:static">
           <div className="flex h-[72px] items-center justify-between gap-3 px-4 sm:px-6 lg:h-[74px] lg:px-9">
             <button

@@ -20,7 +20,12 @@ export default async function CounsellorLeadDetailPage({
     requirePortalStaff(["counsellor"]),
   ]);
   const lead = await prisma.studentAccount.findFirst({
-    where: { id, assignedToId: staff.id },
+    where: {
+      id,
+      ...(staff.portalRole === "super_admin"
+        ? {}
+        : { assignedToId: staff.id }),
+    },
     include: {
       documents: { orderBy: { createdAt: "desc" } },
       activities: { orderBy: { createdAt: "desc" } },

@@ -14,7 +14,9 @@ export default async function CounsellorFollowupsPage() {
   const staff = await requirePortalStaff(["counsellor"]);
   const leads = await prisma.studentAccount.findMany({
     where: {
-      assignedToId: staff.id,
+      ...(staff.portalRole === "super_admin"
+        ? {}
+        : { assignedToId: staff.id }),
       OR: [{ status: "follow-up" }, { followUpDate: { not: null } }],
     },
     orderBy: [{ followUpDate: "asc" }, { createdAt: "desc" }],

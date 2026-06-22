@@ -7,6 +7,7 @@ import {
   readJsonObject,
 } from "../../../../../lib/portal/request";
 import { getCurrentPortalStaff } from "../../../../../lib/portal/session";
+import { isSiteOwnerAdminEmail } from "../../../../../lib/siteOwner";
 
 type UserRouteProps = {
   params: Promise<{ id: string }>;
@@ -36,6 +37,25 @@ export async function PATCH(request: NextRequest, { params }: UserRouteProps) {
     ? requestedRole
     : null;
   const { id } = await params;
+  const target = await prisma.user.findUnique({
+    where: { id },
+    select: { email: true },
+  });
+  if (!target) {
+    return NextResponse.json(
+      { message: "Portal user not found." },
+      { status: 404 }
+    );
+  }
+  if (
+    isSiteOwnerAdminEmail(target.email) &&
+    (!portalAccess || portalRole !== "super_admin")
+  ) {
+    return NextResponse.json(
+      { message: "The owner administrator must retain Super Admin access." },
+      { status: 400 }
+    );
+  }
   const user = await prisma.user.update({
     where: { id },
     data: { portalAccess, portalRole },

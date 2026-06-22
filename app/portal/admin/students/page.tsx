@@ -23,6 +23,7 @@ export default async function AdminStudentsPage() {
       initialLeads={students.map(toPortalLeadRow)}
       counsellors={counsellors.map(({ id, name }) => ({ id, name }))}
       canAssign
+      canPreviewStudent
       detailBasePath="/portal/admin/leads"
     />
   );

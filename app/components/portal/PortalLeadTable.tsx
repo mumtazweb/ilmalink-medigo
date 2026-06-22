@@ -7,10 +7,12 @@ import {
   FileDown,
   Loader2,
   PencilLine,
+  ScanEye,
   Save,
   X,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import {
   STUDENT_STATUSES,
@@ -44,18 +46,52 @@ export default function PortalLeadTable({
   counsellors = [],
   canAssign = false,
   readOnly = false,
+  canPreviewStudent = false,
   detailBasePath,
 }: {
   initialLeads: PortalLeadRow[];
   counsellors?: PortalCounsellorOption[];
   canAssign?: boolean;
   readOnly?: boolean;
+  canPreviewStudent?: boolean;
   detailBasePath?: string;
 }) {
+  const router = useRouter();
   const [leads, setLeads] = useState(initialLeads);
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [editing, setEditing] = useState<PortalLeadRow | null>(null);
+  const [previewingId, setPreviewingId] = useState("");
+  const [previewMessage, setPreviewMessage] = useState("");
+
+  async function previewStudent(studentId: string) {
+    setPreviewingId(studentId);
+    setPreviewMessage("");
+    try {
+      const response = await fetch("/api/portal/admin/student-preview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ studentId }),
+      });
+      const data = (await response.json()) as {
+        ok?: boolean;
+        message?: string;
+        redirectTo?: string;
+      };
+      if (!response.ok || !data.ok) {
+        throw new Error(data.message || "Unable to preview student dashboard.");
+      }
+      router.push(data.redirectTo || "/portal/student/dashboard");
+      router.refresh();
+    } catch (error) {
+      setPreviewMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to preview student dashboard."
+      );
+      setPreviewingId("");
+    }
+  }
 
   const filtered = useMemo(() => {
     const search = query.trim().toLowerCase();
@@ -78,6 +114,11 @@ export default function PortalLeadTable({
 
   return (
     <section className="rounded-2xl border border-[#D8E4EF] bg-white p-3 shadow-[0_7px_18px_rgba(8,42,98,.045)] sm:p-4">
+      {previewMessage ? (
+        <p className="mb-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700">
+          {previewMessage}
+        </p>
+      ) : null}
       <div className="grid gap-2 sm:grid-cols-[1fr_auto_auto]">
         <input
           value={query}
@@ -197,6 +238,21 @@ export default function PortalLeadTable({
                       >
                         <PencilLine className="h-3.5 w-3.5" />
                         Update
+                      </button>
+                    ) : null}
+                    {canPreviewStudent ? (
+                      <button
+                        type="button"
+                        onClick={() => previewStudent(lead.id)}
+                        disabled={previewingId === lead.id}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-[#BFE8D9] bg-[#F1FFF9] px-2.5 py-2 font-black text-[#087A60] disabled:opacity-60"
+                      >
+                        {previewingId === lead.id ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        ) : (
+                          <ScanEye className="h-3.5 w-3.5" />
+                        )}
+                        Student view
                       </button>
                     ) : null}
                     {readOnly && !detailBasePath ? (

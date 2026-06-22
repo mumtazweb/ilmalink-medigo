@@ -2,10 +2,18 @@
 
 import type { LucideIcon } from "lucide-react";
 import {
+  BarChart3,
+  CalendarClock,
   ChevronRight,
+  ContactRound,
+  ExternalLink,
+  LayoutDashboard,
   LogOut,
   Menu,
+  Settings,
   ShieldCheck,
+  UserRoundCog,
+  UsersRound,
   X,
 } from "lucide-react";
 import Image from "next/image";
@@ -16,19 +24,40 @@ import { useState } from "react";
 export type PortalNavItem = {
   label: string;
   href: string;
-  icon: LucideIcon;
+  icon: PortalNavIcon;
+};
+
+type PortalNavIcon =
+  | "dashboard"
+  | "students"
+  | "leads"
+  | "followups"
+  | "reports"
+  | "users"
+  | "settings";
+
+const portalNavIcons: Record<PortalNavIcon, LucideIcon> = {
+  dashboard: LayoutDashboard,
+  students: UsersRound,
+  leads: ContactRound,
+  followups: CalendarClock,
+  reports: BarChart3,
+  users: UserRoundCog,
+  settings: Settings,
 };
 
 export default function PortalDashboardShell({
   title,
   subtitle,
   roleLabel,
+  isSuperAdmin = false,
   navItems,
   children,
 }: {
   title: string;
   subtitle: string;
   roleLabel: string;
+  isSuperAdmin?: boolean;
   navItems: PortalNavItem[];
   children: React.ReactNode;
 }) {
@@ -80,6 +109,27 @@ export default function PortalDashboardShell({
             </Link>
           </div>
           <div className="flex items-center gap-2">
+            {isSuperAdmin ? (
+              <div className="hidden items-center gap-1 rounded-xl border border-[#D8E4EF] bg-[#F7FAFD] p-1 md:flex">
+                {[
+                  ["Admin", "/portal/admin/dashboard"],
+                  ["Counsellor", "/portal/counsellor/dashboard"],
+                  ["Management", "/portal/management/dashboard"],
+                  ["Blog", "/dashboard"],
+                ].map(([label, href]) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="inline-flex h-8 items-center gap-1 rounded-lg px-2.5 text-[10px] font-black text-[#31577F] transition hover:bg-white hover:text-[#0B4AA2]"
+                  >
+                    {label}
+                    {label === "Blog" ? (
+                      <ExternalLink className="h-3 w-3" />
+                    ) : null}
+                  </Link>
+                ))}
+              </div>
+            ) : null}
             <span className="hidden rounded-full bg-[#EAF3FF] px-3 py-1.5 text-[10px] font-black uppercase tracking-wide text-[#0B4AA2] sm:inline-flex">
               {roleLabel}
             </span>
@@ -140,6 +190,19 @@ export default function PortalDashboardShell({
               pathname={pathname}
               onNavigate={() => setMobileOpen(false)}
             />
+            {isSuperAdmin ? (
+              <div className="mt-5 border-t border-[#D8E4EF] pt-4">
+                <p className="mb-2 text-[10px] font-black uppercase tracking-[.12em] text-[#71839A]">
+                  Owner views
+                </p>
+                <div className="grid gap-1.5">
+                  <Link href="/portal/admin/dashboard" onClick={() => setMobileOpen(false)} className="rounded-lg bg-[#F4F8FC] px-3 py-2 text-xs font-black text-[#0B4AA2]">Admin dashboard</Link>
+                  <Link href="/portal/counsellor/dashboard" onClick={() => setMobileOpen(false)} className="rounded-lg bg-[#F4F8FC] px-3 py-2 text-xs font-black text-[#0B4AA2]">Counsellor dashboard</Link>
+                  <Link href="/portal/management/dashboard" onClick={() => setMobileOpen(false)} className="rounded-lg bg-[#F4F8FC] px-3 py-2 text-xs font-black text-[#0B4AA2]">Management dashboard</Link>
+                  <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="rounded-lg bg-[#F4F8FC] px-3 py-2 text-xs font-black text-[#0B4AA2]">Blog dashboard</Link>
+                </div>
+              </div>
+            ) : null}
           </aside>
         </div>
       ) : null}
@@ -159,6 +222,7 @@ function PortalNav({
   return (
     <nav className="space-y-1.5">
       {navItems.map((item) => {
+        const Icon = portalNavIcons[item.icon];
         const active =
           pathname === item.href ||
           (item.href.endsWith("/dashboard") &&
@@ -175,7 +239,7 @@ function PortalNav({
                 : "text-[#46617F] hover:bg-[#F1F6FB] hover:text-[#0B4AA2]"
             }`}
           >
-            <item.icon className="h-[18px] w-[18px] shrink-0" />
+            <Icon className="h-[18px] w-[18px] shrink-0" />
             <span className="flex-1">{item.label}</span>
             <ChevronRight className="h-4 w-4 opacity-70" />
           </Link>

@@ -13,7 +13,8 @@ export const metadata: Metadata = {
 export default async function CounsellorLeadsPage() {
   const staff = await requirePortalStaff(["counsellor"]);
   const leads = await prisma.studentAccount.findMany({
-    where: { assignedToId: staff.id },
+    where:
+      staff.portalRole === "super_admin" ? {} : { assignedToId: staff.id },
     orderBy: { createdAt: "desc" },
   });
   return (

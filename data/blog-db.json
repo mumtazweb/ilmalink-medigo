@@ -4,7 +4,7 @@
       "id": "user-admin",
       "name": "ILMALINK Admin",
       "email": "admin@ilmalink.com",
-      "password": "admin123",
+      "password": "database-managed-account",
       "role": "admin",
       "createdAt": "2026-04-01"
     },
@@ -12,14 +12,14 @@
       "id": "user-author",
       "name": "Editorial Author",
       "email": "author@ilmalink.com",
-      "password": "author123",
+      "password": "database-managed-account",
       "role": "author",
       "createdAt": "2026-04-01"
     },
     {
       "name": "injamul Hoque Middya",
       "email": "middya@ilmalink.com",
-      "password": "Izhan@21mumtaz",
+      "password": "database-managed-account",
       "role": "author",
       "id": "user-1779914606369",
       "createdAt": "2026-05-27T20:43:26.369Z"

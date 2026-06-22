@@ -19,29 +19,31 @@ export const metadata: Metadata = {
 
 export default async function CounsellorDashboardPage() {
   const staff = await requirePortalStaff(["counsellor"]);
+  const leadScope =
+    staff.portalRole === "super_admin" ? {} : { assignedToId: staff.id };
   const endOfToday = new Date();
   endOfToday.setHours(23, 59, 59, 999);
   const [assigned, todayFollowups, interested, documentPending, applicationStarted] =
     await Promise.all([
       prisma.studentAccount.findMany({
-        where: { assignedToId: staff.id },
+        where: leadScope,
         orderBy: [{ followUpDate: "asc" }, { createdAt: "desc" }],
       }),
       prisma.studentAccount.count({
         where: {
-          assignedToId: staff.id,
+          ...leadScope,
           followUpDate: { lte: endOfToday },
           status: { notIn: ["admitted", "invalid", "not-interested"] },
         },
       }),
       prisma.studentAccount.count({
-        where: { assignedToId: staff.id, status: "interested" },
+        where: { ...leadScope, status: "interested" },
       }),
       prisma.studentAccount.count({
-        where: { assignedToId: staff.id, status: "document-pending" },
+        where: { ...leadScope, status: "document-pending" },
       }),
       prisma.studentAccount.count({
-        where: { assignedToId: staff.id, status: "application-started" },
+        where: { ...leadScope, status: "application-started" },
       }),
     ]);
 

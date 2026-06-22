@@ -12,6 +12,7 @@
     "export": "next export",
     "prisma:generate": "prisma generate",
     "portal:grant": "node scripts/grant-portal-access.mjs",
+    "admin:bootstrap": "node scripts/bootstrap-owner-admin.mjs",
     "pdf:compress:neet": "node scripts/compress-neet-pdf.mjs",
     "search:index": "node scripts/generate-search-index.mjs",
     "lint": "eslint"

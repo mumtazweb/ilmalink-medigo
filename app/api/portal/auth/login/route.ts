@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { prisma } from "../../../../lib/prisma";
 import {
+  getEffectivePortalStaffRole,
   isPortalStaffRole,
   portalRoleHome,
 } from "../../../../lib/portal/constants";
@@ -88,7 +89,8 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-    if (!user.portalAccess || !isPortalStaffRole(user.portalRole)) {
+    const effectiveRole = getEffectivePortalStaffRole(user);
+    if (!effectiveRole || !isPortalStaffRole(effectiveRole)) {
       return NextResponse.json(
         {
           message:
@@ -98,10 +100,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    await setStaffPortalSession(user.id, user.portalRole);
+    await setStaffPortalSession(user.id, effectiveRole);
     return NextResponse.json({
       ok: true,
-      redirectTo: portalRoleHome(user.portalRole),
+      redirectTo: portalRoleHome(effectiveRole),
     });
   }
 

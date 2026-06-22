@@ -25,6 +25,7 @@ import {
 } from "./store";
 
 import type { BlogDatabase, BlogPost, BlogStatus } from "./types";
+import { isSiteOwnerAdminEmail } from "../siteOwner";
 
 type ActionState = {
   ok: boolean;
@@ -883,6 +884,10 @@ export async function deleteUserAction(
       });
 
     if (!existingUser) {
+      return;
+    }
+
+    if (isSiteOwnerAdminEmail(existingUser.email)) {
       return;
     }
 

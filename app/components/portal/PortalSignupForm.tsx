@@ -21,7 +21,11 @@ import { FormEvent, useMemo, useState } from "react";
 import { PORTAL_AUDIENCE_TYPES } from "../../lib/portal/constants";
 import PortalAuthMessage from "./PortalAuthMessage";
 
-const serviceMessage = "Personalised NEET and medical admission guidance, clearly explained.";
+const serviceMessage =
+  "Personalised NEET and medical admission guidance, clearly explained.";
+
+const footerMessage =
+  "Join ILMALINK MEDIGO for practical, student-first support across NEET, counselling, medical admissions, scholarships and important education updates.";
 
 type SignupResponse = {
   ok?: boolean;
@@ -48,6 +52,7 @@ export default function PortalSignupForm({
     () => name.trim().split(/\s+/)[0] || "your first name",
     [name]
   );
+
   const formReady =
     name.trim().length >= 2 &&
     mobile.length === 10 &&
@@ -73,6 +78,7 @@ export default function PortalSignupForm({
           otherAudience,
         }),
       });
+
       const responseText = await response.text();
       let data: SignupResponse = {};
 
@@ -92,10 +98,9 @@ export default function PortalSignupForm({
       setMessage(
         `Profile created. Login ID: ${mobile} · Password: ${firstName}`
       );
+
       window.setTimeout(() => {
-        router.push(
-          nextPath || data.redirectTo || "/portal/student/dashboard"
-        );
+        router.push(nextPath || data.redirectTo || "/portal/student/dashboard");
         router.refresh();
       }, 1200);
     } catch (error) {
@@ -118,27 +123,18 @@ export default function PortalSignupForm({
       <section className="portal-signup-shell">
         <div className="portal-signup-benefits">
           <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[.16em] text-white backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5 text-[#7FFFE1]" />
-              One profile. Smarter guidance.
-            </div>
-
-            <h1 className="mt-5 max-w-2xl text-4xl font-black leading-[.98] tracking-[-.055em] text-white sm:text-5xl lg:text-6xl">
-              Your education journey,
-              <span className="portal-signup-shimmer block">
-                brilliantly connected.
+            <div className="inline-flex max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-white/25 bg-white/10 px-2.5 py-1.5 text-[10px] font-black uppercase tracking-[.09em] text-white backdrop-blur sm:gap-2 sm:px-3 sm:text-[11px] sm:tracking-[.16em]">
+              <Sparkles className="h-3.5 w-3.5 shrink-0 text-[#7FFFE1]" />
+              <span>Your</span>
+              <span className="font-black text-[#7FFFE1] drop-shadow-[0_0_10px_rgba(127,255,225,.75)]">
+                MBBS
               </span>
-            </h1>
-
-            <p className="mt-5 max-w-xl text-sm font-semibold leading-7 text-[#D6E8FF] sm:text-base">
-              Join ILMALINK MEDIGO for practical, student-first support across
-              NEET, counselling, medical admissions, scholarships and important
-              education updates.
-            </p>
+              <span>Journey Starts Here</span>
+            </div>
 
             <ServiceSummary />
 
-            <div className="mt-7 grid gap-3 sm:grid-cols-2">
+            <div className="mt-4 grid grid-cols-2 gap-2.5 sm:mt-6 sm:gap-3">
               <Benefit
                 icon={BookOpenCheck}
                 title="Clear pathways"
@@ -174,23 +170,21 @@ export default function PortalSignupForm({
           <div className="relative z-10">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-[11px] font-black uppercase tracking-[.16em] text-[#078A78]">
-                  Free registration
-                </p>
-                <h2 className="mt-1 text-3xl font-black tracking-[-.04em] text-[#082A62] sm:text-4xl">
+                <h2 className="text-3xl font-black tracking-[-.04em] text-[#082A62] sm:text-4xl">
                   Create your profile
                 </h2>
               </div>
+
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(145deg,#E3F5FF,#D9FFF4)] text-[#087D78] shadow-[0_12px_28px_rgba(8,125,120,.18)]">
                 <CircleUserRound className="h-6 w-6" />
               </span>
             </div>
 
-            <p className="mt-3 text-sm font-semibold leading-6 text-[#60738F]">
+            <p className="mt-2 text-sm font-semibold leading-6 text-[#60738F]">
               Only three details are needed. Every field is compulsory.
             </p>
 
-            <form onSubmit={submitSignup} className="mt-6 space-y-4">
+            <form onSubmit={submitSignup} className="mt-5 space-y-4">
               <PremiumField
                 icon={UserRound}
                 label="Your name"
@@ -284,6 +278,7 @@ export default function PortalSignupForm({
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-[#0B63CE] shadow-sm">
                     <LockKeyhole className="h-4 w-4" />
                   </span>
+
                   <div>
                     <p className="text-xs font-black uppercase tracking-[.08em] text-[#0B4AA2]">
                       Your login details
@@ -319,7 +314,9 @@ export default function PortalSignupForm({
                 ) : (
                   <Sparkles className="h-5 w-5" />
                 )}
+
                 {success ? "Profile Created" : "Create My Free Profile"}
+
                 {!busy && !success ? <ArrowRight className="h-5 w-5" /> : null}
               </button>
             </form>
@@ -329,13 +326,19 @@ export default function PortalSignupForm({
               <Link
                 href={
                   nextPath
-                    ? `/portal/login?tab=student&next=${encodeURIComponent(nextPath)}`
+                    ? `/portal/login?tab=student&next=${encodeURIComponent(
+                        nextPath
+                      )}`
                     : "/portal/login?tab=student"
                 }
                 className="font-black text-[#0B4AA2] hover:text-[#008F7C]"
               >
                 Student Login
               </Link>
+            </p>
+
+            <p className="mx-auto mt-4 max-w-md text-center text-xs font-semibold leading-5 text-[#7890A8]">
+              {footerMessage}
             </p>
           </div>
         </div>
@@ -346,11 +349,12 @@ export default function PortalSignupForm({
 
 function ServiceSummary() {
   return (
-    <div className="mt-6 flex min-h-20 items-center gap-3 rounded-2xl border border-white/20 bg-[#041D49]/40 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,.12)] backdrop-blur-xl">
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#37E2BA]/15 text-[#76FFDC]">
-        <Sparkles className="h-5 w-5" />
+    <div className="mt-3 flex items-center gap-2 rounded-xl border border-white/20 bg-[#041D49]/40 px-2.5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,.12)] backdrop-blur-xl sm:mt-4">
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#37E2BA]/15 text-[#76FFDC]">
+        <Sparkles className="h-4 w-4" />
       </span>
-      <p className="text-sm font-black leading-6 text-white sm:text-base">
+
+      <p className="text-xs font-black leading-5 text-white sm:text-sm">
         {serviceMessage}
       </p>
     </div>
@@ -367,10 +371,14 @@ function Benefit({
   text: string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/15 bg-white/[.08] p-3.5 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/[.12]">
-      <Icon className="h-5 w-5 text-[#73FFDC]" />
-      <strong className="mt-2 block text-sm text-white">{title}</strong>
-      <span className="mt-1 block text-xs font-semibold leading-5 text-[#C7DDF6]">
+    <div className="rounded-2xl border border-white/15 bg-white/[.08] p-2.5 text-center backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/[.12] sm:p-3.5 sm:text-left">
+      <Icon className="mx-auto h-5 w-5 text-[#73FFDC] sm:mx-0" />
+
+      <strong className="mt-1.5 block text-xs font-black leading-tight text-white sm:mt-2 sm:text-sm">
+        {title}
+      </strong>
+
+      <span className="mt-1 hidden text-xs font-semibold leading-5 text-[#C7DDF6] sm:block">
         {text}
       </span>
     </div>
@@ -395,8 +403,10 @@ function PremiumField({
           <Icon className="h-4 w-4 text-[#078A78]" />
           {label} <span className="text-[#DB3D4B]">*</span>
         </span>
+
         <span className="text-[10px] font-bold text-[#7890A8]">{hint}</span>
       </span>
+
       {children}
     </label>
   );

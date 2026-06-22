@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import PortalUserAccessTable from "../../../components/portal/PortalUserAccessTable";
 import { prisma } from "../../../lib/prisma";
 import { requirePortalStaff } from "../../../lib/portal/session";
+import { isSiteOwnerAdminEmail } from "../../../lib/siteOwner";
 
 export const metadata: Metadata = {
   title: "Portal User Access | ILMALINK MEDIGO",
@@ -35,6 +36,7 @@ export default async function AdminUsersPage() {
         blogRole: user.role,
         portalAccess: user.portalAccess,
         portalRole: user.portalRole || "",
+        isOwner: isSiteOwnerAdminEmail(user.email),
       }))}
     />
   );

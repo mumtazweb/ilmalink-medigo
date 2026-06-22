@@ -1,5 +1,3 @@
-import { BarChart3, LayoutDashboard } from "lucide-react";
-
 import PortalDashboardShell from "../../components/portal/PortalDashboardShell";
 import { requirePortalStaff } from "../../lib/portal/session";
 
@@ -17,9 +15,10 @@ export default async function ManagementPortalLayout({
       title="Management Dashboard"
       subtitle={`Summary and reporting access for ${staff.name}. Operational student edits remain with Education Admin and assigned counsellors.`}
       roleLabel={staff.portalRole.replace(/_/g, " ")}
+      isSuperAdmin={staff.portalRole === "super_admin"}
       navItems={[
-        { label: "Dashboard", href: "/portal/management/dashboard", icon: LayoutDashboard },
-        { label: "Reports", href: "/portal/management/reports", icon: BarChart3 },
+        { label: "Dashboard", href: "/portal/management/dashboard", icon: "dashboard" },
+        { label: "Reports", href: "/portal/management/reports", icon: "reports" },
       ]}
     >
       {children}

@@ -1,3 +1,5 @@
+import { isSiteOwnerAdminEmail } from "../siteOwner";
+
 export const PORTAL_STUDENT_COOKIE = "ilmalink_portal_student";
 export const PORTAL_STAFF_COOKIE = "ilmalink_portal_staff";
 
@@ -44,6 +46,16 @@ export function isPortalStaffRole(value: unknown): value is PortalStaffRole {
     typeof value === "string" &&
     PORTAL_STAFF_ROLES.includes(value as PortalStaffRole)
   );
+}
+
+export function getEffectivePortalStaffRole(user: {
+  email: string;
+  portalAccess: boolean;
+  portalRole: string | null;
+}): PortalStaffRole | null {
+  if (isSiteOwnerAdminEmail(user.email)) return "super_admin";
+  if (!user.portalAccess || !isPortalStaffRole(user.portalRole)) return null;
+  return user.portalRole;
 }
 
 export function portalRoleHome(role: PortalStaffRole) {

@@ -12,6 +12,7 @@ type PortalUserRow = {
   blogRole: string;
   portalAccess: boolean;
   portalRole: string;
+  isOwner: boolean;
 };
 
 export default function PortalUserAccessTable({
@@ -82,6 +83,11 @@ export default function PortalUserAccessTable({
                 <td className="px-3 py-3">
                   <strong className="block text-[#17396E]">{user.name}</strong>
                   <span className="text-xs text-[#71839A]">{user.email}</span>
+                  {user.isOwner ? (
+                    <span className="mt-1 inline-flex rounded-full bg-[#E7F8F2] px-2 py-0.5 text-[9px] font-black uppercase tracking-wide text-[#087A60]">
+                      Owner administrator
+                    </span>
+                  ) : null}
                 </td>
                 <td className="px-3 py-3 font-semibold text-[#46617F]">
                   {user.blogRole}
@@ -91,6 +97,7 @@ export default function PortalUserAccessTable({
                     <input
                       type="checkbox"
                       checked={user.portalAccess}
+                      disabled={user.isOwner}
                       onChange={(event) =>
                         update(user.id, {
                           portalAccess: event.target.checked,
@@ -110,7 +117,8 @@ export default function PortalUserAccessTable({
                     onChange={(event) =>
                       update(user.id, { portalRole: event.target.value })
                     }
-                    disabled={!user.portalAccess}
+                    disabled={!user.portalAccess || user.isOwner}
+                    aria-disabled={user.isOwner}
                     className="h-10 rounded-lg border border-[#CCD9E7] px-2 text-xs font-bold disabled:bg-[#EEF3F7]"
                   >
                     <option value="">Select role</option>
@@ -125,7 +133,8 @@ export default function PortalUserAccessTable({
                   <button
                     type="button"
                     onClick={() => save(user)}
-                    disabled={busyId === user.id}
+                    disabled={busyId === user.id || user.isOwner}
+                    aria-disabled={user.isOwner}
                     className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-[#0B4AA2] px-3 text-xs font-black text-white"
                   >
                     {busyId === user.id ? (

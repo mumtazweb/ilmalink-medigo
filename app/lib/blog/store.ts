@@ -3,6 +3,7 @@ import { prisma } from "../prisma";
 import { promises as fs } from "fs";
 import path from "path";
 import { seedDatabase } from "./seed";
+import { SITE_OWNER_ADMIN_EMAIL } from "../siteOwner";
 
 import type {
   BlogCategory,
@@ -16,8 +17,7 @@ import type {
   BlogUser,
 } from "./types";
 
-export const BLOG_ADMIN_EMAIL =
-  "injamulhoquemiddya@gmail.com";
+export const BLOG_ADMIN_EMAIL = SITE_OWNER_ADMIN_EMAIL;
 
 const BLOG_EDITOR_EMAIL =
   "middya@ilmalink.com";

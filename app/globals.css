@@ -113,7 +113,7 @@ select {
   isolation: isolate;
   min-height: calc(100vh - 65px);
   overflow: hidden;
-  padding: clamp(1.25rem, 3vw, 3rem) 1rem;
+  padding: clamp(0.5rem, 1.5vw, 1.25rem) 1rem;
   background:
     radial-gradient(circle at 10% 15%, rgba(0, 197, 159, 0.2), transparent 27%),
     radial-gradient(circle at 92% 82%, rgba(31, 101, 255, 0.2), transparent 28%),

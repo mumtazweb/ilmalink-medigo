@@ -105,7 +105,8 @@ export function proxy(request: NextRequest) {
       isPortalStaffRole(role) &&
       ((isAdminPortalRoute &&
         (role === "super_admin" || role === "education_admin")) ||
-        (isCounsellorPortalRoute && role === "counsellor") ||
+        (isCounsellorPortalRoute &&
+          (role === "counsellor" || role === "super_admin")) ||
         (isManagementPortalRoute &&
           (role === "management" || role === "super_admin")));
 

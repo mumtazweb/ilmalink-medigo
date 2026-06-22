@@ -60,6 +60,7 @@ export default async function AdminDashboardPage() {
           initialLeads={recentStudents.map(toPortalLeadRow)}
           counsellors={counsellors.map(({ id, name }) => ({ id, name }))}
           canAssign
+          canPreviewStudent
           detailBasePath="/portal/admin/leads"
         />
       </div>
