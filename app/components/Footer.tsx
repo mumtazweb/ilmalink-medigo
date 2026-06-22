@@ -60,6 +60,9 @@ const footerLinks = [
   {
     title: "Support",
     links: [
+      { label: "Student Login", href: "/portal/login" },
+      { label: "Create Free Profile", href: "/portal/signup" },
+      { label: "Education Staff Login", href: "/portal/login?tab=staff" },
       { label: "Book Counselling", href: "/", counselling: true },
       { label: "WhatsApp Support", href: contact.whatsappHref, external: true },
       { label: "Call Admission Team", href: contact.callHref },

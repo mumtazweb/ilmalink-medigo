@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "screenshot-neet-mobile*.js",
+    "screenshot-neet-mobile*.cjs",
+    "neet-mobile-shots/**",
+    "neet-mobile-*.png",
   ]),
 ]);
 

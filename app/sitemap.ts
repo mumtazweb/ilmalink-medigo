@@ -4,6 +4,7 @@ import path from "node:path";
 
 import { countryGeoFacts } from "./data/geo";
 import { georgiaUniversities } from "./data/georgiaUniversities";
+import { neet2026Questions } from "./data/neet2026Questions";
 import { globalSearchIndex } from "./data/searchIndex";
 import { BLOGS_PAGE_SIZE } from "./lib/blog/pagination";
 
@@ -43,7 +44,17 @@ const staticRoutes = [
   "/neet",
   "/neet/admit-card",
   "/neet/result",
+  "/neet/discussion-centre",
+  "/neet/questions",
+  "/neet/answer-key",
+  "/neet/re-neet-2026-answer-key-codes",
+  "/neet/re-neet-2026-questions",
+  ...neet2026Questions.map(
+    (question) => `/neet/questions/${question.slug}`
+  ),
   "/neet/counselling",
+  "/portal/signup",
+  "/portal/login",
   "/trust-center",
   "/alert",
   "/official-advisories",
@@ -58,6 +69,12 @@ const excludedRoutes = [
   "/admin",
   "/api",
   "/search",
+  "/portal/student",
+  "/portal/admin",
+  "/portal/counsellor",
+  "/portal/management",
+  "/portal/forgot-password",
+  "/portal/reset-password",
 ];
 
 type SitemapEntry = MetadataRoute.Sitemap[number];

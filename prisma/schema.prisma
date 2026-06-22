@@ -8,17 +8,101 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  password  String
-  role      String   @default("author")
-  createdAt DateTime @default(now())
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  password     String
+  role         String   @default("author")
+  portalAccess Boolean  @default(false)
+  portalRole   String?
+  createdAt    DateTime @default(now())
 
   resetOtp       String?
   resetOtpExpiry DateTime?
 
   blogs Blog[]
+}
+
+model StudentAccount {
+  id                String    @id @default(cuid())
+  leadCode          String    @unique
+  name              String?
+  mobile            String    @unique
+  email             String?   @unique
+  password          String?
+  mobileVerified    Boolean   @default(false)
+  whatsappNumber    String?
+  whatsappAvailable String?
+  interests         String?   @db.Text
+  className         String?
+  neetYear          String?
+  state             String?
+  city              String?
+  district          String?
+  category          String?
+  neetScore         String?
+  neetRank          String?
+  preferredCourse   String?
+  preferredCountry  String?
+  status            String    @default("new")
+  assignedToId      String?
+  assignedToName    String?
+  notes             String?   @db.Text
+  followUpDate      DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  activities LeadActivity[]
+  documents  StudentDocument[]
+
+  @@index([status])
+  @@index([assignedToId])
+  @@index([followUpDate])
+  @@index([createdAt])
+}
+
+model StudentOtp {
+  id        String   @id @default(cuid())
+  mobile    String
+  otpHash   String
+  purpose   String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([mobile, purpose, createdAt])
+  @@index([expiresAt])
+}
+
+model LeadActivity {
+  id        String   @id @default(cuid())
+  studentId String
+  action    String
+  note      String?  @db.Text
+  createdBy String?
+  createdAt DateTime @default(now())
+
+  student StudentAccount @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, createdAt])
+  @@index([createdBy])
+}
+
+model StudentDocument {
+  id           String   @id @default(cuid())
+  studentId    String
+  documentType String
+  fileName     String?
+  fileUrl      String?  @db.Text
+  status       String   @default("pending")
+  note         String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  student StudentAccount @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, status])
 }
 
 model Blog {
@@ -40,7 +124,7 @@ model Blog {
   updatedAt        DateTime @updatedAt
 
   authorId String
-  author   User @relation(fields: [authorId], references: [id])
+  author   User   @relation(fields: [authorId], references: [id])
 
   comments BlogComment[]
 

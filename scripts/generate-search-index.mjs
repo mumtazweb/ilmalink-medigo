@@ -7,6 +7,13 @@ const appDir = path.join(rootDir, "app");
 const blogDbPath = path.join(rootDir, "data", "blog-db.json");
 const fmgeDataPath = path.join(rootDir, "app", "data", "fmgeData.ts");
 const neetSearchEntriesPath = path.join(rootDir, "app", "data", "neetSearchEntries.json");
+const neetQuestionsPath = path.join(rootDir, "app", "data", "neet2026Questions.json");
+const reNeetCodeAnswerKeysPath = path.join(
+  rootDir,
+  "app",
+  "data",
+  "reNeet2026CodeAnswerKeys.json"
+);
 const outputPath = path.join(rootDir, "app", "data", "searchIndex.ts");
 const BLOG_METADATA_PREFIX = "<!-- BLOG_METADATA:";
 const BLOG_METADATA_SUFFIX = " -->";
@@ -28,6 +35,12 @@ const publicSearchExcludedRoutes = [
   "/logout",
   "/dashboard",
   "/private",
+  "/portal/student",
+  "/portal/admin",
+  "/portal/counsellor",
+  "/portal/management",
+  "/portal/forgot-password",
+  "/portal/reset-password",
 ];
 
 function toPosix(value) {
@@ -605,6 +618,8 @@ async function buildRouteEntries() {
   ).then((entries) => entries.filter(Boolean).flat());
 }
 
+// Kept for optional component-level indexing without enabling it by default.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function buildComponentEntries() {
  const files = await walkFiles(appDir, (filePath) =>
    /(?:^|[\\/])page\.tsx$/.test(filePath),
@@ -981,6 +996,125 @@ async function readNeetSearchEntries() {
   }
 }
 
+async function readNeetQuestionEntries() {
+  try {
+    const questions = JSON.parse(
+      await fs.readFile(neetQuestionsPath, "utf8")
+    );
+
+    if (!Array.isArray(questions)) return [];
+
+    return questions.map((question) => {
+      const title = `NEET 2026 ${question.subject} Question ${question.questionNumber}`;
+      const optionText = Array.isArray(question.options)
+        ? question.options
+            .map((option) => `Option ${option.label} ${option.text}`)
+            .join(" ")
+        : "";
+      const description = sentenceExcerpt(
+        `${question.question} ${question.correctAnswer}`,
+        190
+      );
+
+      return {
+        id: question.id,
+        title,
+        description,
+        url: `/neet/questions/${question.slug}`,
+        category: "NEET Questions",
+        group: "Pages",
+        type: "page",
+        tags: [
+          "NEET 2026",
+          "Re-NEET 2026",
+          question.subject,
+          question.chapter,
+          question.topic,
+          ...(Array.isArray(question.keywords) ? question.keywords : []),
+        ],
+        content: normalizeText(
+          [
+            title,
+            question.question,
+            optionText,
+            question.correctAnswer,
+            question.explanation,
+            question.subject,
+            question.chapter,
+            question.topic,
+            question.difficulty,
+            question.questionType,
+            question.sourceText,
+            Array.isArray(question.keywords)
+              ? question.keywords.join(" ")
+              : "",
+          ].join(" ")
+        ),
+        priority: 88,
+      };
+    });
+  } catch (error) {
+    console.warn(
+      `Skipping NEET question records: ${error instanceof Error ? error.message : String(error)}`
+    );
+    return [];
+  }
+}
+
+async function readReNeetCodeAnswerEntries() {
+  try {
+    const source = JSON.parse(
+      await fs.readFile(reNeetCodeAnswerKeysPath, "utf8")
+    );
+    const codes = ["50", "60", "70", "80"];
+
+    return codes.map((code) => {
+      const answers = Array.isArray(source.codes?.[code])
+        ? source.codes[code]
+        : [];
+      const answerText = answers
+        .map(
+          (answer, index) =>
+            `Question ${index + 1} answer ${answer === "B" ? "Bonus" : answer}`
+        )
+        .join(" ");
+
+      return {
+        id: `re-neet-2026-answer-key-code-${code}`,
+        title: `Re-NEET 2026 Code ${code} Answer Key`,
+        description: `Read all ${answers.length} supplied answer markers for Re-NEET 2026 Paper Code ${code}.`,
+        url: `/neet/re-neet-2026-answer-key-codes#code-${code}`,
+        category: "NEET Answer Keys",
+        group: "Pages",
+        type: "page",
+        subType: "section",
+        tags: [
+          "Re-NEET 2026",
+          `Code ${code}`,
+          "answer key",
+          "question paper code",
+        ],
+        content: normalizeText(
+          [
+            `Re-NEET 2026 Paper Code ${code} answer key`,
+            "Questions 1 to 180",
+            "B means Bonus",
+            answerText,
+          ].join(" ")
+        ),
+        priority: 92,
+      };
+    });
+  } catch (error) {
+    console.warn(
+      `Skipping Re-NEET code answer-key records: ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    );
+    return [];
+  }
+}
+
 function dedupeEntries(entries) {
   const seen = new Map();
 
@@ -1010,6 +1144,8 @@ async function main() {
       ...(await buildBlogEntries()),
       ...(await buildFmgeEntries()),
       ...(await readNeetSearchEntries()),
+      ...(await readNeetQuestionEntries()),
+      ...(await readReNeetCodeAnswerEntries()),
       ...buildManualEntries(),
     ].filter((entry) => isPublicSearchUrl(entry.url))
   );

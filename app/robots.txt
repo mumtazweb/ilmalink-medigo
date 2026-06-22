@@ -21,5 +21,15 @@ Disallow: /create-account
 Disallow: /forgot-password
 Disallow: /reset-password
 Disallow: /search
+Disallow: /portal/student
+Disallow: /portal/student/
+Disallow: /portal/admin
+Disallow: /portal/admin/
+Disallow: /portal/counsellor
+Disallow: /portal/counsellor/
+Disallow: /portal/management
+Disallow: /portal/management/
+Disallow: /portal/forgot-password
+Disallow: /portal/reset-password
 
 Sitemap: https://www.ilmalink.com/sitemap.xml

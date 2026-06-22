@@ -1,4 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import {
+  isPortalStaffRole,
+  PORTAL_STAFF_COOKIE,
+  PORTAL_STUDENT_COOKIE,
+} from "./app/lib/portal/constants";
+import { verifyPortalToken } from "./app/lib/portal/token";
 
 const canonicalSiteUrl = "https://www.ilmalink.com";
 
@@ -65,6 +71,50 @@ export function proxy(request: NextRequest) {
     redirectUrl.pathname = `${pathname}/`;
 
     return NextResponse.redirect(redirectUrl, 308);
+  }
+
+  const isStudentPortalRoute = pathname.startsWith("/portal/student/");
+  const isAdminPortalRoute = pathname.startsWith("/portal/admin/");
+  const isCounsellorPortalRoute = pathname.startsWith("/portal/counsellor/");
+  const isManagementPortalRoute = pathname.startsWith("/portal/management/");
+
+  if (isStudentPortalRoute) {
+    const studentToken = verifyPortalToken(
+      request.cookies.get(PORTAL_STUDENT_COOKIE)?.value,
+      "student"
+    );
+    if (!studentToken) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/portal/login/";
+      loginUrl.search = "?tab=student";
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
+  if (
+    isAdminPortalRoute ||
+    isCounsellorPortalRoute ||
+    isManagementPortalRoute
+  ) {
+    const staffToken = verifyPortalToken(
+      request.cookies.get(PORTAL_STAFF_COOKIE)?.value,
+      "staff"
+    );
+    const role = staffToken?.role;
+    const allowed =
+      isPortalStaffRole(role) &&
+      ((isAdminPortalRoute &&
+        (role === "super_admin" || role === "education_admin")) ||
+        (isCounsellorPortalRoute && role === "counsellor") ||
+        (isManagementPortalRoute &&
+          (role === "management" || role === "super_admin")));
+
+    if (!allowed) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/portal/login/";
+      loginUrl.search = "?tab=staff";
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
   const hasOldSearchQuery =

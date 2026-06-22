@@ -12,33 +12,16 @@ import {
   TrendingUp,
   X,
 } from "lucide-react";
-
+import {
+  predictNeetRankRangeFromMarks,
+  type NeetRankPrediction,
+} from "@/lib/neetRankPredictor";
 
 type NeetRankPredictorToolProps = {
   isOpen: boolean;
   onClose: () => void;
   onBookCounselling: () => void;
 };
-
-const rankAnchors = [
-  { score: 720, rank: 1 },
-  { score: 710, rank: 100 },
-  { score: 700, rank: 2250 },
-  { score: 650, rank: 26000 },
-  { score: 600, rank: 40000 },
-  { score: 550, rank: 144000 },
-  { score: 500, rank: 209000 },
-  { score: 450, rank: 290000 },
-  { score: 400, rank: 390000 },
-  { score: 350, rank: 540000 },
-  { score: 300, rank: 690000 },
-  { score: 250, rank: 850000 },
-  { score: 200, rank: 1050000 },
-  { score: 144, rank: 1200000 },
-  { score: 100, rank: 1620000 },
-  { score: 50, rank: 2060000 },
-  { score: 0, rank: 2200000 },
-];
 
 const countrySuggestions = [
   { label: "Kyrgyzstan", href: "/mbbs-abroad/kyrgyzstan" },
@@ -49,85 +32,43 @@ const countrySuggestions = [
 
 const rankFormatter = new Intl.NumberFormat("en-IN");
 
-function estimateRank(score: number) {
-  if (score < 0) return null;
-  if (score >= rankAnchors[0].score) return rankAnchors[0].rank;
+function formatEstimatedAir(prediction: NeetRankPrediction | null) {
+  if (!prediction) return "--";
 
-  const lastAnchor = rankAnchors[rankAnchors.length - 1];
-  if (score <= lastAnchor.score) return lastAnchor.rank;
-
-  for (let index = 0; index < rankAnchors.length - 1; index += 1) {
-    const upperAnchor = rankAnchors[index];
-    const lowerAnchor = rankAnchors[index + 1];
-
-    if (score <= upperAnchor.score && score >= lowerAnchor.score) {
-      const scoreProgress =
-        (upperAnchor.score - score) / (upperAnchor.score - lowerAnchor.score);
-      const rankEstimate =
-        upperAnchor.rank + scoreProgress * (lowerAnchor.rank - upperAnchor.rank);
-
-      return Math.round(rankEstimate);
-    }
-  }
-
-  return lastAnchor.rank;
+  return `AIR ${rankFormatter.format(prediction.estimatedRank)}`;
 }
 
-function getRankZone(rank: number, score: number) {
-  let percentage = 0.18;
-  let minimumSpread = 30000;
-
-  if (score >= 700) {
-    percentage = 0.08;
-    minimumSpread = 35;
-  } else if (score >= 650) {
-    percentage = 0.1;
-    minimumSpread = 500;
-  } else if (score >= 550) {
-    percentage = 0.12;
-    minimumSpread = 2500;
-  } else if (score >= 400) {
-    percentage = 0.15;
-    minimumSpread = 10000;
+function getQualificationBadgeClasses(
+  status: NeetRankPrediction["qualificationStatus"] | undefined
+) {
+  if (status === "likely-qualified") {
+    return "border-[#00C896]/25 bg-[#ECFDF7] text-[#064E3B]";
   }
 
-  const spread = Math.max(Math.round(rank * percentage), minimumSpread);
-  const bestRank = Math.max(1, rank - spread);
-  const broadRank = rank + spread;
+  if (status === "borderline") {
+    return "border-amber-200 bg-amber-50 text-amber-800";
+  }
 
-  return `${rankFormatter.format(bestRank)} - ${rankFormatter.format(broadRank)}`;
+  if (status === "not-qualified") {
+    return "border-red-200 bg-red-50 text-red-700";
+  }
+
+  return "border-slate-200 bg-slate-50 text-[#081B35]";
 }
 
-function getScoreZone(score: number | null) {
-  if (score === null || Number.isNaN(score)) return "Enter a valid score";
-  if (score > 720) return "Score out of range";
-  if (score < 0) return "Beyond 22 lakh";
-  if (score >= 600) return "High score zone";
-  if (score >= 350) return "Middle score zone";
-  return "Lower score zone";
-}
+function getBulletItems(text: string) {
+  return text
+    .split(". ")
+    .map((item, index, items) => {
+      const trimmedItem = item.trim();
 
-function getSuggestedNextStep(score: number | null) {
-  if (score === null || Number.isNaN(score)) {
-    return "Enter your NEET score to see your likely admission pathway.";
-  }
+      if (!trimmedItem) return "";
 
-  if (score >= 600 && score <= 720) {
-    return "India counselling options may be explored seriously.";
-  }
-
-  if (score >= 350 && score <= 720) {
-    return "Keep India and MBBS abroad backup options open.";
-  }
-
-  return "Check eligibility and explore guided MBBS abroad options.";
-}
-
-function formatEstimatedAir(rank: number | null, score: number | null) {
-  if (score !== null && score < 0) return "Beyond 22 lakh";
-  if (rank === null) return "--";
-
-  return `AIR ${rankFormatter.format(rank)}`;
+      return index < items.length - 1 && !/[.!?]$/.test(trimmedItem)
+        ? `${trimmedItem}.`
+        : trimmedItem;
+    })
+    .filter(Boolean);
 }
 
 export default function NeetRankPredictorTool({
@@ -150,6 +91,8 @@ export default function NeetRankPredictorTool({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
+  const hasScoreInput = scoreValue.trim().length > 0;
+
   const parsedScore = useMemo(() => {
     if (!scoreValue.trim()) return null;
 
@@ -157,26 +100,42 @@ export default function NeetRankPredictorTool({
     return Number.isFinite(numericScore) ? numericScore : null;
   }, [scoreValue]);
 
-  const validationError =
-    parsedScore !== null && parsedScore > 720
-      ? "NEET score cannot be more than 720."
-      : "";
+  const validationError = useMemo(() => {
+    if (!hasScoreInput) return "";
 
-  const estimatedRank = useMemo(() => {
-    if (parsedScore === null || validationError) return null;
+    if (parsedScore === null) {
+      return "Enter a valid NEET score between -10 and 720.";
+    }
 
-    return estimateRank(parsedScore);
-  }, [parsedScore, validationError]);
+    if (parsedScore < -10 || parsedScore > 720) {
+      return "Enter a NEET score between -10 and 720.";
+    }
 
-  const likelyRankZone = useMemo(() => {
-    if (validationError) return "--";
-    if (parsedScore !== null && parsedScore < 0) return "Beyond 22 lakh";
-    if (estimatedRank === null || parsedScore === null) return "--";
+    return "";
+  }, [hasScoreInput, parsedScore]);
 
-    return getRankZone(estimatedRank, parsedScore);
-  }, [estimatedRank, parsedScore, validationError]);
+  const prediction = useMemo(() => {
+    if (!hasScoreInput || parsedScore === null || validationError) return null;
 
-  const sliderScore = Math.min(720, Math.max(0, parsedScore ?? 500));
+    return predictNeetRankRangeFromMarks(parsedScore);
+  }, [hasScoreInput, parsedScore, validationError]);
+
+  const sliderScore = Math.min(720, Math.max(-10, parsedScore ?? 500));
+  const estimateLabel = formatEstimatedAir(prediction);
+  const rankRangeLabel = prediction?.rankZoneLabel ?? "--";
+  const showCountryOptions =
+    prediction?.qualificationStatus !== "not-qualified";
+  const showQualificationStatus = Boolean(prediction && prediction.marks < 160);
+  const admissionChanceText =
+    prediction?.admissionChanceSummary ??
+    "Enter your NEET score to see the likely admission chance summary.";
+  const suggestedNextStepText =
+    prediction?.suggestedNextStep ??
+    "Enter your NEET score to see your likely admission pathway.";
+  const admissionChanceBullets = useMemo(
+    () => getBulletItems(admissionChanceText),
+    [admissionChanceText]
+  );
 
   if (!isOpen) return null;
 
@@ -188,21 +147,98 @@ export default function NeetRankPredictorTool({
   if (!portalRoot) return null;
 
   return createPortal(
-    <div
-      className="fixed inset-0 isolate flex items-center justify-center overflow-y-auto bg-[#020817]/80 p-3 backdrop-blur-md sm:p-5"
-      style={{
-        zIndex: 2147483647,
-        position: "fixed",
-        inset: 0,
-        isolation: "isolate",
-      }}
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="neet-rank-predictor-title"
-    >
+    <>
+      <style>{`
+        @keyframes neetToolEnter {
+          from {
+            opacity: 0;
+            transform: perspective(1100px) rotateX(8deg) translateY(28px) scale(0.96);
+            filter: saturate(0.75) blur(8px);
+          }
+          to {
+            opacity: 1;
+            transform: perspective(1100px) rotateX(0deg) translateY(0) scale(1);
+            filter: saturate(1) blur(0);
+          }
+        }
+
+        @keyframes neetResultLift {
+          from {
+            opacity: 0;
+            transform: perspective(900px) rotateX(7deg) translateY(18px);
+          }
+          to {
+            opacity: 1;
+            transform: perspective(900px) rotateX(0.8deg) translateY(0);
+          }
+        }
+
+        @keyframes neetSheen {
+          0% { transform: translateX(-130%) skewX(-18deg); opacity: 0; }
+          18% { opacity: 0.35; }
+          54% { opacity: 0.15; }
+          100% { transform: translateX(145%) skewX(-18deg); opacity: 0; }
+        }
+
+        @keyframes neetCursorBlink {
+          0%, 42% { opacity: 1; }
+          43%, 100% { opacity: 0; }
+        }
+
+        .neet-tool-shell {
+          animation: neetToolEnter 460ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+          transform-style: preserve-3d;
+        }
+
+        .neet-stat-card {
+          animation: neetResultLift 520ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+          transform-style: preserve-3d;
+        }
+
+        .neet-plan-window {
+          animation: neetResultLift 620ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+          transform-style: preserve-3d;
+        }
+
+        .neet-plan-window::before {
+          content: "";
+          position: absolute;
+          inset: -24% auto -24% -34%;
+          width: 42%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.78), transparent);
+          animation: neetSheen 3.8s ease-in-out 0.45s infinite;
+          pointer-events: none;
+        }
+
+        .neet-type-cursor {
+          animation: neetCursorBlink 720ms steps(1) infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .neet-tool-shell,
+          .neet-stat-card,
+          .neet-plan-window,
+          .neet-plan-window::before,
+          .neet-type-cursor {
+            animation: none;
+          }
+        }
+      `}</style>
       <div
-        className="relative w-full max-w-4xl overflow-hidden rounded-[28px] border border-white/10 bg-white shadow-[0_30px_110px_rgba(2,8,23,0.45)]"
+        className="fixed inset-0 isolate flex items-center justify-center overflow-y-auto bg-[#020817]/80 p-3 backdrop-blur-md sm:p-5"
+        style={{
+          zIndex: 2147483647,
+          position: "fixed",
+          inset: 0,
+          isolation: "isolate",
+        }}
+        onClick={onClose}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="neet-rank-predictor-title"
+      >
+      <div
+        className="neet-tool-shell relative w-full max-w-4xl overflow-hidden rounded-[28px] border border-white/10 bg-white shadow-[0_30px_110px_rgba(2,8,23,0.45)]"
         style={{ zIndex: 2147483647 }}
         onClick={(event) => event.stopPropagation()}
       >
@@ -235,40 +271,42 @@ export default function NeetRankPredictorTool({
                 NEET Rank Predictor
               </h2>
               <p className="mt-3 max-w-sm text-sm leading-6 text-white/75">
-                Enter one score and see an estimated AIR, score zone, and planning
-                direction instantly.
+                Enter one score and see a hard-paper adjusted AIR, predicted
+                rank range, and counselling direction instantly.
               </p>
 
               <div className="mt-7 rounded-2xl border border-white/12 bg-white/[0.08] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
-                  Estimated AIR
+                  Hard-paper adjusted estimate
                 </p>
                 <p className="mt-3 text-4xl font-black tracking-tight text-white sm:text-5xl">
-                  {formatEstimatedAir(estimatedRank, parsedScore)}
+                  {estimateLabel}
                 </p>
                 <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#00C896]/15 px-3 py-1.5 text-xs font-semibold text-[#9EF5DC]">
                   <TrendingUp size={14} />
-                  {likelyRankZone}
+                  {rankRangeLabel}
                 </div>
               </div>
 
-              <div className="mt-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
-                  Recommended countries
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {countrySuggestions.map((country) => (
-                    <Link
-                      key={country.href}
-                      href={country.href}
-                      onClick={onClose}
-                      className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white transition hover:border-[#00C896]/60 hover:bg-[#00C896]/15"
-                    >
-                      {country.label}
-                    </Link>
-                  ))}
+              {showCountryOptions ? (
+                <div className="mt-6">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/55">
+                    Popular MBBS abroad pages
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {countrySuggestions.map((country) => (
+                      <Link
+                        key={country.href}
+                        href={country.href}
+                        onClick={onClose}
+                        className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white transition hover:border-[#00C896]/60 hover:bg-[#00C896]/15"
+                      >
+                        {country.label}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ) : null}
             </div>
           </div>
 
@@ -283,23 +321,25 @@ export default function NeetRankPredictorTool({
                   name="neetRankScore"
                   type="number"
                   inputMode="numeric"
+                  min={-10}
+                  max={720}
                   value={scoreValue}
                   onChange={(event) => setScoreValue(event.target.value)}
-                  placeholder="Enter score out of 720"
+                  placeholder="Enter score from -10 to 720"
                   className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-lg font-bold text-[#081B35] outline-none transition focus:border-[#00C896] focus:bg-white focus:ring-4 focus:ring-[#00C896]/15"
                 />
               </label>
 
               <div className="mt-4">
                 <div className="mb-2 flex items-center justify-between text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-                  <span>0</span>
+                  <span>-10</span>
                   <span>720</span>
                 </div>
                 <input
                   id="neet-rank-score-range"
                   name="neetRankScoreRange"
                   type="range"
-                  min={0}
+                  min={-10}
                   max={720}
                   value={sliderScore}
                   onChange={(event) => setScoreValue(event.target.value)}
@@ -315,38 +355,78 @@ export default function NeetRankPredictorTool({
               ) : null}
             </div>
 
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Likely Rank Zone
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              <div
+                className="neet-stat-card min-w-0 rounded-2xl border border-white/80 bg-white/90 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.12),inset_0_1px_0_rgba(255,255,255,0.85)] backdrop-blur transition duration-300 hover:-translate-y-0.5"
+                style={{ animationDelay: "70ms" }}
+              >
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  AIR
                 </p>
-                <p className="mt-2 text-lg font-extrabold text-[#081B35]">
-                  {likelyRankZone}
+                <p className="mt-2 truncate text-lg font-black text-[#081B35] sm:text-xl">
+                  {estimateLabel}
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Score Zone
+              <div
+                className="neet-stat-card min-w-0 rounded-2xl border border-white/80 bg-white/90 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.12),inset_0_1px_0_rgba(255,255,255,0.85)] backdrop-blur transition duration-300 hover:-translate-y-0.5"
+                style={{ animationDelay: "130ms" }}
+              >
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  Predicted rank range
                 </p>
-                <p className="mt-2 text-lg font-extrabold text-[#081B35]">
-                  {getScoreZone(parsedScore)}
+                <p className="mt-2 truncate text-lg font-black text-[#081B35] sm:text-xl">
+                  {rankRangeLabel}
                 </p>
               </div>
             </div>
 
-            <div className="mt-4 rounded-2xl border border-[#00C896]/20 bg-[#ECFDF7] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#047857]">
-                Suggested next step
-              </p>
-              <p className="mt-2 text-sm font-semibold leading-6 text-[#064E3B]">
-                {getSuggestedNextStep(parsedScore)}
-              </p>
+            {showQualificationStatus ? (
+              <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+                <span
+                  className={`inline-flex w-fit items-center rounded-full border px-3 py-1.5 text-xs font-extrabold ${getQualificationBadgeClasses(
+                    prediction?.qualificationStatus
+                  )}`}
+                >
+                  {prediction?.qualificationLabel}
+                </span>
+                <p className="mt-3 text-sm font-semibold leading-6 text-[#334155]">
+                  {prediction?.qualificationNote}
+                </p>
+              </div>
+            ) : null}
+
+            <div className="neet-plan-window relative mt-4 overflow-hidden rounded-2xl border border-[#00C896]/20 bg-[linear-gradient(145deg,#ffffff_0%,#ecfdf7_48%,#e8f6ff_100%)] p-4 shadow-[0_24px_58px_rgba(8,27,53,0.16),inset_0_1px_0_rgba(255,255,255,0.9)]">
+              <div className="relative grid gap-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#047857]">
+                    Admission chance summary
+                  </p>
+                  <ul className="mt-3 space-y-2 text-sm font-semibold leading-6 text-[#064E3B]">
+                    {admissionChanceBullets.map((item) => (
+                      <li key={item} className="flex gap-2">
+                        <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#00C896] shadow-[0_0_10px_rgba(0,200,150,0.65)]" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="border-t border-[#00C896]/20 pt-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0B2A52]">
+                    Suggested next step
+                  </p>
+                  <TypewriterNextStep
+                    key={suggestedNextStepText}
+                    text={suggestedNextStepText}
+                  />
+                </div>
+              </div>
             </div>
 
-            <p className="mt-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs leading-5 text-slate-500">
-              This is only an estimated prediction for guidance; actual NEET rank,
-              cutoff, and admission chances may differ.
+            <p className="mt-3 overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border border-slate-200 bg-white/80 px-3 py-2 text-[11px] font-semibold text-slate-500">
+              Estimate only; final rank and cut-off depend on NTA result and
+              counselling rules.
             </p>
 
             <div className="mt-5 grid gap-2 sm:grid-cols-3">
@@ -381,7 +461,52 @@ export default function NeetRankPredictorTool({
           </div>
         </div>
       </div>
-    </div>,
+      </div>
+    </>,
     portalRoot
+  );
+}
+
+function TypewriterNextStep({ text }: { text: string }) {
+  const [typedText, setTypedText] = useState("");
+  const typedBullets = useMemo(() => getBulletItems(typedText), [typedText]);
+
+  useEffect(() => {
+    let typedLength = 0;
+    const charactersPerTick = Math.max(1, Math.ceil(text.length / 130));
+
+    const typewriter = window.setInterval(() => {
+      typedLength = Math.min(text.length, typedLength + charactersPerTick);
+      setTypedText(text.slice(0, typedLength));
+
+      if (typedLength >= text.length) {
+        window.clearInterval(typewriter);
+      }
+    }, 18);
+
+    return () => window.clearInterval(typewriter);
+  }, [text]);
+
+  return (
+    <>
+      <ul className="mt-3 space-y-2 text-sm font-semibold leading-6 text-[#081B35]">
+        {typedBullets.length > 0 ? (
+          typedBullets.map((item) => (
+            <li key={item} className="flex gap-2">
+              <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#33A6FF] shadow-[0_0_10px_rgba(51,166,255,0.6)]" />
+              <span>{item}</span>
+            </li>
+          ))
+        ) : (
+          <li className="flex gap-2">
+            <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#33A6FF] shadow-[0_0_10px_rgba(51,166,255,0.6)]" />
+            <span className="neet-type-cursor inline-block h-4 w-2 rounded-sm bg-[#081B35]" />
+          </li>
+        )}
+      </ul>
+      {typedText.length < text.length ? (
+        <span className="neet-type-cursor mt-1 inline-block h-4 w-2 rounded-sm bg-[#081B35]" />
+      ) : null}
+    </>
   );
 }

@@ -20,6 +20,7 @@ import {
 
 import type { NeetPathwayResult } from "../../data/neetPathwayGuide";
 import {
+  formatNeetEstimatedRank,
   getNeetPathwayEmptyState,
   getNeetPathwayInvalidState,
 } from "../../data/neetPathwayGuide";
@@ -36,9 +37,9 @@ type NeetDecisionCenterProps = {
 };
 
 const pathwayPreview = [
-  { label: "Score Band", icon: Medal },
-  { label: "India Route", icon: Landmark },
-  { label: "Abroad / Backup", icon: Globe2 },
+  { label: "Rank Range", icon: Medal },
+  { label: "Admission Chance", icon: Landmark },
+  { label: "Next Step", icon: Globe2 },
 ];
 
 export default function NeetDecisionCenter({
@@ -54,23 +55,21 @@ export default function NeetDecisionCenter({
   return (
     <section
       id="neet-decision-center"
-      className="relative isolate overflow-hidden rounded-[30px] border border-cyan-300/45 bg-[radial-gradient(circle_at_14%_0%,rgba(90,75,255,0.34),transparent_30%),radial-gradient(circle_at_92%_10%,rgba(0,200,150,0.22),transparent_28%),linear-gradient(145deg,#030b26_0%,#06245a_50%,#07143a_100%)] p-3.5 text-white shadow-[0_30px_85px_rgba(3,12,45,0.5),inset_0_1px_0_rgba(255,255,255,0.17)] sm:rounded-[36px] sm:p-6"
+      className="relative isolate overflow-hidden rounded-[30px] border border-cyan-200/60 bg-[radial-gradient(circle_at_14%_0%,rgba(90,75,255,0.38),transparent_30%),radial-gradient(circle_at_92%_10%,rgba(0,200,150,0.28),transparent_28%),linear-gradient(145deg,#030b26_0%,#06245a_50%,#07143a_100%)] p-3.5 text-white shadow-[0_34px_100px_rgba(3,12,45,0.56),0_0_45px_rgba(34,211,238,0.28),inset_0_1px_0_rgba(255,255,255,0.2)] sm:rounded-[36px] sm:p-6"
     >
       <div className="pointer-events-none absolute inset-0 opacity-[0.1] [background-image:linear-gradient(rgba(255,255,255,.28)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.28)_1px,transparent_1px)] [background-size:26px_26px]" />
-      <div className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full border border-cyan-300/20 bg-blue-400/10 blur-[1px]" />
+      <div className="pointer-events-none absolute right-0 top-0 h-52 w-52 translate-x-1/3 -translate-y-1/3 rounded-full border border-cyan-300/20 bg-blue-400/10 blur-[1px]" />
       <Sparkles className="pointer-events-none absolute right-6 top-7 h-5 w-5 animate-pulse text-cyan-200" />
 
       <div className="relative">
         <div className="grid gap-4 sm:grid-cols-[1fr_150px] sm:items-center">
-          <div>
-            <p className="inline-flex items-center gap-2 rounded-lg border border-cyan-300/35 bg-[linear-gradient(135deg,rgba(79,70,229,.76),rgba(15,76,255,.72))] px-3 py-2 text-[10px] font-black uppercase tracking-[0.12em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,.25),0_10px_24px_rgba(15,76,255,.3)] sm:text-xs">
+          <div className="min-w-0 text-center sm:text-left">
+            <p className="mx-auto inline-flex items-center gap-2 rounded-lg border border-cyan-200/60 bg-[linear-gradient(135deg,rgba(79,70,229,.9),rgba(15,76,255,.8)_55%,rgba(0,200,150,.72))] px-3 py-2 text-[10px] font-black uppercase tracking-[0.12em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,.32),0_0_28px_rgba(34,211,238,.48),0_12px_26px_rgba(15,76,255,.42)] ring-1 ring-cyan-200/20 sm:mx-0 sm:text-xs">
               <Sparkles className="h-4 w-4" />
               NEET Decision Center
             </p>
-            <h2 className="mt-4 text-[29px] font-black leading-[1.02] tracking-[-0.045em] text-white sm:text-[38px]">
-              Find Your MBBS
-              <br />
-              Admission{" "}
+            <h2 className="mt-4 whitespace-nowrap text-[15px] font-black leading-[1.08] text-white sm:text-[34px] md:text-[38px]">
+              Find Your MBBS Admission{" "}
               <span className="bg-gradient-to-r from-emerald-300 to-cyan-300 bg-clip-text text-transparent">
                 Pathway
               </span>
@@ -109,7 +108,7 @@ export default function NeetDecisionCenter({
           >
             Your NEET Score
           </label>
-          <div className="mt-2 grid gap-2 sm:grid-cols-[1fr_auto]">
+          <div className="mt-2 grid grid-cols-2 gap-2">
             <div className="relative">
               <PencilLine className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#315aa7]" />
               <input
@@ -117,24 +116,27 @@ export default function NeetDecisionCenter({
                 id="home-hero-neet-score"
                 name="homeHeroNeetScore"
                 type="number"
-                min={1}
+                min={-10}
                 max={720}
                 inputMode="numeric"
                 value={neetScore}
                 onChange={(event) => onScoreChange(event.target.value)}
                 placeholder="e.g. 512"
-                className="w-full rounded-[14px] border border-white/70 bg-[linear-gradient(145deg,#ffffff,#edf3ff)] py-3 pl-10 pr-14 text-xl font-black text-[#071B44] outline-none shadow-[inset_0_2px_4px_rgba(15,45,91,.08),0_10px_25px_rgba(0,0,0,.18)] [appearance:textfield] placeholder:font-semibold placeholder:text-slate-400 focus:border-cyan-300 focus:ring-4 focus:ring-cyan-300/15 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="h-9 w-full rounded-[13px] border border-white/70 bg-[linear-gradient(145deg,#ffffff,#edf3ff)] py-1.5 pl-8 pr-10 text-sm font-black text-[#071B44] outline-none shadow-[inset_0_2px_4px_rgba(15,45,91,.08),0_10px_25px_rgba(0,0,0,.18)] [appearance:textfield] placeholder:font-semibold placeholder:text-slate-400 focus:border-cyan-300 focus:ring-4 focus:ring-cyan-300/15 sm:h-12 sm:pl-10 sm:pr-14 sm:text-xl [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-500">
+              <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500 sm:right-3 sm:text-sm">
                 / 720
               </span>
             </div>
             <button
               type="submit"
-              className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-[14px] border border-cyan-200/70 bg-[linear-gradient(135deg,#0F8CFF,#2454f5_52%,#8b3dff)] px-4 text-xs font-black text-white shadow-[inset_0_1px_0_rgba(255,255,255,.4),0_12px_28px_rgba(60,61,255,.38)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_34px_rgba(60,61,255,.52)]"
+              className="group relative inline-flex h-9 w-full items-center justify-center gap-1.5 overflow-hidden rounded-[13px] border border-cyan-100/80 bg-[linear-gradient(135deg,#08a8ff,#2454f5_48%,#7c3dff)] px-2 text-white shadow-[inset_0_1px_0_rgba(255,255,255,.45),0_10px_22px_rgba(60,61,255,.36),0_0_16px_rgba(34,211,238,.22)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_30px_rgba(60,61,255,.52)] sm:h-12 sm:gap-2 sm:px-4"
             >
-              Get My Pathway
-              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+              <span className="absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-18deg] bg-white/30 blur-md transition duration-700 group-hover:left-[115%]" />
+              <span className="relative whitespace-nowrap text-[11px] font-black leading-none sm:text-xs">
+                Get My Pathway
+              </span>
+              <ArrowRight className="relative h-3.5 w-3.5 shrink-0 transition group-hover:translate-x-1 sm:h-4 sm:w-4" />
             </button>
           </div>
           <div className="mt-2 flex items-center justify-between gap-2">
@@ -145,7 +147,7 @@ export default function NeetDecisionCenter({
             >
               {isInvalid
                 ? getNeetPathwayInvalidState
-                : "Score should be between 1 and 720."}
+                : "Score should be between -10 and 720."}
             </p>
             {neetPathway && (
               <button
@@ -209,32 +211,43 @@ export default function NeetDecisionCenter({
         ) : (
           <div className="mt-3 space-y-2.5">
             <div className="relative overflow-hidden rounded-[18px] border border-cyan-300/60 bg-[linear-gradient(135deg,rgba(0,156,255,.22),rgba(15,76,255,.12))] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,.14),0_0_26px_rgba(0,156,255,.18)]">
-              <Medal className="absolute right-3 top-1/2 h-12 w-12 -translate-y-1/2 text-amber-300 drop-shadow-[0_0_12px_rgba(251,191,36,.55)]" />
-              <div className="grid grid-cols-[92px_1fr] gap-3 pr-12">
-                <div className="border-r border-blue-200/35">
+              <Medal className="absolute right-1 top-1 h-14 w-14 text-amber-300/35 drop-shadow-[0_0_18px_rgba(251,191,36,.7)]" />
+              <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+                <div className="min-h-[72px] rounded-[15px] border border-cyan-200/25 bg-white/[0.06] p-2 shadow-[inset_0_1px_0_rgba(255,255,255,.1)] sm:p-3">
                   <p className="text-[9px] font-black uppercase tracking-[0.12em] text-cyan-300">
-                    Score Band
+                    Marks
                   </p>
-                  <p className="mt-1 text-xl font-black text-cyan-300">
+                  <p className="mt-1 text-lg font-black leading-tight text-cyan-200 sm:text-xl">
                     {neetPathway.bandLabel}
                   </p>
                 </div>
-                <div>
+                <div className="min-h-[72px] rounded-[15px] border border-cyan-200/25 bg-white/[0.06] p-2 shadow-[inset_0_1px_0_rgba(255,255,255,.1)] sm:p-3">
                   <p className="text-[9px] font-black uppercase tracking-[0.12em] text-cyan-300">
-                    Pathway Headline
+                    Est. AIR
                   </p>
-                  <p className="mt-1 text-[11px] font-black leading-4 text-white">
-                    {neetPathway.headline}
+                  <p className="mt-1 text-sm font-black leading-tight text-white sm:text-base">
+                    {formatNeetEstimatedRank(neetPathway.estimatedRank)}
+                  </p>
+                </div>
+                <div className="min-h-[72px] min-w-0 rounded-[15px] border border-cyan-200/25 bg-white/[0.06] p-2 shadow-[inset_0_1px_0_rgba(255,255,255,.1)] sm:p-3">
+                  <p className="text-[9px] font-black uppercase tracking-[0.12em] text-cyan-300">
+                    Rank Range
+                  </p>
+                  <p className="mt-1 break-words text-[10px] font-black leading-3 text-white sm:text-xs sm:leading-4">
+                    {neetPathway.rankZoneLabel}
                   </p>
                 </div>
               </div>
+              <p className="mt-3 text-[10px] font-bold leading-4 text-blue-50/85">
+                {neetPathway.headline}
+              </p>
             </div>
 
-            <div className="grid gap-2 sm:grid-cols-2">
+            <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
               {[
                 {
-                  label: "Likely India Route",
-                  value: neetPathway.indiaRoute,
+                  label: "Admission Chance Summary",
+                  value: neetPathway.admissionChanceSummary,
                   icon: Landmark,
                   style: "border-emerald-400/55 bg-emerald-500/10 text-emerald-200",
                 },
@@ -251,21 +264,21 @@ export default function NeetDecisionCenter({
                   style: "border-violet-400/55 bg-violet-500/10 text-violet-200",
                 },
                 {
-                  label: "Recommended Next Step",
-                  value: neetPathway.nextStep,
+                  label: "Suggested Next Step",
+                  value: neetPathway.suggestedNextStep,
                   icon: Workflow,
                   style: "border-teal-400/55 bg-teal-500/10 text-teal-200",
                 },
               ].map(({ label, value, icon: Icon, style }) => (
                 <div
                   key={label}
-                  className={`rounded-[16px] border p-3 shadow-[inset_0_1px_0_rgba(255,255,255,.1)] ${style}`}
+                  className={`min-h-[112px] rounded-[16px] border p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,.1)] sm:p-3 ${style}`}
                 >
-                  <p className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.08em]">
-                    <Icon className="h-4 w-4" />
+                  <p className="flex items-center gap-1.5 text-[8px] font-black uppercase leading-tight tracking-[0.08em] sm:gap-2 sm:text-[9px]">
+                    <Icon className="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
                     {label}
                   </p>
-                  <p className="mt-2 line-clamp-5 text-[9px] font-medium leading-[1.45] text-white/88">
+                  <p className="mt-2 line-clamp-5 text-[8px] font-medium leading-[1.45] text-white/88 sm:text-[9px]">
                     {value}
                   </p>
                 </div>

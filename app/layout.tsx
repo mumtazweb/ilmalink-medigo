@@ -6,6 +6,7 @@ import { Inter, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import Footer from "./components/Footer";
 import FloatingContactButton from "./components/FloatingContactButton";
 import JsonLd from "./components/JsonLd";
+import NeetFloatingPopup from "./components/NeetFloatingPopup";
 import UniversalTranslator from "./components/UniversalTranslator";
 import { ilmaLinkEntityData } from "./data/geo";
 import {
@@ -105,6 +106,7 @@ export default function RootLayout({
         />
 
         <FloatingContactButton />
+        <NeetFloatingPopup />
         <div id="modal-root" />
 
         <Analytics />

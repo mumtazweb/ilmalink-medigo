@@ -41,17 +41,6 @@ function getTickerLabel(item: AnnouncementItem) {
   return tickerText || getFirstWords(item.title);
 }
 
-function repeatForMarquee(items: AnnouncementItem[]) {
-  const minimumItems = 8;
-  const repeated = [...items];
-
-  while (repeated.length > 0 && repeated.length < minimumItems) {
-    repeated.push(...items);
-  }
-
-  return repeated.slice(0, Math.max(minimumItems, items.length));
-}
-
 function TickerItems({
   items,
   prefix,
@@ -135,7 +124,6 @@ export default function AnnouncementTicker() {
     };
   }, []);
 
-  const marqueeItems = useMemo(() => repeatForMarquee(items), [items]);
   const semanticItems = useMemo(() => {
     const unique = new Map<string, AnnouncementItem>();
 
@@ -147,6 +135,7 @@ export default function AnnouncementTicker() {
 
     return Array.from(unique.values());
   }, [items]);
+  const marqueeItems = semanticItems;
 
   useEffect(() => {
     return () => {
@@ -233,19 +222,8 @@ export default function AnnouncementTicker() {
           onTouchStart={pauseThenResume}
           onWheel={pauseThenResume}
         >
-          <ul className="sr-only">
-            {semanticItems.map((item) => (
-              <li key={`semantic-${item.id}`}>
-                <Link href={item.href} prefetch={item.href.startsWith("/") ? undefined : false}>
-                  {getTickerLabel(item)}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
           <div className="ticker-content absolute left-0 top-0 flex w-max whitespace-nowrap">
-            <TickerItems items={marqueeItems} prefix="first" decorative />
-            <TickerItems items={marqueeItems} prefix="second" decorative />
+            <TickerItems items={marqueeItems} prefix="visible" />
           </div>
         </div>
 

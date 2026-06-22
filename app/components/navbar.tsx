@@ -5,7 +5,7 @@ import Link from "next/link";
 import AnnouncementTicker from "./AnnouncementTicker";
 import CounsellingPopup from "./CounsellingPopup";
 import SearchModal from "./SearchModal";
-import { Phone, Menu, X, ChevronDown, Search, Send, MessageSquare, GraduationCap } from "lucide-react";
+import { Phone, Menu, X, ChevronDown, Search, MessageSquare, GraduationCap, LogIn, UserPlus } from "lucide-react";
 
 // Small inline SVG icons (under 100kb, minimal, optimized for UI)
 function IconHome() {
@@ -426,12 +426,12 @@ export default function Navbar() {
 
                   {/* Brand Text Stack - Desktop */}
                   <div className="hidden lg:flex flex-col gap-0.5">
-                    <h1 className="font-[family-name:var(--font-plus-jakarta)] text-lg font-extrabold tracking-tight text-[#081B35] leading-tight">
+                    <span className="font-[family-name:var(--font-plus-jakarta)] text-lg font-extrabold tracking-tight text-[#081B35] leading-tight">
                       ILMALINK
-                    </h1>
-                    <h2 className="font-[family-name:var(--font-plus-jakarta)] text-lg font-extrabold tracking-tight text-[#00C896] leading-tight">
+                    </span>
+                    <span className="font-[family-name:var(--font-plus-jakarta)] text-lg font-extrabold tracking-tight text-[#00C896] leading-tight">
                       MEDIGO
-                    </h2>
+                    </span>
                     <p className="text-[10px] font-medium text-slate-500 tracking-wide mt-0.5">
                       Global Medical Education
                     </p>
@@ -439,10 +439,10 @@ export default function Navbar() {
 
                   {/* Brand Text Stack - Mobile & Tablet */}
                   <div className="flex min-w-0 flex-col gap-0.5 overflow-hidden lg:hidden">
-                    <h1 className="min-w-0 truncate whitespace-nowrap font-[family-name:var(--font-plus-jakarta)] text-xs sm:text-sm font-extrabold leading-none">
+                    <span className="min-w-0 truncate whitespace-nowrap font-[family-name:var(--font-plus-jakarta)] text-xs sm:text-sm font-extrabold leading-none">
                       <span className="text-[#081B35]">ILMALINK</span>{" "}
                       <span className="text-[#00C896]">MEDIGO</span>
-                    </h1>
+                    </span>
                     <p className="truncate text-[8px] sm:text-[9px] font-medium leading-tight text-slate-500">
                       Global Medical Education
                     </p>
@@ -553,16 +553,21 @@ export default function Navbar() {
                   </span>
                 </button>
 
-                {/* Enquire Now Button */}
-                <button
-                  type="button"
-                  onClick={() => setShowCounsellingPopup(true)}
-                  className="group inline-flex h-8 flex-shrink-0 items-center gap-1 rounded-lg bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-2.5 text-xs font-semibold text-white shadow-[0_6px_16px_rgba(0,200,150,0.22)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,200,150,0.25)] sm:h-9 sm:gap-1.5 sm:px-5 sm:text-sm sm:shadow-none whitespace-nowrap"
+                <Link
+                  href="/portal/login"
+                  className="hidden h-9 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-[#0B4AA2] transition hover:border-[#1769E8]/40 hover:bg-blue-50 xl:inline-flex"
                 >
-                  <Send size={13} className="flex-shrink-0 transition group-hover:translate-x-0.5" />
-                  <span className="hidden sm:inline">Enquire Now</span>
-                  <span className="sm:hidden">Enquire</span>
-                </button>
+                  <LogIn size={14} />
+                  Student Login
+                </Link>
+                <Link
+                  href="/portal/signup"
+                  className="group inline-flex h-8 flex-shrink-0 items-center gap-1 rounded-lg bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-2.5 text-xs font-semibold text-white shadow-[0_6px_16px_rgba(0,200,150,0.22)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,200,150,0.25)] sm:h-9 sm:gap-1.5 sm:px-4 sm:text-sm sm:shadow-none whitespace-nowrap"
+                >
+                  <UserPlus size={13} className="flex-shrink-0" />
+                  <span className="hidden sm:inline">Sign Up Free</span>
+                  <span className="sm:hidden">Sign Up</span>
+                </Link>
               </div>
             </div>
           </div>
@@ -817,6 +822,24 @@ export default function Navbar() {
 
               <div className="border-t border-slate-200 bg-white p-4">
                 <div className="grid gap-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link
+                      href="/portal/login"
+                      onClick={closeMobileMenu}
+                      className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#BFD3E8] bg-[#F4F9FF] px-3 py-3 text-xs font-black text-[#0B4AA2]"
+                    >
+                      <LogIn size={14} />
+                      Student Login
+                    </Link>
+                    <Link
+                      href="/portal/signup"
+                      onClick={closeMobileMenu}
+                      className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0B4AA2] px-3 py-3 text-xs font-black text-white"
+                    >
+                      <UserPlus size={14} />
+                      Sign Up Free
+                    </Link>
+                  </div>
                   <button
                     type="button"
                     onClick={() => {
