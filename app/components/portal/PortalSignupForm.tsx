@@ -16,17 +16,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 
 import { PORTAL_AUDIENCE_TYPES } from "../../lib/portal/constants";
 import PortalAuthMessage from "./PortalAuthMessage";
 
-const serviceMessages = [
-  "Personalised NEET guidance built around your goals.",
-  "MBBS India and abroad options explained clearly.",
-  "Scholarship, document and application support.",
-  "Verified deadlines, alerts and student-safety updates.",
-];
+const serviceMessage = "Personalised NEET and medical admission guidance, clearly explained.";
 
 type SignupResponse = {
   ok?: boolean;
@@ -141,7 +136,7 @@ export default function PortalSignupForm({
               education updates.
             </p>
 
-            <TypewriterServices />
+            <ServiceSummary />
 
             <div className="mt-7 grid gap-3 sm:grid-cols-2">
               <Benefit
@@ -266,7 +261,7 @@ export default function PortalSignupForm({
               </PremiumField>
 
               {audienceType === "Other" ? (
-                <label className="block animate-[portal-signup-rise_.3s_ease-out]">
+                <label className="block">
                   <span className="mb-2 block text-xs font-black text-[#17396E]">
                     Please describe yourself
                   </span>
@@ -349,44 +344,14 @@ export default function PortalSignupForm({
   );
 }
 
-function TypewriterServices() {
-  const [messageIndex, setMessageIndex] = useState(0);
-  const [characterCount, setCharacterCount] = useState(0);
-  const [deleting, setDeleting] = useState(false);
-
-  useEffect(() => {
-    const currentMessage = serviceMessages[messageIndex];
-    const atEnd = characterCount === currentMessage.length;
-    const atStart = characterCount === 0;
-    const delay = atEnd && !deleting ? 1500 : deleting ? 24 : 42;
-
-    const timer = window.setTimeout(() => {
-      if (atEnd && !deleting) {
-        setDeleting(true);
-        return;
-      }
-      if (atStart && deleting) {
-        setDeleting(false);
-        setMessageIndex((current) => (current + 1) % serviceMessages.length);
-        return;
-      }
-      setCharacterCount((current) => current + (deleting ? -1 : 1));
-    }, delay);
-
-    return () => window.clearTimeout(timer);
-  }, [characterCount, deleting, messageIndex]);
-
+function ServiceSummary() {
   return (
-    <div
-      className="mt-6 flex min-h-20 items-center gap-3 rounded-2xl border border-white/20 bg-[#041D49]/40 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,.12)] backdrop-blur-xl"
-      aria-live="polite"
-    >
+    <div className="mt-6 flex min-h-20 items-center gap-3 rounded-2xl border border-white/20 bg-[#041D49]/40 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,.12)] backdrop-blur-xl">
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#37E2BA]/15 text-[#76FFDC]">
         <Sparkles className="h-5 w-5" />
       </span>
       <p className="text-sm font-black leading-6 text-white sm:text-base">
-        {serviceMessages[messageIndex].slice(0, characterCount)}
-        <span className="ml-0.5 inline-block h-5 w-[2px] animate-pulse bg-[#76FFDC] align-middle" />
+        {serviceMessage}
       </p>
     </div>
   );

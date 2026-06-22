@@ -142,7 +142,6 @@ select {
   border-radius: 999px;
   pointer-events: none;
   filter: blur(12px);
-  animation: portal-signup-float 8s ease-in-out infinite alternate;
 }
 
 .portal-signup-orb-one {
@@ -159,7 +158,6 @@ select {
   width: 22rem;
   height: 22rem;
   background: rgba(15, 76, 255, 0.16);
-  animation-delay: -3s;
 }
 
 .portal-signup-shell {
@@ -177,27 +175,10 @@ select {
     0 20px 44px rgba(7, 39, 91, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.98);
   transform-style: preserve-3d;
-  animation: portal-signup-arrive 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .portal-signup-shell::before {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  top: -35%;
-  left: -28%;
-  width: 32%;
-  height: 170%;
-  pointer-events: none;
-  opacity: 0;
-  transform: rotate(18deg);
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.32),
-    transparent
-  );
-  animation: portal-signup-sheen 8s ease-in-out 1.5s infinite;
+  content: none;
 }
 
 .portal-signup-benefits {
@@ -244,7 +225,6 @@ select {
   background-size: 240% 100%;
   background-clip: text;
   -webkit-background-clip: text;
-  animation: portal-signup-text-shine 4.5s linear infinite;
 }
 
 .portal-signup-depth-card {
@@ -412,59 +392,6 @@ select {
   cursor: not-allowed;
   opacity: 0.5;
   box-shadow: none;
-}
-
-@keyframes portal-signup-arrive {
-  from {
-    opacity: 0;
-    transform: translateY(28px) rotateX(2deg) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) rotateX(0) scale(1);
-  }
-}
-
-@keyframes portal-signup-float {
-  from {
-    transform: translate3d(-12px, 8px, 0) scale(0.94);
-  }
-  to {
-    transform: translate3d(22px, -18px, 0) scale(1.08);
-  }
-}
-
-@keyframes portal-signup-sheen {
-  0%,
-  72% {
-    left: -28%;
-    opacity: 0;
-  }
-  80% {
-    opacity: 1;
-  }
-  94%,
-  100% {
-    left: 118%;
-    opacity: 0;
-  }
-}
-
-@keyframes portal-signup-text-shine {
-  to {
-    background-position: -240% 0;
-  }
-}
-
-@keyframes portal-signup-rise {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 @media (min-width: 960px) {
@@ -722,9 +649,6 @@ select:focus {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .portal-signup-shell,
-  .portal-signup-orb,
-  .portal-signup-shimmer,
   .kyrgyz-liquid-hero-card::before,
   .kyrgyz-liquid-hero-card::after,
   .kyrgyz-liquid-university-card::before,
