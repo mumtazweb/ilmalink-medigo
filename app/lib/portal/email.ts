@@ -120,7 +120,7 @@ export async function sendNewStudentAlert(student: LeadAlertStudent) {
     ["Class / NEET Year", `${student.className ?? ""} ${student.neetYear ?? ""}`],
     ["State", student.state],
     ["City / District", `${student.city ?? ""} ${student.district ?? ""}`],
-    ["Category", student.category],
+    ["You are", student.category],
     ["NEET Score", student.neetScore],
     ["NEET Rank", student.neetRank],
     ["Preferred Course", student.preferredCourse],

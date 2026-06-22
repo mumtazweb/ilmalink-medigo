@@ -33,6 +33,10 @@ function getPortalSecret() {
   return secret;
 }
 
+export function assertPortalSessionConfigured() {
+  getPortalSecret();
+}
+
 function encode(value: string) {
   return Buffer.from(value, "utf8").toString("base64url");
 }

@@ -90,7 +90,7 @@ export default function PortalLoginForm({
         </h2>
         <p className="mt-1 text-sm font-medium leading-6 text-[#60738F]">
           {tab === "student"
-            ? "OTP is not required for your regular student login."
+            ? "For newly created profiles, use your mobile number and your first name as the initial password."
             : "Education Portal access must be enabled separately on your existing staff account."}
         </p>
       </div>

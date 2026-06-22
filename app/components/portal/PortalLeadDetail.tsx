@@ -65,7 +65,7 @@ export default function PortalLeadDetail({
   const fields = [
     ["Class", lead.className],
     ["NEET year", lead.neetYear],
-    ["Category", lead.category],
+    ["You are", lead.category],
     ["NEET score", lead.neetScore],
     ["NEET rank", lead.neetRank],
     ["Preferred course", lead.preferredCourse],

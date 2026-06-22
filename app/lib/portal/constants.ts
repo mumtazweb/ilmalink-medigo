@@ -31,6 +31,14 @@ export const STUDENT_INTERESTS = [
   "Scholarships / Education Support",
 ] as const;
 
+export const PORTAL_AUDIENCE_TYPES = [
+  "Student",
+  "Teacher",
+  "Parent",
+  "NEET Aspirant",
+  "Other",
+] as const;
+
 export function isPortalStaffRole(value: unknown): value is PortalStaffRole {
   return (
     typeof value === "string" &&

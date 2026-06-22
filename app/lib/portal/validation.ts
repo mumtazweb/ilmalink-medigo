@@ -1,4 +1,5 @@
 import {
+  PORTAL_AUDIENCE_TYPES,
   STUDENT_INTERESTS,
   STUDENT_STATUSES,
   type StudentStatus,
@@ -42,6 +43,26 @@ export function cleanText(value: unknown, maxLength = 191) {
 export function cleanOptionalText(value: unknown, maxLength = 191) {
   const text = cleanText(value, maxLength);
   return text || null;
+}
+
+export function normalizePortalAudience(
+  value: unknown,
+  otherValue: unknown
+) {
+  const audience = cleanText(value, 50);
+
+  if (
+    !PORTAL_AUDIENCE_TYPES.includes(
+      audience as (typeof PORTAL_AUDIENCE_TYPES)[number]
+    )
+  ) {
+    return null;
+  }
+
+  if (audience !== "Other") return audience;
+
+  const customAudience = cleanText(otherValue, 40);
+  return customAudience ? `Other: ${customAudience}` : null;
 }
 
 export function validatePassword(value: unknown) {

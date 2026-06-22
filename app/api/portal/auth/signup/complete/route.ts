@@ -9,13 +9,11 @@ import {
   readJsonObject,
 } from "../../../../../lib/portal/request";
 import { setStudentPortalSession } from "../../../../../lib/portal/session";
+import { assertPortalSessionConfigured } from "../../../../../lib/portal/token";
 import {
-  cleanOptionalText,
   cleanText,
-  normalizeEmail,
   normalizeIndianMobile,
-  normalizeInterests,
-  validatePassword,
+  normalizePortalAudience,
 } from "../../../../../lib/portal/validation";
 
 async function createLeadCode() {
@@ -51,131 +49,122 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const passwordResult = validatePassword(body.password);
-  if (!passwordResult.ok) {
-    return NextResponse.json(
-      { message: passwordResult.message },
-      { status: 400 }
-    );
-  }
-  if (passwordResult.password !== String(body.confirmPassword ?? "")) {
-    return NextResponse.json(
-      { message: "Password and confirm password do not match." },
-      { status: 400 }
-    );
-  }
-
   const name = cleanText(body.name, 120);
-  const emailInput = cleanText(body.email, 191);
-  const email = emailInput ? normalizeEmail(emailInput) : null;
-  const interests = normalizeInterests(body.interests);
-  const whatsappAvailable = cleanText(body.whatsappAvailable, 20);
-  const whatsappNumber =
-    whatsappAvailable === "same"
-      ? mobile
-      : whatsappAvailable === "different"
-        ? normalizeIndianMobile(body.whatsappNumber)
-        : null;
+  const firstName = name.split(/\s+/)[0] ?? "";
+  const audience = normalizePortalAudience(
+    body.audienceType,
+    body.otherAudience
+  );
 
-  if (name.length < 2) {
+  if (name.length < 2 || firstName.length < 2) {
     return NextResponse.json(
-      { message: "Enter the student's full name." },
+      { message: "Enter your name. The first name must have at least 2 characters." },
       { status: 400 }
     );
   }
-  if (emailInput && !email) {
-    return NextResponse.json(
-      { message: "Enter a valid email address or leave it blank." },
-      { status: 400 }
-    );
-  }
-  if (!["same", "different", "none"].includes(whatsappAvailable)) {
-    return NextResponse.json(
-      { message: "Select a WhatsApp preference." },
-      { status: 400 }
-    );
-  }
-  if (whatsappAvailable === "different" && !whatsappNumber) {
-    return NextResponse.json(
-      { message: "Enter a valid WhatsApp number." },
-      { status: 400 }
-    );
-  }
-  if (interests.length === 0) {
-    return NextResponse.json(
-      { message: "Select at least one guidance interest." },
-      { status: 400 }
-    );
-  }
-
-  const duplicate = await prisma.studentAccount.findFirst({
-    where: {
-      OR: [
-        { mobile },
-        ...(email ? [{ email }] : []),
-      ],
-    },
-    select: { mobile: true, email: true },
-  });
-  if (duplicate) {
+  if (!audience) {
     return NextResponse.json(
       {
         message:
-          "A student profile already exists with this mobile number or email. Please log in or reset the password.",
+          body.audienceType === "Other"
+            ? "Tell us who you are in the Other field."
+            : "Select whether you are a student, teacher, parent, NEET aspirant, or other.",
       },
-      { status: 409 }
+      { status: 400 }
     );
   }
-
-  const hashedPassword = await bcrypt.hash(passwordResult.password, 12);
-  const leadCode = await createLeadCode();
-  const student = await prisma.studentAccount.create({
-    data: {
-      leadCode,
-      name,
-      mobile,
-      email,
-      password: hashedPassword,
-      mobileVerified: false,
-      whatsappAvailable,
-      whatsappNumber,
-      interests: JSON.stringify(interests),
-      className: cleanOptionalText(body.className, 80),
-      neetYear: cleanOptionalText(body.neetYear, 20),
-      state: cleanOptionalText(body.state, 80),
-      city: cleanOptionalText(body.city, 80),
-      district: cleanOptionalText(body.district, 80),
-      category: cleanOptionalText(body.category, 50),
-      neetScore: cleanOptionalText(body.neetScore, 20),
-      neetRank: cleanOptionalText(body.neetRank, 30),
-      preferredCourse: cleanOptionalText(body.preferredCourse, 100),
-      preferredCountry: cleanOptionalText(body.preferredCountry, 100),
-      activities: {
-        create: {
-          action: "student_signup",
-          note: "Student created a free profile without mobile verification.",
-          createdBy: studentActor(leadCode),
-        },
-      },
-    },
-  });
-
-  await setStudentPortalSession(student.id);
 
   try {
-    await sendNewStudentAlert(student);
+    // Validate session configuration before touching the database. Creating the
+    // student first would leave an account behind while the browser receives a
+    // server error if signed sessions are not configured.
+    assertPortalSessionConfigured();
+
+    const duplicate = await prisma.studentAccount.findFirst({
+      where: { mobile },
+      select: { mobile: true },
+    });
+    if (duplicate) {
+      return NextResponse.json(
+        {
+          message:
+            "This mobile number is already registered. Please use Student Login instead.",
+          code: "MOBILE_EXISTS",
+        },
+        { status: 409 }
+      );
+    }
+
+    const hashedPassword = await bcrypt.hash(firstName, 12);
+    const leadCode = await createLeadCode();
+    const student = await prisma.studentAccount.create({
+      data: {
+        leadCode,
+        name,
+        mobile,
+        email: null,
+        password: hashedPassword,
+        mobileVerified: false,
+        whatsappAvailable: "same",
+        whatsappNumber: mobile,
+        interests: JSON.stringify([]),
+        category: audience,
+        activities: {
+          create: {
+            action: "student_signup",
+            note: `${audience} created a free profile using the simplified signup form.`,
+            createdBy: studentActor(leadCode),
+          },
+        },
+      },
+    });
+
+    await setStudentPortalSession(student.id);
+
+    try {
+      await sendNewStudentAlert(student);
+    } catch (error) {
+      console.error(
+        "New student alert email failed:",
+        error instanceof Error ? error.message : "Mail provider error"
+      );
+    }
+
+    return NextResponse.json({
+      ok: true,
+      leadCode: student.leadCode,
+      redirectTo: "/portal/student/dashboard",
+    });
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code?: unknown }).code === "P2002"
+    ) {
+      return NextResponse.json(
+        {
+          message:
+            "This mobile number is already registered. Please use Student Login instead.",
+          code: "MOBILE_EXISTS",
+        },
+        { status: 409 }
+      );
+    }
+
     console.error(
-      "New student alert email failed:",
-      error instanceof Error ? error.message : "Mail provider error"
+      "Student signup failed:",
+      error instanceof Error ? error.message : "Unknown signup error"
+    );
+
+    return NextResponse.json(
+      {
+        message:
+          "Signup is temporarily unavailable. Please try again in a few minutes.",
+      },
+      { status: 503 }
     );
   }
-
-  return NextResponse.json({
-    ok: true,
-    leadCode: student.leadCode,
-    redirectTo: "/portal/student/dashboard",
-  });
 }
 
 function studentActor(leadCode: string) {

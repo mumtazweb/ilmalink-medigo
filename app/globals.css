@@ -108,6 +108,412 @@ select {
   opacity: 0.55;
 }
 
+.portal-signup-stage {
+  position: relative;
+  isolation: isolate;
+  min-height: calc(100vh - 65px);
+  overflow: hidden;
+  padding: clamp(1.25rem, 3vw, 3rem) 1rem;
+  background:
+    radial-gradient(circle at 10% 15%, rgba(0, 197, 159, 0.2), transparent 27%),
+    radial-gradient(circle at 92% 82%, rgba(31, 101, 255, 0.2), transparent 28%),
+    linear-gradient(145deg, #e9f6ff 0%, #f8fbff 48%, #eafcf7 100%);
+  perspective: 1600px;
+}
+
+.portal-signup-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  opacity: 0.32;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(11, 74, 162, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11, 74, 162, 0.08) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, transparent, black 18%, black 78%, transparent);
+  transform: rotateX(64deg) translateY(28%) scale(1.4);
+  transform-origin: center bottom;
+}
+
+.portal-signup-orb {
+  position: absolute;
+  z-index: -1;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(12px);
+  animation: portal-signup-float 8s ease-in-out infinite alternate;
+}
+
+.portal-signup-orb-one {
+  left: -6rem;
+  top: 3rem;
+  width: 18rem;
+  height: 18rem;
+  background: rgba(12, 206, 164, 0.2);
+}
+
+.portal-signup-orb-two {
+  right: -5rem;
+  bottom: 1rem;
+  width: 22rem;
+  height: 22rem;
+  background: rgba(15, 76, 255, 0.16);
+  animation-delay: -3s;
+}
+
+.portal-signup-shell {
+  position: relative;
+  display: grid;
+  width: min(100%, 1320px);
+  min-height: min(760px, calc(100vh - 7.5rem));
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  border-radius: clamp(1.5rem, 3vw, 2.75rem);
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow:
+    0 58px 120px rgba(7, 39, 91, 0.2),
+    0 20px 44px rgba(7, 39, 91, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98);
+  transform-style: preserve-3d;
+  animation: portal-signup-arrive 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.portal-signup-shell::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: -35%;
+  left: -28%;
+  width: 32%;
+  height: 170%;
+  pointer-events: none;
+  opacity: 0;
+  transform: rotate(18deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.32),
+    transparent
+  );
+  animation: portal-signup-sheen 8s ease-in-out 1.5s infinite;
+}
+
+.portal-signup-benefits {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(2rem, 5vw, 4.5rem);
+  background:
+    radial-gradient(circle at 85% 12%, rgba(51, 243, 197, 0.23), transparent 22%),
+    radial-gradient(circle at 14% 88%, rgba(51, 129, 255, 0.35), transparent 31%),
+    linear-gradient(145deg, #061b46 0%, #0a3775 53%, #075b70 100%);
+  transform-style: preserve-3d;
+}
+
+.portal-signup-benefits::before,
+.portal-signup-benefits::after {
+  content: "";
+  position: absolute;
+  border: 1px solid rgba(127, 255, 225, 0.2);
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.portal-signup-benefits::before {
+  right: -9rem;
+  top: -8rem;
+  width: 25rem;
+  height: 25rem;
+  box-shadow:
+    inset 0 0 70px rgba(55, 226, 186, 0.08),
+    0 0 70px rgba(55, 226, 186, 0.08);
+}
+
+.portal-signup-benefits::after {
+  left: -11rem;
+  bottom: -12rem;
+  width: 29rem;
+  height: 29rem;
+  box-shadow: inset 0 0 90px rgba(55, 134, 255, 0.13);
+}
+
+.portal-signup-shimmer {
+  color: transparent;
+  background: linear-gradient(90deg, #7fffe1, #ffffff 45%, #8cdcff 78%, #7fffe1);
+  background-size: 240% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: portal-signup-text-shine 4.5s linear infinite;
+}
+
+.portal-signup-depth-card {
+  position: absolute;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1.4rem;
+  color: rgba(255, 255, 255, 0.12);
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow:
+    0 32px 65px rgba(0, 12, 34, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.portal-signup-depth-card-one {
+  right: -2.5rem;
+  bottom: 7rem;
+  width: 13rem;
+  height: 7.5rem;
+  transform: translateZ(46px) rotate(-11deg);
+}
+
+.portal-signup-depth-card-two {
+  right: 5rem;
+  bottom: -2.5rem;
+  width: 12rem;
+  height: 7rem;
+  transform: translateZ(82px) rotate(8deg);
+}
+
+.portal-signup-form-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: clamp(1.5rem, 4vw, 4rem);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(0, 188, 151, 0.12), transparent 30%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(244, 250, 255, 0.94));
+}
+
+.portal-signup-form-panel::before {
+  content: "";
+  position: absolute;
+  inset: 1.2rem;
+  border: 1px solid rgba(23, 105, 232, 0.08);
+  border-radius: 1.75rem;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 36px rgba(23, 105, 232, 0.035),
+    0 24px 70px rgba(9, 48, 105, 0.06);
+}
+
+.portal-signup-form-panel > div {
+  width: 100%;
+}
+
+.portal-signup-input {
+  height: 3.55rem;
+  width: 100%;
+  border: 1px solid #bfd0e1;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.96);
+  padding: 0 1rem;
+  color: #102f5e;
+  font-size: 0.95rem;
+  font-weight: 750;
+  box-shadow:
+    0 8px 18px rgba(10, 49, 104, 0.055),
+    inset 0 1px 0 #ffffff;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.portal-signup-input:focus {
+  border-color: #078f85;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 4px rgba(7, 143, 133, 0.11),
+    0 13px 28px rgba(10, 49, 104, 0.08);
+  transform: translateY(-1px);
+}
+
+.portal-signup-prefix {
+  display: flex;
+  height: 3.55rem;
+  align-items: center;
+  border: 1px solid #bfd0e1;
+  border-right: 0;
+  border-radius: 1rem 0 0 1rem;
+  background: linear-gradient(145deg, #e9f5ff, #e7fbf5);
+  padding: 0 0.9rem;
+  color: #0b4aa2;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.portal-signup-submit {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  min-height: 3.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1.1rem;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(105, 255, 222, 0.35), transparent 30%),
+    linear-gradient(110deg, #0b4aa2 0%, #087d8d 58%, #00a67e 100%);
+  padding: 0.8rem 1.25rem;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  box-shadow:
+    0 20px 40px rgba(8, 85, 135, 0.27),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -3px 0 rgba(0, 31, 74, 0.2);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    opacity 0.22s ease;
+}
+
+.portal-signup-submit::after {
+  content: "";
+  position: absolute;
+  top: -70%;
+  left: -35%;
+  width: 22%;
+  height: 240%;
+  transform: rotate(18deg);
+  background: rgba(255, 255, 255, 0.25);
+  transition: left 0.6s ease;
+}
+
+.portal-signup-submit:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow:
+    0 27px 48px rgba(8, 85, 135, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -3px 0 rgba(0, 31, 74, 0.2);
+}
+
+.portal-signup-submit:hover:not(:disabled)::after {
+  left: 115%;
+}
+
+.portal-signup-submit:active:not(:disabled) {
+  transform: translateY(0) scale(0.995);
+}
+
+.portal-signup-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+@keyframes portal-signup-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(28px) rotateX(2deg) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0) scale(1);
+  }
+}
+
+@keyframes portal-signup-float {
+  from {
+    transform: translate3d(-12px, 8px, 0) scale(0.94);
+  }
+  to {
+    transform: translate3d(22px, -18px, 0) scale(1.08);
+  }
+}
+
+@keyframes portal-signup-sheen {
+  0%,
+  72% {
+    left: -28%;
+    opacity: 0;
+  }
+  80% {
+    opacity: 1;
+  }
+  94%,
+  100% {
+    left: 118%;
+    opacity: 0;
+  }
+}
+
+@keyframes portal-signup-text-shine {
+  to {
+    background-position: -240% 0;
+  }
+}
+
+@keyframes portal-signup-rise {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 960px) {
+  .portal-signup-shell {
+    grid-template-columns: minmax(0, 1.08fr) minmax(430px, 0.92fr);
+  }
+}
+
+@media (max-width: 959px) {
+  .portal-signup-shell {
+    max-width: 760px;
+  }
+
+  .portal-signup-benefits,
+  .portal-signup-form-panel {
+    padding: clamp(1.5rem, 6vw, 3rem);
+  }
+
+  .portal-signup-depth-card {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .portal-signup-stage {
+    padding: 0;
+  }
+
+  .portal-signup-shell {
+    min-height: auto;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .portal-signup-benefits {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .portal-signup-form-panel {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .portal-signup-form-panel::before {
+    inset: 0.65rem;
+  }
+}
+
 input,
 textarea,
 select {
@@ -316,6 +722,9 @@ select:focus {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .portal-signup-shell,
+  .portal-signup-orb,
+  .portal-signup-shimmer,
   .kyrgyz-liquid-hero-card::before,
   .kyrgyz-liquid-hero-card::after,
   .kyrgyz-liquid-university-card::before,
@@ -323,5 +732,10 @@ select:focus {
   .kyrgyz-liquid-card-stage::before,
   .kyrgyz-liquid-card-stage::after {
     animation: none;
+  }
+
+  .portal-signup-submit,
+  .portal-signup-input {
+    transition: none;
   }
 }

@@ -136,7 +136,7 @@ export default function PortalProfileForm({
           onChange={(value) => update("district", value)}
         />
         <ProfileField
-          label="Category"
+          label="You are"
           value={form.category}
           onChange={(value) => update("category", value)}
         />

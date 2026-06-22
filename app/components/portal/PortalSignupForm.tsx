@@ -1,80 +1,39 @@
 "use client";
 
 import {
-  ArrowLeft,
   ArrowRight,
+  BadgeCheck,
+  BookOpenCheck,
   Check,
-  CheckCircle2,
+  CircleUserRound,
   GraduationCap,
-  HeartHandshake,
-  Landmark,
   Loader2,
-  MessageCircle,
+  LockKeyhole,
   Phone,
-  Stethoscope,
+  ShieldCheck,
+  Sparkles,
+  UserRound,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 
-import { STUDENT_INTERESTS } from "../../lib/portal/constants";
+import { PORTAL_AUDIENCE_TYPES } from "../../lib/portal/constants";
 import PortalAuthMessage from "./PortalAuthMessage";
 
-type SignupState = {
-  mobile: string;
-  password: string;
-  confirmPassword: string;
-  whatsappAvailable: "same" | "different" | "none";
-  whatsappNumber: string;
-  interests: string[];
-  name: string;
-  email: string;
-  className: string;
-  neetYear: string;
-  state: string;
-  city: string;
-  district: string;
-  category: string;
-  neetScore: string;
-  neetRank: string;
-  preferredCourse: string;
-  preferredCountry: string;
-};
-
-const initialState: SignupState = {
-  mobile: "",
-  password: "",
-  confirmPassword: "",
-  whatsappAvailable: "same",
-  whatsappNumber: "",
-  interests: [],
-  name: "",
-  email: "",
-  className: "",
-  neetYear: "2026",
-  state: "",
-  city: "",
-  district: "",
-  category: "",
-  neetScore: "",
-  neetRank: "",
-  preferredCourse: "MBBS",
-  preferredCountry: "",
-};
-
-const stepNames = [
-  "Mobile",
-  "Password",
-  "WhatsApp",
-  "Interest",
-  "Profile",
+const serviceMessages = [
+  "Personalised NEET guidance built around your goals.",
+  "MBBS India and abroad options explained clearly.",
+  "Scholarship, document and application support.",
+  "Verified deadlines, alerts and student-safety updates.",
 ];
 
-const interestIcons = {
-  "NEET Coaching": GraduationCap,
-  "MBBS India Counselling": Landmark,
-  "MBBS Abroad Counselling": Stethoscope,
-  "Scholarships / Education Support": HeartHandshake,
-} as const;
+type SignupResponse = {
+  ok?: boolean;
+  message?: string;
+  code?: string;
+  redirectTo?: string;
+};
 
 export default function PortalSignupForm({
   nextPath = "",
@@ -82,102 +41,73 @@ export default function PortalSignupForm({
   nextPath?: string;
 }) {
   const router = useRouter();
-  const [step, setStep] = useState(1);
-  const [form, setForm] = useState<SignupState>(initialState);
+  const [name, setName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [audienceType, setAudienceType] = useState("");
+  const [otherAudience, setOtherAudience] = useState("");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const progress = useMemo(() => `${(step / 5) * 100}%`, [step]);
+  const firstName = useMemo(
+    () => name.trim().split(/\s+/)[0] || "your first name",
+    [name]
+  );
+  const formReady =
+    name.trim().length >= 2 &&
+    mobile.length === 10 &&
+    Boolean(audienceType) &&
+    (audienceType !== "Other" || otherAudience.trim().length >= 2);
 
-  function update<K extends keyof SignupState>(
-    key: K,
-    value: SignupState[K]
-  ) {
-    setForm((current) => ({ ...current, [key]: value }));
-    setMessage("");
-    setSuccess(false);
-  }
+  async function submitSignup(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!formReady || busy) return;
 
-  async function post(url: string, payload: Record<string, unknown>) {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const data = (await response.json()) as {
-      ok?: boolean;
-      message?: string;
-      redirectTo?: string;
-    };
-    if (!response.ok || !data.ok) {
-      throw new Error(data.message || "Unable to continue.");
-    }
-    return data;
-  }
-
-  function continueMobile() {
-    if (form.mobile.length !== 10) {
-      setMessage("Enter a valid 10-digit Indian mobile number.");
-      return;
-    }
-    setStep(2);
-    setMessage("");
-  }
-
-  function continuePassword() {
-    if (form.password.length < 8) {
-      setMessage("Password must contain at least 8 characters.");
-      return;
-    }
-    if (!/[A-Za-z]/.test(form.password) || !/\d/.test(form.password)) {
-      setMessage("Password must include at least one letter and one number.");
-      return;
-    }
-    if (form.password !== form.confirmPassword) {
-      setMessage("Password and confirm password do not match.");
-      return;
-    }
-    setStep(3);
-    setMessage("");
-  }
-
-  function continueWhatsapp() {
-    if (
-      form.whatsappAvailable === "different" &&
-      form.whatsappNumber.replace(/\D/g, "").length < 10
-    ) {
-      setMessage("Enter a valid WhatsApp number.");
-      return;
-    }
-    setStep(4);
-    setMessage("");
-  }
-
-  function continueInterest() {
-    if (!form.interests.length) {
-      setMessage("Select at least one guidance interest.");
-      return;
-    }
-    setStep(5);
-    setMessage("");
-  }
-
-  async function completeSignup() {
     setBusy(true);
     setMessage("");
+    setSuccess(false);
+
     try {
-      const data = await post("/api/portal/auth/signup/complete", form);
+      const response = await fetch("/api/portal/auth/signup/complete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          mobile,
+          audienceType,
+          otherAudience,
+        }),
+      });
+      const responseText = await response.text();
+      let data: SignupResponse = {};
+
+      try {
+        data = responseText ? JSON.parse(responseText) : {};
+      } catch {
+        throw new Error(
+          "The signup service returned an unexpected response. Please try again."
+        );
+      }
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.message || "Unable to create your profile.");
+      }
+
       setSuccess(true);
-      setMessage("Your student profile is ready.");
-      router.push(
-        nextPath || data.redirectTo || "/portal/student/dashboard"
-      );
-      router.refresh();
-    } catch (error) {
-      setSuccess(false);
       setMessage(
-        error instanceof Error ? error.message : "Unable to create profile."
+        `Profile created. Login ID: ${mobile} · Password: ${firstName}`
+      );
+      window.setTimeout(() => {
+        router.push(
+          nextPath || data.redirectTo || "/portal/student/dashboard"
+        );
+        router.refresh();
+      }, 1200);
+    } catch (error) {
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to create your profile."
       );
     } finally {
       setBusy(false);
@@ -185,391 +115,324 @@ export default function PortalSignupForm({
   }
 
   return (
-    <div>
-      <div className="mb-5">
-        <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-[.12em] text-[#6A7F99]">
-          <span>
-            Step {step} of 5 · {stepNames[step - 1]}
-          </span>
-          <span>{Math.round((step / 5) * 100)}%</span>
-        </div>
-        <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#E6EEF6]">
-          <div
-            className="h-full rounded-full bg-[linear-gradient(90deg,#1769E8,#00A88F)] transition-all"
-            style={{ width: progress }}
-          />
-        </div>
-      </div>
+    <div className="portal-signup-stage">
+      <div className="portal-signup-orb portal-signup-orb-one" />
+      <div className="portal-signup-orb portal-signup-orb-two" />
+      <div className="portal-signup-grid" />
 
-      {step === 1 ? (
-        <Step title="Enter your mobile number" icon={Phone}>
-          <Field label="Mobile number(Whatsapp preffered)">
-            <div className="flex">
-              <span className="flex h-12 items-center rounded-l-xl border border-r-0 border-[#CCD9E7] bg-[#F3F7FB] px-3 text-sm font-bold text-[#17396E]">
-                +91
+      <section className="portal-signup-shell">
+        <div className="portal-signup-benefits">
+          <div className="relative z-10">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-[.16em] text-white backdrop-blur">
+              <Sparkles className="h-3.5 w-3.5 text-[#7FFFE1]" />
+              One profile. Smarter guidance.
+            </div>
+
+            <h1 className="mt-5 max-w-2xl text-4xl font-black leading-[.98] tracking-[-.055em] text-white sm:text-5xl lg:text-6xl">
+              Your education journey,
+              <span className="portal-signup-shimmer block">
+                brilliantly connected.
               </span>
-              <input
-                value={form.mobile}
-                onChange={(event) =>
-                  update(
-                    "mobile",
-                    event.target.value.replace(/\D/g, "").slice(0, 10)
-                  )
-                }
-                inputMode="numeric"
-                autoComplete="tel-national"
-                maxLength={10}
-                placeholder="10-digit mobile number"
-                className="h-12 w-full rounded-l-none rounded-r-xl border border-[#CCD9E7] px-3 text-sm font-semibold"
+            </h1>
+
+            <p className="mt-5 max-w-xl text-sm font-semibold leading-7 text-[#D6E8FF] sm:text-base">
+              Join ILMALINK MEDIGO for practical, student-first support across
+              NEET, counselling, medical admissions, scholarships and important
+              education updates.
+            </p>
+
+            <TypewriterServices />
+
+            <div className="mt-7 grid gap-3 sm:grid-cols-2">
+              <Benefit
+                icon={BookOpenCheck}
+                title="Clear pathways"
+                text="Understand options without confusing jargon."
+              />
+              <Benefit
+                icon={ShieldCheck}
+                title="Student-first safety"
+                text="Verified guidance with no seat-selling promises."
+              />
+              <Benefit
+                icon={GraduationCap}
+                title="Personal support"
+                text="Guidance shaped around your education goal."
+              />
+              <Benefit
+                icon={BadgeCheck}
+                title="Free profile"
+                text="Get started in less than one minute."
               />
             </div>
-          </Field>
-          <PrimaryButton
-            onClick={continueMobile}
-            disabled={form.mobile.length !== 10}
-          >
-            Continue
-          </PrimaryButton>
-        </Step>
-      ) : null}
+          </div>
 
-      {step === 2 ? (
-        <Step title="Create your password" icon={CheckCircle2}>
-          <Field label="Create password">
-            <input
-              type="password"
-              value={form.password}
-              onChange={(event) => update("password", event.target.value)}
-              autoComplete="new-password"
-              className="portal-input"
-              placeholder="Minimum 8 characters"
-            />
-          </Field>
-          <Field label="Confirm password">
-            <input
-              type="password"
-              value={form.confirmPassword}
-              onChange={(event) =>
-                update("confirmPassword", event.target.value)
-              }
-              autoComplete="new-password"
-              className="portal-input"
-            />
-          </Field>
-          <PrimaryButton onClick={continuePassword}>Continue</PrimaryButton>
-        </Step>
-      ) : null}
+          <div className="portal-signup-depth-card portal-signup-depth-card-one">
+            NEET
+          </div>
+          <div className="portal-signup-depth-card portal-signup-depth-card-two">
+            MBBS
+          </div>
+        </div>
 
-      {step === 3 ? (
-        <Step title="WhatsApp preference" icon={MessageCircle}>
-          <Choice
-            selected={form.whatsappAvailable === "same"}
-            onClick={() => update("whatsappAvailable", "same")}
-            title="Yes, use this mobile number"
-            description="Counselling updates may be shared on the verified number."
-          />
-          <Choice
-            selected={form.whatsappAvailable === "different"}
-            onClick={() => update("whatsappAvailable", "different")}
-            title="No, add a different WhatsApp number"
-            description="Your login mobile remains unchanged."
-          />
-          {form.whatsappAvailable === "different" ? (
-            <input
-              value={form.whatsappNumber}
-              onChange={(event) =>
-                update(
-                  "whatsappNumber",
-                  event.target.value.replace(/\D/g, "").slice(0, 10)
-                )
-              }
-              inputMode="numeric"
-              placeholder="Different 10-digit WhatsApp number"
-              className="portal-input"
-            />
-          ) : null}
-          <Choice
-            selected={form.whatsappAvailable === "none"}
-            onClick={() => update("whatsappAvailable", "none")}
-            title="I don’t use WhatsApp"
-            description="WhatsApp is optional and never required for login."
-          />
-          <PrimaryButton onClick={continueWhatsapp}>Continue</PrimaryButton>
-        </Step>
-      ) : null}
+        <div className="portal-signup-form-panel">
+          <div className="relative z-10">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-black uppercase tracking-[.16em] text-[#078A78]">
+                  Free registration
+                </p>
+                <h2 className="mt-1 text-3xl font-black tracking-[-.04em] text-[#082A62] sm:text-4xl">
+                  Create your profile
+                </h2>
+              </div>
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(145deg,#E3F5FF,#D9FFF4)] text-[#087D78] shadow-[0_12px_28px_rgba(8,125,120,.18)]">
+                <CircleUserRound className="h-6 w-6" />
+              </span>
+            </div>
 
-      {step === 4 ? (
-        <Step title="What guidance do you need?" icon={GraduationCap}>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {STUDENT_INTERESTS.map((interest) => {
-              const Icon = interestIcons[interest];
-              const selected = form.interests.includes(interest);
+            <p className="mt-3 text-sm font-semibold leading-6 text-[#60738F]">
+              Only three details are needed. Every field is compulsory.
+            </p>
 
-              return (
-                <button
-                  key={interest}
-                  type="button"
-                  onClick={() =>
-                    update(
-                      "interests",
-                      selected
-                        ? form.interests.filter((item) => item !== interest)
-                        : [...form.interests, interest]
-                    )
-                  }
-                  className={`relative rounded-2xl border p-3 text-left transition ${
-                    selected
-                      ? "border-[#1769E8] bg-[#EEF5FF] shadow-[0_7px_18px_rgba(23,105,232,.12)]"
-                      : "border-[#D9E3ED] bg-white"
-                  }`}
-                >
-                  <Icon
-                    className={`h-5 w-5 ${
-                      selected ? "text-[#1769E8]" : "text-[#60738F]"
-                    }`}
+            <form onSubmit={submitSignup} className="mt-6 space-y-4">
+              <PremiumField
+                icon={UserRound}
+                label="Your name"
+                hint="Your first name becomes your initial password"
+              >
+                <input
+                  value={name}
+                  onChange={(event) => {
+                    setName(event.target.value.slice(0, 120));
+                    setMessage("");
+                  }}
+                  required
+                  autoComplete="name"
+                  placeholder="Enter your full name"
+                  className="portal-signup-input"
+                />
+              </PremiumField>
+
+              <PremiumField
+                icon={Phone}
+                label="Mobile number"
+                hint="This will be your login ID"
+              >
+                <div className="flex">
+                  <span className="portal-signup-prefix">+91</span>
+                  <input
+                    value={mobile}
+                    onChange={(event) => {
+                      setMobile(
+                        event.target.value.replace(/\D/g, "").slice(0, 10)
+                      );
+                      setMessage("");
+                    }}
+                    required
+                    inputMode="numeric"
+                    autoComplete="tel-national"
+                    maxLength={10}
+                    placeholder="10-digit mobile number"
+                    className="portal-signup-input rounded-l-none"
                   />
-                  <strong className="mt-2 block text-sm text-[#17396E]">
-                    {interest}
-                  </strong>
-                  {selected ? (
-                    <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#1769E8] text-white">
-                      <Check className="h-3 w-3" />
-                    </span>
-                  ) : null}
-                </button>
-              );
-            })}
+                </div>
+              </PremiumField>
+
+              <PremiumField
+                icon={GraduationCap}
+                label="You are a"
+                hint="Choose the option that describes you"
+              >
+                <select
+                  value={audienceType}
+                  onChange={(event) => {
+                    setAudienceType(event.target.value);
+                    if (event.target.value !== "Other") setOtherAudience("");
+                    setMessage("");
+                  }}
+                  required
+                  className="portal-signup-input appearance-none"
+                >
+                  <option value="" disabled>
+                    Select one
+                  </option>
+                  {PORTAL_AUDIENCE_TYPES.map((audience) => (
+                    <option key={audience} value={audience}>
+                      {audience}
+                    </option>
+                  ))}
+                </select>
+              </PremiumField>
+
+              {audienceType === "Other" ? (
+                <label className="block animate-[portal-signup-rise_.3s_ease-out]">
+                  <span className="mb-2 block text-xs font-black text-[#17396E]">
+                    Please describe yourself
+                  </span>
+                  <input
+                    value={otherAudience}
+                    onChange={(event) => {
+                      setOtherAudience(event.target.value.slice(0, 40));
+                      setMessage("");
+                    }}
+                    required
+                    autoFocus
+                    placeholder="Type here"
+                    className="portal-signup-input"
+                  />
+                </label>
+              ) : null}
+
+              <div className="rounded-2xl border border-[#CFE2F4] bg-[linear-gradient(135deg,#F4F9FF,#ECFFFA)] p-4 shadow-[inset_0_1px_0_white]">
+                <div className="flex gap-3">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-[#0B63CE] shadow-sm">
+                    <LockKeyhole className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[.08em] text-[#0B4AA2]">
+                      Your login details
+                    </p>
+                    <p className="mt-1 text-sm font-bold leading-6 text-[#31577F]">
+                      Login ID:{" "}
+                      <strong className="text-[#082A62]">
+                        {mobile || "your mobile number"}
+                      </strong>
+                      <br />
+                      Initial password:{" "}
+                      <strong className="text-[#082A62]">{firstName}</strong>
+                    </p>
+                    <p className="mt-1 text-[11px] font-semibold text-[#6D829A]">
+                      Password is case-sensitive. You can reset it later for
+                      better security.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <PortalAuthMessage message={message} success={success} />
+
+              <button
+                type="submit"
+                disabled={!formReady || busy || success}
+                className="portal-signup-submit"
+              >
+                {busy ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : success ? (
+                  <Check className="h-5 w-5" />
+                ) : (
+                  <Sparkles className="h-5 w-5" />
+                )}
+                {success ? "Profile Created" : "Create My Free Profile"}
+                {!busy && !success ? <ArrowRight className="h-5 w-5" /> : null}
+              </button>
+            </form>
+
+            <p className="mt-5 text-center text-sm font-semibold text-[#60738F]">
+              Already registered?{" "}
+              <Link
+                href={
+                  nextPath
+                    ? `/portal/login?tab=student&next=${encodeURIComponent(nextPath)}`
+                    : "/portal/login?tab=student"
+                }
+                className="font-black text-[#0B4AA2] hover:text-[#008F7C]"
+              >
+                Student Login
+              </Link>
+            </p>
           </div>
-          <PrimaryButton onClick={continueInterest}>Continue</PrimaryButton>
-        </Step>
-      ) : null}
-
-      {step === 5 ? (
-        <Step title="Complete your basic profile" icon={Stethoscope}>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <TextInput
-              label="Student name"
-              value={form.name}
-              onChange={(value) => update("name", value)}
-              required
-            />
-            <TextInput
-              label="Email (optional)"
-              value={form.email}
-              onChange={(value) => update("email", value)}
-              type="email"
-            />
-            <TextInput
-              label="Class"
-              value={form.className}
-              onChange={(value) => update("className", value)}
-              placeholder="Class 12 / Dropper"
-            />
-            <TextInput
-              label="NEET year"
-              value={form.neetYear}
-              onChange={(value) => update("neetYear", value)}
-            />
-            <TextInput
-              label="State"
-              value={form.state}
-              onChange={(value) => update("state", value)}
-            />
-            <TextInput
-              label="City"
-              value={form.city}
-              onChange={(value) => update("city", value)}
-            />
-            <TextInput
-              label="District"
-              value={form.district}
-              onChange={(value) => update("district", value)}
-            />
-            <TextInput
-              label="Category (optional)"
-              value={form.category}
-              onChange={(value) => update("category", value)}
-            />
-            <TextInput
-              label="NEET score (optional)"
-              value={form.neetScore}
-              onChange={(value) => update("neetScore", value)}
-            />
-            <TextInput
-              label="NEET rank (optional)"
-              value={form.neetRank}
-              onChange={(value) => update("neetRank", value)}
-            />
-            <TextInput
-              label="Preferred course"
-              value={form.preferredCourse}
-              onChange={(value) => update("preferredCourse", value)}
-            />
-            <TextInput
-              label="Preferred country"
-              value={form.preferredCountry}
-              onChange={(value) => update("preferredCountry", value)}
-            />
-          </div>
-          <PrimaryButton
-            onClick={completeSignup}
-            busy={busy}
-            disabled={form.name.trim().length < 2}
-          >
-            Create My Free Profile
-          </PrimaryButton>
-        </Step>
-      ) : null}
-
-      <PortalAuthMessage message={message} success={success} />
-
-      {step > 1 ? (
-        <button
-          type="button"
-          onClick={() => {
-            setStep((current) => Math.max(1, current - 1));
-            setMessage("");
-          }}
-          disabled={busy}
-          className="mt-4 inline-flex items-center gap-1.5 text-xs font-black text-[#60738F] disabled:hidden"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Previous step
-        </button>
-      ) : null}
+        </div>
+      </section>
     </div>
   );
 }
 
-function Step({
-  title,
-  icon: Icon,
-  children,
-}: {
-  title: string;
-  icon: typeof Phone;
-  children: React.ReactNode;
-}) {
+function TypewriterServices() {
+  const [messageIndex, setMessageIndex] = useState(0);
+  const [characterCount, setCharacterCount] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentMessage = serviceMessages[messageIndex];
+    const atEnd = characterCount === currentMessage.length;
+    const atStart = characterCount === 0;
+    const delay = atEnd && !deleting ? 1500 : deleting ? 24 : 42;
+
+    const timer = window.setTimeout(() => {
+      if (atEnd && !deleting) {
+        setDeleting(true);
+        return;
+      }
+      if (atStart && deleting) {
+        setDeleting(false);
+        setMessageIndex((current) => (current + 1) % serviceMessages.length);
+        return;
+      }
+      setCharacterCount((current) => current + (deleting ? -1 : 1));
+    }, delay);
+
+    return () => window.clearTimeout(timer);
+  }, [characterCount, deleting, messageIndex]);
+
   return (
-    <section className="space-y-4">
-      <div className="flex items-center gap-2.5">
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF3FF] text-[#1769E8]">
-          <Icon className="h-5 w-5" />
-        </span>
-        <h2 className="text-xl font-black text-[#082A62]">{title}</h2>
-      </div>
-      {children}
-    </section>
+    <div
+      className="mt-6 flex min-h-20 items-center gap-3 rounded-2xl border border-white/20 bg-[#041D49]/40 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,.12)] backdrop-blur-xl"
+      aria-live="polite"
+    >
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#37E2BA]/15 text-[#76FFDC]">
+        <Sparkles className="h-5 w-5" />
+      </span>
+      <p className="text-sm font-black leading-6 text-white sm:text-base">
+        {serviceMessages[messageIndex].slice(0, characterCount)}
+        <span className="ml-0.5 inline-block h-5 w-[2px] animate-pulse bg-[#76FFDC] align-middle" />
+      </p>
+    </div>
   );
 }
 
-function Field({
+function Benefit({
+  icon: Icon,
+  title,
+  text,
+}: {
+  icon: typeof ShieldCheck;
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-white/15 bg-white/[.08] p-3.5 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/[.12]">
+      <Icon className="h-5 w-5 text-[#73FFDC]" />
+      <strong className="mt-2 block text-sm text-white">{title}</strong>
+      <span className="mt-1 block text-xs font-semibold leading-5 text-[#C7DDF6]">
+        {text}
+      </span>
+    </div>
+  );
+}
+
+function PremiumField({
+  icon: Icon,
   label,
+  hint,
   children,
 }: {
+  icon: typeof UserRound;
   label: string;
+  hint: string;
   children: React.ReactNode;
 }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs font-black text-[#17396E]">
-        {label}
+      <span className="mb-2 flex items-center justify-between gap-3">
+        <span className="flex items-center gap-2 text-xs font-black text-[#17396E]">
+          <Icon className="h-4 w-4 text-[#078A78]" />
+          {label} <span className="text-[#DB3D4B]">*</span>
+        </span>
+        <span className="text-[10px] font-bold text-[#7890A8]">{hint}</span>
       </span>
       {children}
     </label>
-  );
-}
-
-function TextInput({
-  label,
-  value,
-  onChange,
-  type = "text",
-  placeholder,
-  required = false,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  type?: string;
-  placeholder?: string;
-  required?: boolean;
-}) {
-  return (
-    <Field label={`${label}${required ? " *" : ""}`}>
-      <input
-        type={type}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder={placeholder}
-        required={required}
-        className="portal-input"
-      />
-    </Field>
-  );
-}
-
-function Choice({
-  selected,
-  onClick,
-  title,
-  description,
-}: {
-  selected: boolean;
-  onClick: () => void;
-  title: string;
-  description: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`flex w-full items-start gap-3 rounded-2xl border p-3 text-left ${
-        selected
-          ? "border-[#1769E8] bg-[#EEF5FF]"
-          : "border-[#D9E3ED] bg-white"
-      }`}
-    >
-      <span
-        className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
-          selected
-            ? "border-[#1769E8] bg-[#1769E8] text-white"
-            : "border-[#9FB1C6]"
-        }`}
-      >
-        {selected ? <Check className="h-3 w-3" /> : null}
-      </span>
-      <span>
-        <strong className="block text-sm text-[#17396E]">{title}</strong>
-        <span className="mt-0.5 block text-xs font-medium leading-5 text-[#60738F]">
-          {description}
-        </span>
-      </span>
-    </button>
-  );
-}
-
-function PrimaryButton({
-  onClick,
-  children,
-  busy = false,
-  disabled = false,
-}: {
-  onClick: () => void;
-  children: React.ReactNode;
-  busy?: boolean;
-  disabled?: boolean;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={busy || disabled}
-      className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[linear-gradient(105deg,#0B4AA2,#087F9F)] px-5 text-sm font-black text-white shadow-[0_10px_22px_rgba(11,74,162,.22)] disabled:cursor-not-allowed disabled:opacity-50"
-    >
-      {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-      {children}
-      {!busy ? <ArrowRight className="h-4 w-4" /> : null}
-    </button>
   );
 }
