@@ -88,7 +88,7 @@ export const ilmaLinkEntityData = {
     {
       name: "ILMALINK Kolkata Main Office",
       label: "Kolkata Main Office",
-      streetAddress: "MUMTAZ Campus, Kamrbari, Basina, Rajarhat-Newtown",
+      streetAddress: "Kamrbari, Basina, Rajarhat-Newtown",
       addressLocality: "Kolkata",
       addressRegion: "West Bengal",
       postalCode: "700135",

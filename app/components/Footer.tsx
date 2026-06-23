@@ -80,7 +80,7 @@ const offices = [
   {
     label: "Main Office",
     city: "Kolkata",
-    address: "MUMTAZ Campus, Kamrbari, Basina, Rajarhat-Newtown, Kolkata-135",
+    address: "Kamrbari, Basina, Rajarhat-Newtown, Kolkata-135",
   },
   {
     label: "R&D Branch",

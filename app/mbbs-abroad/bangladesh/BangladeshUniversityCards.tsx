@@ -35,14 +35,14 @@ const cardDetails: Record<
   "anwer-khan-modern-medical-college": {
     name: "Anwer Khan Modern Medical College",
     city: "Dhaka",
-    fee: "Fee letter mapped",
-    accreditation: "Verify BM&DC/DGME",
+    fee: "$45,000 total",
+    accreditation: "BM&DC/DGME & WDOMS",
   },
   "green-life-medical-college": {
     name: "Green Life Medical College",
     city: "Dhaka",
-    fee: "Fee letter mapped",
-    accreditation: "Verify BM&DC/DGME",
+    fee: "$42,000 total",
+    accreditation: "BM&DC/DGME & WDOMS",
   },
   "jahurul-islam-medical-college": {
     name: "Jahurul Islam Medical College",
@@ -54,31 +54,31 @@ const cardDetails: Record<
     name: "Tairunnessa Memorial Medical College",
     city: "Gazipur",
     fee: "Fee letter mapped",
-    accreditation: "Verify BM&DC/DGME",
+    accreditation: "BM&DC/DGME & WDOMS",
   },
   "sylhet-womens-medical-college": {
     name: "Sylhet Women's Medical College",
     city: "Sylhet",
     fee: "$42,000 total",
-    accreditation: "Verify BM&DC/DGME",
+    accreditation: "BM&DC/DGME & WDOMS",
   },
   "ad-din-akij-medical-college": {
     name: "Ad-din Akij Medical College",
     city: "Khulna",
     fee: "$33,500 total",
-    accreditation: "Verify BM&DC/DGME",
+    accreditation: "BM&DC/DGME & WDOMS",
   },
   "ad-din-momin-medical-college": {
     name: "Ad-din Momin Medical College",
     city: "Dhaka",
     fee: "$35,500 total",
-    accreditation: "Verify BM&DC/DGME",
+    accreditation: "BM&DC/DGME & WDOMS",
   },
   "ad-din-sakina-womens-medical-college": {
     name: "Ad-din Sakina Women's Medical College",
     city: "Jashore",
     fee: "$33,500 total",
-    accreditation: "Verify BM&DC/DGME",
+    accreditation: "BM&DC/DGME & WDOMS",
   },
 };
 
@@ -110,7 +110,7 @@ function conciseAccreditation(college: BangladeshCollegeProfile) {
     return "Verify first";
   }
 
-  return "Verify BM&DC/DGME";
+  return "BM&DC/DGME & WDOMS";
 }
 
 function displayCity(college: BangladeshCollegeProfile) {
@@ -334,27 +334,39 @@ export function BangladeshVerificationPills({
 }: {
   university: BangladeshCollegeProfile;
 }) {
+  const pillItems = [
+    ["Fee letter", university.intake, CircleDollarSign],
+    ["FMGE", university.fmge.passRate, TrendingUp],
+    ["Route", "DGME/BM&DC", ShieldCheck],
+  ] as const;
+
   return (
-    <div className="grid gap-2 sm:grid-cols-3">
-      {[
-        ["Fee letter", university.intake, CircleDollarSign],
-        ["FMGE", university.fmge.passRate, TrendingUp],
-        ["Route", "Verify DGME/BM&DC", ShieldCheck],
-      ].map(([label, value, Icon]) => {
+    <div className="grid grid-cols-3 gap-2">
+      {pillItems.map(([label, value, Icon]) => {
         const IconComponent = Icon as typeof CheckCircle2;
 
         return (
           <div
-            key={label as string}
-            className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+            key={label}
+            className="group relative min-w-0 overflow-hidden rounded-xl border border-white/80 bg-[linear-gradient(145deg,#ffffff,#f1fbf8)] p-2.5 shadow-[0_12px_34px_rgba(8,45,67,0.10),inset_0_1px_0_rgba(255,255,255,1)] sm:p-3"
           >
-            <IconComponent size={18} className="text-[#00A878]" />
-            <p className="mt-3 text-[10px] font-black uppercase tracking-wide text-slate-500">
-              {label as string}
-            </p>
-            <p className="mt-1 text-sm font-black text-[#071f3f]">
-              {value as string}
-            </p>
+            <span className="absolute inset-x-0 top-0 h-0.5 bg-[linear-gradient(90deg,#00A878,#0F4CFF)] opacity-80" />
+            <div className="flex items-center justify-center gap-2 sm:justify-start">
+              <span className="hidden h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#e9fbf5] text-[#00A878] ring-1 ring-[#b9efe0] sm:flex">
+                <IconComponent size={16} />
+              </span>
+              <div className="min-w-0 text-center sm:text-left">
+                <p className="truncate text-[8px] font-black uppercase tracking-wide text-slate-500 min-[360px]:text-[9px] sm:text-[10px]">
+                  {label}
+                </p>
+                <p
+                  className="mt-0.5 truncate text-[11px] font-black leading-4 text-[#071f3f] min-[360px]:text-xs sm:text-sm"
+                  title={value}
+                >
+                  {value}
+                </p>
+              </div>
+            </div>
           </div>
         );
       })}

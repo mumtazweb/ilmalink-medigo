@@ -650,7 +650,7 @@ export const bangladeshFeaturedUniversities: BangladeshCollegeProfile[] = [
     image: "/bangladesh/universities/ad-din-momin-medical-college.webp",
     imageAlt: "Ad-din Momin Medical College campus building in Dhaka",
     city: "Dhaka",
-    location: "Keraniganj, Dhaka, Bangladesh",
+    location: "Keraniaboutganj, Dhaka, Bangladesh",
     program: "Five-Year MBBS Program",
     intake: "2026-2027",
     duration: "5 years + internship as applicable",

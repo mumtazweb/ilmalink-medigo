@@ -6,7 +6,8 @@ import process from "node:process";
 const projectRoot = process.cwd();
 const sourcePath = path.resolve(
   projectRoot,
-  process.argv[2] ?? "private-assets/neet-2026-answer-key-ilmalink-mumtaz.pdf"
+  process.argv[2] ??
+    "private-assets/re-neet-2026-questions-with-answers-ilmalink.pdf"
 );
 const outputPath = path.resolve(
   projectRoot,

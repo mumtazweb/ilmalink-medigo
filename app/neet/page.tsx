@@ -35,13 +35,13 @@ export const dynamic = "force-static";
 export const metadata: Metadata = {
   title: "NEET UG 2026 Hub: Exam, Answer Key, Preparation & Counselling",
   description:
-    "Explore NEET UG 2026 exam information, question-paper analysis, answer keys, previous papers, preparation institutes, counselling and MBBS admission guidance.",
+    "Explore NEET UG 2026 exam information, question-paper analysis, answer keys, previous papers, preparation planning, counselling and MBBS admission guidance.",
   alternates: { canonical: "https://www.ilmalink.com/neet" },
   keywords: [
     "NEET UG 2026",
     "NEET 2026 answer key",
     "NEET previous year questions",
-    "NEET preparation institutes",
+    "NEET preparation planning",
     "NEET counselling",
     "MBBS admission guidance",
   ],
@@ -89,9 +89,9 @@ const hubCards = [
     iconClass: "bg-[#E9F8FA] text-[#029BB5]",
   },
   {
-    title: "NEET-UG Preparation Institutes",
-    description: "Compare NEET coaching and residential preparation institutes.",
-    href: "/neet/preparation-institutes",
+    title: "NEET-UG Syllabus & Preparation",
+    description: "Plan NEET preparation from the official syllabus and topic map.",
+    href: "/neet/information-bulletin#neet-ug-2026-syllabus",
     icon: Landmark,
     iconClass: "bg-[#FFF1E7] text-[#F06422]",
   },
@@ -517,7 +517,7 @@ export default function NeetHubPage() {
 
             <nav aria-label="NEET footer quick links">
               <h2 className="text-xs font-extrabold">Quick Links</h2>
-              <div className="mt-2 grid gap-1 text-[11px] font-medium text-blue-100"><Link href="/neet/information-bulletin" className="!text-blue-100">NEET 2026 Info</Link><Link href="/neet/preparation-institutes" className="!text-blue-100">Preparation</Link><Link href="/neet/questions" className="!text-blue-100">Question Search</Link><Link href="/neet/previous-year-questions" className="!text-blue-100">Previous Papers</Link></div>
+              <div className="mt-2 grid gap-1 text-[11px] font-medium text-blue-100"><Link href="/neet/information-bulletin" className="!text-blue-100">NEET 2026 Info</Link><Link href="/neet/information-bulletin#neet-ug-2026-syllabus" className="!text-blue-100">Preparation</Link><Link href="/neet/questions" className="!text-blue-100">Question Search</Link><Link href="/neet/previous-year-questions" className="!text-blue-100">Previous Papers</Link></div>
             </nav>
 
             <nav aria-label="NEET footer resources">

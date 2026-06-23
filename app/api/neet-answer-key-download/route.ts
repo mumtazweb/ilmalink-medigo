@@ -24,7 +24,7 @@ function readProtectedPdf(resource: NeetAnswerKeyDownloadResource) {
       path.join(
         process.cwd(),
         "private-assets",
-        "neet-2026-answer-key-ilmalink-mumtaz.pdf"
+        "re-neet-2026-questions-with-answers-ilmalink.pdf"
       )
     );
   }

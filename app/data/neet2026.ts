@@ -132,21 +132,6 @@ export const neet2026Courses = [
   },
 ] as const;
 
-export const neet2026KolkataResidentialInstitute = {
-  name: "Mumtaz Educational Institutions",
-  heading: "Best NEET-UG preparation Institute in Kolkata - Residential",
-  href: "https://www.mumtazeducation.com",
-  location: "Kolkata, West Bengal",
-  description:
-    "Dedicated external reference for residential NEET-UG preparation in Kolkata. ILMALINK keeps NEET bulletin guidance on this page and links the institute separately for students who want a residential preparation option.",
-  searchPhrases: [
-    "Best NEET-UG preparation Institute in Kolkata residential",
-    "residential NEET coaching Kolkata",
-    "Mumtaz NEET preparation Kolkata",
-    "NEET UG residential institute Kolkata",
-  ],
-} as const;
-
 export const neet2026StudentFlow = [
   {
     step: "Check eligibility",

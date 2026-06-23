@@ -1,7 +1,7 @@
 export const NEET_ANSWER_KEY_DOWNLOADS = {
   "question-paper-analysis": {
     resource: "question-paper-analysis",
-    fileName: "re-neet-2026-questions-with-answers-ilmalink-mumtaz.pdf",
+    fileName: "re-neet-2026-questions-with-answers-ilmalink.pdf",
     title: "Re-NEET 2026 Questions with Supplied Answers",
     description:
       "The earlier 2.4 MB study booklet contains the supplied questions and answer markers, but does not identify a paper code.",

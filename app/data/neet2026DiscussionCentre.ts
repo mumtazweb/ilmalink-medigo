@@ -22,7 +22,7 @@ export type Neet2026DiscussionQuestion = {
 export const neet2026DiscussionMeta = {
   "title": "NEET 2026 Discussions Centre",
   "description": "Crawlable Re-NEET 2026 question and answer key discussion centre for Physics, Chemistry and Biology.",
-  "sourcePdfName": "re NEET_2026_Clean_Questions_Answers_Analysis_Ilmalink_Mumtaz.pdf",
+  "sourcePdfName": "re NEET_2026_Clean_Questions_Answers_Analysis_Ilmalink.pdf",
   "sourcePdfPages": 34,
   "totalQuestions": 180,
   "extractionNote": "Generated from the embedded text layer of the supplied PDF. Some source lines may preserve PDF column-order artifacts, so each item keeps a source-page reference for verification."
