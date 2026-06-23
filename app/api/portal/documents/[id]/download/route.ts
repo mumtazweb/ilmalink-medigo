@@ -1,3 +1,4 @@
+import { get } from "@vercel/blob";
 import { stat } from "fs/promises";
 import { Readable } from "stream";
 import { NextRequest, NextResponse } from "next/server";
@@ -52,6 +53,40 @@ export async function GET(
     return new NextResponse("Document file is not available.", { status: 404 });
   }
 
+  if (isVercelBlobUrl(document.fileUrl)) {
+    try {
+      const result = await get(document.fileUrl, {
+        access: "private",
+        useCache: false,
+      });
+
+      if (!result || result.statusCode !== 200) {
+        return new NextResponse("Document file is not available.", {
+          status: 404,
+        });
+      }
+
+      return new NextResponse(result.stream, {
+        headers: {
+          "Cache-Control": "private, no-store",
+          "Content-Disposition": portalDownloadContentDisposition(
+            document.fileName
+          ),
+          "Content-Length": String(result.blob.size),
+          "Content-Type":
+            result.blob.contentType ||
+            portalDocumentMimeType(document.fileName),
+          "X-Content-Type-Options": "nosniff",
+        },
+      });
+    } catch (error) {
+      console.error("[PortalBlobDocumentDownloadError]", error);
+      return new NextResponse("Document file is not available.", {
+        status: 404,
+      });
+    }
+  }
+
   if (!isPortalDocumentStorageKey(document.fileUrl)) {
     return NextResponse.redirect(new URL(document.fileUrl, request.url));
   }
@@ -97,4 +132,12 @@ async function canDownloadDocument(student: {
   }
 
   return staff.portalRole === "counsellor" && student.assignedToId === staff.id;
+}
+
+function isVercelBlobUrl(value: string) {
+  try {
+    return new URL(value).hostname.endsWith(".blob.vercel-storage.com");
+  } catch {
+    return false;
+  }
 }

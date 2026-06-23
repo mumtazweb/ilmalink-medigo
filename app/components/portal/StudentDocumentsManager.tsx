@@ -1,5 +1,6 @@
 "use client";
 
+import { upload } from "@vercel/blob/client";
 import {
   CheckCircle2,
   Clock3,
@@ -14,6 +15,8 @@ import { useRouter } from "next/navigation";
 import {
   PORTAL_DOCUMENT_REQUIREMENTS,
   PORTAL_DOCUMENT_ACCEPT,
+  PORTAL_DOCUMENT_MAX_BYTES,
+  PORTAL_DOCUMENT_MAX_LABEL,
   PORTAL_OTHER_DOCUMENT_LABEL,
   findMatchingPortalDocument,
   getPortalDocumentUploadProgress,
@@ -32,10 +35,14 @@ export default function StudentDocumentsManager({
   documents,
   preferredPath,
   preferredCountry,
+  blobUploadsEnabled,
+  uploadPathPrefix,
 }: {
   documents: StudentDocumentView[];
   preferredPath: string;
   preferredCountry: string | null;
+  blobUploadsEnabled: boolean;
+  uploadPathPrefix: string;
 }) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -46,6 +53,7 @@ export default function StudentDocumentsManager({
   const [note, setNote] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [message, setMessage] = useState("");
   const uploadedDocuments = useMemo(
     () => documents.filter((document) => document.hasFile !== false),
@@ -115,6 +123,13 @@ export default function StudentDocumentsManager({
       return;
     }
 
+    if (file.size > PORTAL_DOCUMENT_MAX_BYTES) {
+      setSelectedFile(null);
+      setMessage(`The document must be ${PORTAL_DOCUMENT_MAX_LABEL} or smaller.`);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
     setSelectedFile(file);
   }
 
@@ -128,21 +143,22 @@ export default function StudentDocumentsManager({
     }
 
     setBusy(true);
+    setUploadProgress(0);
     try {
-      const formData = new FormData();
-      formData.set("documentType", documentType);
-      formData.set("customDocumentType", customDocumentType);
-      formData.set("note", note);
-      formData.set("file", selectedFile);
-
-      const response = await fetch("/api/portal/student/documents", {
-        method: "POST",
-        body: formData,
-      });
-      const data = (await response.json()) as {
-        ok?: boolean;
-        message?: string;
-      };
+      const response = blobUploadsEnabled
+        ? await uploadDocumentToBlob(selectedFile, {
+            documentType,
+            customDocumentType,
+            note,
+            uploadPathPrefix,
+            onProgress: setUploadProgress,
+          })
+        : await uploadDocumentToServer(selectedFile, {
+            documentType,
+            customDocumentType,
+            note,
+          });
+      const data = await readUploadResponse(response);
 
       if (!response.ok || !data.ok) {
         throw new Error(data.message || "Document upload failed.");
@@ -160,6 +176,7 @@ export default function StudentDocumentsManager({
       );
     } finally {
       setBusy(false);
+      setUploadProgress(0);
     }
   }
 
@@ -257,7 +274,8 @@ export default function StudentDocumentsManager({
               className="portal-input pt-3 text-xs"
             />
             <span className="mt-1 block text-[10px] font-semibold text-[#71839A]">
-              Any image format or PDF. No app size limit.
+              Images and PDFs up to {PORTAL_DOCUMENT_MAX_LABEL}. Large files
+              upload directly and securely.
             </span>
           </label>
 
@@ -271,7 +289,9 @@ export default function StudentDocumentsManager({
             ) : (
               <UploadCloud className="h-4 w-4" />
             )}
-            Upload
+            {busy && uploadProgress > 0
+              ? `Uploading ${uploadProgress}%`
+              : "Upload"}
           </button>
         </form>
 
@@ -327,6 +347,94 @@ export default function StudentDocumentsManager({
       </section>
     </div>
   );
+}
+
+type UploadFields = {
+  documentType: string;
+  customDocumentType: string;
+  note: string;
+};
+
+async function uploadDocumentToBlob(
+  file: File,
+  fields: UploadFields & {
+    uploadPathPrefix: string;
+    onProgress: (progress: number) => void;
+  }
+) {
+  const blob = await upload(
+    createPortalBlobPath(fields.uploadPathPrefix, file.name),
+    file,
+    {
+      access: "private",
+      contentType: file.type || undefined,
+      handleUploadUrl: "/api/portal/student/documents/upload/",
+      multipart: file.size > 5 * 1024 * 1024,
+      onUploadProgress(event) {
+        fields.onProgress(Math.round(event.percentage));
+      },
+    }
+  );
+
+  return fetch("/api/portal/student/documents/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      documentType: fields.documentType,
+      customDocumentType: fields.customDocumentType,
+      note: fields.note,
+      fileName: file.name,
+      fileType: file.type,
+      blobUrl: blob.url,
+      blobPathname: blob.pathname,
+    }),
+  });
+}
+
+function uploadDocumentToServer(file: File, fields: UploadFields) {
+  const formData = new FormData();
+  formData.set("documentType", fields.documentType);
+  formData.set("customDocumentType", fields.customDocumentType);
+  formData.set("note", fields.note);
+  formData.set("file", file);
+
+  return fetch("/api/portal/student/documents/", {
+    method: "POST",
+    body: formData,
+  });
+}
+
+async function readUploadResponse(response: Response) {
+  const rawResponse = await response.text();
+  let data: { ok?: boolean; message?: string } = {};
+
+  if (rawResponse) {
+    try {
+      data = JSON.parse(rawResponse) as typeof data;
+    } catch {
+      if (
+        response.status === 413 ||
+        /request entity too large|function_payload_too_large/i.test(rawResponse)
+      ) {
+        data.message =
+          "This file is too large for the upload server. Please try a smaller file.";
+      } else {
+        data.message = `Document upload failed (server response ${response.status}).`;
+      }
+    }
+  }
+
+  return data;
+}
+
+function createPortalBlobPath(prefix: string, fileName: string) {
+  const safeFileName =
+    fileName
+      .replace(/[\\/:*?"<>|\x00-\x1F]/g, "-")
+      .replace(/\s+/g, "-")
+      .slice(-140) || "student-document";
+
+  return `${prefix}${crypto.randomUUID()}-${safeFileName}`;
 }
 
 function ChecklistRow({

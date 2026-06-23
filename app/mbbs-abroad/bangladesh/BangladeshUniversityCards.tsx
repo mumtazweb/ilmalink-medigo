@@ -44,6 +44,12 @@ const cardDetails: Record<
     fee: "Fee letter mapped",
     accreditation: "Verify BM&DC/DGME",
   },
+  "jahurul-islam-medical-college": {
+    name: "Jahurul Islam Medical College",
+    city: "Kishoreganj",
+    fee: "$42,000 (2025-26)",
+    accreditation: "University of Dhaka",
+  },
   "tairunnessa-memorial-medical-college": {
     name: "Tairunnessa Memorial Medical College",
     city: "Gazipur",

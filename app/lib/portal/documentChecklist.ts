@@ -38,6 +38,8 @@ export const PORTAL_DOCUMENT_REQUIREMENTS: readonly PortalDocumentRequirement[] 
 
 export const PORTAL_OTHER_DOCUMENT_LABEL = "Other Document";
 export const PORTAL_DOCUMENT_ACCEPT = "image/*,application/pdf,.pdf";
+export const PORTAL_DOCUMENT_MAX_BYTES = 25 * 1024 * 1024;
+export const PORTAL_DOCUMENT_MAX_LABEL = "25 MB";
 
 const PORTAL_IMAGE_EXTENSIONS = new Set([
   ".arw",

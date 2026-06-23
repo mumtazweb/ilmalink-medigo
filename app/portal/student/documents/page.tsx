@@ -14,6 +14,7 @@ export default async function StudentDocumentsPage() {
   const interests = parseStoredInterests(student.interests);
   const preferredPath =
     student.preferredCourse || interests.join(", ") || "";
+  const blobUploadsEnabled = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
 
   return (
     <StudentDocumentsManager
@@ -28,6 +29,8 @@ export default async function StudentDocumentsPage() {
       }))}
       preferredPath={preferredPath}
       preferredCountry={student.preferredCountry}
+      blobUploadsEnabled={blobUploadsEnabled}
+      uploadPathPrefix={`portal-documents/${student.id}/`}
     />
   );
 }

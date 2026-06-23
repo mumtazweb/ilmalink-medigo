@@ -303,6 +303,133 @@ export const bangladeshFeaturedUniversities: BangladeshCollegeProfile[] = [
     pageExists: true,
   },
   {
+    name: "Jahurul Islam Medical College",
+    slug: "jahurul-islam-medical-college",
+    image:
+      "/bangladesh/universities/jahurul-islam-medical-college.webp",
+    imageAlt:
+      "Jahurul Islam Medical College and Hospital campus in Bhagalpur, Bajitpur",
+    city: "Bajitpur, Kishoreganj",
+    location: "Bhagalpur, Bajitpur, Kishoreganj, Bangladesh",
+    program: "MBBS for international students",
+    intake: "2025-2026 (J-35)",
+    duration: "5-year MBBS + compulsory internship as applicable",
+    ownership: "Private medical college",
+    universityAffiliation:
+      "University of Dhaka; BM&DC approval shown by the college (verify current session)",
+    website: "jimedcol.org",
+    fees: "US$42,000 total for foreign students (2025-2026)",
+    feeHeadline:
+      "Official foreign-student fee structure for session 2025-2026",
+    totalCourseFeeUsd: 42000,
+    totalCourseFeeLabel: "US$42,000",
+    hostelNote:
+      "The listed total includes hostel seat rent; food and authority charges are separate.",
+    summary:
+      "Residential private medical college established in 1992 at Bhagalpur, Bajitpur, with a self-contained campus and a teaching hospital that the college describes as having more than 500 beds.",
+    recommendationLevel: "Featured",
+    recommendationMessage:
+      "Featured because the college publishes a foreign-student fee structure and detailed campus information. Verify the latest session, eligibility circular, payment account and all additional charges before admission.",
+    feeRows: [
+      {
+        label: "Admission fee",
+        amount: "US$8,000",
+        note: "Official 2025-2026 foreign-student fee structure",
+      },
+      { label: "Other fees", amount: "US$2,000" },
+      { label: "Student welfare fee", amount: "US$2,000" },
+      { label: "Session fee", amount: "US$900" },
+      { label: "First-year tuition fee", amount: "US$4,200" },
+      { label: "Hostel seat rent", amount: "US$500" },
+      { label: "University registration fee", amount: "US$2,000" },
+      {
+        label: "Second- to fifth-year tuition",
+        amount: "US$22,400",
+        note: "US$5,600 per year for four years",
+      },
+      { label: "Grand total", amount: "US$42,000" },
+    ],
+    paymentSchedule: [
+      {
+        stage: "Admission / first year",
+        amount: "US$19,600",
+        due: "At admission",
+        note: "Admission and first-year listed charges",
+      },
+      {
+        stage: "Second year",
+        amount: "US$5,600",
+        due: "By 30 January of the second academic year",
+      },
+      {
+        stage: "Third year",
+        amount: "US$5,600",
+        due: "By 30 January of the third academic year",
+      },
+      {
+        stage: "Fourth year",
+        amount: "US$5,600",
+        due: "By 30 January of the fourth academic year",
+      },
+      {
+        stage: "Fifth year",
+        amount: "US$5,600",
+        due: "By 30 January of the fifth academic year",
+      },
+    ],
+    additionalFees: [
+      {
+        label: "Food",
+        amount: "At actual cost",
+        note: "Not included in the listed grand total",
+      },
+      {
+        label: "University / examination / authority charges",
+        amount: "At actual cost",
+        note: "Payable when applicable",
+      },
+      {
+        label: "Visa extension and related processing",
+        amount: "At actual cost",
+      },
+      {
+        label: "VAT or government charges",
+        amount: "As applicable",
+      },
+    ],
+    feeNotes: [
+      "The published fee structure is for the 2025-2026 session and should not be assumed unchanged for a later intake.",
+      "The college states that deposited fees are non-refundable.",
+      "Obtain the latest signed fee letter and verified college bank details before transfer.",
+    ],
+    eligibility: [
+      "NEET qualification is required for Indian students seeking India-facing medical licensing eligibility.",
+      "Verify the latest DGME/BM&DC and University of Dhaka eligibility circular for the admission session.",
+      "The college's 2025-2026 foreign-admission page states a combined SSC/HSC GPA requirement of 8.00 and a passing-year restriction; obtain written confirmation before payment.",
+      "Confirm Biology, PCB, English, equivalence and gap-year requirements against the current official circular.",
+    ],
+    documentChecklist: commonDocuments,
+    highlights: [
+      "Established in 1992 under the Aftab Rahima Welfare Trust.",
+      "Self-contained residential campus with separate student hostels, laboratories, library, museums, dissection hall and lecture theatres.",
+      "Teaching hospital described by the college as having more than 500 beds.",
+      "Located at Bhagalpur, about 110 km northeast of Dhaka.",
+    ],
+    facts: [
+      { label: "Established", value: "1992" },
+      { label: "Affiliation", value: "University of Dhaka" },
+      { label: "Location", value: "Bajitpur, Kishoreganj" },
+      { label: "Hospital", value: "More than 500 beds" },
+    ],
+    warnings: [
+      ...commonWarning,
+      "Confirm that the published 2025-2026 fee structure remains applicable to the student's actual intake.",
+    ],
+    fmge: fmgeNotAvailable,
+    disclaimer: bangladeshFinalDisclaimer,
+    pageExists: true,
+  },
+  {
     name: "Tairunnessa Memorial Medical College & Hospital",
     slug: "tairunnessa-memorial-medical-college",
     image:
@@ -666,11 +793,30 @@ export const bangladeshFeaturedUniversities: BangladeshCollegeProfile[] = [
   },
 ];
 
-export const bangladeshUniversityDirectory = bangladeshFeaturedUniversities.filter(
-  (college, index, list) =>
-    college.pageExists !== false &&
-    list.findIndex((item) => item.slug === college.slug) === index,
-);
+const bangladeshCollegeCardPriority = [
+  "green-life-medical-college",
+  "jahurul-islam-medical-college",
+] as const;
+
+export const bangladeshUniversityDirectory = bangladeshFeaturedUniversities
+  .filter(
+    (college, index, list) =>
+      college.pageExists !== false &&
+      list.findIndex((item) => item.slug === college.slug) === index,
+  )
+  .sort((left, right) => {
+    const leftPriority = bangladeshCollegeCardPriority.indexOf(
+      left.slug as (typeof bangladeshCollegeCardPriority)[number],
+    );
+    const rightPriority = bangladeshCollegeCardPriority.indexOf(
+      right.slug as (typeof bangladeshCollegeCardPriority)[number],
+    );
+
+    if (leftPriority === -1 && rightPriority === -1) return 0;
+    if (leftPriority === -1) return 1;
+    if (rightPriority === -1) return -1;
+    return leftPriority - rightPriority;
+  });
 
 export const bangladeshHighlightedFeeRows = bangladeshUniversityDirectory
   .slice(0, 4)

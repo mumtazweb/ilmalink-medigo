@@ -698,7 +698,11 @@ function FmgeAndCounselling() {
             [bangladeshFeaturedUniversities.length.toString(), "Featured colleges", Building2],
             [bangladeshCountryFmge.appeared.toLocaleString("en-IN"), "FMGE 2025 appeared", Users],
             [bangladeshCountryFmge.passRate, "FMGE 2025 pass rate", TrendingUp],
-            ["7 colleges", "Fee letters mapped", Microscope],
+            [
+              bangladeshUniversityDirectory.length.toString(),
+              "College profiles mapped",
+              Microscope,
+            ],
             ["Private route", "Main admission pathway", GraduationCap],
           ].map(([value, label, Icon]) => {
             const IconComponent = Icon as typeof Building2;

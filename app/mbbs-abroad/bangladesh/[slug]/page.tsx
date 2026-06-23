@@ -52,10 +52,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const pageUrl = `${countryPageUrl}${college.slug}/`;
 
   return {
-    title: `${college.name} Fees 2026 | Bangladesh MBBS Profile`,
-    description: `${college.name} MBBS profile with 2026-2027 fee structure, payment schedule, FMGE reference, eligibility, documents and Bangladesh admission verification notes.`,
+    title: `${college.name} Fees | Bangladesh MBBS Profile`,
+    description: `${college.name} MBBS profile with ${college.intake} fee structure, payment schedule, FMGE reference, eligibility, documents and Bangladesh admission verification notes.`,
     keywords: [
-      `${college.name} fee structure 2026`,
+      `${college.name} fee structure`,
       `${college.name} MBBS Bangladesh`,
       `${college.name} FMGE 2025`,
       "Bangladesh MBBS fees 2026",
@@ -139,7 +139,7 @@ function buildJsonLd(college: NonNullable<ReturnType<typeof getBangladeshUnivers
       mainEntity: [
         {
           "@type": "Question",
-          name: `What is the 2026-2027 fee structure of ${college.name}?`,
+          name: `What is the current fee structure of ${college.name}?`,
           acceptedAnswer: {
             "@type": "Answer",
             text: `${college.name} currently has a listed fee headline of ${college.fees}. Students must verify the latest college-issued fee letter, inclusions, exclusions and payment schedule before admission.`,
@@ -288,8 +288,66 @@ export default async function BangladeshCollegeProfilePage({ params }: PageProps
         <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[1.15fr_0.85fr]">
           <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <SectionHeading
+              eyebrow="College overview"
+              title={`About ${college.name}`}
+              description={college.summary}
+            />
+            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+              {college.highlights.map((highlight) => (
+                <li
+                  key={highlight}
+                  className="flex items-start gap-3 rounded-xl bg-[#f8fafc] p-3 text-xs font-semibold leading-6 text-slate-700"
+                >
+                  <CheckCircle2
+                    size={17}
+                    className="mt-0.5 shrink-0 text-[#00A878]"
+                  />
+                  {highlight}
+                </li>
+              ))}
+            </ul>
+          </article>
+
+          <aside className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <h2 className="text-lg font-black text-[#071f3f]">
+              Essential facts
+            </h2>
+            <dl className="mt-4 grid gap-3">
+              {college.facts.map((fact) => (
+                <div
+                  key={`${fact.label}-${fact.value}`}
+                  className="rounded-xl border border-slate-200 bg-[#f8fafc] p-3"
+                >
+                  <dt className="text-[10px] font-black uppercase tracking-wide text-slate-500">
+                    {fact.label}
+                  </dt>
+                  <dd className="mt-1 text-sm font-black text-[#071f3f]">
+                    {fact.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            {college.website ? (
+              <a
+                href={`https://${college.website}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-[#0b4b7a] px-4 py-2.5 text-sm font-extrabold !text-[#0b3a67] transition hover:border-[#00A878] hover:!text-[#00A878]"
+              >
+                Official college website
+                <ArrowRight size={15} />
+              </a>
+            ) : null}
+          </aside>
+        </div>
+      </section>
+
+      <section className="px-4 pb-7 sm:px-6 lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+          <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <SectionHeading
               eyebrow="Fee structure"
-              title={`${college.name} fees 2026-2027`}
+              title={`${college.name} fee structure`}
               description={college.feeHeadline}
             />
             <div className="mt-5 overflow-x-auto rounded-xl border border-slate-200">
