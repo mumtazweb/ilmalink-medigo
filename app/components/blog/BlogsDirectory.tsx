@@ -1,14 +1,21 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { BookOpen, ChevronDown, Search, SlidersHorizontal, X } from "lucide-react";
+import {
+  BookOpen,
+  ChevronDown,
+  Filter,
+  RotateCcw,
+  Search,
+  ShieldCheck,
+  X,
+} from "lucide-react";
 import BlogCard from "./BlogCard";
 import type { BlogSort, BlogSummaryPost } from "@/app/lib/blog/types";
 import { BLOGS_PAGE_SIZE } from "@/app/lib/blog/pagination";
 
 const visibleStep = BLOGS_PAGE_SIZE;
 
-// BLOG SYSTEM: Search, filters, sorting and load-more grid for /blogs.
 export default function BlogsDirectory({
   posts,
   categories,
@@ -32,10 +39,17 @@ export default function BlogsDirectory({
       .filter((post) => {
         const matchesQuery =
           !normalizedQuery ||
-          [post.title, post.shortDescription, post.category, post.country, ...post.tags]
+          [
+            post.title,
+            post.shortDescription,
+            post.category,
+            post.country,
+            ...post.tags,
+          ]
             .join(" ")
             .toLowerCase()
             .includes(normalizedQuery);
+
         const matchesCategory = !category || post.category === category;
         const matchesCountry = !country || post.country === country;
 
@@ -55,6 +69,7 @@ export default function BlogsDirectory({
   }, [category, country, posts, query, sort]);
 
   const visiblePosts = filteredPosts.slice(0, visible);
+
   const activeFilterCount =
     Number(Boolean(category)) +
     Number(Boolean(country)) +
@@ -67,16 +82,45 @@ export default function BlogsDirectory({
     setVisible(visibleStep);
   }
 
+  function clearAll() {
+    setQuery("");
+    clearFilters();
+  }
+
   return (
-    <section className="mx-auto max-w-7xl px-3 py-5 sm:px-6 md:py-7 lg:px-8">
-      <div className="rounded-2xl border border-slate-200/80 bg-white p-2 shadow-[0_18px_46px_rgba(8,27,53,0.08)] ring-1 ring-white">
-        <div className="flex items-center gap-2">
-          <div className="relative min-w-0 flex-1">
+    <section className="mx-auto max-w-7xl px-4 pb-10 pt-2 sm:px-6 md:pb-12 lg:px-8">
+      <div className="overflow-hidden rounded-[1.6rem] border border-slate-200/80 bg-white/90 p-4 shadow-[0_20px_60px_rgba(8,27,53,0.08)] backdrop-blur-xl sm:p-5">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#EAF1FF] px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.12em] text-[#0F4CFF]">
+              <ShieldCheck size={14} />
+              Find updates
+            </div>
+
+            <h2 className="mt-2 text-2xl font-black tracking-tight text-[#061733] sm:text-3xl">
+              Search MBBS &amp; NEET Blogs
+            </h2>
+
+            <p className="mt-1 max-w-2xl text-sm font-semibold leading-6 text-[#50617A]">
+              Filter admission news, NEET alerts, college guidance,
+              scholarships, loans and medical education updates.
+            </p>
+          </div>
+
+          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-black text-[#50617A] shadow-sm">
+            <BookOpen size={14} className="text-[#0F4CFF]" />
+            Showing {visiblePosts.length} of {filteredPosts.length}
+          </div>
+        </div>
+
+        <div className="mt-5 grid gap-3 lg:grid-cols-[1fr_auto]">
+          <div className="relative">
             <Search
-              size={17}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              size={18}
+              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#0F4CFF]"
               aria-hidden="true"
             />
+
             <input
               id="blog-directory-search"
               name="blogDirectorySearch"
@@ -85,9 +129,10 @@ export default function BlogsDirectory({
                 setQuery(event.target.value);
                 setVisible(visibleStep);
               }}
-              placeholder="Search blogs"
-              className="h-11 w-full rounded-xl border border-slate-200 bg-[#F6F9FC] pl-10 pr-9 text-sm font-semibold text-[#0F172A] outline-none transition focus:border-[#0F4CFF] focus:bg-white focus:shadow-[0_0_0_4px_rgba(15,76,255,0.08)]"
+              placeholder="Search NEET update, MBBS admission, counselling, college..."
+              className="h-14 w-full rounded-2xl border border-slate-200 bg-[#F8FBFF] pl-12 pr-11 text-sm font-bold text-[#061733] outline-none transition placeholder:text-slate-400 focus:border-[#0F4CFF] focus:bg-white focus:shadow-[0_0_0_4px_rgba(15,76,255,0.08)]"
             />
+
             {query && (
               <button
                 type="button"
@@ -96,9 +141,9 @@ export default function BlogsDirectory({
                   setQuery("");
                   setVisible(visibleStep);
                 }}
-                className="absolute right-2 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-[#061733]"
               >
-                <X size={14} />
+                <X size={15} />
               </button>
             )}
           </div>
@@ -106,12 +151,12 @@ export default function BlogsDirectory({
           <button
             type="button"
             onClick={() => setFiltersOpen((current) => !current)}
-            className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-[#0C2A55] bg-[#061733] px-3 text-xs font-black uppercase tracking-[0.08em] text-white shadow-[0_12px_24px_rgba(8,27,53,0.18)] transition hover:border-[#0F4CFF] hover:bg-[#0F4CFF] sm:px-4"
+            className="inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-[#061733] px-5 text-xs font-black uppercase tracking-[0.08em] text-white shadow-[0_16px_34px_rgba(8,27,53,0.18)] transition hover:-translate-y-0.5 hover:bg-[#0F4CFF]"
             aria-expanded={filtersOpen}
             aria-label="Toggle blog filters"
           >
-            <SlidersHorizontal size={15} />
-            Filter
+            <Filter size={16} />
+            Filters
             {activeFilterCount > 0 && (
               <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#00C896] px-1.5 text-[10px] text-[#041528]">
                 {activeFilterCount}
@@ -125,7 +170,7 @@ export default function BlogsDirectory({
         </div>
 
         {filtersOpen && (
-          <div className="mt-2 grid gap-2 border-t border-slate-100 bg-[linear-gradient(180deg,#FFFFFF_0%,#F8FBFF_100%)] pt-2 md:grid-cols-[1fr_1fr_1fr_auto]">
+          <div className="mt-4 grid gap-3 border-t border-slate-100 pt-4 md:grid-cols-[1fr_1fr_1fr_auto]">
             <select
               id="blog-directory-category"
               name="blogDirectoryCategory"
@@ -134,7 +179,7 @@ export default function BlogsDirectory({
                 setCategory(event.target.value);
                 setVisible(visibleStep);
               }}
-              className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-[#0F172A] outline-none transition focus:border-[#0F4CFF] focus:shadow-[0_0_0_4px_rgba(15,76,255,0.08)]"
+              className="h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-bold text-[#061733] outline-none transition focus:border-[#0F4CFF] focus:shadow-[0_0_0_4px_rgba(15,76,255,0.08)]"
             >
               <option value="">All categories</option>
               {categories.map((item) => (
@@ -152,7 +197,7 @@ export default function BlogsDirectory({
                 setCountry(event.target.value);
                 setVisible(visibleStep);
               }}
-              className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-[#0F172A] outline-none transition focus:border-[#0F4CFF] focus:shadow-[0_0_0_4px_rgba(15,76,255,0.08)]"
+              className="h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-bold text-[#061733] outline-none transition focus:border-[#0F4CFF] focus:shadow-[0_0_0_4px_rgba(15,76,255,0.08)]"
             >
               <option value="">All countries</option>
               {countries.map((item) => (
@@ -170,7 +215,7 @@ export default function BlogsDirectory({
                 setSort(event.target.value as BlogSort);
                 setVisible(visibleStep);
               }}
-              className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-[#0F172A] outline-none transition focus:border-[#0F4CFF] focus:shadow-[0_0_0_4px_rgba(15,76,255,0.08)]"
+              className="h-12 rounded-2xl border border-slate-200 bg-white px-4 text-sm font-bold text-[#061733] outline-none transition focus:border-[#0F4CFF] focus:shadow-[0_0_0_4px_rgba(15,76,255,0.08)]"
             >
               <option value="latest">Latest first</option>
               <option value="oldest">Oldest first</option>
@@ -180,22 +225,28 @@ export default function BlogsDirectory({
             <button
               type="button"
               onClick={clearFilters}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-xs font-black uppercase tracking-[0.08em] text-slate-600 transition hover:border-[#0F4CFF]/30 hover:text-[#0F4CFF]"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 text-xs font-black uppercase tracking-[0.08em] text-[#50617A] transition hover:border-[#0F4CFF]/30 hover:text-[#0F4CFF]"
             >
-              <X size={14} />
-              Clear
+              <RotateCcw size={14} />
+              Reset
             </button>
           </div>
         )}
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 px-1 text-xs font-bold text-slate-500">
-        <span className="inline-flex items-center gap-2">
-          <BookOpen size={14} className="text-[#0F4CFF]" />
-          Showing {visiblePosts.length} of {filteredPosts.length} blogs
-        </span>
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 px-1 text-sm font-bold text-[#50617A]">
         <span>
-          {sort === "latest" ? "Latest updates first" : sort === "oldest" ? "Oldest updates first" : "Most viewed first"}
+          {query
+            ? `Results for “${query}”`
+            : "Latest MBBS admission & NEET updates"}
+        </span>
+
+        <span className="rounded-full bg-white px-3 py-1.5 text-xs font-black text-[#0F4CFF] shadow-sm">
+          {sort === "latest"
+            ? "Latest first"
+            : sort === "oldest"
+              ? "Oldest first"
+              : "Most viewed"}
         </span>
       </div>
 
@@ -206,18 +257,34 @@ export default function BlogsDirectory({
       </div>
 
       {filteredPosts.length === 0 && (
-        <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm font-semibold text-slate-600 shadow-sm">
-          No blogs found for the selected filters.
+        <div className="mt-8 rounded-[1.35rem] border border-slate-200 bg-white p-8 text-center shadow-[0_18px_52px_rgba(8,27,53,0.07)]">
+          <p className="text-lg font-black text-[#061733]">
+            No matching blogs found
+          </p>
+          <p className="mt-2 text-sm font-semibold text-[#50617A]">
+            Try searching NEET, MBBS, counselling, scholarship, loan or college.
+          </p>
+
+          <button
+            type="button"
+            onClick={clearAll}
+            className="mt-5 inline-flex items-center justify-center gap-2 rounded-2xl bg-[#0F4CFF] px-5 py-3 text-sm font-black text-white"
+          >
+            Clear Search
+            <X size={15} />
+          </button>
         </div>
       )}
 
       {visible < filteredPosts.length && (
         <div className="mt-8 flex justify-center">
           <button
+            type="button"
             onClick={() => setVisible((current) => current + visibleStep)}
-            className="rounded-full bg-[#0F4CFF] px-7 py-3 text-sm font-black text-white shadow-[0_14px_28px_rgba(15,76,255,0.22)] transition hover:bg-[#0b3fd6]"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#0F4CFF] px-7 py-3 text-sm font-black text-white shadow-[0_16px_34px_rgba(15,76,255,0.22)] transition hover:-translate-y-0.5 hover:bg-[#061733]"
           >
-            Load More
+            Load More Blogs
+            <ChevronDown size={16} />
           </button>
         </div>
       )}

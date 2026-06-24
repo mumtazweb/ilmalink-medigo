@@ -17,16 +17,11 @@ import type {
   BlogUser,
 } from "./types";
 
-export const BLOG_ADMIN_EMAIL = SITE_OWNER_ADMIN_EMAIL;
+export const BLOG_ADMIN_EMAIL = SITE_OWNER_ADMIN_EMAIL.toLowerCase();
 
-const BLOG_EDITOR_EMAIL =
-  "middya@ilmalink.com";
+const BLOG_EDITOR_EMAIL = "middya@ilmalink.com";
 
-const databasePath = path.join(
-  process.cwd(),
-  "data",
-  "blog-db.json"
-);
+const databasePath = path.join(process.cwd(), "data", "blog-db.json");
 
 type PrismaBlogRecord = {
   id: string;
@@ -48,6 +43,21 @@ type PrismaBlogRecord = {
   author?: {
     name: string;
   } | null;
+};
+
+type PrismaBlogSummaryRecord = {
+  id: string;
+  title: string;
+  slug: string;
+  shortDescription: string;
+  content: string;
+  category: string;
+  country: string | null;
+  featuredImage: string | null;
+  status: string;
+  views: number;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 type PrismaBlogCommentRecord = {
@@ -91,15 +101,12 @@ type StoredBlogMetadata = {
   images?: BlogPost["images"];
 };
 
-const BLOG_METADATA_PREFIX =
-  "<!-- BLOG_METADATA:";
+const BLOG_METADATA_PREFIX = "<!-- BLOG_METADATA:";
 const BLOG_METADATA_SUFFIX = " -->";
 const MAX_SLUG_LENGTH = 180;
 const DEFAULT_TICKER_ORDER = 999;
 
-function normalizeTickerText(
-  value: unknown
-) {
+function normalizeTickerText(value: unknown) {
   if (typeof value !== "string") {
     return null;
   }
@@ -109,9 +116,7 @@ function normalizeTickerText(
   return trimmed || null;
 }
 
-function normalizeTickerOrder(
-  value: unknown
-) {
+function normalizeTickerOrder(value: unknown) {
   const order =
     typeof value === "number"
       ? value
@@ -122,28 +127,17 @@ function normalizeTickerOrder(
     : DEFAULT_TICKER_ORDER;
 }
 
-function normalizeBlogPost(
-  blog: BlogPost
-): BlogPost {
+function normalizeBlogPost(blog: BlogPost): BlogPost {
   return {
     ...blog,
-    createdAt:
-      blog.createdAt ??
-      blog.publishDate ??
-      blog.updatedAt,
-    tickerText: normalizeTickerText(
-      blog.tickerText
-    ),
+    createdAt: blog.createdAt ?? blog.publishDate ?? blog.updatedAt,
+    tickerText: normalizeTickerText(blog.tickerText),
     showInTicker: blog.showInTicker ?? false,
-    tickerOrder: normalizeTickerOrder(
-      blog.tickerOrder
-    ),
+    tickerOrder: normalizeTickerOrder(blog.tickerOrder),
   };
 }
 
-function normalizeBlogDatabase(
-  database: BlogDatabase
-): BlogDatabase {
+function normalizeBlogDatabase(database: BlogDatabase): BlogDatabase {
   return {
     ...database,
     blogs: database.blogs.map(normalizeBlogPost),
@@ -162,20 +156,11 @@ function getPrismaBlogCommentModel() {
 }
 
 function isRole(value: string): value is BlogRole {
-  return (
-    value === "admin" ||
-    value === "editor" ||
-    value === "author"
-  );
+  return value === "admin" || value === "editor" || value === "author";
 }
 
-export function getEffectiveBlogRole(
-  email: string,
-  role: string
-): BlogRole {
-  const normalizedEmail = email
-    .trim()
-    .toLowerCase();
+export function getEffectiveBlogRole(email: string, role: string): BlogRole {
+  const normalizedEmail = email.trim().toLowerCase();
 
   if (normalizedEmail === BLOG_ADMIN_EMAIL) {
     return "admin";
@@ -195,10 +180,7 @@ async function withEffectiveBlogRole<
     return null;
   }
 
-  const role = getEffectiveBlogRole(
-    user.email,
-    user.role
-  );
+  const role = getEffectiveBlogRole(user.email, user.role);
 
   if (role !== user.role) {
     try {
@@ -211,10 +193,7 @@ async function withEffectiveBlogRole<
         },
       });
     } catch (error) {
-      console.log(
-        "Blog role sync error:",
-        error
-      );
+      console.log("Blog role sync error:", error);
     }
   }
 
@@ -228,17 +207,13 @@ async function readFileDatabase(): Promise<BlogDatabase> {
   try {
     const file = await fs.readFile(databasePath, "utf8");
 
-    return normalizeBlogDatabase(
-      JSON.parse(file) as BlogDatabase
-    );
+    return normalizeBlogDatabase(JSON.parse(file) as BlogDatabase);
   } catch {
     return normalizeBlogDatabase(seedDatabase);
   }
 }
 
-function stringifyBlogMetadata(
-  blog: BlogPost
-) {
+function stringifyBlogMetadata(blog: BlogPost) {
   const metadata: StoredBlogMetadata = {
     imageAlt: blog.imageAlt,
     seoTitle: blog.seoTitle,
@@ -254,9 +229,7 @@ function stringifyBlogMetadata(
 }
 
 function splitBlogContent(value: string) {
-  const markerIndex = value.lastIndexOf(
-    BLOG_METADATA_PREFIX
-  );
+  const markerIndex = value.lastIndexOf(BLOG_METADATA_PREFIX);
 
   if (markerIndex === -1) {
     return {
@@ -265,10 +238,7 @@ function splitBlogContent(value: string) {
     };
   }
 
-  const markerEnd = value.indexOf(
-    BLOG_METADATA_SUFFIX,
-    markerIndex
-  );
+  const markerEnd = value.indexOf(BLOG_METADATA_SUFFIX, markerIndex);
 
   if (markerEnd === -1) {
     return {
@@ -299,13 +269,8 @@ function splitBlogContent(value: string) {
   }
 }
 
-function joinBlogContent(
-  content: string,
-  metadata: string
-) {
-  const encoded = Buffer.from(metadata, "utf8").toString(
-    "base64"
-  );
+function joinBlogContent(content: string, metadata: string) {
+  const encoded = Buffer.from(metadata, "utf8").toString("base64");
 
   return `${content.trimEnd()}\n\n${BLOG_METADATA_PREFIX}${encoded}${BLOG_METADATA_SUFFIX}`;
 }
@@ -317,9 +282,7 @@ function toBlogCategory(value: string): BlogCategory {
 }
 
 function toBlogStatus(value: string) {
-  return value === "published" ||
-    value === "pending" ||
-    value === "rejected"
+  return value === "published" || value === "pending" || value === "rejected"
     ? value
     : "draft";
 }
@@ -327,17 +290,11 @@ function toBlogStatus(value: string) {
 function safeDate(value: string) {
   const date = new Date(value);
 
-  return Number.isNaN(date.getTime())
-    ? new Date()
-    : date;
+  return Number.isNaN(date.getTime()) ? new Date() : date;
 }
 
-function mapPrismaBlog(
-  record: PrismaBlogRecord
-): BlogPost {
-  const parsedContent = splitBlogContent(
-    record.content
-  );
+function mapPrismaBlog(record: PrismaBlogRecord): BlogPost {
+  const parsedContent = splitBlogContent(record.content);
   const metadata = parsedContent.metadata;
   const category = toBlogCategory(record.category);
   const keywords = Array.isArray(metadata.keywords)
@@ -355,46 +312,29 @@ function mapPrismaBlog(
     featuredImage: record.featuredImage ?? "",
     imageAlt: metadata.imageAlt ?? record.title,
     shortDescription: record.shortDescription,
-    tickerText: normalizeTickerText(
-      record.tickerText
-    ),
+    tickerText: normalizeTickerText(record.tickerText),
     showInTicker: record.showInTicker ?? false,
-    tickerOrder: normalizeTickerOrder(
-      record.tickerOrder
-    ),
+    tickerOrder: normalizeTickerOrder(record.tickerOrder),
     category,
     country: record.country || "India",
     tags: tags.length ? tags : [category],
     authorId: record.authorId,
-    authorName:
-      record.author?.name ??
-      "ILMALINK Editorial Team",
+    authorName: record.author?.name ?? "ILMALINK Editorial Team",
     publishDate:
-      metadata.publishDate ??
-      record.createdAt
-        .toISOString()
-        .slice(0, 10),
+      metadata.publishDate ?? record.createdAt.toISOString().slice(0, 10),
     updatedAt: record.updatedAt.toISOString(),
-    readTime:
-      metadata.readTime ??
-      calculateReadTime(record.content),
+    readTime: metadata.readTime ?? calculateReadTime(record.content),
     views: record.views,
     status: toBlogStatus(record.status),
-    seoTitle:
-      metadata.seoTitle ?? record.title,
-    metaDescription:
-      metadata.metaDescription ??
-      record.shortDescription,
+    seoTitle: metadata.seoTitle ?? record.title,
+    metaDescription: metadata.metaDescription ?? record.shortDescription,
     keywords,
     images: metadata.images ?? [],
     content: parsedContent.content,
   };
 }
 
-function addBlogToMap(
-  map: Map<string, BlogPost>,
-  blog: BlogPost
-) {
+function addBlogToMap(map: Map<string, BlogPost>, blog: BlogPost) {
   for (const [id, item] of map) {
     if (item.slug === blog.slug && id !== blog.id) {
       map.delete(id);
@@ -404,21 +344,13 @@ function addBlogToMap(
   map.set(blog.id, blog);
 }
 
-function getSortedPublishedBlogs(
-  database: BlogDatabase
-) {
+function getSortedPublishedBlogs(database: BlogDatabase) {
   return database.blogs
     .filter((blog) => blog.status === "published")
-    .sort(
-      (a, b) =>
-        Date.parse(b.publishDate) -
-        Date.parse(a.publishDate)
-    );
+    .sort((a, b) => Date.parse(b.publishDate) - Date.parse(a.publishDate));
 }
 
-function toBlogSummaryPost(
-  blog: BlogPost
-): BlogSummaryPost {
+function toBlogSummaryPost(blog: BlogPost): BlogSummaryPost {
   return {
     id: blog.id,
     title: blog.title,
@@ -433,6 +365,102 @@ function toBlogSummaryPost(
     readTime: blog.readTime,
     views: blog.views,
   };
+}
+
+function mapPrismaBlogSummary(record: PrismaBlogSummaryRecord): BlogSummaryPost {
+  const parsedContent = splitBlogContent(record.content);
+  const metadata = parsedContent.metadata;
+  const category = toBlogCategory(record.category);
+  const keywords = Array.isArray(metadata.keywords)
+    ? metadata.keywords.filter(Boolean)
+    : [];
+  const tags = Array.isArray(metadata.tags)
+    ? metadata.tags.filter(Boolean)
+    : keywords;
+
+  return {
+    id: record.id,
+    title: record.title,
+    slug: record.slug,
+    featuredImage: record.featuredImage ?? "",
+    imageAlt: metadata.imageAlt ?? record.title,
+    shortDescription: record.shortDescription,
+    category,
+    country: record.country || "India",
+    tags: tags.length ? tags : [category],
+    publishDate:
+      metadata.publishDate ?? record.createdAt.toISOString().slice(0, 10),
+    readTime: metadata.readTime ?? calculateReadTime(parsedContent.content),
+    views: record.views,
+  };
+}
+
+function addBlogSummaryToMap(
+  map: Map<string, BlogSummaryPost>,
+  blog: BlogSummaryPost
+) {
+  for (const [id, item] of map) {
+    if (item.slug === blog.slug && id !== blog.id) {
+      map.delete(id);
+    }
+  }
+
+  map.set(blog.id, blog);
+}
+
+function sortBlogSummaries(blogs: BlogSummaryPost[]) {
+  return blogs.sort(
+    (a, b) => Date.parse(b.publishDate) - Date.parse(a.publishDate)
+  );
+}
+
+async function readPrismaBlogSummaries() {
+  try {
+    const findManyBlogs = prisma.blog.findMany as unknown as (args: {
+      where: {
+        status: "published";
+      };
+      select: Record<string, unknown>;
+      orderBy: {
+        createdAt: "desc";
+      };
+    }) => Promise<PrismaBlogSummaryRecord[]>;
+
+    const records = await findManyBlogs({
+      where: {
+        status: "published",
+      },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        shortDescription: true,
+        content: true,
+        category: true,
+        country: true,
+        featuredImage: true,
+        status: true,
+        views: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return records.map(mapPrismaBlogSummary);
+  } catch (error) {
+    console.log("Read blog summaries error:", error);
+
+    return [];
+  }
+}
+
+async function readFileBlogSummaries() {
+  const database = await readFileDatabase();
+
+  return getSortedPublishedBlogs(database).map(toBlogSummaryPost);
 }
 
 async function readPrismaBlogs() {
@@ -475,10 +503,7 @@ async function readPrismaBlogs() {
 
     return records.map((record) => mapPrismaBlog(record));
   } catch (error) {
-    console.log(
-      "Read blog database error:",
-      error
-    );
+    console.log("Read blog database error:", error);
 
     return [];
   }
@@ -503,17 +528,11 @@ async function readPrismaComments() {
       blogId: record.blogId,
       authorName: record.authorName,
       message: record.message,
-      status:
-        record.status === "approved"
-          ? "approved"
-          : "pending",
+      status: record.status === "approved" ? "approved" : "pending",
       createdAt: record.createdAt.toISOString(),
     })) satisfies BlogComment[];
   } catch (error) {
-    console.log(
-      "Read blog comments error:",
-      error
-    );
+    console.log("Read blog comments error:", error);
 
     return [];
   }
@@ -534,9 +553,7 @@ function mergeBlogComments(
   }
 
   return Array.from(comments.values()).sort(
-    (a, b) =>
-      Date.parse(b.createdAt) -
-      Date.parse(a.createdAt)
+    (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)
   );
 }
 
@@ -548,10 +565,7 @@ async function readDatabase(): Promise<BlogDatabase> {
   if (prismaBlogs.length === 0) {
     return {
       ...fileDatabase,
-      comments: mergeBlogComments(
-        fileDatabase.comments,
-        prismaComments
-      ),
+      comments: mergeBlogComments(fileDatabase.comments, prismaComments),
     };
   }
 
@@ -578,10 +592,7 @@ async function readDatabase(): Promise<BlogDatabase> {
     ...fileDatabase,
     blogs: Array.from(blogs.values()),
     drafts: Array.from(drafts.values()),
-    comments: mergeBlogComments(
-      fileDatabase.comments,
-      prismaComments
-    ),
+    comments: mergeBlogComments(fileDatabase.comments, prismaComments),
   };
 }
 
@@ -590,32 +601,27 @@ async function writeFileDatabase(database: BlogDatabase) {
     recursive: true,
   });
 
-  await fs.writeFile(
-    databasePath,
-    JSON.stringify(database, null, 2)
-  );
+  await fs.writeFile(databasePath, JSON.stringify(database, null, 2));
 }
 
 async function ensureFallbackAuthorId() {
   const fallbackEmail = "admin@ilmalink.com";
 
-  const userByEmail =
-    await prisma.user.findUnique({
-      where: {
-        email: fallbackEmail,
-      },
-    });
+  const userByEmail = await prisma.user.findUnique({
+    where: {
+      email: fallbackEmail,
+    },
+  });
 
   if (userByEmail) {
     return userByEmail.id;
   }
 
-  const userById =
-    await prisma.user.findUnique({
-      where: {
-        id: "user-admin",
-      },
-    });
+  const userById = await prisma.user.findUnique({
+    where: {
+      id: "user-admin",
+    },
+  });
 
   if (userById) {
     return userById.id;
@@ -650,38 +656,23 @@ async function resolveAuthorId(authorId: string) {
   return ensureFallbackAuthorId();
 }
 
-async function writePrismaDatabase(
-  database: BlogDatabase
-) {
-  const posts = [
-    ...database.blogs,
-    ...database.drafts,
-  ];
+async function writePrismaDatabase(database: BlogDatabase) {
+  const posts = [...database.blogs, ...database.drafts];
 
   for (const blog of posts) {
-    const authorId = await resolveAuthorId(
-      blog.authorId
-    );
+    const authorId = await resolveAuthorId(blog.authorId);
 
     const data = {
       title: blog.title,
       slug: blog.slug,
       shortDescription: blog.shortDescription,
-      content: joinBlogContent(
-        blog.content,
-        stringifyBlogMetadata(blog)
-      ),
+      content: joinBlogContent(blog.content, stringifyBlogMetadata(blog)),
       category: blog.category,
       country: blog.country || "India",
-      featuredImage:
-        blog.featuredImage || null,
-      tickerText: normalizeTickerText(
-        blog.tickerText
-      ),
+      featuredImage: blog.featuredImage || null,
+      tickerText: normalizeTickerText(blog.tickerText),
       showInTicker: blog.showInTicker ?? false,
-      tickerOrder: normalizeTickerOrder(
-        blog.tickerOrder
-      ),
+      tickerOrder: normalizeTickerOrder(blog.tickerOrder),
       status: blog.status,
       views: blog.views,
       createdAt: safeDate(blog.publishDate),
@@ -734,9 +725,7 @@ export async function getFreshBlogDatabase() {
   return readDatabase();
 }
 
-export async function saveBlogDatabase(
-  database: BlogDatabase
-) {
+export async function saveBlogDatabase(database: BlogDatabase) {
   let databaseSaved = false;
   let fileSaved = false;
   let databaseError: unknown = null;
@@ -747,10 +736,7 @@ export async function saveBlogDatabase(
     databaseSaved = true;
   } catch (error) {
     databaseError = error;
-    console.log(
-      "Save blog database error:",
-      error
-    );
+    console.log("Save blog database error:", error);
   }
 
   try {
@@ -758,10 +744,7 @@ export async function saveBlogDatabase(
     fileSaved = true;
   } catch (error) {
     fileError = error;
-    console.log(
-      "Save blog file backup error:",
-      error
-    );
+    console.log("Save blog file backup error:", error);
   }
 
   if (!databaseSaved && !fileSaved) {
@@ -769,9 +752,7 @@ export async function saveBlogDatabase(
   }
 }
 
-export async function saveBlogComment(
-  comment: BlogComment
-) {
+export async function saveBlogComment(comment: BlogComment) {
   let databaseSaved = false;
   let fileSaved = false;
   let databaseError: unknown = null;
@@ -796,10 +777,7 @@ export async function saveBlogComment(
       databaseSaved = true;
     } catch (error) {
       databaseError = error;
-      console.log(
-        "Save blog comment error:",
-        error
-      );
+      console.log("Save blog comment error:", error);
     }
   }
 
@@ -807,18 +785,13 @@ export async function saveBlogComment(
     const database = await readFileDatabase();
     database.comments = [
       comment,
-      ...database.comments.filter(
-        (item) => item.id !== comment.id
-      ),
+      ...database.comments.filter((item) => item.id !== comment.id),
     ];
     await writeFileDatabase(database);
     fileSaved = true;
   } catch (error) {
     fileError = error;
-    console.log(
-      "Save blog comment backup error:",
-      error
-    );
+    console.log("Save blog comment backup error:", error);
   }
 
   if (!databaseSaved && !fileSaved) {
@@ -826,10 +799,7 @@ export async function saveBlogComment(
   }
 }
 
-export async function deleteStoredBlog(
-  blogId: string,
-  slug?: string
-) {
+export async function deleteStoredBlog(blogId: string, slug?: string) {
   try {
     await prisma.blog.deleteMany({
       where: {
@@ -848,10 +818,7 @@ export async function deleteStoredBlog(
       },
     });
   } catch (error) {
-    console.log(
-      "Delete stored blog error:",
-      error
-    );
+    console.log("Delete stored blog error:", error);
   }
 }
 
@@ -862,9 +829,22 @@ export async function getPublishedBlogs() {
 }
 
 export async function getPublishedBlogSummaries() {
-  const blogs = await getPublishedBlogs();
+  const [fileSummaries, prismaSummaries] = await Promise.all([
+    readFileBlogSummaries(),
+    readPrismaBlogSummaries(),
+  ]);
 
-  return blogs.map(toBlogSummaryPost);
+  const summaries = new Map<string, BlogSummaryPost>();
+
+  for (const blog of fileSummaries) {
+    addBlogSummaryToMap(summaries, blog);
+  }
+
+  for (const blog of prismaSummaries) {
+    addBlogSummaryToMap(summaries, blog);
+  }
+
+  return sortBlogSummaries(Array.from(summaries.values()));
 }
 
 const HOMEPAGE_BLOG_CATEGORIES = new Set([
@@ -920,9 +900,7 @@ function isOtherEntranceExamBlog(blog: BlogSummaryPost) {
     return true;
   }
 
-  return blog.tags.some((tag) =>
-    containsOtherEntranceExamKeyword(tag)
-  );
+  return blog.tags.some((tag) => containsOtherEntranceExamKeyword(tag));
 }
 
 function isHomepageMedicalBlog(blog: BlogSummaryPost) {
@@ -944,114 +922,71 @@ export async function getLatestBlogSummaries(limit = 8) {
   return blogs.slice(0, limit);
 }
 
-export async function getLatestHomepageBlogSummaries(
-  limit = 8
-) {
+export async function getLatestHomepageBlogSummaries(limit = 8) {
   const blogs = await getPublishedBlogSummaries();
 
-  return blogs
-    .filter(isHomepageMedicalBlog)
-    .slice(0, limit);
+  return blogs.filter(isHomepageMedicalBlog).slice(0, limit);
 }
 
-export async function getLatestOtherEntranceExamBlogSummaries(
-  limit = 4
-) {
+export async function getLatestOtherEntranceExamBlogSummaries(limit = 4) {
   const blogs = await getPublishedBlogSummaries();
 
   return blogs.filter(isOtherEntranceExamBlog).slice(0, limit);
 }
 
-export async function getTickerBlogs(
-  limit = 12
-): Promise<BlogTickerPost[]> {
+export async function getTickerBlogs(limit = 12): Promise<BlogTickerPost[]> {
   const database = await readDatabase();
 
   return database.blogs
-    .filter(
-      (blog) =>
-        blog.status === "published" &&
-        blog.showInTicker === true
-    )
+    .filter((blog) => blog.status === "published" && blog.showInTicker === true)
     .sort((a, b) => {
       const orderDifference =
-        normalizeTickerOrder(a.tickerOrder) -
-        normalizeTickerOrder(b.tickerOrder);
+        normalizeTickerOrder(a.tickerOrder) - normalizeTickerOrder(b.tickerOrder);
 
       if (orderDifference !== 0) {
         return orderDifference;
       }
 
-      const aDate = Date.parse(
-        a.publishDate ||
-          a.createdAt ||
-          a.updatedAt
-      );
-      const bDate = Date.parse(
-        b.publishDate ||
-          b.createdAt ||
-          b.updatedAt
-      );
+      const aDate = Date.parse(blogDateForTicker(a));
+      const bDate = Date.parse(blogDateForTicker(b));
 
-      return (
-        (Number.isNaN(bDate) ? 0 : bDate) -
-        (Number.isNaN(aDate) ? 0 : aDate)
-      );
+      return (Number.isNaN(bDate) ? 0 : bDate) - (Number.isNaN(aDate) ? 0 : aDate);
     })
     .slice(0, limit)
     .map((blog) => ({
       id: blog.id,
       title: blog.title,
       slug: blog.slug,
-      tickerText: normalizeTickerText(
-        blog.tickerText
-      ),
+      tickerText: normalizeTickerText(blog.tickerText),
       shortDescription: blog.shortDescription,
       publishDate: blog.publishDate,
-      createdAt:
-        blog.createdAt ??
-        blog.publishDate ??
-        blog.updatedAt,
-      tickerOrder: normalizeTickerOrder(
-        blog.tickerOrder
-      ),
+      createdAt: blog.createdAt ?? blog.publishDate ?? blog.updatedAt,
+      tickerOrder: normalizeTickerOrder(blog.tickerOrder),
     }));
 }
 
-export async function getApprovedBlogComments(
-  blogId: string
-) {
+function blogDateForTicker(blog: BlogPost) {
+  return blog.publishDate || blog.createdAt || blog.updatedAt;
+}
+
+export async function getApprovedBlogComments(blogId: string) {
   const database = await getBlogDatabase();
 
   return database.comments
-    .filter(
-      (comment) =>
-        comment.blogId === blogId &&
-        comment.status === "approved"
-    )
-    .sort(
-      (a, b) =>
-        Date.parse(b.createdAt) -
-        Date.parse(a.createdAt)
-    );
+    .filter((comment) => comment.blogId === blogId && comment.status === "approved")
+    .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
 
 export async function getBlogBySlug(slug: string) {
   const blogs = await getPublishedBlogs();
 
-  return (
-    blogs.find((blog) => blog.slug === slug) ?? null
-  );
+  return blogs.find((blog) => blog.slug === slug) ?? null;
 }
 
-export async function getBlogArticleData(
-  slug: string,
-  relatedLimit = 3
-) {
+export async function getBlogArticleData(slug: string, relatedLimit = 3) {
   const database = await getBlogDatabase();
   const blogs = getSortedPublishedBlogs(database);
-  const post =
-    blogs.find((blog) => blog.slug === slug) ?? null;
+  const post = blogs.find((blog) => blog.slug === slug) ?? null;
 
   if (!post) {
     return {
@@ -1065,52 +1000,32 @@ export async function getBlogArticleData(
     };
   }
 
-  const index = blogs.findIndex(
-    (blog) => blog.id === post.id
-  );
+  const index = blogs.findIndex((blog) => blog.id === post.id);
   const related = blogs
     .filter((blog) => blog.id !== post.id)
     .filter(
       (blog) =>
         blog.category === post.category ||
         blog.country === post.country ||
-        blog.tags.some((tag) =>
-          post.tags.includes(tag)
-        )
+        blog.tags.some((tag) => post.tags.includes(tag))
     )
     .slice(0, relatedLimit);
   const comments = database.comments
-    .filter(
-      (comment) =>
-        comment.blogId === post.id &&
-        comment.status === "approved"
-    )
-    .sort(
-      (a, b) =>
-        Date.parse(b.createdAt) -
-        Date.parse(a.createdAt)
-    );
+    .filter((comment) => comment.blogId === post.id && comment.status === "approved")
+    .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 
   return {
     post,
     related,
     adjacent: {
-      previous:
-        index > 0 ? blogs[index - 1] : null,
-      next:
-        index >= 0 &&
-        index < blogs.length - 1
-          ? blogs[index + 1]
-          : null,
+      previous: index > 0 ? blogs[index - 1] : null,
+      next: index >= 0 && index < blogs.length - 1 ? blogs[index + 1] : null,
     },
     comments,
   };
 }
 
-export async function getRelatedBlogs(
-  post: BlogPost,
-  limit = 3
-) {
+export async function getRelatedBlogs(post: BlogPost, limit = 3) {
   const blogs = await getPublishedBlogs();
 
   return blogs
@@ -1119,31 +1034,20 @@ export async function getRelatedBlogs(
       (blog) =>
         blog.category === post.category ||
         blog.country === post.country ||
-        blog.tags.some((tag) =>
-          post.tags.includes(tag)
-        )
+        blog.tags.some((tag) => post.tags.includes(tag))
     )
     .slice(0, limit);
 }
 
-export async function getAdjacentBlogs(
-  post: BlogPost
-) {
+export async function getAdjacentBlogs(post: BlogPost) {
   const blogs = await getPublishedBlogs();
 
-  const index = blogs.findIndex(
-    (blog) => blog.id === post.id
-  );
+  const index = blogs.findIndex((blog) => blog.id === post.id);
 
   return {
-    previous:
-      index > 0 ? blogs[index - 1] : null,
+    previous: index > 0 ? blogs[index - 1] : null,
 
-    next:
-      index >= 0 &&
-      index < blogs.length - 1
-        ? blogs[index + 1]
-        : null,
+    next: index >= 0 && index < blogs.length - 1 ? blogs[index + 1] : null,
   };
 }
 
@@ -1156,9 +1060,7 @@ export function filterAndSortBlogs(
     sort?: BlogSort;
   }
 ) {
-  const query = options.query
-    ?.trim()
-    .toLowerCase();
+  const query = options.query?.trim().toLowerCase();
 
   return blogs
     .filter((blog) => {
@@ -1176,42 +1078,27 @@ export function filterAndSortBlogs(
           .includes(query);
 
       const matchesCategory =
-        !options.category ||
-        blog.category === options.category;
+        !options.category || blog.category === options.category;
 
-      const matchesCountry =
-        !options.country ||
-        blog.country === options.country;
+      const matchesCountry = !options.country || blog.country === options.country;
 
-      return (
-        matchesQuery &&
-        matchesCategory &&
-        matchesCountry
-      );
+      return matchesQuery && matchesCategory && matchesCountry;
     })
 
     .sort((a, b) => {
       if (options.sort === "oldest") {
-        return (
-          Date.parse(a.publishDate) -
-          Date.parse(b.publishDate)
-        );
+        return Date.parse(a.publishDate) - Date.parse(b.publishDate);
       }
 
       if (options.sort === "most-viewed") {
         return b.views - a.views;
       }
 
-      return (
-        Date.parse(b.publishDate) -
-        Date.parse(a.publishDate)
-      );
+      return Date.parse(b.publishDate) - Date.parse(a.publishDate);
     });
 }
 
-export async function getBlogUser(
-  email: string
-) {
+export async function getBlogUser(email: string) {
   const user = await prisma.user.findUnique({
     where: {
       email: email.toLowerCase(),
@@ -1221,9 +1108,7 @@ export async function getBlogUser(
   return withEffectiveBlogRole(user);
 }
 
-export async function getBlogUserById(
-  id: string
-) {
+export async function getBlogUserById(id: string) {
   const user = await prisma.user.findUnique({
     where: {
       id,
@@ -1233,9 +1118,7 @@ export async function getBlogUserById(
   return withEffectiveBlogRole(user);
 }
 
-export async function createBlogUser(
-  user: Omit<BlogUser, "id" | "createdAt">
-) {
+export async function createBlogUser(user: Omit<BlogUser, "id" | "createdAt">) {
   const exists = await prisma.user.findUnique({
     where: {
       email: user.email.toLowerCase(),
@@ -1249,10 +1132,7 @@ export async function createBlogUser(
     };
   }
 
-  const role = getEffectiveBlogRole(
-    user.email,
-    user.role
-  );
+  const role = getEffectiveBlogRole(user.email, user.role);
 
   await prisma.user.create({
     data: {
@@ -1279,35 +1159,18 @@ export function createSlug(value: string) {
     .replace(/-+$/g, "");
 }
 
-export function calculateReadTime(
-  content: string
-) {
-  const words = content
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean).length;
+export function calculateReadTime(content: string) {
+  const words = content.trim().split(/\s+/).filter(Boolean).length;
 
-  return `${Math.max(
-    1,
-    Math.ceil(words / 220)
-  )} min read`;
+  return `${Math.max(1, Math.ceil(words / 220))} min read`;
 }
 
-export function getCountries(
-  blogs: Pick<BlogPost, "country">[]
-) {
-  return Array.from(
-    new Set(
-      blogs.map((blog) => blog.country)
-    )
-  ).sort();
+export function getCountries(blogs: Pick<BlogPost, "country">[]) {
+  return Array.from(new Set(blogs.map((blog) => blog.country))).sort();
 }
 
 export function isBlogCategory(
   value: FormDataEntryValue | null
 ): value is BlogCategory {
-  return (
-    typeof value === "string" &&
-    Boolean(value.trim())
-  );
+  return typeof value === "string" && Boolean(value.trim());
 }

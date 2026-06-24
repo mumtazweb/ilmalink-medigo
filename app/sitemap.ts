@@ -10,7 +10,8 @@ import { BLOGS_PAGE_SIZE } from "./lib/blog/pagination";
 
 const SITE_URL = "https://www.ilmalink.com";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const countryRoutes = countryGeoFacts.map((country) =>
   country.slug === "india" ? "/mbbs-india" : `/mbbs-abroad/${country.slug}`
@@ -27,7 +28,6 @@ const staticRoutes = [
   "",
   "/about",
   "/data-methodology",
-  "/geo-profile",
   "/official-links",
   "/site-hierarchy",
   "/blogs",
@@ -50,9 +50,7 @@ const staticRoutes = [
   "/neet/answer-key",
   "/neet/re-neet-2026-answer-key-codes",
   "/neet/re-neet-2026-questions",
-  ...neet2026Questions.map(
-    (question) => `/neet/questions/${question.slug}`
-  ),
+  ...neet2026Questions.map((question) => `/neet/questions/${question.slug}`),
   "/neet/counselling",
   "/portal/signup",
   "/portal/login",
@@ -124,33 +122,61 @@ function shouldIncludeRoute(route: string) {
   );
 }
 
-function routePriority(route: string, priorityHint?: number) {
+function normalizePriority(value: number) {
+  if (value > 1) {
+    return Math.max(0.5, Math.min(0.9, value / 115));
+  }
+
+  return Math.max(0.5, Math.min(1, value));
+}
+
+function routePriority(route: string) {
   if (route === "") return 1;
-  if (route.startsWith("/blogs/")) return 0.82;
-  if (route === "/blogs") return 0.78;
+
+  if (route === "/blogs") return 0.88;
+  if (route.startsWith("/blogs/page/")) return 0.72;
+  if (route.startsWith("/blogs/")) return 0.86;
+
+  if (route === "/neet") return 0.92;
+  if (route.startsWith("/neet/")) return 0.84;
+
   if (
     route.includes("bangladesh") ||
     route.includes("kyrgyzstan") ||
     route.includes("georgia")
-  ) return 0.9;
-  if (route.includes("mbbs-abroad") || route.includes("scholarships-loans")) return 0.8;
-  if (priorityHint) return Math.max(0.5, Math.min(0.86, priorityHint / 115));
+  ) {
+    return 0.9;
+  }
+
+  if (route.includes("mbbs-abroad") || route.includes("scholarships-loans")) {
+    return 0.8;
+  }
 
   return 0.6;
+}
+
+function routeChangeFrequency(route: string): SitemapEntry["changeFrequency"] {
+  if (route === "") return "daily";
+  if (route === "/blogs") return "daily";
+  if (route.startsWith("/blogs/page/")) return "weekly";
+  if (route.startsWith("/blogs/")) return "weekly";
+  if (route === "/neet" || route.startsWith("/neet/")) return "daily";
+
+  return "monthly";
 }
 
 function buildSitemapEntry(
   route: string,
   lastModified: Date,
-  priorityHint?: number
+  priority: number
 ): SitemapEntry {
   const canonicalRoute = route === "" ? "" : `${route}/`;
 
   return {
     url: `${SITE_URL}${canonicalRoute}`,
     lastModified,
-    changeFrequency: route.startsWith("/blogs/") ? "weekly" : "monthly",
-    priority: routePriority(route, priorityHint),
+    changeFrequency: routeChangeFrequency(route),
+    priority: normalizePriority(priority),
   };
 }
 
@@ -166,7 +192,7 @@ async function getPublishedBlogsFromStore() {
   try {
     const blogStoreModule = await import("./lib/blog/store");
 
-    return (await blogStoreModule.getPublishedBlogs()) as SitemapBlogPost[];
+    return (await blogStoreModule.getPublishedBlogSummaries()) as SitemapBlogPost[];
   } catch (error) {
     console.error("Sitemap blog store loading error:", error);
 
@@ -180,6 +206,7 @@ async function getPublishedBlogsFromFile() {
       path.join(process.cwd(), "data", "blog-db.json"),
       "utf8"
     );
+
     const parsed = JSON.parse(raw) as {
       blogs?: Array<{
         slug?: string;
@@ -190,7 +217,9 @@ async function getPublishedBlogsFromFile() {
     };
 
     return (parsed.blogs ?? [])
-      .filter((blog) => blog.status === "published" && typeof blog.slug === "string")
+      .filter(
+        (blog) => blog.status === "published" && typeof blog.slug === "string"
+      )
       .map((blog) => ({
         slug: blog.slug as string,
         publishDate: blog.publishDate,
@@ -217,12 +246,13 @@ function addBlogRoute(
   if (!slug) return;
 
   const route = normalizeBlogRoute(slug);
+
   if (!shouldIncludeRoute(route)) return;
 
   const lastModified = parseDate(updatedAt ?? publishDate, now);
 
   routes.set(route, {
-    priority: 95,
+    priority: 0.86,
     lastModified,
   });
 }
@@ -264,11 +294,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!route && entry.url !== "/") continue;
     if (!shouldIncludeRoute(route)) continue;
 
+    const priority = normalizePriority(entry.priority);
     const existing = routes.get(route);
 
-    if (!existing || entry.priority > existing.priority) {
+    if (!existing || priority > existing.priority) {
       routes.set(route, {
-        priority: entry.priority,
+        priority,
         lastModified: now,
       });
     }
@@ -285,18 +316,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (let pageNumber = 2; pageNumber <= totalBlogPages; pageNumber += 1) {
     const route = cleanRoute(`/blogs/page/${pageNumber}`);
 
-    if (!shouldIncludeRoute(route)) {
-      continue;
-    }
+    if (!shouldIncludeRoute(route)) continue;
 
     routes.set(route, {
-      priority: 0.7,
+      priority: 0.72,
       lastModified: now,
     });
   }
 
   return [...routes.entries()]
-    .sort(([firstRoute], [secondRoute]) => firstRoute.localeCompare(secondRoute))
+    .sort(([firstRoute], [secondRoute]) =>
+      firstRoute.localeCompare(secondRoute)
+    )
     .map(([route, value]) =>
       buildSitemapEntry(route, value.lastModified, value.priority)
     );
