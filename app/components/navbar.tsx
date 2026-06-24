@@ -401,22 +401,22 @@ export default function Navbar() {
       <div className="sticky top-0 z-50 overflow-visible bg-white">
   <AnnouncementTicker />
   <header className="relative z-50 border-b border-slate-100/50 bg-white shadow-sm">
-          <div className="mx-auto max-w-[1500px] px-3 sm:px-4 lg:px-6 py-2.5">
-            <div className="flex items-center justify-between gap-2 sm:gap-4 lg:gap-6">
+          <div className="mx-auto max-w-[1800px] px-3 py-2.5 sm:px-4 lg:px-6 2xl:px-8">
+            <div className="flex items-center justify-between gap-2 sm:gap-4 xl:gap-3 2xl:gap-5">
               {/* LEFT SECTION: HAMBURGER + BRANDING */}
-              <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+              <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3 xl:flex-none xl:basis-[13.5rem] 2xl:basis-[14.5rem]">
                 <button
                   type="button"
                   aria-label="Open navigation menu"
                   onClick={() => setMobileMenuOpen(true)}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-900 transition hover:border-[#00C896]/50 hover:text-[#00C896] lg:hidden flex-shrink-0"
+                  className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-900 transition hover:border-[#00C896]/50 hover:text-[#00C896] xl:hidden"
                 >
                   <Menu size={18} />
                 </button>
 
-                <Link href="/" className="group flex min-w-0 flex-1 items-center gap-2 sm:gap-2.5 lg:flex-none lg:flex-shrink-0">
+                <Link href="/" className="group flex min-w-0 flex-1 items-center gap-2 sm:gap-2.5 xl:flex-none xl:flex-shrink-0">
                   {/* Logo Image */}
-                  <div className="relative hidden h-14 w-14 flex-shrink-0 items-center justify-center sm:h-16 sm:w-16 lg:flex">
+                  <div className="relative hidden h-14 w-14 flex-shrink-0 items-center justify-center sm:h-16 sm:w-16 xl:flex">
                     <img 
                       src="/logoimage.svg" 
                       alt="ILMALINK MEDIGO Logo" 
@@ -425,7 +425,7 @@ export default function Navbar() {
                   </div>
 
                   {/* Brand Text Stack - Desktop */}
-                  <div className="hidden lg:flex flex-col gap-0.5">
+                  <div className="hidden flex-col gap-0.5 xl:flex">
                     <span className="font-[family-name:var(--font-plus-jakarta)] text-lg font-extrabold tracking-tight text-[#081B35] leading-tight">
                       ILMALINK
                     </span>
@@ -438,7 +438,7 @@ export default function Navbar() {
                   </div>
 
                   {/* Brand Text Stack - Mobile & Tablet */}
-                  <div className="flex min-w-0 flex-col gap-0.5 overflow-hidden lg:hidden">
+                  <div className="flex min-w-0 flex-col gap-0.5 overflow-hidden xl:hidden">
                     <span className="min-w-0 truncate whitespace-nowrap font-[family-name:var(--font-plus-jakarta)] text-xs sm:text-sm font-extrabold leading-none">
                       <span className="text-[#081B35]">ILMALINK</span>{" "}
                       <span className="text-[#00C896]">MEDIGO</span>
@@ -451,12 +451,15 @@ export default function Navbar() {
               </div>
 
               {/* CENTER SECTION: NAVIGATION (Desktop Only) */}
-              <nav className="hidden lg:flex items-center gap-0.5 flex-1 justify-center">
+              <nav className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 xl:flex">
                 <style>{`
                   .nav-link {
                     position: relative;
-                    padding: 0.375rem 0.875rem;
-                    font-size: 14px;
+                    display: inline-flex;
+                    align-items: center;
+                    white-space: nowrap;
+                    padding: 0.35rem 0.5rem;
+                    font-size: 12px;
                     font-weight: 500;
                     color: #475569;
                     transition: color 0.2s ease;
@@ -481,6 +484,20 @@ export default function Navbar() {
 
                   .nav-link:hover::after {
                     width: 55%;
+                  }
+
+                  @media (min-width: 1536px) {
+                    .nav-link {
+                      padding: 0.375rem 0.75rem;
+                      font-size: 13px;
+                    }
+                  }
+
+                  @media (min-width: 1700px) {
+                    .nav-link {
+                      padding-inline: 0.875rem;
+                      font-size: 14px;
+                    }
                   }
                 `}</style>
 
@@ -541,11 +558,11 @@ export default function Navbar() {
                   type="button"
                   aria-label="Search"
                   onClick={() => setShowSearchModal(true)}
-                  className="group relative flex h-8 min-w-8 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-2 text-slate-600 shadow-sm transition hover:border-[#00C896]/50 hover:bg-[#f4fffb] hover:text-[#00C896] sm:h-9 sm:min-w-[10rem] sm:justify-start sm:px-3 sm:shadow-none md:min-w-[14rem]"
+                  className="group relative flex h-8 min-w-8 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-2 text-slate-600 shadow-sm transition hover:border-[#00C896]/50 hover:bg-[#f4fffb] hover:text-[#00C896] sm:h-9 sm:min-w-[10rem] sm:justify-start sm:px-3 sm:shadow-none md:min-w-[14rem] xl:w-9 xl:min-w-[2.25rem] xl:justify-center xl:px-0 2xl:w-auto 2xl:min-w-[14rem] 2xl:justify-start 2xl:px-3"
                   title="Search (Ctrl+K)"
                 >
                   <Search size={16} />
-                  <span className="hidden truncate text-xs font-bold text-slate-500 transition group-hover:text-[#008f72] sm:inline">
+                  <span className="hidden truncate text-xs font-bold text-slate-500 transition group-hover:text-[#008f72] sm:inline xl:hidden 2xl:inline">
                     Search keywords or ask questions
                   </span>
                   <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded text-[10px] font-medium bg-slate-900 text-white opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none">
@@ -555,14 +572,14 @@ export default function Navbar() {
 
                 <Link
                   href="/portal/login"
-                  className="hidden h-9 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-[#0B4AA2] transition hover:border-[#1769E8]/40 hover:bg-blue-50 xl:inline-flex"
+                  className="hidden h-9 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-[#0B4AA2] transition hover:border-[#1769E8]/40 hover:bg-blue-50 min-[1700px]:inline-flex"
                 >
                   <LogIn size={14} />
                   Student Login
                 </Link>
                 <Link
                   href="/portal/signup"
-                  className="group inline-flex h-8 flex-shrink-0 items-center gap-1 rounded-lg bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-2.5 text-xs font-semibold text-white shadow-[0_6px_16px_rgba(0,200,150,0.22)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,200,150,0.25)] sm:h-9 sm:gap-1.5 sm:px-4 sm:text-sm sm:shadow-none whitespace-nowrap"
+                  className="group inline-flex h-8 flex-shrink-0 items-center gap-1 whitespace-nowrap rounded-lg bg-gradient-to-r from-[#00C896] to-[#0EA5A4] px-2.5 text-xs font-semibold text-white shadow-[0_6px_16px_rgba(0,200,150,0.22)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(0,200,150,0.25)] sm:h-9 sm:gap-1.5 sm:px-4 sm:text-sm sm:shadow-none xl:px-3 xl:text-xs min-[1700px]:px-4 min-[1700px]:text-sm"
                 >
                   <UserPlus size={13} className="flex-shrink-0" />
                   <span className="hidden sm:inline">Sign Up Free</span>
