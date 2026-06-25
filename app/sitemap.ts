@@ -27,20 +27,29 @@ const additionalPublicCountryRoutes = [
 const staticRoutes = [
   "",
   "/about",
+  "/contact",
   "/data-methodology",
   "/official-links",
   "/site-hierarchy",
   "/blogs",
+
   "/mbbs-abroad",
   ...countryRoutes,
   ...additionalPublicCountryRoutes,
+
   "/mbbs-abroad/georgia",
   ...georgiaUniversities.map(
     (university) => `/mbbs-abroad/georgia/${university.slug}`
   ),
+
+  "/mbbs-abroad/uzbekistan",
+  "/mbbs-abroad/uzbekistan/medical-institute-of-karakalpakstan",
+
   "/mbbs-abroad/kyrgyzstan/international-higher-school-of-medicine",
   "/mbbs-abroad/kyrgyzstan/kyrgyz-state-medical-academy",
+
   "/scholarships-loans",
+
   "/neet",
   "/neet/information-bulletin",
   "/neet/admit-card",
@@ -52,8 +61,10 @@ const staticRoutes = [
   "/neet/re-neet-2026-questions",
   ...neet2026Questions.map((question) => `/neet/questions/${question.slug}`),
   "/neet/counselling",
+
   "/portal/signup",
   "/portal/login",
+
   "/trust-center",
   "/alert",
   "/official-advisories",
@@ -133,6 +144,15 @@ function normalizePriority(value: number) {
 function routePriority(route: string) {
   if (route === "") return 1;
 
+  if (route === "/about") return 0.94;
+  if (route === "/contact") return 0.9;
+  if (route === "/trust-center") return 0.9;
+  if (route === "/official-links") return 0.86;
+  if (route === "/data-methodology") return 0.84;
+
+  if (route === "/portal/signup") return 0.88;
+  if (route === "/portal/login") return 0.7;
+
   if (route === "/blogs") return 0.88;
   if (route.startsWith("/blogs/page/")) return 0.72;
   if (route.startsWith("/blogs/")) return 0.86;
@@ -140,10 +160,22 @@ function routePriority(route: string) {
   if (route === "/neet") return 0.92;
   if (route.startsWith("/neet/")) return 0.84;
 
+  if (route === "/mbbs-abroad") return 0.9;
+
+  if (route === "/mbbs-abroad/uzbekistan") return 0.92;
+
+  if (
+    route ===
+    "/mbbs-abroad/uzbekistan/medical-institute-of-karakalpakstan"
+  ) {
+    return 0.9;
+  }
+
   if (
     route.includes("bangladesh") ||
     route.includes("kyrgyzstan") ||
-    route.includes("georgia")
+    route.includes("georgia") ||
+    route.includes("uzbekistan")
   ) {
     return 0.9;
   }
@@ -161,6 +193,13 @@ function routeChangeFrequency(route: string): SitemapEntry["changeFrequency"] {
   if (route.startsWith("/blogs/page/")) return "weekly";
   if (route.startsWith("/blogs/")) return "weekly";
   if (route === "/neet" || route.startsWith("/neet/")) return "daily";
+  if (route === "/mbbs-abroad/uzbekistan") return "weekly";
+  if (
+    route ===
+    "/mbbs-abroad/uzbekistan/medical-institute-of-karakalpakstan"
+  ) {
+    return "weekly";
+  }
 
   return "monthly";
 }
@@ -170,7 +209,7 @@ function buildSitemapEntry(
   lastModified: Date,
   priority: number
 ): SitemapEntry {
-  const canonicalRoute = route === "" ? "" : `${route}/`;
+  const canonicalRoute = route === "" ? "/" : `${route}/`;
 
   return {
     url: `${SITE_URL}${canonicalRoute}`,

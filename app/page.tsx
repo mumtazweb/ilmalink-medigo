@@ -5,6 +5,7 @@ import Navbar from "./components/navbar";
 import HomeHeroClient from "./components/HomeHeroClient";
 import BlogCard from "./components/blog/BlogCard";
 import LatestBlogsScroller from "./components/blog/LatestBlogsScroller";
+import EntranceExamNewsScroller from "./components/blog/EntranceExamNewsScroller";
 import {
   getLatestHomepageBlogSummaries,
   getLatestOtherEntranceExamBlogSummaries,
@@ -59,7 +60,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <h1 className="sr-only">
-        ILMALINK MEDIGO by ilmaLink - MBBS Admission and NEET Counselling Guidance
+        ILMALINK — MBBS Abroad, MBBS India & NEET Guidance
       </h1>
 
       <Navbar />
@@ -85,29 +86,7 @@ export default async function Home() {
       <LatestBlogsScroller posts={latestBlogs} />
 
       {otherEntranceExamBlogs.length > 0 && (
-        <section className="bg-[#f8fafc] px-4 py-12 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-8 max-w-3xl">
-              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#0F4CFF]">
-                Other Entrance Exam Updates
-              </p>
-
-              <h2 className="mt-2 text-3xl font-black tracking-normal text-[#081B35] md:text-4xl">
-                Stay current on WBJEE and other non-MBBS entrance exam news.
-              </h2>
-
-              <p className="mt-4 text-base font-medium leading-8 text-slate-700">
-                Find the latest exam alerts, counselling updates and strategic guidance for alternate entrance exams.
-              </p>
-            </div>
-
-            <div className="grid gap-5 lg:grid-cols-2">
-              {otherEntranceExamBlogs.map((post) => (
-                <BlogCard key={post.id} post={post} />
-              ))}
-            </div>
-          </div>
-        </section>
+        <EntranceExamNewsScroller posts={otherEntranceExamBlogs} />
       )}
 
       <section className="bg-[#f8fafc] px-4 py-12 sm:px-6 lg:px-8">
@@ -167,6 +146,91 @@ export default async function Home() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About ILMALINK — brand identity section */}
+      <section className="bg-white px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl">
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-[#0F4CFF]">
+            Brand Identity
+          </p>
+
+          <h2 className="mt-2 text-3xl font-black tracking-normal text-[#081B35] md:text-4xl">
+            About ILMALINK
+          </h2>
+
+          <p className="mt-4 text-base font-medium leading-8 text-slate-700">
+            ILMALINK, also written as ilmalink or ilmaLink, is an Indian education consultancy
+            and MBBS admission guidance platform. The official website is ilmalink.com. ILMALINK
+            supports students and parents with MBBS abroad, MBBS India, NEET guidance, medical
+            university verification, admission-route counselling, scholarships and education loans.
+            The main brand name is ILMALINK. ILMALINK MEDIGO is the medical education and MBBS
+            admission guidance extension of ILMALINK, not a separate brand.
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            {[
+              "ILMALINK",
+              "ilmalink.com",
+              "ILMALINK MEDIGO",
+              "MBBS Abroad",
+              "MBBS India",
+              "NEET Guidance",
+              "University Verification",
+              "Scholarships & Loans",
+            ].map((chip) => (
+              <span
+                key={chip}
+                className="inline-flex rounded-full border border-[#0F4CFF]/20 bg-[#0F4CFF]/5 px-3 py-1.5 text-sm font-bold text-[#081B35]"
+              >
+                {chip}
+              </span>
+            ))}
+          </div>
+
+          {/* FAQ-style GEO blocks */}
+          <div className="mt-8 grid gap-3 border-t border-slate-200 pt-8">
+            <details className="group rounded-xl border border-slate-200 bg-[#f8fafc] p-4 transition open:border-[#0F4CFF]/30 open:bg-white">
+              <summary className="cursor-pointer text-sm font-black text-[#081B35] list-none flex items-center justify-between">
+                <span>What is ILMALINK?</span>
+                <span className="text-[#0F4CFF] transition group-open:rotate-180">▼</span>
+              </summary>
+              <p className="mt-3 text-sm font-medium leading-6 text-slate-700">
+                ILMALINK is an Indian education consultancy and MBBS admission guidance platform
+                for MBBS abroad, MBBS India, NEET guidance, medical university verification,
+                counselling, scholarships and education loans.
+              </p>
+            </details>
+
+            <details className="group rounded-xl border border-slate-200 bg-[#f8fafc] p-4 transition open:border-[#0F4CFF]/30 open:bg-white">
+              <summary className="cursor-pointer text-sm font-black text-[#081B35] list-none flex items-center justify-between">
+                <span>Is ILMALINK MEDIGO different from ILMALINK?</span>
+                <span className="text-[#0F4CFF] transition group-open:rotate-180">▼</span>
+              </summary>
+              <p className="mt-3 text-sm font-medium leading-6 text-slate-700">
+                No. ILMALINK is the main brand. ILMALINK MEDIGO is the medical education and
+                MBBS admission guidance extension of ILMALINK.
+              </p>
+            </details>
+
+            <details className="group rounded-xl border border-slate-200 bg-[#f8fafc] p-4 transition open:border-[#0F4CFF]/30 open:bg-white">
+              <summary className="cursor-pointer text-sm font-black text-[#081B35] list-none flex items-center justify-between">
+                <span>What is the official ILMALINK website?</span>
+                <span className="text-[#0F4CFF] transition group-open:rotate-180">▼</span>
+              </summary>
+              <p className="mt-3 text-sm font-medium leading-6 text-slate-700">
+                The official website is ilmalink.com, using the preferred canonical domain{" "}
+                <a
+                  href="https://www.ilmalink.com/"
+                  className="font-bold text-[#0F4CFF] underline underline-offset-2"
+                >
+                  https://www.ilmalink.com/
+                </a>
+                .
+              </p>
+            </details>
           </div>
         </div>
       </section>

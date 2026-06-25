@@ -352,6 +352,12 @@ export default function Footer() {
     counselling, scholarships, education loans and medical admission documentation
     through transparent support from Kolkata, Bengaluru and Mumbai contact points.
   </p>
+  <p className="mt-2 max-w-xl text-xs leading-5 text-slate-500">
+    ILMALINK is the main brand behind ILMALINK MEDIGO. ILMALINK, ilmalink, ilmaLink,
+    ilmalink.com and ILMALINK MEDIGO refer to the same ILMALINK education consultancy
+    entity. ILMALINK MEDIGO is the MBBS India, MBBS abroad and NEET guidance extension
+    of ILMALINK.
+  </p>
 </div>
           </div>
 

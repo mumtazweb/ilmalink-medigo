@@ -5,15 +5,19 @@ Allow: /blogs/
 Allow: /blogs/page/
 Allow: /neet/
 Allow: /mbbs-abroad/
+Allow: /mbbs-abroad/uzbekistan/
 Allow: /mbbs-india/
 Allow: /scholarships-loans/
 Allow: /trust-center/
 Allow: /alert/
 Allow: /official-advisories/
 Allow: /about/
+Allow: /contact/
 Allow: /data-methodology/
 Allow: /official-links/
 Allow: /site-hierarchy/
+Allow: /portal/signup/
+Allow: /portal/login/
 
 Disallow: /admin/
 Disallow: /dashboard/
@@ -33,4 +37,3 @@ Disallow: /portal/forgot-password/
 Disallow: /portal/reset-password/
 
 Sitemap: https://www.ilmalink.com/sitemap.xml
-Host: https://www.ilmalink.com

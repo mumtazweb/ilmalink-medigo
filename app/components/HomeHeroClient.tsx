@@ -1372,8 +1372,8 @@ export default function HomeHeroClient() {
               </p>
 
               <h1 className="mt-3 text-[1.9rem] font-extrabold leading-[0.95] tracking-[-0.05em] text-white sm:text-[2.55rem] md:text-[2.8rem] lg:max-w-[560px] lg:text-[3.7rem] lg:leading-[0.94] lg:tracking-[-0.03em] lg:[word-spacing:0.08em] xl:text-[3.95rem]">
-                <span className="block lg:whitespace-nowrap">Global Medical</span>
-                <span className="block">Education</span>
+                <span className="block lg:whitespace-nowrap">ILMALINK — MBBS Abroad,</span>
+                <span className="block">MBBS India & NEET Guidance</span>
               </h1>
               <div className="mt-4 space-y-1 text-sm text-white/[0.82] sm:text-[15px] lg:mt-5 lg:max-w-[520px] lg:text-base lg:leading-7">
                 <p>Explore 480+ FMGE-2025  Universities in 54+ Countries.</p>
@@ -1421,10 +1421,7 @@ export default function HomeHeroClient() {
                   </div>
                 </div>
               </div>
-              <p className="mt-3 hidden max-w-[520px] text-[9px] font-medium leading-none tracking-wide text-white/45 md:mx-auto md:block md:text-center md:text-[10px] lg:mx-0 lg:max-w-[480px] lg:text-left">
-                Data compiled from official public sources
-              </p>
-
+              ----------------------
               <div className="mx-0 mt-5 flex w-full max-w-[190px] flex-col items-stretch justify-center gap-2 md:mx-auto md:mt-6 md:max-w-[600px] md:flex-row md:flex-wrap lg:mx-0 lg:mt-8 lg:max-w-[650px] lg:justify-start lg:gap-3">
                 <button
                   type="button"
