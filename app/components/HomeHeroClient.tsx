@@ -1419,9 +1419,8 @@ export default function HomeHeroClient() {
                     <p className="text-base font-bold lg:text-[15px]">823+ | 1.29L+</p>
                     <p className="text-[11px] text-white/70 lg:text-[10px] lg:leading-4">Indian Colleges | MBBS Seats</p>
                   </div>
-                </div>
               </div>
-              ----------------------
+            </div>
               <div className="mx-0 mt-5 flex w-full max-w-[190px] flex-col items-stretch justify-center gap-2 md:mx-auto md:mt-6 md:max-w-[600px] md:flex-row md:flex-wrap lg:mx-0 lg:mt-8 lg:max-w-[650px] lg:justify-start lg:gap-3">
                 <button
                   type="button"
@@ -1926,8 +1925,6 @@ export default function HomeHeroClient() {
                         <ChevronRight className="h-4 w-4" strokeWidth={2.4} />
                       </button>
                     </div>
-
-                    <div className="mx-4 h-px bg-[linear-gradient(90deg,transparent,rgba(8,145,178,0.28),transparent)]" />
 
                     <div className="relative">
                       <button
