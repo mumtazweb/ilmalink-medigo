@@ -14,18 +14,18 @@ import {
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "ILMALINK MEDIGO by ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
+  title: "ilmaLink Medigo by ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
   description:
     "Official medical education platform of ilmaLink for MBBS Abroad, MBBS India, NEET counselling, scholarships and university guidance.",
   alternates: {
     canonical: "https://www.ilmalink.com/",
   },
   openGraph: {
-    title: "ILMALINK MEDIGO by ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
+    title: "ilmaLink Medigo by ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
     description:
       "Official medical education platform of ilmaLink for MBBS Abroad, MBBS India, NEET counselling, scholarships and university guidance.",
     url: "https://www.ilmalink.com/",
-    siteName: "ILMALINK MEDIGO",
+    siteName: "ilmaLink Medigo",
     locale: "en_IN",
     type: "website",
   },
@@ -60,7 +60,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <h1 className="sr-only">
-        ILMALINK — MBBS Abroad, MBBS India & NEET Guidance
+        ilmaLink — MBBS Abroad, MBBS India & NEET Guidance
       </h1>
 
       <Navbar />
@@ -69,7 +69,7 @@ export default async function Home() {
       <section className="bg-[#f8fafc] px-4 pb-3 pt-2 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <p className="text-center text-[11px] font-medium leading-5 text-slate-600">
-            Data compiled from ILMALINK MEDIGO student guidance records and official public sources.
+            Data compiled from ilmaLink Medigo student guidance records and official public sources.
           </p>
 
           <p className="mt-1 text-center text-[11px] font-semibold leading-5">
@@ -97,12 +97,12 @@ export default async function Home() {
             </p>
 
             <h2 className="mt-2 text-3xl font-black tracking-normal text-[#081B35] md:text-4xl">
-              ILMALINK MEDIGO is the MBBS counselling and medical admission
-              guidance platform of ILMALINK.
+              ilmaLink Medigo is the MBBS counselling and medical admission
+              guidance platform of ilmaLink.
             </h2>
 
             <p className="mt-4 text-base font-medium leading-8 text-slate-700">
-              Students use ILMALINK MEDIGO for MBBS abroad counselling, MBBS
+              Students use ilmaLink Medigo for MBBS abroad counselling, MBBS
               India counselling support, NEET guidance, eligibility review,
               documentation help, university comparison, scholarship and loan
               guidance, and student support across India and major medical
@@ -113,7 +113,7 @@ export default async function Home() {
           <div className="grid gap-4">
             <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
               <h3 className="text-lg font-black text-[#081B35]">
-                Key ILMALINK MEDIGO pages
+                Key ilmaLink Medigo pages
               </h3>
 
               <div className="mt-4 flex flex-wrap gap-2">

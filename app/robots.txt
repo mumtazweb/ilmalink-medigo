@@ -16,6 +16,10 @@ Allow: /contact/
 Allow: /data-methodology/
 Allow: /official-links/
 Allow: /site-hierarchy/
+Allow: /geo-profile/
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /sitemap.xml
 Allow: /portal/signup/
 Allow: /portal/login/
 
@@ -23,6 +27,7 @@ Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /search/
+Disallow: /private/
 
 Disallow: /login/
 Disallow: /create-account/

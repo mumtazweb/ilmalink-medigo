@@ -99,7 +99,7 @@ export function buildOrganizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": "https://www.ilmalink.com/#organization",
-    name: "ILMALINK",
+    name: "ilmaLink",
     alternateName: ilmaLinkEntityData.alternateName,
     url: ilmaLinkEntityData.url,
     logo: absoluteUrl(ilmaLinkEntityData.logo),
@@ -121,8 +121,8 @@ export function buildEducationalOrganizationSchema() {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
     "@id": "https://www.ilmalink.com/#educationalorganization",
-    name: "ILMALINK",
-    alternateName: "ILMALINK MEDIGO",
+    name: "ilmaLink",
+    alternateName: "ilmaLink Medigo",
     url: ilmaLinkEntityData.url,
     logo: absoluteUrl(ilmaLinkEntityData.logo),
     description:
@@ -162,7 +162,7 @@ export function buildLocalBusinessSchema(office: IlmaLinkOffice) {
     url: ilmaLinkEntityData.url,
     image: absoluteUrl(ilmaLinkEntityData.logo),
     description:
-      "ILMALINK MEDIGO contact point for MBBS admission guidance and consultancy, MBBS abroad counselling, India medical counselling support and student documentation guidance.",
+      "ilmaLink Medigo contact point for MBBS admission guidance and consultancy, MBBS abroad counselling, India medical counselling support and student documentation guidance.",
     telephone: ilmaLinkEntityData.contact.call,
     email: ilmaLinkEntityData.contact.email,
     contactPoint: [
@@ -206,7 +206,7 @@ export function buildWebsiteSchema() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": "https://www.ilmalink.com/#website",
-    name: "ILMALINK MEDIGO",
+    name: "ilmaLink Medigo",
     url: ilmaLinkEntityData.url,
     inLanguage: "en-IN",
     publisher: {
@@ -220,9 +220,9 @@ export function buildGuidanceDisclaimerSchema() {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     "@id": "https://www.ilmalink.com/#guidance-disclaimer",
-    name: "ILMALINK MEDIGO Admissions Guidance Disclaimer",
+    name: "ilmaLink Medigo Admissions Guidance Disclaimer",
     text:
-      "ILMALINK MEDIGO provides admission guidance, counselling and student-support information. Final admission, eligibility, documentation, visa approval, scholarship, loan or licence outcome is subject to official rules, university decisions, regulatory authorities and applicable government norms.",
+      "ilmaLink Medigo provides admission guidance, counselling and student-support information. Final admission, eligibility, documentation, visa approval, scholarship, loan or licence outcome is subject to official rules, university decisions, regulatory authorities and applicable government norms.",
     inLanguage: "en-IN",
     isPartOf: {
       "@id": "https://www.ilmalink.com/#website",
@@ -238,7 +238,7 @@ export function buildSiteNavigationSchema() {
     "@context": "https://schema.org",
     "@type": "ItemList",
     "@id": "https://www.ilmalink.com/#site-navigation",
-    name: "ILMALINK MEDIGO Study and Support Navigation",
+    name: "ilmaLink Medigo Study and Support Navigation",
     itemListElement: siteNavigationItems.map((item, index) => ({
       "@type": "ListItem",
       position: index + 1,
@@ -308,7 +308,7 @@ export function buildCountryMedicalEducationSchema(countryData: CountryGeoFact) 
       {
         "@type": "Thing",
         name: `${countryData.countryName} WDOMS medical schools`,
-        description: `${countryData.wdomsCount} WDOMS-listed medical school entries in ILMALINK MEDIGO's country dataset.`,
+        description: `${countryData.wdomsCount} WDOMS-listed medical school entries in ilmaLink Medigo's country dataset.`,
       },
       {
         "@type": "Thing",

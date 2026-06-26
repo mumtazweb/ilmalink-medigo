@@ -1,0 +1,27 @@
+# ilmalink / ilmaLink / ilmaLink Medigo
+
+Main brand: ilmalink
+Visible brand: ilmaLink
+Service extension: ilmaLink Medigo
+
+Alternate searchable names:
+- ilmalink
+- ilmaLink
+- ilmaLink Medigo
+- Medigo
+
+Primary domain:
+- https://www.ilmalink.com/
+
+Important public routes:
+- https://www.ilmalink.com/
+- https://www.ilmalink.com/neet/
+- https://www.ilmalink.com/mbbs-abroad/
+- https://www.ilmalink.com/mbbs-india/
+- https://www.ilmalink.com/scholarships-loans/
+- https://www.ilmalink.com/blogs/
+- https://www.ilmalink.com/about/
+- https://www.ilmalink.com/geo-profile/
+
+Public URL discovery:
+- https://www.ilmalink.com/sitemap.xml

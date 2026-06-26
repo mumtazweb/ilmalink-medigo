@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -41,18 +41,18 @@ const brandOrganizationSchema = {
   "@context": "https://schema.org",
   "@type": ["Organization", "EducationalOrganization"],
   "@id": "https://www.ilmalink.com/#organization",
-  name: "ILMALINK",
+  name: "ilmaLink",
   alternateName: [
-    "ILMALINK MEDIGO",
+    "ilmaLink Medigo",
     "ilmalink",
     "ilmaLink",
     "ilmalink.com",
-    "ILMALINK Education Consultancy",
+    "ilmaLink Education Consultancy",
   ],
-  legalName: "ILMALINK",
+  legalName: "ilmaLink",
   url: "https://www.ilmalink.com/",
   description:
-    "ILMALINK is an Indian education consultancy and MBBS admission guidance platform for MBBS abroad, MBBS India, NEET guidance, medical university verification, counselling, scholarships and education loans.",
+    "ilmaLink is an Indian education consultancy and MBBS admission guidance platform for MBBS abroad, MBBS India, NEET guidance, medical university verification, counselling, scholarships and education loans.",
   slogan: "Student-first MBBS admission guidance for Indian students.",
   areaServed: [
     {
@@ -65,8 +65,8 @@ const brandOrganizationSchema = {
     },
   ],
   knowsAbout: [
-    "ILMALINK",
-    "ILMALINK MEDIGO",
+    "ilmaLink",
+    "ilmaLink Medigo",
     "MBBS Abroad",
     "MBBS in India",
     "NEET Guidance",
@@ -86,8 +86,8 @@ const brandOrganizationSchema = {
   brand: {
     "@type": "Brand",
     "@id": "https://www.ilmalink.com/#brand",
-    name: "ILMALINK",
-    alternateName: ["ILMALINK MEDIGO", "ilmalink", "ilmaLink", "ilmalink.com"],
+    name: "ilmaLink",
+    alternateName: ["ilmaLink Medigo", "ilmalink", "ilmaLink", "ilmalink.com"],
   },
 };
 
@@ -95,34 +95,34 @@ const brandWebsiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": "https://www.ilmalink.com/#website",
-  name: "ILMALINK",
-  alternateName: ["ILMALINK MEDIGO", "ilmalink", "ilmaLink", "ilmalink.com"],
+  name: "ilmaLink",
+  alternateName: ["ilmaLink Medigo", "ilmalink", "ilmaLink", "ilmalink.com"],
   url: "https://www.ilmalink.com/",
   publisher: {
     "@id": "https://www.ilmalink.com/#organization",
   },
   inLanguage: "en-IN",
   description:
-    "Official website of ILMALINK, an Indian education consultancy platform for MBBS abroad, MBBS India, NEET guidance, counselling, medical university verification, scholarships and education loans.",
+    "Official website of ilmaLink, an Indian education consultancy platform for MBBS abroad, MBBS India, NEET guidance, counselling, medical university verification, scholarships and education loans.",
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.ilmalink.com"),
-  applicationName: "ILMALINK",
+  applicationName: "ilmaLink",
   title: {
-    default: "ILMALINK | MBBS Abroad, MBBS India & NEET Guidance",
-    template: "%s | ILMALINK",
+    default: "ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
+    template: "%s | ilmaLink",
   },
   description:
-    "ILMALINK is an Indian education consultancy platform for MBBS abroad, MBBS India, NEET guidance, medical university verification, counselling, scholarships and education loans.",
+    "ilmaLink is an Indian education consultancy platform for MBBS abroad, MBBS India, NEET guidance, medical university verification, counselling, scholarships and education loans.",
   keywords: [
-    "ILMALINK",
+    "ilmaLink",
     "ilmalink",
     "ilmaLink",
     "ilmalink.com",
-    "ILMALINK MEDIGO",
-    "ILMALINK education consultancy",
-    "ILMALINK MBBS guidance",
+    "ilmaLink Medigo",
+    "ilmaLink education consultancy",
+    "ilmaLink MBBS guidance",
     "MBBS Abroad",
     "MBBS India",
     "MBBS admission consultancy in India",
@@ -146,9 +146,9 @@ export const metadata: Metadata = {
     "MBBS education loan guidance",
     "scholarship guidance for MBBS",
   ],
-  authors: [{ name: "ILMALINK" }],
-  creator: "ILMALINK",
-  publisher: "ILMALINK",
+  authors: [{ name: "ilmaLink" }],
+  creator: "ilmaLink",
+  publisher: "ilmaLink",
   robots: {
     index: true,
     follow: true,
@@ -161,26 +161,26 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "ILMALINK | MBBS Abroad, MBBS India & NEET Guidance",
+    title: "ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
     description:
-      "ILMALINK helps Indian students with MBBS abroad, MBBS India, NEET guidance, university verification, counselling, scholarships and education loans.",
+      "ilmaLink helps Indian students with MBBS abroad, MBBS India, NEET guidance, university verification, counselling, scholarships and education loans.",
     url: "https://www.ilmalink.com/",
-    siteName: "ILMALINK",
+    siteName: "ilmaLink",
     type: "website",
     locale: "en_IN",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ILMALINK | MBBS Abroad, MBBS India & NEET Guidance",
+    title: "ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
     description:
       "Indian education consultancy platform for MBBS abroad, MBBS India, NEET guidance, medical university verification and admission counselling.",
   },
   other: {
     "geo.region": "IN",
     "geo.placename": "Kolkata, Bengaluru, Mumbai",
-    "application-name": "ILMALINK",
-    "apple-mobile-web-app-title": "ILMALINK",
-    "brand": "ILMALINK",
+    "application-name": "ilmaLink",
+    "apple-mobile-web-app-title": "ilmaLink",
+    "brand": "ilmaLink",
     "subject":
       "MBBS abroad, MBBS India, NEET guidance, medical admission counselling and university verification",
   },

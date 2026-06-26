@@ -1,0 +1,29 @@
+# ilmalink full reference
+
+Entity identity:
+- Main brand/search identity: ilmalink
+- Visible website brand spelling: ilmaLink
+- Service extension: ilmaLink Medigo
+- Medigo is not the primary standalone brand on this site.
+
+Canonical base:
+- https://www.ilmalink.com/
+
+Important public routes:
+- https://www.ilmalink.com/
+- https://www.ilmalink.com/about/
+- https://www.ilmalink.com/neet/
+- https://www.ilmalink.com/mbbs-abroad/
+- https://www.ilmalink.com/mbbs-india/
+- https://www.ilmalink.com/scholarships-loans/
+- https://www.ilmalink.com/blogs/
+- https://www.ilmalink.com/geo-profile/
+- https://www.ilmalink.com/trust-center/
+- https://www.ilmalink.com/official-links/
+- https://www.ilmalink.com/official-advisories/
+- https://www.ilmalink.com/site-hierarchy/
+
+Comprehensive public route source:
+- https://www.ilmalink.com/sitemap.xml
+
+Private or non-public areas are intentionally excluded from crawl indexing, including portal private areas and API routes.
