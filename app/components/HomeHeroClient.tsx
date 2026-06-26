@@ -1366,18 +1366,22 @@ export default function HomeHeroClient() {
 
           <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-5 px-4 pb-6 pt-7 sm:px-6 md:pb-9 md:pt-9 lg:min-h-[540px] lg:grid-cols-[minmax(0,0.98fr)_minmax(360px,0.92fr)_minmax(255px,0.68fr)] lg:gap-5 lg:px-10 lg:py-12 xl:grid-cols-[minmax(420px,1.02fr)_minmax(410px,0.96fr)_minmax(285px,0.72fr)] xl:gap-8 xl:px-12">
             {/* Left content */}
-            <div className="relative z-20 min-h-[245px] pr-[30%] text-left md:min-h-0 md:pr-0 md:text-center lg:flex lg:min-h-[420px] lg:flex-col lg:justify-center lg:text-left xl:min-h-[450px]">
+                        <div className="relative z-20 min-h-[245px] pr-[30%] text-left md:min-h-0 md:pr-0 md:text-center lg:flex lg:min-h-[420px] lg:flex-col lg:justify-center lg:text-left xl:min-h-[450px]">
               <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/[0.85] sm:text-xs lg:text-[12px] lg:tracking-[0.48em]">
                 Your Gateway To
               </p>
 
-              <h1 className="mt-3 text-[1.9rem] font-extrabold leading-[0.95] tracking-[-0.05em] text-white sm:text-[2.55rem] md:text-[2.8rem] lg:max-w-[560px] lg:text-[3.7rem] lg:leading-[0.94] lg:tracking-[-0.03em] lg:[word-spacing:0.08em] xl:text-[3.95rem]">
-                <span className="block lg:whitespace-nowrap">ILMALINK — MBBS Abroad,</span>
-                <span className="block">MBBS India & NEET Guidance</span>
+              <h1 className="mt-2 text-[1.75rem] font-extrabold leading-[1.02] tracking-[-0.02em] text-white sm:text-[2.35rem] md:text-[2.6rem] lg:max-w-[500px] lg:text-[3.4rem] lg:leading-[1.0] lg:tracking-[-0.01em] xl:text-[3.7rem]">
+                <span className="block lg:whitespace-nowrap">Global Medical</span>
+                <span className="block">Education</span>
               </h1>
               <div className="mt-4 space-y-1 text-sm text-white/[0.82] sm:text-[15px] lg:mt-5 lg:max-w-[520px] lg:text-base lg:leading-7">
-                <p>Explore 480+ FMGE-2025  Universities in 54+ Countries.</p>
+                <p>480+ FMGE-2025  Universities in 54+ Countries.</p>
                 <p className="hidden md:block">As Per FMGE Screening Test 2025</p>
+<div className="mt-2.5 space-y-0 text-[13px] text-white/[0.8] sm:text-[14px] md:text-[14.5px] lg:mt-3 lg:max-w-[480px] lg:text-[15px] lg:leading-6">
+                <p className="font-medium">Explore 480+ NMC-Approved Universities across 54+ countries</p>
+                <p className="hidden md:block text-white/[0.65] text-[12px] lg:text-[13px] lg:leading-5 lg:mt-1">Verified with FMGE standards & international recognition</p>
+              </div>
               </div>
 
               <div className="mx-auto mt-5 hidden max-w-[520px] grid-cols-2 gap-3 sm:grid-cols-4 md:grid lg:mx-0 lg:mt-7 lg:max-w-[480px] lg:grid-cols-2 lg:gap-2.5 lg:rounded-2xl lg:border lg:border-white/15 lg:bg-white/[0.075] lg:p-3 lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_18px_44px_rgba(0,0,0,0.16)] lg:backdrop-blur-xl">
@@ -1419,8 +1423,9 @@ export default function HomeHeroClient() {
                     <p className="text-base font-bold lg:text-[15px]">823+ | 1.29L+</p>
                     <p className="text-[11px] text-white/70 lg:text-[10px] lg:leading-4">Indian Colleges | MBBS Seats</p>
                   </div>
+                </div>
               </div>
-            </div>
+              
               <div className="mx-0 mt-5 flex w-full max-w-[190px] flex-col items-stretch justify-center gap-2 md:mx-auto md:mt-6 md:max-w-[600px] md:flex-row md:flex-wrap lg:mx-0 lg:mt-8 lg:max-w-[650px] lg:justify-start lg:gap-3">
                 <button
                   type="button"
@@ -1438,7 +1443,7 @@ export default function HomeHeroClient() {
                   onClick={() => setShowRankPredictor(true)}
                   className="inline-flex min-w-0 flex-none items-center justify-center whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-2 py-2 text-[11px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/[0.15] sm:px-3 sm:text-xs md:flex-1 lg:min-w-[190px] lg:flex-none lg:rounded-[16px] lg:px-6 lg:py-3.5 lg:text-sm"
                 >
-                  NEET Rank Predictor
+                  NEET Rank Card
                 </button>
                 </div>
             </div>
@@ -1925,6 +1930,8 @@ export default function HomeHeroClient() {
                         <ChevronRight className="h-4 w-4" strokeWidth={2.4} />
                       </button>
                     </div>
+
+                    <div className="mx-4 h-px bg-[linear-gradient(90deg,transparent,rgba(8,145,178,0.28),transparent)]" />
 
                     <div className="relative">
                       <button
