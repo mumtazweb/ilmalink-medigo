@@ -39,14 +39,14 @@ export async function generateMetadata({
 
   if (!country) {
     return {
-      title: "MBBS Abroad Country | ILMALINK MEDIGO",
+      title: "MBBS Abroad Country | ilmaLink",
     };
   }
 
   const displayName = getFmgeCountryDisplayName(country.country);
 
   return {
-    title: `MBBS in ${displayName} | FMGE Data | ILMALINK MEDIGO`,
+    title: `MBBS in ${displayName} | FMGE Data | ilmaLink`,
     description: `Explore ${displayName} FMGE country and college-wise data with counselling support for MBBS abroad shortlisting.`,
     alternates: {
       canonical: `https://www.ilmalink.com${getFmgeCountryHref(country.country)}`,

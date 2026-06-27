@@ -45,7 +45,7 @@ export const dynamic = "force-static";
 
 const pageUrl = "https://www.ilmalink.com/mbbs-abroad/bangladesh/";
 const bangladeshWhatsappUrl = `${whatsappCounsellingUrl}?text=${encodeURIComponent(
-  "Hello ILMALINK MEDIGO, I want Bangladesh MBBS eligibility and college verification support.",
+  "Hello ilmaLink, I want Bangladesh MBBS eligibility and college verification support.",
 )}`;
 
 const bangladeshCountryFmge =
@@ -138,7 +138,7 @@ export const metadata: Metadata = {
     description:
       "Bangladesh MBBS guidance with private-route eligibility, GPA and gap-rule checks, FMGE references, and college comparison.",
     url: pageUrl,
-    siteName: "ILMALINK MEDIGO",
+    siteName: "ilmaLink",
     locale: "en_IN",
     type: "website",
   },
@@ -732,7 +732,7 @@ function FmgeAndCounselling() {
               Need route verification?
             </p>
             <h2 className="mt-2 text-2xl font-black sm:text-3xl">
-              Get Bangladesh MBBS eligibility guidance from ILMALINK MEDIGO
+              Get Bangladesh MBBS eligibility guidance from ilmalink
             </h2>
             <p className="mt-3 max-w-3xl text-sm font-medium leading-7 text-blue-100">
               Compare GPA and passing-year eligibility, college fee range, FMGE references, route-specific documentation, and payment safety checkpoints before processing admission.

@@ -27,8 +27,8 @@ Students and families need verified information before choosing a medical educat
 - Keep documents ready before the counselling or application timeline begins.
 - Speak with an expert before making payments or selecting a university.
 
-## ILMALINK MEDIGO guidance
-ILMALINK MEDIGO helps students compare realistic options for ${country}, India, NEET counselling, scholarships, education loans, and career planning with transparent guidance.
+## Medigo guidance under ilmalink
+Medigo, an extension/service line of ilmalink, helps students compare realistic options for ${country}, India, NEET counselling, scholarships, education loans, and career planning with transparent guidance.
 `;
 
 const vijayNeetAbolitionContent = `
@@ -160,7 +160,7 @@ export const seedBlogs: BlogPost[] = [
       "NEET Controversy",
     ],
     authorId: "user-admin",
-    authorName: "ILMALINK Editorial Team",
+    authorName: "ilmaLink Editorial Team",
     publishDate: "2026-06-14",
     updatedAt: "2026-06-14",
     readTime: "7 min read",
@@ -200,13 +200,13 @@ export const seedBlogs: BlogPost[] = [
     country: "Kyrgyzstan",
     tags: ["MBBS Abroad", "Kyrgyzstan", "Admission"],
     authorId: "user-admin",
-    authorName: "ILMALINK Editorial Team",
+    authorName: "ilmaLink Editorial Team",
     publishDate: "2026-05-18",
     updatedAt: "2026-05-18",
     readTime: "5 min read",
     views: 1430,
     status: "published",
-    seoTitle: "MBBS in Kyrgyzstan Guide for Indian Students | ILMALINK MEDIGO",
+    seoTitle: "MBBS in Kyrgyzstan Guide for Indian Students | ilmaLink",
     metaDescription:
       "Explore MBBS in Kyrgyzstan for Indian students with eligibility, fees, admission planning, university checks and counselling guidance.",
     keywords: ["MBBS in Kyrgyzstan", "MBBS Abroad", "medical admission"],
@@ -230,7 +230,7 @@ export const seedBlogs: BlogPost[] = [
     country: "India",
     tags: ["NEET", "Counselling", "MBBS India"],
     authorId: "user-admin",
-    authorName: "ILMALINK Editorial Team",
+    authorName: "ilmaLink Editorial Team",
     publishDate: "2026-05-16",
     updatedAt: "2026-05-16",
     readTime: "4 min read",
@@ -260,13 +260,13 @@ export const seedBlogs: BlogPost[] = [
     country: "India",
     tags: ["MBBS India", "NEET", "Admission"],
     authorId: "user-admin",
-    authorName: "ILMALINK Editorial Team",
+    authorName: "ilmaLink Editorial Team",
     publishDate: "2026-05-13",
     updatedAt: "2026-05-13",
     readTime: "6 min read",
     views: 1844,
     status: "published",
-    seoTitle: "MBBS India Admission Planning After NEET | ILMALINK MEDIGO",
+    seoTitle: "MBBS India Admission Planning After NEET | ilmaLink",
     metaDescription:
       "Plan MBBS India admission after NEET with guidance on government, private, deemed and management quota options.",
     keywords: ["MBBS India", "NEET result", "medical admission"],
@@ -290,7 +290,7 @@ export const seedBlogs: BlogPost[] = [
     country: "India",
     tags: ["Scholarships", "Medical Education", "Documents"],
     authorId: "user-admin",
-    authorName: "ILMALINK Editorial Team",
+    authorName: "ilmaLink Editorial Team",
     publishDate: "2026-05-10",
     updatedAt: "2026-05-10",
     readTime: "4 min read",
@@ -317,7 +317,7 @@ export const seedBlogs: BlogPost[] = [
     country: "India",
     tags: ["Loans", "MBBS Fees", "Parents"],
     authorId: "user-admin",
-    authorName: "ILMALINK Editorial Team",
+    authorName: "ilmaLink Editorial Team",
     publishDate: "2026-05-07",
     updatedAt: "2026-05-07",
     readTime: "5 min read",
@@ -344,7 +344,7 @@ export const seedBlogs: BlogPost[] = [
     country: "Global",
     tags: ["University Reviews", "MBBS Abroad", "Safety"],
     authorId: "user-admin",
-    authorName: "ILMALINK Editorial Team",
+    authorName: "ilmaLink Editorial Team",
     publishDate: "2026-05-04",
     updatedAt: "2026-05-04",
     readTime: "6 min read",
@@ -371,13 +371,13 @@ export const seedBlogs: BlogPost[] = [
     country: "India",
     tags: ["Career", "MBBS", "Medical Education"],
     authorId: "user-admin",
-    authorName: "ILMALINK Editorial Team",
+    authorName: "ilmaLink Editorial Team",
     publishDate: "2026-05-01",
     updatedAt: "2026-05-01",
     readTime: "5 min read",
     views: 740,
     status: "published",
-    seoTitle: "Medical Career Options Beyond MBBS | ILMALINK MEDIGO",
+    seoTitle: "Medical Career Options Beyond MBBS | ilmaLink",
     metaDescription:
       "Explore career options beyond MBBS including specialization, licensing pathways, public health and clinical careers.",
     keywords: ["medical career", "after MBBS", "doctor career"],
@@ -401,7 +401,7 @@ export const seedBlogs: BlogPost[] = [
     country: "Global",
     tags: ["MBBS Abroad", "Documents", "Admission"],
     authorId: "user-admin",
-    authorName: "ILMALINK Editorial Team",
+    authorName: "ilmaLink Editorial Team",
     publishDate: "2026-04-28",
     updatedAt: "2026-04-28",
     readTime: "4 min read",
@@ -422,7 +422,7 @@ export const seedDatabase: BlogDatabase = {
   users: [
     {
       id: "user-admin",
-      name: "ILMALINK Admin",
+      name: "ilmaLink Admin",
       email: "admin@ilmalink.com",
       password: "admin123",
       role: "admin",

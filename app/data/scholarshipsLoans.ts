@@ -45,7 +45,7 @@ export type SupportType =
   | "charitable support"
   | "student credit card"
   | "bank loan"
-  | "ILMALINK support";
+  | "ilmaLink support";
 
 export type SourceType = "official" | "verified" | "needs-check";
 
@@ -84,7 +84,7 @@ export type ScholarshipLoanScheme = {
   sourceType: SourceType;
   lastVerifiedDate: string;
   tags: string[];
-  isInternalIlmalinkSupport: boolean;
+  isInternalilmaLinkSupport: boolean;
 };
 
 export const lastScholarshipsLoansVerificationDate = "2026-06-13";
@@ -133,9 +133,9 @@ const categoryDocuments = [
 export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
   {
     id: "ilmalink-fee-support",
-    title: "ILMALINK Scholarship & Fee Support",
-    shortTitle: "ILMALINK Support",
-    type: "ILMALINK support",
+    title: "ilmaLink Scholarship & Fee Support",
+    shortTitle: "ilmaLink Support",
+    type: "ilmaLink support",
     applicableFor: "Both",
     eligibleStates: ["All India"],
     eligibleCommunities: ["All"],
@@ -155,29 +155,29 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
       "MBBS Abroad",
       "Counselling not completed yet",
     ],
-    maxAmount: "Up to INR 3,00,000, subject to ILMALINK verification and approval.",
+    maxAmount: "Up to INR 3,00,000, subject to ilmaLink verification and approval.",
     interestRate: "Not a loan",
     repayment: "No repayment if approved as support or fee discount.",
     moratorium: "Not applicable",
     benefitDescription:
-      "Admission-linked scholarship, fee discount, counselling support, documentation support or loan-guidance support may be reviewed by ILMALINK up to INR 3,00,000.",
+      "Admission-linked scholarship, fee discount, counselling support, documentation support or loan-guidance support may be reviewed by ilmaLink up to INR 3,00,000.",
     whyUsefulForMBBS:
-      "It keeps ILMALINK support visible for every MBBS aspirant while clearly marking the estimate as subject to verification and approval.",
+      "It keeps ilmaLink support visible for every MBBS aspirant while clearly marking the estimate as subject to verification and approval.",
     officialWebsite: "https://www.ilmalink.com",
     applyRoute: "/",
-    documents: [...baseAcademicDocuments, "Annual tuition fee estimate", "Admission processing details through ILMALINK"],
+    documents: [...baseAcademicDocuments, "Annual tuition fee estimate", "Admission processing details through ilmaLink"],
     importantNotes: [
-      "ILMALINK will assist end-to-end after profile verification.",
-      "Applicable only when admission is processed through ILMALINK MEDIGO.",
+      "ilmaLink will assist end-to-end after profile verification.",
+      "Applicable only when admission is processed through Medigo, an extension/service line of ilmalink.",
       "Subject to university/college/institute approval.",
-      "Subject to available partner benefit, document verification and ILMALINK approval.",
+      "Subject to available partner benefit, document verification and ilmaLink approval.",
       "Final amount is confirmed after profile and document review.",
     ],
     priorityScore: 1000,
     sourceType: "verified",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
-    tags: ["ILMALINK", "Fee Support", "India", "Abroad", "Counselling"],
-    isInternalIlmalinkSupport: true,
+    tags: ["ilmaLink", "Fee Support", "India", "Abroad", "Counselling"],
+    isInternalilmaLinkSupport: true,
   },
   {
     id: "bank-education-loan-options",
@@ -229,7 +229,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["Bank Loan", "Education Loan", "India", "Abroad", "High Fee"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "pm-vidyalaxmi",
@@ -276,7 +276,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["PM Vidyalaxmi", "Education Loan", "Interest Support", "India"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "west-bengal-student-credit-card",
@@ -327,7 +327,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["West Bengal", "Student Credit Card", "Loan", "India", "Abroad"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "wbmdfc-nmdfc-minority-education-loan",
@@ -380,7 +380,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["West Bengal", "Muslim Minority", "Minority", "NMDFC", "WBMDFC", "Loan", "Abroad"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "isdb-scholarship",
@@ -432,7 +432,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["Muslim Minority", "IsDB", "Scholarship", "Medical", "Competitive"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "west-bengal-zakat-fund",
@@ -477,7 +477,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["West Bengal", "Muslim Minority", "Zakat", "Charitable Support", "Medical"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "amp-indiazakat",
@@ -522,7 +522,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["Muslim Minority", "AMP", "IndiaZakat", "Community Support", "Medical"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "gd-study-circle",
@@ -567,7 +567,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "needs-check",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["West Bengal", "Charitable Support", "Needs Verification"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "al-ameen-support",
@@ -612,7 +612,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "needs-check",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["Al-Ameen", "Charitable Support", "Minority Support", "Needs Verification"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "rd-sethna-loan-scholarship",
@@ -664,7 +664,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["Loan Scholarship", "India", "Abroad", "All Communities", "Partial Support"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "cmrf-nabanna-education-assistance",
@@ -714,7 +714,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["West Bengal", "Nabanna", "CMRF", "Case Based Assistance"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "nsp-post-matric-sc",
@@ -759,7 +759,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["SC", "NSP", "Post-Matric", "Government Scholarship", "India"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "nsp-post-matric-st",
@@ -804,7 +804,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["ST", "NSP", "Post-Matric", "Government Scholarship", "India"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "pm-yasasvi-obc-ebc-dnt",
@@ -849,7 +849,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["OBC", "EBC", "DNT", "NSP", "India"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "top-class-sc",
@@ -894,7 +894,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["SC", "Top Class", "NSP", "Government Scholarship", "India"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "top-class-st",
@@ -939,7 +939,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["ST", "Top Class", "NSP", "Government Scholarship", "India"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "pwd-scholarships",
@@ -984,7 +984,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["PwD", "Disability", "NSP", "Top Class", "India"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "svmcm-west-bengal",
@@ -1029,7 +1029,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["West Bengal", "SVMCM", "Merit-cum-Means", "Medical", "Income Based"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "aikyashree-west-bengal",
@@ -1074,7 +1074,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["West Bengal", "Minority", "Aikyashree", "MCM", "Medical"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
   {
     id: "oasis-west-bengal",
@@ -1119,6 +1119,6 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     sourceType: "official",
     lastVerifiedDate: lastScholarshipsLoansVerificationDate,
     tags: ["West Bengal", "SC", "ST", "OBC", "OASIS", "Post-Matric"],
-    isInternalIlmalinkSupport: false,
+    isInternalilmaLinkSupport: false,
   },
 ];

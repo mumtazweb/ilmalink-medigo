@@ -20,14 +20,8 @@ Allow: /portal/signup/
 Allow: /portal/login/
 
 Disallow: /admin/
-Disallow: /dashboard/
 Disallow: /api/
 Disallow: /search/
-
-Disallow: /login/
-Disallow: /create-account/
-Disallow: /forgot-password/
-Disallow: /reset-password/
 
 Disallow: /portal/admin/
 Disallow: /portal/counsellor/

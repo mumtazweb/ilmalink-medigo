@@ -199,7 +199,7 @@ export default function DecisionIntelligenceSection() {
                     MBBS in {selectedCountry.label}
                   </h3>
                   <p className="text-[9px] font-bold uppercase tracking-[0.08em] text-[#047857]">
-                    Current ILMALINK planning view
+                    Current ilmaLink planning view
                   </p>
                 </div>
               </div>

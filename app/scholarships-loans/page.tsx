@@ -10,22 +10,22 @@ import ScholarshipsLoansFinder from "./ScholarshipsLoansFinder";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "MBBS Scholarships & Education Loans in India & Abroad | ILMALINK MEDIGO",
+  title: "MBBS Scholarships & Education Loans in India & Abroad | ilmaLink",
   description:
-    "Find MBBS scholarships, education loans, merit-based and category-based funding, student credit cards, minority finance, charitable support and ILMALINK fee support for medical students in India and abroad.",
+    "Find MBBS scholarships, education loans, merit-based and category-based funding, student credit cards, minority finance, charitable support and ilmaLink fee support for medical students in India and abroad.",
   alternates: {
     canonical: "https://www.ilmalink.com/scholarships-loans",
   },
   openGraph: {
-    title: "MBBS Scholarships & Education Loans | ILMALINK MEDIGO",
+    title: "MBBS Scholarships & Education Loans | ilmaLink",
     description:
-      "Find MBBS scholarships, education loans, merit scholarships, category support, student credit cards, charitable routes and ILMALINK fee support.",
+      "Find MBBS scholarships, education loans, merit scholarships, category support, student credit cards, charitable routes and ilmaLink fee support.",
     url: "https://www.ilmalink.com/scholarships-loans",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "MBBS Scholarships & Education Loans | ILMALINK MEDIGO",
+    title: "MBBS Scholarships & Education Loans | ilmaLink",
     description:
       "A practical MBBS funding finder for merit scholarships, category support, education loans and charitable routes in India and abroad.",
   },
@@ -35,7 +35,7 @@ const faqs = [
   {
     question: "Are scholarships available for MBBS abroad?",
     answer:
-      "Full scholarships for MBBS abroad are limited. Some students may get university fee discounts, community support, education loans, minority finance loans, or ILMALINK fee support subject to verification.",
+      "Full scholarships for MBBS abroad are limited. Some students may get university fee discounts, community support, education loans, minority finance loans, or ilmaLink fee support subject to verification.",
   },
   {
     question: "Can I get an education loan for MBBS abroad?",
@@ -53,19 +53,19 @@ const faqs = [
       "The NMDFC education loan scheme includes support for eligible professional courses in India and abroad, but students must verify current rules through WBMDFC/NMDFC/MILAN official route.",
   },
   {
-    question: "Does ILMALINK provide scholarships?",
+    question: "Does ilmaLink provide scholarships?",
     answer:
-      "ILMALINK may provide admission-linked scholarship or fee support up to INR 3,00,000 when admission is processed through ILMALINK, subject to verification, approval and availability.",
+      "ilmaLink may provide admission-linked scholarship or fee support up to INR 3,00,000 when admission is processed through ilmaLink, subject to verification, approval and availability.",
   },
   {
-    question: "How does ILMALINK Scholarship & Fee Support work?",
+    question: "How does ilmaLink Scholarship & Fee Support work?",
     answer:
-      "ILMALINK reviews the student's profile, admission route, fee structure and available support scope. Any scholarship or fee support is conditional and may be lower than the maximum.",
+      "ilmaLink reviews the student's profile, admission route, fee structure and available support scope. Any scholarship or fee support is conditional and may be lower than the maximum.",
   },
   {
     question: "What affects scholarship or loan approval?",
     answer:
-      "Final approval depends on scheme rules, documents, income, category, institution, fund availability, lender rules and official verification. ILMALINK helps students prepare the route properly.",
+      "Final approval depends on scheme rules, documents, income, category, institution, fund availability, lender rules and official verification. ilmaLink helps students prepare the route properly.",
   },
   {
     question: "What documents are needed for MBBS education loan?",
@@ -73,14 +73,14 @@ const faqs = [
       "Usually Class 10/12 marksheets, NEET score, admission letter, fee structure, income proof, identity proof, domicile, category/minority certificate if applicable, co-applicant documents and bank-specific documents are needed.",
   },
   {
-    question: "Can I apply for both ILMALINK support and external loan?",
+    question: "Can I apply for both ilmaLink support and external loan?",
     answer:
-      "Yes. Students may request ILMALINK support review and also apply for eligible external loans/scholarships through official portals.",
+      "Yes. Students may request ilmaLink support review and also apply for eligible external loans/scholarships through official portals.",
   },
   {
     question: "What if no government scholarship is available?",
     answer:
-      "Students may check merit scholarships, category-based scholarships, education loans, student credit cards, charitable support, Zakat funds and ILMALINK fee support.",
+      "Students may check merit scholarships, category-based scholarships, education loans, student credit cards, charitable support, Zakat funds and ilmaLink fee support.",
   },
 ];
 
@@ -311,7 +311,7 @@ export default function ScholarshipsLoansPage() {
             <p className="mt-3 max-w-3xl text-sm font-semibold leading-6 text-slate-700 md:text-base md:leading-7">
               Check possible MBBS scholarship, education loan, merit-based support,
               category and community finance, student credit cards, Zakat,
-              charitable support and ILMALINK admission-linked fee support routes
+              charitable support and ilmaLink admission-linked fee support routes
               in one compact profile tool.
             </p>
 
@@ -344,7 +344,7 @@ export default function ScholarshipsLoansPage() {
               Scholarship, loan, category support and charitable funding routes
             </h2>
             <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-slate-600">
-              Use this ordered guide after checking your profile match. ILMALINK
+              Use this ordered guide after checking your profile match. ilmaLink
               helps students compare official portals, prepare documents and move
               through the application route with end-to-end guidance.
               Education loans, merit scholarships, category-based support and
@@ -483,11 +483,11 @@ export default function ScholarshipsLoansPage() {
             </h2>
             <p className="mt-3 text-sm font-semibold leading-6 text-amber-900">
               Scholarships, education loans, Zakat support, charitable support,
-              student credit card support and ILMALINK support require official
+              student credit card support and ilmaLink support require official
               eligibility, document verification, fund availability, institution
               recognition, bank/NBFC rules, government rules, university/college
-              rules, admission route, student profile and ILMALINK approval.
-              ILMALINK MEDIGO guides students end-to-end and may offer
+              rules, admission route, student profile and ilmaLink approval.
+              Medigo, an extension/service line of ilmalink, guides students end-to-end and may offer
               admission-linked fee support up to INR 3,00,000 after
               verification.
             </p>

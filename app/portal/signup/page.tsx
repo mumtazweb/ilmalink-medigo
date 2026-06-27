@@ -5,9 +5,9 @@ import PortalSignupForm from "../../components/portal/PortalSignupForm";
 import { normalizePortalReturnPath } from "../../lib/portal/validation";
 
 export const metadata: Metadata = {
-  title: "Join ILMALINK MEDIGO | Free Education Guidance Profile",
+  title: "Join ilmaLink | Free Education Guidance Profile",
   description:
-    "Create a free ILMALINK MEDIGO profile for NEET, MBBS India, MBBS Abroad, scholarship and education guidance.",
+    "Create a free ilmaLink profile for NEET, MBBS India, MBBS Abroad, scholarship and education guidance.",
   alternates: { canonical: "https://www.ilmalink.com/portal/signup" },
   robots: { index: true, follow: true },
 };

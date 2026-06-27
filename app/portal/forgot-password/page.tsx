@@ -6,7 +6,7 @@ import PortalPublicHeader from "../../components/portal/PortalPublicHeader";
 import { PortalForgotPasswordForm } from "../../components/portal/PortalResetForms";
 
 export const metadata: Metadata = {
-  title: "Student Forgot Password | ILMALINK MEDIGO",
+  title: "Student Forgot Password | ilmaLink",
   description: "Request a student portal password reset code by mobile or email.",
   robots: { index: false, follow: true },
 };

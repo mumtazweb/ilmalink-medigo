@@ -106,7 +106,7 @@ const defaultProfile: FinderProfile = {
   annualTuitionFee: "500000",
 };
 
-export const ILMALINK_SUPPORT_CAP = 300000;
+export const ilmaLink_SUPPORT_CAP = 300000;
 
 const incomeBandMaximums: Record<IncomeBand, number> = {
   "Below ₹1 lakh": 100000,
@@ -131,7 +131,7 @@ export function formatCurrencyINR(amount: number) {
   }).format(Math.round(amount));
 }
 
-export function calculateIlmalinkSupport(
+export function calculateilmaLinkSupport(
   destination: StudyDestination,
   annualTuitionFee: number
 ) {
@@ -139,7 +139,7 @@ export function calculateIlmalinkSupport(
 
   const profileRate = destination === "Abroad" ? 0.15 : 0.1;
   return Math.min(
-    ILMALINK_SUPPORT_CAP,
+    ilmaLink_SUPPORT_CAP,
     Math.round(annualTuitionFee * profileRate)
   );
 }
@@ -315,7 +315,7 @@ function getWhyText(profile: FinderProfile, scheme: ScholarshipLoanScheme) {
   }
 
   if (getIncomeBandValue(profile.incomeBand) > 800000) {
-    return "Some income-based scholarships may not be available based on your selected income band. Bank education loan options and ILMALINK support may still be checked.";
+    return "Some income-based scholarships may not be available based on your selected income band. Bank education loan options and ilmaLink support may still be checked.";
   }
 
   const matchedReasons = [
@@ -341,7 +341,7 @@ export function getBestExternalSupport(
   schemes: ScholarshipLoanScheme[]
 ) {
   return schemes
-    .filter((scheme) => !scheme.isInternalIlmalinkSupport)
+    .filter((scheme) => !scheme.isInternalilmaLinkSupport)
     .map((scheme) => toScoredScheme(profile, scheme))
     .sort((a, b) => b.score - a.score)[0];
 }
@@ -354,7 +354,7 @@ export function getOtherMatches(
   return schemes
     .filter(
       (scheme) =>
-        !scheme.isInternalIlmalinkSupport && scheme.id !== bestExternalId
+        !scheme.isInternalilmaLinkSupport && scheme.id !== bestExternalId
     )
     .map((scheme) => toScoredScheme(profile, scheme))
     .sort((a, b) => b.score - a.score);
@@ -618,7 +618,7 @@ function ExternalSupportCard({
           <ExternalLink size={16} />
         </a>
         <CounsellingActionButton className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#00C896]/45 bg-[#ECFDF5] px-4 py-2 text-sm font-extrabold text-[#047857] transition hover:bg-[#D1FAE5]">
-          Review With ILMALINK
+          Review With ilmaLink
           <ChevronRight size={16} />
         </CounsellingActionButton>
       </div>
@@ -652,13 +652,13 @@ export default function ScholarshipsLoansFinder() {
   }, []);
 
   const annualTuitionFee = toNumber(profile.annualTuitionFee);
-  const supportAmount = calculateIlmalinkSupport(
+  const supportAmount = calculateilmaLinkSupport(
     profile.destination,
     annualTuitionFee
   );
 
   const externalSchemes = scholarshipLoanSchemes.filter(
-    (scheme) => !scheme.isInternalIlmalinkSupport
+    (scheme) => !scheme.isInternalilmaLinkSupport
   );
 
   const bestExternalCandidate = getBestExternalSupport(profile, externalSchemes);
@@ -707,7 +707,7 @@ export default function ScholarshipsLoansFinder() {
             </h2>
           </div>
           <p className="max-w-xl text-xs font-semibold leading-5 text-slate-500">
-            Fill the profile, press Find, and ILMALINK will help compare the
+            Fill the profile, press Find, and ilmaLink will help compare the
             strongest official route.
           </p>
         </div>
@@ -720,7 +720,7 @@ export default function ScholarshipsLoansFinder() {
                   Start with your student profile
                 </h3>
                 <p className="mt-1 text-sm font-semibold leading-6 text-slate-600">
-                  Enter the details once and compare ILMALINK support with the
+                  Enter the details once and compare ilmaLink support with the
                   strongest official route.
                 </p>
               </div>
@@ -859,13 +859,13 @@ export default function ScholarshipsLoansFinder() {
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                       <div>
                         <p className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#047857]">
-                          ILMALINK Support
+                          ilmaLink Support
                         </p>
                         <h3 className="mt-1 text-lg font-extrabold leading-6 text-slate-950">
                           Scholarship & Fee Support
                         </h3>
                         <p className="mt-1 text-xs font-extrabold uppercase tracking-[0.12em] text-[#047857]">
-                          ILMALINK end-to-end assisted
+                          ilmaLink end-to-end assisted
                         </p>
                       </div>
                       <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#ECFDF5] text-[#047857] ring-1 ring-emerald-200">
@@ -889,9 +889,9 @@ export default function ScholarshipsLoansFinder() {
                     </div>
 
                     <p className="mt-3 text-sm font-semibold leading-6 text-slate-700">
-                      ILMALINK will assist end-to-end to secure eligible
+                      ilmaLink will assist end-to-end to secure eligible
                       admission-linked support for students processed through
-                      ILMALINK MEDIGO.
+                      Medigo, an extension/service line of ilmalink.
                     </p>
 
                     <div className="mt-3 grid gap-2 text-xs font-bold text-emerald-900 sm:grid-cols-3">
@@ -922,7 +922,7 @@ export default function ScholarshipsLoansFinder() {
                   <span className="font-extrabold text-slate-950">
                     Find Results
                   </span>{" "}
-                  to show your best two support cards: ILMALINK support and one
+                  to show your best two support cards: ilmaLink support and one
                   official route subject to approval.
                 </div>
               )}
@@ -938,7 +938,7 @@ export default function ScholarshipsLoansFinder() {
                 Need help choosing?
               </p>
               <h2 className="mt-2 text-xl font-extrabold md:text-2xl">
-                Let ILMALINK review your route before you commit fees.
+                Let ilmaLink review your route before you commit fees.
               </h2>
               <p className="mt-2 text-sm font-semibold leading-6 text-slate-200">
                 Profile review, official-route shortlist, document checklist and

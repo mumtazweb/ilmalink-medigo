@@ -5,7 +5,7 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in Russia 2026 | WDOMS & NMC-Regulation-Aware Shortlisting | ILMALINK MEDIGO",
+    "Study MBBS in Russia 2026 | WDOMS & NMC-Regulation-Aware Shortlisting | ilmaLink",
 
   description:
     "Study MBBS in Russia for Indian students with affordable tuition fees, globally recognized universities, strong clinical exposure and English-medium medical education pathways.",
@@ -497,7 +497,7 @@ export default function RussiaPage() {
 
       <VerificationCounsellingCard
         countryName="Russia MBBS"
-        title="Check Russia MBBS eligibility with ILMALINK"
+        title="Check Russia MBBS eligibility with ilmaLink"
         buttonLabel="Get Russia MBBS Counselling"
       />
 </main>

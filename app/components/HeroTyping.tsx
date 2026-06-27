@@ -13,7 +13,7 @@ export default function HeroTyping() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            name: "ILMALINK MEDIGO",
+            name: "ilmaLink",
             url: "https://www.ilmalink.com",
             description: subtitle,
             potentialAction: {

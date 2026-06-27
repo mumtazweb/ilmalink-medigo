@@ -11,12 +11,12 @@ export async function sendOtpEmail(
   try {
     await resend.emails.send({
       from:
-        "ILMALINK MEDIGO <onboarding@resend.dev>",
+        "ilmaLink <onboarding@resend.dev>",
 
       to: email,
 
       subject:
-        "ILMALINK MEDIGO Password Reset OTP",
+        "ilmaLink Password Reset OTP",
 
       html: `
         <div style="font-family:Arial,sans-serif;padding:24px;">

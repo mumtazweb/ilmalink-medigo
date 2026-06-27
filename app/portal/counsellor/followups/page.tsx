@@ -6,7 +6,7 @@ import { toPortalLeadRow } from "../../../lib/portal/presentation";
 import { requirePortalStaff } from "../../../lib/portal/session";
 
 export const metadata: Metadata = {
-  title: "My Follow-ups | ILMALINK MEDIGO",
+  title: "My Follow-ups | ilmaLink",
   robots: { index: false, follow: false },
 };
 

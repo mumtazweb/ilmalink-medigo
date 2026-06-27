@@ -74,16 +74,16 @@ export async function generateMetadata({
   const canonicalUrl = `${SITE_URL}/blogs/page/${parsedPage}/`;
 
   return {
-    title: `MBBS & NEET Aspirants News Blogs Archive Page ${parsedPage} | ILMALINK MEDIGO`,
+    title: `MBBS & NEET Aspirants News Blogs Archive Page ${parsedPage} | ilmaLink`,
     description:
-      "Browse older MBBS admission news, NEET updates, counselling alerts, college guidance, scholarships, loans and medical education insights from ILMALINK MEDIGO.",
+      "Browse older MBBS admission news, NEET updates, counselling alerts, college guidance, scholarships, loans and medical education insights from ilmalink.",
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
       title: `MBBS & NEET Aspirants News Blogs Archive Page ${parsedPage}`,
       description:
-        "Older ILMALINK MEDIGO MBBS admission news, NEET updates, counselling alerts and college guidance articles.",
+        "Older ilmaLink MBBS admission news, NEET updates, counselling alerts and college guidance articles.",
       url: canonicalUrl,
       type: "website",
     },
@@ -91,7 +91,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: `MBBS & NEET Aspirants News Blogs Archive Page ${parsedPage}`,
       description:
-        "Older ILMALINK MEDIGO MBBS admission news, NEET updates, counselling alerts and college guidance articles.",
+        "Older ilmaLink MBBS admission news, NEET updates, counselling alerts and college guidance articles.",
     },
     robots: {
       index: true,
@@ -170,7 +170,7 @@ export default async function BlogArchivePage({
     "@type": "CollectionPage",
     name: `MBBS & NEET Aspirants News Blogs Archive Page ${parsedPage}`,
     description:
-      "Older ILMALINK MEDIGO MBBS admission news, NEET updates, counselling alerts, college guidance, scholarships, loans and medical education insights.",
+      "Older ilmaLink MBBS admission news, NEET updates, counselling alerts, college guidance, scholarships, loans and medical education insights.",
     url: currentUrl,
     inLanguage: "en-IN",
     isPartOf: {
@@ -228,7 +228,7 @@ export default async function BlogArchivePage({
 
               <div className="mt-4 inline-flex items-center gap-2 rounded-2xl border border-[#00A986]/25 bg-white px-4 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-[#008A73] shadow-sm">
                 <ShieldCheck size={15} />
-                ILMALINK MEDIGO Archive
+                ilmaLink Archive
               </div>
 
               <h1 className="mt-5 text-[1.85rem] font-black leading-[0.98] tracking-tight text-[#061733] min-[390px]:text-[2.1rem] sm:text-5xl lg:text-[4rem]">
@@ -268,7 +268,7 @@ export default async function BlogArchivePage({
               <div className="absolute right-0 top-0 h-[350px] w-[460px] overflow-hidden rounded-bl-[8rem] rounded-tl-[8rem] bg-[linear-gradient(135deg,#EAF3FF,#CFF8F0)] shadow-[0_30px_90px_rgba(8,27,53,0.12)]">
                 <Image
                   src={BLOG_HERO_IMAGE}
-                  alt="MBBS and NEET aspirants archive by ILMALINK MEDIGO"
+                  alt="MBBS and NEET aspirants archive by ilmalink"
                   fill
                   priority
                   sizes="460px"

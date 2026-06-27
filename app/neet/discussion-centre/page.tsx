@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     "NEET Physics Chemistry Biology analysis",
   ],
   openGraph: {
-    title: "NEET 2026 Analysis & Discussion Centre | ILMALINK MEDIGO",
+    title: "NEET 2026 Analysis & Discussion Centre | ilmaLink",
     description:
       "Question search, supplied answer-key PDF, subject review and student discussion topics for NEET 2026.",
     url: "https://www.ilmalink.com/neet/discussion-centre",

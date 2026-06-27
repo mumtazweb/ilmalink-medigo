@@ -126,7 +126,7 @@ export default function BlogShareFollow({
 
       <div className="mt-6 border-t border-slate-100 pt-5">
         <p className="text-xs font-black uppercase tracking-[0.22em] text-slate-400">
-          Follow ILMALINK
+          Follow ilmaLink
         </p>
 
         <div className="mt-3 flex flex-wrap gap-2">

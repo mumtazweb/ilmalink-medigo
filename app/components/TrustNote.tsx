@@ -15,7 +15,7 @@ export default function TrustNote({
             Trust Note
           </p>
           <h2 className="mt-2 text-2xl font-black tracking-normal text-[#081B35]">
-            Reviewed by: ILMALINK MEDIGO Counselling Desk
+            Reviewed by: ilmalink Counselling Desk
           </h2>
           <p className="mt-3 text-sm font-bold text-slate-600">
             Last reviewed: {lastReviewedDate}

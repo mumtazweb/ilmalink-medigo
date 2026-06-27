@@ -99,12 +99,12 @@ export function buildOrganizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": "https://www.ilmalink.com/#organization",
-    name: "ilmaLink",
+    name: "ilmalink",
     alternateName: ilmaLinkEntityData.alternateName,
     url: ilmaLinkEntityData.url,
     logo: absoluteUrl(ilmaLinkEntityData.logo),
     description:
-      "Student-first MBBS admission consultancy and medical education guidance platform for MBBS India, MBBS Abroad, NEET counselling, eligibility, documents, scholarships and loans.",
+      "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups.",
     areaServed: "India and international medical education destinations",
     sameAs: ilmaLinkEntityData.sameAs,
     department: ilmaLinkEntityData.offices.map((office) => ({
@@ -121,12 +121,12 @@ export function buildEducationalOrganizationSchema() {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
     "@id": "https://www.ilmalink.com/#educationalorganization",
-    name: "ilmaLink",
-    alternateName: "ilmaLink Medigo",
+    name: "ilmalink",
+    alternateName: "Medigo service line of ilmalink",
     url: ilmaLinkEntityData.url,
     logo: absoluteUrl(ilmaLinkEntityData.logo),
     description:
-      "Student-first MBBS admission consultancy in India providing transparent MBBS India and MBBS Abroad counselling, eligibility, document, scholarship, loan and college-comparison support.",
+      "Medigo is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation.",
     areaServed: [
       "West Bengal",
       "Maharashtra",
@@ -162,7 +162,7 @@ export function buildLocalBusinessSchema(office: IlmaLinkOffice) {
     url: ilmaLinkEntityData.url,
     image: absoluteUrl(ilmaLinkEntityData.logo),
     description:
-      "ilmaLink Medigo contact point for MBBS admission guidance and consultancy, MBBS abroad counselling, India medical counselling support and student documentation guidance.",
+      "ilmaLink contact point for Medigo MBBS admission guidance and consultancy, MBBS abroad counselling, India medical counselling support and student documentation guidance.",
     telephone: ilmaLinkEntityData.contact.call,
     email: ilmaLinkEntityData.contact.email,
     contactPoint: [
@@ -206,7 +206,7 @@ export function buildWebsiteSchema() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": "https://www.ilmalink.com/#website",
-    name: "ilmaLink Medigo",
+    name: "ilmaLink",
     url: ilmaLinkEntityData.url,
     inLanguage: "en-IN",
     publisher: {
@@ -220,9 +220,9 @@ export function buildGuidanceDisclaimerSchema() {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     "@id": "https://www.ilmalink.com/#guidance-disclaimer",
-    name: "ilmaLink Medigo Admissions Guidance Disclaimer",
+    name: "ilmalink Admissions Guidance Disclaimer",
     text:
-      "ilmaLink Medigo provides admission guidance, counselling and student-support information. Final admission, eligibility, documentation, visa approval, scholarship, loan or licence outcome is subject to official rules, university decisions, regulatory authorities and applicable government norms.",
+      "Medigo is an extension/service line of ilmalink. It provides admission guidance, counselling and student-support information. Final admission, eligibility, documentation, visa approval, scholarship, loan or licence outcome is subject to official rules, university decisions, regulatory authorities and applicable government norms.",
     inLanguage: "en-IN",
     isPartOf: {
       "@id": "https://www.ilmalink.com/#website",
@@ -238,7 +238,7 @@ export function buildSiteNavigationSchema() {
     "@context": "https://schema.org",
     "@type": "ItemList",
     "@id": "https://www.ilmalink.com/#site-navigation",
-    name: "ilmaLink Medigo Study and Support Navigation",
+    name: "ilmalink Study and Support Navigation",
     itemListElement: siteNavigationItems.map((item, index) => ({
       "@type": "ListItem",
       position: index + 1,
@@ -308,7 +308,7 @@ export function buildCountryMedicalEducationSchema(countryData: CountryGeoFact) 
       {
         "@type": "Thing",
         name: `${countryData.countryName} WDOMS medical schools`,
-        description: `${countryData.wdomsCount} WDOMS-listed medical school entries in ilmaLink Medigo's country dataset.`,
+        description: `${countryData.wdomsCount} WDOMS-listed medical school entries in the Medigo service-line country dataset of ilmalink.`,
       },
       {
         "@type": "Thing",

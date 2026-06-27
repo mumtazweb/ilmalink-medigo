@@ -66,7 +66,7 @@ async function sendOwnerEmail(input: { subject: string; text: string }) {
 
   const from =
     process.env.RESEND_FROM_EMAIL ||
-    "ILMALINK NEET <onboarding@resend.dev>";
+    "ilmaLink NEET <onboarding@resend.dev>";
 
   try {
     const { Resend } = await import("resend");

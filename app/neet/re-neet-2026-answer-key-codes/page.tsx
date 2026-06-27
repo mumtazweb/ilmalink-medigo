@@ -68,7 +68,7 @@ const datasetSchema = {
   url: "https://www.ilmalink.com/neet/re-neet-2026-answer-key-codes/",
   creator: {
     "@type": "Organization",
-    name: "ILMALINK MEDIGO",
+    name: "ilmaLink",
     url: "https://www.ilmalink.com/",
   },
   temporalCoverage: "2026",

@@ -2,7 +2,7 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in USA 2026 | MCAT USMLE MD Pathway | ILMALINK MEDIGO",
+    "Study MBBS in USA 2026 | MCAT USMLE MD Pathway | ilmaLink",
 
   description:
     "Study MBBS in USA for Indian students with MCAT entrance exam, USMLE pathway, globally respected MD programs and possible FMGE exemption opportunities.",

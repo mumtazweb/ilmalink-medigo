@@ -5,7 +5,7 @@ import { STUDENT_STATUSES, statusLabel } from "../../../lib/portal/constants";
 import { requirePortalStudent } from "../../../lib/portal/session";
 
 export const metadata: Metadata = {
-  title: "Application Status | ILMALINK MEDIGO",
+  title: "Application Status | ilmaLink",
   robots: { index: false, follow: false },
 };
 

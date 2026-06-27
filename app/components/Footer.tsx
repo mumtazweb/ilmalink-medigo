@@ -339,24 +339,26 @@ export default function Footer() {
             <Link
               href="/"
               className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white p-1.5 shadow-sm"
-              aria-label="ilmaLink Medigo home"
+              aria-label="ilmaLink home"
             >
               <img src="/logoimage.svg" alt="" className="h-full w-full object-contain" />
             </Link>
            <div className="min-w-0">
   <p className="text-base font-semibold tracking-wide text-white">
-    ilmaLink Medigo <span className="text-emerald-200">by ilmaLink</span>
+    ilmaLink
   </p>
   <p className="mt-1 max-w-xl text-sm leading-5 text-slate-400">
-    ilmaLink Medigo guides Indian students for MBBS Abroad, MBBS India, NEET
-    counselling, scholarships, education loans and medical admission documentation
-    through transparent support from Kolkata, Bengaluru and Mumbai contact points.
+    Medigo, an extension/service line of ilmalink, guides Indian students for
+    MBBS Abroad, MBBS India, NEET counselling, scholarships, education loans
+    and medical admission documentation through transparent support from
+    Kolkata, Bengaluru and Mumbai contact points.
   </p>
   <p className="mt-2 max-w-xl text-xs leading-5 text-slate-500">
-    ilmalink is the main brand behind ilmaLink Medigo. ilmalink, ilmalink, ilmaLink,
-    ilmalink.com and ilmaLink Medigo refer to the same ilmalink education consultancy
-    entity. ilmaLink Medigo is the MBBS India, MBBS abroad and NEET guidance extension
-    of ilmalink.
+    ilmaLink is the public display style of the official brand ilmalink. Medigo
+    is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET
+    guidance, counselling support, scholarships, education loans, direct
+    college/university tie-up based admission coordination, and medical
+    admission documentation. Medigo is not a separate brand.
   </p>
 </div>
           </div>
@@ -577,7 +579,7 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col gap-1 pt-3 text-xs leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 ilmaLink Medigo. All Rights Reserved.</p>
+          <p>© 2026 ilmalink. All Rights Reserved.</p>
           <p>
             Developed and guided by{" "}
             <Link href="/" className="font-semibold text-slate-300 transition hover:text-white">

@@ -30,7 +30,7 @@ export const dynamic = "force-static";
 
 const pageUrl = "https://www.ilmalink.com/mbbs-abroad/uzbekistan/";
 const uzbekistanWhatsappUrl = `${whatsappCounsellingUrl}?text=${encodeURIComponent(
-  "Hello ILMALINK MEDIGO, I want to talk to an Uzbekistan MBBS admission expert.",
+  "Hello ilmaLink, I want to talk to an Uzbekistan MBBS admission expert.",
 )}`;
 
 export const metadata: Metadata = {
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     description:
       "Uzbekistan MBBS university comparison with all 39 WDOMS records, fees, eligibility, documents, FMGE references, WDOMS and verification-first admission guidance.",
     url: pageUrl,
-    siteName: "ILMALINK MEDIGO",
+    siteName: "ilmaLink",
     images: [
       {
         url: "/images/mbbs-abroad/uzbekistan.jpg",
@@ -1436,7 +1436,7 @@ function FmgeAndCounselling() {
               Need a university comparison?
             </p>
             <h2 className="mt-2 text-2xl font-black sm:text-3xl">
-              Get Uzbekistan admission guidance from ILMALINK MEDIGO
+              Get Uzbekistan admission guidance from ilmalink
             </h2>
             <p className="mt-3 max-w-3xl text-sm font-medium leading-7 text-blue-100">
               Compare all 39 records, fees, eligibility, documents, FMGE
@@ -1471,7 +1471,7 @@ function VerificationAndFaq() {
           <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold leading-7 text-amber-950">
             Final admission depends on eligibility, documents, university
             approval, visa approval and applicable Uzbekistan and Indian
-            regulations. Contact ILMALINK MEDIGO for current guidance before
+            regulations. Contact ilmalink for current guidance before
             making a payment or travel commitment.
           </p>
 

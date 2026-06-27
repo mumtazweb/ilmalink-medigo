@@ -4,16 +4,16 @@ import Navbar from "../components/navbar";
 const pageUrl = "https://www.ilmalink.com/data-methodology/";
 
 export const metadata: Metadata = {
-  title: "ILMALINK MEDIGO Data Methodology",
+  title: "ilmaLink Data Methodology",
   description:
-    "Understand how ILMALINK MEDIGO compiles country, university, seat and counselling statistics, and how to verify official eligibility and compliance.",
+    "Understand how ilmalink compiles country, university, seat and counselling statistics, and how to verify official eligibility and compliance.",
   alternates: {
     canonical: pageUrl,
   },
   openGraph: {
-    title: "ILMALINK MEDIGO Data Methodology",
+    title: "ilmaLink Data Methodology",
     description:
-      "How ILMALINK MEDIGO compiles educational data and what students should verify before admission.",
+      "How ilmalink compiles educational data and what students should verify before admission.",
     url: pageUrl,
     type: "article",
   },
@@ -33,7 +33,7 @@ export default function DataMethodologyPage() {
       {
         "@type": "ListItem",
         position: 2,
-        name: "ILMALINK MEDIGO Data Methodology",
+        name: "ilmaLink Data Methodology",
         item: pageUrl,
       },
     ],
@@ -52,10 +52,10 @@ export default function DataMethodologyPage() {
       <section className="border-b border-[#0B2244]/15 bg-[#061733] px-4 py-9 text-white sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl">
           <h1 className="text-3xl font-black tracking-normal md:text-5xl">
-            ILMALINK MEDIGO Data Methodology
+            ilmaLink Data Methodology
           </h1>
           <p className="mt-4 max-w-4xl text-sm font-semibold leading-7 text-slate-200 md:text-base">
-            This page explains how ILMALINK MEDIGO presents public-reference education data and
+            This page explains how ilmalink presents public-reference education data and
             internal counselling activity figures.
           </p>
         </div>
@@ -76,9 +76,9 @@ export default function DataMethodologyPage() {
           </article>
 
           <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <h2 className="text-xl font-black text-[#081B35]">ILMALINK counselling activity figures</h2>
+            <h2 className="text-xl font-black text-[#081B35]">ilmaLink counselling activity figures</h2>
             <p className="mt-3 text-sm font-medium leading-7 text-slate-700">
-              Application, offer-letter and visa figures, where shown, refer to ILMALINK internal
+              Application, offer-letter and visa figures, where shown, refer to ilmaLink internal
               counselling records and student-support activity.
             </p>
             <p className="mt-2 text-sm font-medium leading-7 text-slate-700">

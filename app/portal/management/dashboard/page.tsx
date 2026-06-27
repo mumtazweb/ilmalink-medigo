@@ -10,7 +10,7 @@ import PortalStatCard from "../../../components/portal/PortalStatCard";
 import { getPortalDashboardCounts } from "../../../lib/portal/queries";
 
 export const metadata: Metadata = {
-  title: "Management Dashboard | ILMALINK MEDIGO",
+  title: "Management Dashboard | ilmaLink",
   robots: { index: false, follow: false },
 };
 

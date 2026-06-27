@@ -21,7 +21,7 @@ export const dynamic = "force-static";
 
 export const metadata: Metadata = {
   title:
-    "Kyrgyz State Medical Academy Fee Structure 2026 | KSMA MBBS Admission | ILMALINK MEDIGO",
+    "Kyrgyz State Medical Academy Fee Structure 2026 | KSMA MBBS Admission | ilmaLink",
   description:
     "KSMA MBBS Admission for Indian Students with brochure-provided fee structure, admission requirements, documents, accreditation guidance, clinical training, facilities, and disclaimer.",
   keywords: [

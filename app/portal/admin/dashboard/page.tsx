@@ -22,7 +22,7 @@ import {
 } from "../../../lib/portal/queries";
 
 export const metadata: Metadata = {
-  title: "Education Admin Dashboard | ILMALINK MEDIGO",
+  title: "Education Admin Dashboard | ilmaLink",
   robots: { index: false, follow: false },
 };
 

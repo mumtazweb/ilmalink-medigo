@@ -151,7 +151,7 @@ export default function StudentDashboardShell({
                 Student Dashboard
               </h1>
               <p className="mt-0.5 text-xs font-semibold text-[#58657C]">
-                Your ILMALINK MEDIGO student dashboard
+                Your ilmaLink student dashboard
               </p>
             </div>
             <button
@@ -230,17 +230,17 @@ function PortalBrand({ inverse = false }: { inverse?: boolean }) {
     <Link href="/portal/student/dashboard" className="flex items-center gap-2.5">
       <Image
         src="/logoimage.svg"
-        alt="ILMALINK MEDIGO"
+        alt="ilmaLink logo"
         width={46}
         height={46}
         className={`h-11 w-11 ${inverse ? "rounded-lg bg-white/95 p-1" : ""}`}
       />
       <span>
         <strong className={`block text-[17px] font-black tracking-[.11em] ${inverse ? "text-white" : "text-[#071A45]"}`}>
-          ILMALINK
+          ilmaLink
         </strong>
         <strong className="block text-[17px] font-black tracking-[.11em] text-[#00B886]">
-          MEDIGO
+          Medigo service line
         </strong>
         <span className={`block text-[9px] font-bold tracking-[.13em] ${inverse ? "text-white/70" : "text-[#23324D]"}`}>
           STUDENT PORTAL

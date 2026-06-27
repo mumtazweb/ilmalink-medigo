@@ -5,7 +5,7 @@ import { requirePortalStudent } from "../../../lib/portal/session";
 import { parseStoredInterests } from "../../../lib/portal/validation";
 
 export const metadata: Metadata = {
-  title: "My Student Profile | ILMALINK MEDIGO",
+  title: "My Student Profile | ilmaLink",
   robots: { index: false, follow: false },
 };
 

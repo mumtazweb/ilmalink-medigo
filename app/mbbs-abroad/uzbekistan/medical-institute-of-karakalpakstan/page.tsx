@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
   BookOpen,
@@ -8,14 +9,11 @@ import {
   CircleDollarSign,
   ClipboardCheck,
   ExternalLink,
-  FileCheck2,
   FileText,
   Globe,
   GraduationCap,
-  MapPin,
   MessageCircle,
   SearchCheck,
-  ShieldAlert,
   ShieldCheck,
   ShieldQuestion,
   Stethoscope,
@@ -40,7 +38,7 @@ export const dynamic = "force-static";
 const pageUrl =
   "https://www.ilmalink.com/mbbs-abroad/uzbekistan/medical-institute-of-karakalpakstan/";
 const kmiWhatsappUrl = `${whatsappCounsellingUrl}?text=${encodeURIComponent(
-  "Hello ILMALINK MEDIGO, I want to discuss Karakalpakstan Medical Institute admissions.",
+  "Hello ilmaLink, I want to discuss Karakalpakstan Medical Institute admissions.",
 )}`;
 
 export const metadata: Metadata = {
@@ -68,7 +66,7 @@ export const metadata: Metadata = {
     description:
       "Verified research report on KMI: 6-year English General Medicine programme, WDOMS listing F0000700, ECAQA accreditation, NMC/FMGL compliance check, FMGE data analysis, fees and complete risk assessment for Indian students.",
     url: pageUrl,
-    siteName: "ILMALINK MEDIGO",
+    siteName: "ilmaLink",
     images: [{ url: "/images/mbbs-abroad/uzbekistan.jpg", width: 1800, height: 506, alt: "Karakalpakstan Medical Institute research report" }],
     locale: "en_IN",
     type: "article",
@@ -496,7 +494,7 @@ const sourceList = [
    COMPONENTS
    ============================================================ */
 
-function SectionIcon({ icon: Icon, tone }: { icon: any; tone: string }) {
+function SectionIcon({ icon: Icon, tone }: { icon: LucideIcon; tone: string }) {
   const toneMap: Record<string, string> = {
     green: "bg-emerald-100 text-emerald-700",
     blue: "bg-blue-100 text-blue-700",
@@ -653,7 +651,7 @@ function DecisionTableSection() {
    RESEARCH SECTIONS
    ============================================================ */
 
-function ResearchSection({ section, index }: { section: (typeof sections)[0]; index: number }) {
+function ResearchSection({ section }: { section: (typeof sections)[0] }) {
   const toneBorders: Record<string, string> = {
     green: "border-l-emerald-500",
     blue: "border-l-blue-500",
@@ -719,7 +717,7 @@ function FinalConclusion() {
             <div className="rounded-xl border border-amber-500/30 bg-amber-950/30 p-4">
               <p className="text-sm font-black text-amber-300">Strongest Caution</p>
               <p className="mt-2 text-sm font-semibold leading-6 text-amber-100">
-                ECAQA's public accreditation entry for KMI lists General Medicine in Uzbek/Russian medium. KMI-specific FMGE data not found in official NBEMS data checked.
+                ECAQA&apos;s public accreditation entry for KMI lists General Medicine in Uzbek/Russian medium. KMI-specific FMGE data not found in official NBEMS data checked.
               </p>
             </div>
           </div>
@@ -862,9 +860,9 @@ export default function KMIPage() {
       <DecisionTableSection />
       <SectionNavigator />
       <div className="mx-auto max-w-7xl space-y-4 px-3 py-6 sm:px-6 sm:py-8 lg:px-8">
-        {sections.map((section, index) => (
-          <ResearchSection key={section.id} section={section} index={index} />
-        ))}
+        {sections.map((section) => (
+  <ResearchSection key={section.id} section={section} />
+))}
       </div>
       <FinalConclusion />
       <SourceList />

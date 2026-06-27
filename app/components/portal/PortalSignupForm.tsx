@@ -25,7 +25,7 @@ const serviceMessage =
   "Personalised NEET and medical admission guidance, clearly explained.";
 
 const footerMessage =
-  "Join ILMALINK MEDIGO for practical, student-first support across NEET, counselling, medical admissions, scholarships and important education updates.";
+  "Join ilmaLink for practical, student-first support across NEET, counselling, medical admissions, scholarships and important education updates.";
 
 type SignupResponse = {
   ok?: boolean;

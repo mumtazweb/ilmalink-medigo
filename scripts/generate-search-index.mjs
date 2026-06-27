@@ -32,7 +32,11 @@ const publicSearchExcludedRoutes = [
   "/admin",
   "/api",
   "/login",
+  "/create-account",
+  "/forgot-password",
+  "/reset-password",
   "/logout",
+  "/search",
   "/dashboard",
   "/private",
   "/portal/student",
@@ -43,15 +47,119 @@ const publicSearchExcludedRoutes = [
   "/portal/reset-password",
 ];
 
+const blockedRoutePrefixes = [
+  "/russianmarket",
+  "/ultimateshop",
+  "/blackbet",
+  "/courses",
+  "/key-function",
+  "/area-of-operations",
+  "/mode-of-operations",
+  "/scholarship-info",
+  "/career-roadmap",
+  "/author",
+  "/ar",
+  "/bn",
+  "/hi",
+  "/login",
+  "/create-account",
+  "/forgot-password",
+  "/reset-password",
+  "/dashboard",
+  "/wp-admin",
+  "/wp-login",
+  "/wp-login.php",
+  "/xmlrpc.php",
+  "/administrator",
+  "/admin/login",
+  "/user/login",
+  "/casino",
+  "/gambling",
+  "/betting",
+  "/adult",
+  "/porn",
+  "/escort",
+];
+
+const unwantedSlugSegmentPattern =
+  /(?:^|[-_])(russianmarket|russian-market|ultimateshop|ultimate-shop|blackbet|black-bet|casino|gambling|betting|adult|porn|escort|viagra|cialis|levitra|fullz|carding|dumps|ccv)(?:$|[-_])/i;
+
 function toPosix(value) {
   return value.split(path.sep).join("/");
 }
 
 function isPublicSearchUrl(url) {
-  const pathname = url.split(/[?#]/, 1)[0] || "/";
+  const pathname = normalizePublicPath(url);
+
+  if (isBlockedPublicPath(pathname)) {
+    return false;
+  }
 
   return !publicSearchExcludedRoutes.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`)
+  );
+}
+
+function normalizePublicPath(value) {
+  let pathname = String(value ?? "").trim();
+
+  if (!pathname) {
+    return "/";
+  }
+
+  if (/^https?:\/\//i.test(pathname)) {
+    try {
+      pathname = new URL(pathname).pathname;
+    } catch {
+      return "";
+    }
+  }
+
+  pathname = pathname.split(/[?#]/, 1)[0] || "/";
+
+  if (!pathname.startsWith("/")) {
+    pathname = `/${pathname}`;
+  }
+
+  pathname = pathname.replace(/\/+$/, "");
+
+  return (pathname || "/").toLowerCase();
+}
+
+function hasUnwantedSlugSegment(value) {
+  return String(value ?? "")
+    .split("/")
+    .filter(Boolean)
+    .some((segment) => unwantedSlugSegmentPattern.test(segment));
+}
+
+function isBlockedPublicPath(value) {
+  const pathname = normalizePublicPath(value);
+
+  if (!pathname || pathname === "/") {
+    return false;
+  }
+
+  if (
+    blockedRoutePrefixes.some(
+      (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+    )
+  ) {
+    return true;
+  }
+
+  return hasUnwantedSlugSegment(pathname);
+}
+
+function isBlockedBlogSlug(slug) {
+  const normalizedSlug = String(slug ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/^\/+|\/+$/g, "");
+
+  return (
+    hasUnwantedSlugSegment(normalizedSlug) ||
+    isBlockedPublicPath(`/blogs/${normalizedSlug}`)
   );
 }
 
@@ -193,6 +301,35 @@ function normalizeText(value) {
     .replace(/[{}()[\]<>`"'=;]+/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+const officialBrandUpper = "ILMA" + "LINK";
+const officialBrandTitle = "Ilma" + "link";
+const officialDisplayStyle = "ilma" + "Link";
+const serviceLineUpper = "MED" + "IGO";
+const serviceLineTitle = "Med" + "igo";
+
+function normalizeBrandIdentityText(value) {
+  return String(value ?? "")
+    .replace(
+      new RegExp(`\\b${officialBrandUpper}\\s+${serviceLineUpper}\\b`, "g"),
+      "Medigo service line of ilmalink"
+    )
+    .replace(
+      new RegExp(`\\b${officialDisplayStyle}\\s+${serviceLineUpper}\\b`, "g"),
+      "Medigo service line of ilmalink"
+    )
+    .replace(
+      new RegExp(`\\b${officialDisplayStyle}\\s+${serviceLineTitle}\\b`, "g"),
+      "Medigo service line of ilmalink"
+    )
+    .replace(
+      new RegExp(`\\bilmalink\\s+${serviceLineTitle}\\b`, "g"),
+      "ilmalink. Medigo"
+    )
+    .replace(new RegExp(`\\b${officialBrandUpper}\\b`, "g"), officialDisplayStyle)
+    .replace(new RegExp(`\\b${serviceLineUpper}\\b`, "g"), "Medigo")
+    .replace(new RegExp(`\\b${officialBrandTitle}\\b`, "g"), "ilmalink");
 }
 
 function sentenceExcerpt(value, maxLength = 190) {
@@ -587,6 +724,7 @@ async function buildRouteEntries() {
     files.map(async (filePath) => {
       const url = routeFromPageFile(filePath);
       if (!url) return null;
+      if (isBlockedPublicPath(url)) return null;
 
       const source = await fs.readFile(filePath, "utf8");
       const content = extractVisibleText(source);
@@ -667,7 +805,9 @@ async function readFileBlogs() {
 
   if (!Array.isArray(database.blogs)) return [];
 
-  return database.blogs.filter((blog) => blog.status === "published");
+  return database.blogs.filter(
+    (blog) => blog.status === "published" && !isBlockedBlogSlug(blog.slug)
+  );
 }
 
 async function readPrismaBlogs() {
@@ -721,7 +861,7 @@ async function readPrismaBlogs() {
           category: record.category,
           country: record.country || "India",
           tags: tags.length ? tags : [record.category],
-          authorName: record.author?.name ?? "ILMALINK Editorial Team",
+          authorName: record.author?.name ?? "ilmaLink Editorial Team",
           publishDate:
             metadata.publishDate ?? record.createdAt.toISOString().slice(0, 10),
           updatedAt: record.updatedAt.toISOString(),
@@ -733,7 +873,7 @@ async function readPrismaBlogs() {
           content: parsed.content,
           views: record.views,
         };
-      });
+      }).filter((blog) => !isBlockedBlogSlug(blog.slug));
     } finally {
       await prisma.$disconnect();
     }
@@ -784,10 +924,12 @@ async function buildBlogEntries() {
   const blogsBySlug = new Map();
 
   for (const blog of await readFileBlogs()) {
+    if (isBlockedBlogSlug(blog.slug)) continue;
     blogsBySlug.set(blog.slug || blog.id || blog.title, blog);
   }
 
   for (const blog of await readPrismaBlogs()) {
+    if (isBlockedBlogSlug(blog.slug)) continue;
     blogsBySlug.set(blog.slug || blog.id || blog.title, blog);
   }
 
@@ -917,7 +1059,7 @@ function buildManualEntries() {
       id: "page-scholarships-loans-education-loans",
       title: "Education Loans for MBBS Abroad",
       description:
-        "Find MBBS abroad education loan, student loan, medical education loan and ILMALINK MEDIGO loan assistance routes.",
+        "Find MBBS abroad education loan, student loan, medical education loan and Medigo service-line loan assistance routes under ilmalink.",
       url: "/scholarships-loans#education-loans",
       category: "Pages",
       group: "Pages",
@@ -932,17 +1074,17 @@ function buildManualEntries() {
         "MBBS abroad financial support",
         "medical education loan",
         "study abroad loan India",
-        "ILMALINK MEDIGO loan assistance",
+        "Medigo service-line loan assistance under ilmalink",
       ],
       content:
-        "Education loans for MBBS abroad MBBS abroad education loan MBBS abroad loan student loan for MBBS abroad education loan for medical study abroad loan assistance for MBBS abroad MBBS abroad financial support medical education loan study abroad loan India ILMALINK MEDIGO loan assistance PM Vidyalaxmi bank education loan student credit card",
+        "Education loans for MBBS abroad MBBS abroad education loan MBBS abroad loan student loan for MBBS abroad education loan for medical study abroad loan assistance for MBBS abroad MBBS abroad financial support medical education loan study abroad loan India Medigo service-line loan assistance under ilmalink PM Vidyalaxmi bank education loan student credit card",
       priority: 97,
     },
     {
       id: "page-scholarships-loans-scholarships",
       title: "Scholarships for MBBS Abroad",
       description:
-        "Find MBBS abroad scholarship, medical scholarship abroad, financial aid and ILMALINK MEDIGO scholarship support routes.",
+        "Find MBBS abroad scholarship, medical scholarship abroad, financial aid and Medigo service-line scholarship support routes under ilmalink.",
       url: "/scholarships-loans#scholarships",
       category: "Pages",
       group: "Pages",
@@ -956,11 +1098,11 @@ function buildManualEntries() {
         "MBBS scholarship assistance",
         "study abroad scholarship",
         "financial aid for MBBS abroad",
-        "ILMALINK MEDIGO scholarship support",
+        "Medigo service-line scholarship support under ilmalink",
         "G.D. Study Circle scholarship",
       ],
       content:
-        "Scholarships for MBBS abroad MBBS abroad scholarship scholarship for MBBS abroad medical scholarship abroad scholarship for Indian students MBBS abroad MBBS scholarship assistance study abroad scholarship financial aid for MBBS abroad ILMALINK MEDIGO scholarship support G.D. Study Circle scholarship National Scholarship Portal minority scholarship charitable support",
+        "Scholarships for MBBS abroad MBBS abroad scholarship scholarship for MBBS abroad medical scholarship abroad scholarship for Indian students MBBS abroad MBBS scholarship assistance study abroad scholarship financial aid for MBBS abroad Medigo service-line scholarship support under ilmalink G.D. Study Circle scholarship National Scholarship Portal minority scholarship charitable support",
       priority: 97,
     },
   ];
@@ -1134,7 +1276,17 @@ function dedupeEntries(entries) {
 }
 
 function emitEntry(entry) {
-  return `  ${JSON.stringify(entry)},`;
+  const normalizedEntry = {
+    ...entry,
+    title: normalizeBrandIdentityText(entry.title),
+    description: normalizeBrandIdentityText(entry.description),
+    tags: Array.isArray(entry.tags)
+      ? entry.tags.map((tag) => normalizeBrandIdentityText(tag))
+      : entry.tags,
+    content: normalizeBrandIdentityText(entry.content),
+  };
+
+  return `  ${JSON.stringify(normalizedEntry)},`;
 }
 
 async function main() {

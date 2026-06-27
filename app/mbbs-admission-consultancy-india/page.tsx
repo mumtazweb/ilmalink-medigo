@@ -9,14 +9,14 @@ import { buildBreadcrumbSchema, buildFAQSchema } from "../lib/schema";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "MBBS Admission Consultancy in India | ILMALINK MEDIGO",
+  title: "MBBS Admission Consultancy in India | ilmaLink",
   description:
     "Student-first MBBS admission consultancy in India for MBBS Abroad, MBBS India, NEET counselling, eligibility, documents, scholarships, loans and college-wise guidance.",
   alternates: {
     canonical: "https://www.ilmalink.com/mbbs-admission-consultancy-india",
   },
   openGraph: {
-    title: "MBBS Admission Consultancy in India | ILMALINK MEDIGO",
+    title: "MBBS Admission Consultancy in India | ilmaLink",
     description:
       "Transparent, student-first MBBS consultancy and medical education guidance for Indian students.",
     url: "https://www.ilmalink.com/mbbs-admission-consultancy-india",
@@ -36,19 +36,19 @@ const services = [
 
 const faqs = [
   {
-    question: "Is ILMALINK MEDIGO an MBBS admission consultancy?",
+    question: "Is Medigo an MBBS admission consultancy?",
     answer:
-      "Yes. ILMALINK MEDIGO works as a student-first MBBS admission consultancy and guidance platform for Indian students, covering MBBS India, MBBS Abroad, NEET counselling, eligibility checks, scholarships, loans and document support.",
+      "Medigo is an extension/service line of ilmalink for student-first MBBS admission consultancy and guidance, covering MBBS India, MBBS Abroad, NEET counselling, eligibility checks, scholarships, loans and document support.",
   },
   {
-    question: "How is ILMALINK MEDIGO different from traditional agents?",
+    question: "How is Medigo different from traditional agents?",
     answer:
-      "ILMALINK MEDIGO focuses on transparent comparison, eligibility checks, rule-based guidance and student fit instead of pushing one college or country only because of admission pressure.",
+      "Medigo, an extension/service line of ilmalink, focuses on transparent comparison, eligibility checks, rule-based guidance and student fit instead of pushing one college or country only because of admission pressure.",
   },
   {
-    question: "What outcome does ILMALINK MEDIGO work toward?",
+    question: "What outcome does Medigo work toward?",
     answer:
-      "ILMALINK MEDIGO works toward the best available outcome for each eligible student by comparing realistic college, country, counselling, scholarship and loan options against the student's profile, budget and long-term goals.",
+      "Medigo, an extension/service line of ilmalink, works toward the best available outcome for each eligible student by comparing realistic college, country, counselling, scholarship and loan options against the student's profile, budget and long-term goals.",
   },
 ] as const;
 
@@ -100,13 +100,13 @@ export default function MbbsAdmissionConsultancyIndiaPage() {
               MBBS Admission Consultancy in India
             </h1>
             <p className="mt-5 max-w-4xl text-base font-medium leading-8 text-slate-200 md:text-lg">
-              ILMALINK MEDIGO is a student-first MBBS admission consultancy and
-              medical education guidance platform for MBBS India, MBBS Abroad,
-              NEET counselling, scholarships, loans, eligibility checks,
-              document support and post-admission planning.
+              Medigo is an extension/service line of ilmalink for MBBS India,
+              MBBS Abroad, NEET guidance, counselling support, scholarships,
+              education loans, direct college/university tie-up based admission
+              coordination, and medical admission documentation.
             </p>
             <p className="mt-4 max-w-4xl text-base font-medium leading-8 text-slate-200">
-              Unlike commission-first agencies, ILMALINK MEDIGO combines
+              Unlike commission-first agencies, Medigo, an extension/service line of ilmalink, combines
               counselling, eligibility tools, document support and transparent
               comparison so students can choose colleges based on fit, rules,
               budget and long-term safety.
@@ -124,7 +124,7 @@ export default function MbbsAdmissionConsultancyIndiaPage() {
                 Transparent MBBS counselling built around student fit
               </h2>
               <p className="mt-4 text-base font-medium leading-8 text-slate-700">
-                Families can use ILMALINK MEDIGO as an MBBS abroad consultant
+                Families can use Medigo, an extension/service line of ilmalink, as an MBBS abroad consultant
                 for Indian students, a source of MBBS India counselling support
                 and a practical NEET counselling guidance platform. The
                 consultancy compares realistic options instead of treating
@@ -138,8 +138,8 @@ export default function MbbsAdmissionConsultancyIndiaPage() {
               </p>
               <p className="mt-4 text-base font-medium leading-8 text-slate-700">
                 For families comparing the best MBBS admission consultancy in
-                India or the best MBBS abroad consultant in India, ILMALINK
-                MEDIGO offers a transparent way to evaluate support through
+                India or the best MBBS abroad consultant in India, Medigo under
+                ilmalink offers a transparent way to evaluate support through
                 student fit, rule awareness, practical tools and clear
                 college-wise guidance.
               </p>
@@ -217,7 +217,7 @@ export default function MbbsAdmissionConsultancyIndiaPage() {
               MBBS consultancy FAQ
             </p>
             <h2 className="mt-2 text-2xl font-extrabold text-[#061D3F] md:text-3xl">
-              Questions about ILMALINK MEDIGO consultancy support
+              Questions about Medigo consultancy support under ilmalink
             </h2>
             <div className="mt-6 grid gap-4">
               {faqs.map((faq) => (

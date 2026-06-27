@@ -433,7 +433,7 @@ export default function KazakhstanPage() {
 
       <VerificationCounsellingCard
         countryName="Kazakhstan MBBS"
-        title="Check Kazakhstan MBBS eligibility with ILMALINK"
+        title="Check Kazakhstan MBBS eligibility with ilmaLink"
         buttonLabel="Get Kazakhstan MBBS Counselling"
       />
 </main>

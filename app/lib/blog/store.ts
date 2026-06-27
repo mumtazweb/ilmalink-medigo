@@ -4,6 +4,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { seedDatabase } from "./seed";
 import { SITE_OWNER_ADMIN_EMAIL } from "../siteOwner";
+import { isBlockedBlogSlug } from "../unwantedUrls";
 
 import type {
   BlogCategory,
@@ -319,7 +320,7 @@ function mapPrismaBlog(record: PrismaBlogRecord): BlogPost {
     country: record.country || "India",
     tags: tags.length ? tags : [category],
     authorId: record.authorId,
-    authorName: record.author?.name ?? "ILMALINK Editorial Team",
+    authorName: record.author?.name ?? "ilmaLink Editorial Team",
     publishDate:
       metadata.publishDate ?? record.createdAt.toISOString().slice(0, 10),
     updatedAt: record.updatedAt.toISOString(),
@@ -346,7 +347,9 @@ function addBlogToMap(map: Map<string, BlogPost>, blog: BlogPost) {
 
 function getSortedPublishedBlogs(database: BlogDatabase) {
   return database.blogs
-    .filter((blog) => blog.status === "published")
+    .filter(
+      (blog) => blog.status === "published" && !isBlockedBlogSlug(blog.slug)
+    )
     .sort((a, b) => Date.parse(b.publishDate) - Date.parse(a.publishDate));
 }
 
@@ -630,7 +633,7 @@ async function ensureFallbackAuthorId() {
   const user = await prisma.user.create({
     data: {
       id: "user-admin",
-      name: "ILMALINK Admin",
+      name: "ilmaLink Admin",
       email: fallbackEmail,
       password: "system-user",
       role: "admin",
@@ -844,7 +847,11 @@ export async function getPublishedBlogSummaries() {
     addBlogSummaryToMap(summaries, blog);
   }
 
-  return sortBlogSummaries(Array.from(summaries.values()));
+  return sortBlogSummaries(
+    Array.from(summaries.values()).filter(
+      (blog) => !isBlockedBlogSlug(blog.slug)
+    )
+  );
 }
 
 const HOMEPAGE_BLOG_CATEGORIES = new Set([
@@ -938,7 +945,12 @@ export async function getTickerBlogs(limit = 12): Promise<BlogTickerPost[]> {
   const database = await readDatabase();
 
   return database.blogs
-    .filter((blog) => blog.status === "published" && blog.showInTicker === true)
+    .filter(
+      (blog) =>
+        blog.status === "published" &&
+        blog.showInTicker === true &&
+        !isBlockedBlogSlug(blog.slug)
+    )
     .sort((a, b) => {
       const orderDifference =
         normalizeTickerOrder(a.tickerOrder) - normalizeTickerOrder(b.tickerOrder);
@@ -978,12 +990,28 @@ export async function getApprovedBlogComments(blogId: string) {
 }
 
 export async function getBlogBySlug(slug: string) {
+  if (isBlockedBlogSlug(slug)) {
+    return null;
+  }
+
   const blogs = await getPublishedBlogs();
 
   return blogs.find((blog) => blog.slug === slug) ?? null;
 }
 
 export async function getBlogArticleData(slug: string, relatedLimit = 3) {
+  if (isBlockedBlogSlug(slug)) {
+    return {
+      post: null,
+      related: [],
+      adjacent: {
+        previous: null,
+        next: null,
+      },
+      comments: [],
+    };
+  }
+
   const database = await getBlogDatabase();
   const blogs = getSortedPublishedBlogs(database);
   const post = blogs.find((blog) => blog.slug === slug) ?? null;

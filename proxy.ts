@@ -5,16 +5,9 @@ import {
   PORTAL_STUDENT_COOKIE,
 } from "./app/lib/portal/constants";
 import { verifyPortalToken } from "./app/lib/portal/token";
+import { isBlockedPublicPath } from "./app/lib/unwantedUrls";
 
 const canonicalSiteUrl = "https://www.ilmalink.com";
-
-const oldAuthorUrl = /^\/author(\/|$)/i;
-
-const oldLegacyUrls = /^\/(russianmarket|courses|key-function|area-of-operations)(\/|$)/i;
-
-const oldLocalizedSearchUrl = /^\/(ar|bn|hi)\/search(\/|$)/i;
-
-const oldSearchQueryLocales = /^\/(ar|bn|hi)\/?$/i;
 
 const publicFileUrl = /((?!\.well-known(?:\/.*)?)(?:[^/]+\/)*[^/]+\.\w+)/;
 
@@ -46,6 +39,18 @@ export function proxy(request: NextRequest) {
   }
 
   const { pathname, searchParams } = request.nextUrl;
+  const hasOldSearchQuery =
+    searchParams.get("s") === "search_term_string" ||
+    searchParams.get("s") === "{search_term_string}";
+
+  if (isBlockedPublicPath(pathname) || hasOldSearchQuery) {
+    return new NextResponse("Gone", {
+      status: 410,
+      headers: {
+        "X-Robots-Tag": "noindex, nofollow",
+      },
+    });
+  }
 
   const isCounsellingQueryUrl = searchParams.get("counselling") === "open";
 
@@ -118,10 +123,6 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  const hasOldSearchQuery =
-    searchParams.get("s") === "search_term_string" ||
-    searchParams.get("s") === "{search_term_string}";
-
   const hasVideoSpamQuery =
     searchParams.has("playlist") ||
     searchParams.has("mute") ||
@@ -130,24 +131,6 @@ export function proxy(request: NextRequest) {
     searchParams.has("controls") ||
     searchParams.has("start") ||
     searchParams.has("end");
-
-  const isOldAuthorPage = oldAuthorUrl.test(pathname);
-
-  const isOldLegacyPage = oldLegacyUrls.test(pathname);
-
-  const isOldSearchPage =
-    hasOldSearchQuery ||
-    oldLocalizedSearchUrl.test(pathname) ||
-    (oldSearchQueryLocales.test(pathname) && hasOldSearchQuery);
-
-  if (isOldAuthorPage || isOldSearchPage || isOldLegacyPage) {
-    return new NextResponse("Gone", {
-      status: 410,
-      headers: {
-        "X-Robots-Tag": "noindex, nofollow",
-      },
-    });
-  }
 
   if (hasVideoSpamQuery) {
     const cleanUrl = request.nextUrl.clone();

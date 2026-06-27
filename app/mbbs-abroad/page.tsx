@@ -14,7 +14,7 @@ import { getOverallFmgeTotals } from "../lib/fmge";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "MBBS Abroad Consultant for Indian Students | ILMALINK MEDIGO",
+  title: "MBBS Abroad Consultant for Indian Students | ilmaLink",
   description:
     "Student-first MBBS abroad consultancy for Indian students with country comparison, FMGE data, eligibility, document support and transparent counselling.",
   alternates: {
@@ -52,7 +52,7 @@ export default function MBBSAbroadPage() {
             Explore MBBS Abroad Countries with FMGE Data
           </h1>
           <p className="mt-5 max-w-3xl text-base font-medium leading-7 text-slate-200 md:text-lg md:leading-8">
-            ILMALINK MEDIGO works as a student-first MBBS abroad consultant for
+            Medigo, an extension/service line of ilmalink, works as a student-first MBBS abroad consultant for
             Indian students, combining country-wise and college-wise comparison,
             FMGE data, NMC/FMGL rule checks, eligibility, document support,
             scholarships, loans and transparent counselling before shortlisting
@@ -85,7 +85,7 @@ export default function MBBSAbroadPage() {
                 Popular destinations
               </p>
               <h2 className="mt-2 text-2xl font-extrabold tracking-normal md:text-3xl">
-                Start with active ILMALINK country pages
+                Start with active ilmaLink country pages
               </h2>
             </div>
             <Link

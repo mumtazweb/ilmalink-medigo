@@ -419,7 +419,7 @@ export default function Navbar() {
                   <div className="relative hidden h-14 w-14 flex-shrink-0 items-center justify-center sm:h-16 sm:w-16 xl:flex">
                     <img 
                       src="/logoimage.svg" 
-                      alt="ILMALINK MEDIGO Logo" 
+                      alt="ilmaLink logo" 
                       className="h-full w-full object-contain" 
                     />
                   </div>
@@ -427,10 +427,10 @@ export default function Navbar() {
                   {/* Brand Text Stack - Desktop */}
                   <div className="hidden flex-col gap-0.5 xl:flex">
                     <span className="font-[family-name:var(--font-plus-jakarta)] text-lg font-extrabold tracking-tight text-[#081B35] leading-tight">
-                      ILMALINK
+                      ilmaLink
                     </span>
                     <span className="font-[family-name:var(--font-plus-jakarta)] text-lg font-extrabold tracking-tight text-[#00C896] leading-tight">
-                      MEDIGO
+                      Medigo service line
                     </span>
                     <p className="text-[10px] font-medium text-slate-500 tracking-wide mt-0.5">
                       Global Medical Education
@@ -440,8 +440,8 @@ export default function Navbar() {
                   {/* Brand Text Stack - Mobile & Tablet */}
                   <div className="flex min-w-0 flex-col gap-0.5 overflow-hidden xl:hidden">
                     <span className="min-w-0 truncate whitespace-nowrap font-[family-name:var(--font-plus-jakarta)] text-xs sm:text-sm font-extrabold leading-none">
-                      <span className="text-[#081B35]">ILMALINK</span>{" "}
-                      <span className="text-[#00C896]">MEDIGO</span>
+                      <span className="text-[#081B35]">ilmaLink</span>{" "}
+                      <span className="text-[#00C896]">Medigo service line</span>
                     </span>
                     <p className="truncate text-[8px] sm:text-[9px] font-medium leading-tight text-slate-500">
                       Global Medical Education
@@ -710,7 +710,7 @@ export default function Navbar() {
               <div className="flex items-center justify-between gap-3 border-b border-slate-100 bg-gradient-to-br from-white via-[#f6fffc] to-slate-50 p-5">
                 <div className="flex-1">
                   <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#008f72]">Navigation</p>
-                  <h2 className="mt-1 text-lg font-extrabold text-[#081B35]">ILMALINK MEDIGO</h2>
+                  <h2 className="mt-1 text-lg font-extrabold text-[#081B35]">ilmaLink</h2>
                   <p className="mt-0.5 text-xs font-medium text-slate-500">Global Medical Education</p>
                 </div>
                 <button

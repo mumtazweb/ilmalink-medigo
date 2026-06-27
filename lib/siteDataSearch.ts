@@ -967,7 +967,7 @@ function buildBaseRecords() {
         priority: 105,
       },
       "Page",
-      "ILMALINK MBBS India dataset"
+      "ilmaLink MBBS India dataset"
     ),
     createRecord(
       {
@@ -992,7 +992,7 @@ function buildBaseRecords() {
         priority: 125,
       },
       "Page",
-      "ILMALINK NEET rank predictor",
+      "ilmaLink NEET rank predictor",
       {
         data: {
           kind: "rank-predictor",
@@ -1001,7 +1001,7 @@ function buildBaseRecords() {
       }
     ),
     ...neetSectionSearchEntries.map((entry) =>
-      createRecord(entry, "Page Section", "ILMALINK NEET bulletin section", {
+      createRecord(entry, "Page Section", "ilmaLink NEET bulletin section", {
         keyFacts: ["Specific NEET section", `Open: ${entry.url}`],
         data: {
           kind: "page-section",
@@ -1035,7 +1035,7 @@ function buildBaseRecords() {
           priority: destination.badge === "Top" ? 101 : 96,
         },
         "Country Page",
-        "ILMALINK destination pages",
+        "ilmaLink destination pages",
         {
           data: {
             kind: "country-page",
@@ -1080,7 +1080,7 @@ function buildBaseRecords() {
           priority: 104 - index,
         },
         "University",
-        "ILMALINK Bangladesh university data",
+        "ilmaLink Bangladesh university data",
         {
           keyFacts: [
             "Private medical college",
@@ -1264,7 +1264,7 @@ function buildBaseRecords() {
           priority: college.category === "Private" ? 95 : 92,
         },
         "MBBS India College",
-        "ILMALINK MBBS India college data",
+        "ilmaLink MBBS India college data",
         {
           keyFacts: [
             `${college.category} college`,
@@ -1367,7 +1367,7 @@ function buildBaseRecords() {
         )
           ? "University Fee"
           : "Accreditation",
-        "ILMALINK Kyrgyzstan university data",
+        "ilmaLink Kyrgyzstan university data",
         {
           keyFacts: [
             university.recommendationLevel,
@@ -1486,7 +1486,7 @@ function buildBaseRecords() {
           priority: university.pageExists ? 107 : 93,
         },
         university.feeRows.length ? "University Fee" : "University",
-        "ILMALINK Georgia university data",
+        "ilmaLink Georgia university data",
         {
           keyFacts: [
             university.recommendationLabel,
@@ -1572,7 +1572,7 @@ function buildBaseRecords() {
           priority: 94,
         },
         "FMGE Country",
-        "ILMALINK FMGE data",
+        "ilmaLink FMGE data",
         {
           keyFacts: [
             `${country.appeared.toLocaleString("en-IN")} appeared`,
@@ -1631,7 +1631,7 @@ function buildBaseRecords() {
             priority: 90,
           },
           "FMGE College",
-          "ILMALINK FMGE data",
+          "ilmaLink FMGE data",
           {
             keyFacts: [
               `${college.appeared.toLocaleString("en-IN")} appeared`,
@@ -1669,8 +1669,8 @@ function buildBaseRecords() {
         entry,
         dataType,
         entry.subType === "section"
-          ? "ILMALINK MEDIGO page section"
-          : "ILMALINK MEDIGO website data",
+          ? "ilmaLink page section"
+          : "ilmalink website data",
         entry.subType === "section"
           ? {
               keyFacts: ["Specific page section", `Open: ${entry.url}`],
@@ -2298,11 +2298,11 @@ function getWhySuggested(
   const kind = getRecordKind(record);
 
   if (kind === "country-page") {
-    return `Official ILMALINK ${intent.country ?? "MBBS Abroad"} country guide.`;
+    return `Official ilmaLink ${intent.country ?? "MBBS Abroad"} country guide.`;
   }
 
   if (kind === "fmge-country") {
-    return "Country-level FMGE volume and pass-rate reference from the current ILMALINK dataset.";
+    return "Country-level FMGE volume and pass-rate reference from the current ilmaLink dataset.";
   }
 
   if (kind === "mbbs-india-state") {
@@ -2310,7 +2310,7 @@ function getWhySuggested(
   }
 
   if (record.id === "ask-mbbs-india-directory") {
-    return "Starting point for the state-wise ILMALINK MBBS India college directory.";
+    return "Starting point for the state-wise ilmaLink MBBS India college directory.";
   }
 
   if (isMedicalCollegeKolkata(record)) {
@@ -2319,7 +2319,7 @@ function getWhySuggested(
 
   const premium = indiaPremiumPriority(record);
   if (intent.best && premium < 4) {
-    return "Premium government institution prioritised by ILMALINK’s India ranking logic.";
+    return "Premium government institution prioritised by ilmaLink’s India ranking logic.";
   }
 
   if (kind === "mbbs-india-college") {
@@ -2332,7 +2332,7 @@ function getWhySuggested(
 
   const customPriority = abroadCustomPriority(record, intent);
   if (customPriority < 99) {
-    return `${intent.country} priority option in ILMALINK’s counselling ranking logic.`;
+    return `${intent.country} priority option in ilmaLink’s counselling ranking logic.`;
   }
 
   const appeared = getRecordNumber(record, "appeared") ?? 0;
@@ -2340,7 +2340,7 @@ function getWhySuggested(
     return "Suggested using FMGE appearance volume, pass-rate reference and available university data.";
   }
 
-  return "Suggested from the available ILMALINK country and university dataset.";
+  return "Suggested from the available ilmaLink country and university dataset.";
 }
 
 function toCounsellingSuggestedLink(

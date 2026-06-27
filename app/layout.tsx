@@ -41,18 +41,17 @@ const brandOrganizationSchema = {
   "@context": "https://schema.org",
   "@type": ["Organization", "EducationalOrganization"],
   "@id": "https://www.ilmalink.com/#organization",
-  name: "ilmaLink",
+  name: "ilmalink",
   alternateName: [
-    "ilmaLink Medigo",
-    "ilmalink",
     "ilmaLink",
+    "Medigo service line of ilmalink",
     "ilmalink.com",
     "ilmaLink Education Consultancy",
   ],
-  legalName: "ilmaLink",
+  legalName: "ilmalink",
   url: "https://www.ilmalink.com/",
   description:
-    "ilmaLink is an Indian education consultancy and MBBS admission guidance platform for MBBS abroad, MBBS India, NEET guidance, medical university verification, counselling, scholarships and education loans.",
+    "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups. ilmaLink is the public display style of the official brand ilmalink. Medigo is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. Medigo is not a separate brand.",
   slogan: "Student-first MBBS admission guidance for Indian students.",
   areaServed: [
     {
@@ -66,7 +65,7 @@ const brandOrganizationSchema = {
   ],
   knowsAbout: [
     "ilmaLink",
-    "ilmaLink Medigo",
+    "Medigo service line of ilmalink",
     "MBBS Abroad",
     "MBBS in India",
     "NEET Guidance",
@@ -86,8 +85,8 @@ const brandOrganizationSchema = {
   brand: {
     "@type": "Brand",
     "@id": "https://www.ilmalink.com/#brand",
-    name: "ilmaLink",
-    alternateName: ["ilmaLink Medigo", "ilmalink", "ilmaLink", "ilmalink.com"],
+    name: "ilmalink",
+    alternateName: ["Medigo service line of ilmalink", "ilmalink", "ilmaLink", "ilmalink.com"],
   },
 };
 
@@ -96,14 +95,14 @@ const brandWebsiteSchema = {
   "@type": "WebSite",
   "@id": "https://www.ilmalink.com/#website",
   name: "ilmaLink",
-  alternateName: ["ilmaLink Medigo", "ilmalink", "ilmaLink", "ilmalink.com"],
+  alternateName: ["Medigo service line of ilmalink", "ilmalink", "ilmaLink", "ilmalink.com"],
   url: "https://www.ilmalink.com/",
   publisher: {
     "@id": "https://www.ilmalink.com/#organization",
   },
   inLanguage: "en-IN",
   description:
-    "Official website of ilmaLink, an Indian education consultancy platform for MBBS abroad, MBBS India, NEET guidance, counselling, medical university verification, scholarships and education loans.",
+    "Official website of ilmalink, a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities.",
 };
 
 export const metadata: Metadata = {
@@ -114,13 +113,13 @@ export const metadata: Metadata = {
     template: "%s | ilmaLink",
   },
   description:
-    "ilmaLink is an Indian education consultancy platform for MBBS abroad, MBBS India, NEET guidance, medical university verification, counselling, scholarships and education loans.",
+    "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups.",
   keywords: [
     "ilmaLink",
     "ilmalink",
     "ilmaLink",
     "ilmalink.com",
-    "ilmaLink Medigo",
+    "Medigo service line of ilmalink",
     "ilmaLink education consultancy",
     "ilmaLink MBBS guidance",
     "MBBS Abroad",
@@ -146,9 +145,9 @@ export const metadata: Metadata = {
     "MBBS education loan guidance",
     "scholarship guidance for MBBS",
   ],
-  authors: [{ name: "ilmaLink" }],
-  creator: "ilmaLink",
-  publisher: "ilmaLink",
+  authors: [{ name: "ilmalink" }],
+  creator: "ilmalink",
+  publisher: "ilmalink",
   robots: {
     index: true,
     follow: true,

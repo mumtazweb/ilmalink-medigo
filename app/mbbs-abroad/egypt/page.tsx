@@ -4,7 +4,7 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in Egypt 2026 | WDOMS & NMC-Regulation-Aware Shortlisting | ILMALINK MEDIGO",
+    "Study MBBS in Egypt 2026 | WDOMS & NMC-Regulation-Aware Shortlisting | ilmaLink",
 
   description:
     "Study MBBS in Egypt for Indian students with affordable fees, English-medium medical education, ancient medical heritage and globally recognized universities.",
@@ -406,7 +406,7 @@ export default function EgyptPage() {
 
       <VerificationCounsellingCard
         countryName="Egypt MBBS"
-        title="Check Egypt MBBS eligibility with ILMALINK"
+        title="Check Egypt MBBS eligibility with ilmaLink"
         buttonLabel="Get Egypt MBBS Counselling"
       />
 </main>

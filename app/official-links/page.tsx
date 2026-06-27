@@ -8,17 +8,17 @@ import Navbar from "../components/navbar";
 
 export const dynamic = "force-static";
 
-const pageTitle = "Official Links of ILMALINK MEDIGO by ilmaLink";
-const seoTitle = "Official Links | ILMALINK MEDIGO by ilmaLink";
+const pageTitle = "Official Links of ilmaLink";
+const seoTitle = "Official Links | ilmaLink";
 const metaDescription =
-  "Find the official website, blog, MBBS Abroad page, MBBS India page and social media profiles of ILMALINK MEDIGO by ilmaLink, a medical education guidance platform for Indian students.";
+  "Find the official website, blog, MBBS Abroad page, MBBS India page and social media profiles of ilmalink, a medical MBBS admission platform and consultancy for Indian students.";
 const canonicalUrl = "https://www.ilmalink.com/official-links";
 
 const officialWebsiteLinks = [
   {
     label: "Official Website",
     href: "https://www.ilmalink.com/",
-    note: "Primary ILMALINK MEDIGO website and brand home.",
+    note: "Primary ilmalink website and brand home.",
   },
   {
     label: "Blogs",
@@ -57,36 +57,36 @@ const officialSocialProfiles = [
     label: "Instagram",
     href: "https://www.instagram.com/ilmalinkmbbs/",
     icon: FaInstagram,
-    note: "Official ILMALINK MBBS/Medigo social profile.",
+    note: "Official ilmaLink MBBS profile for the Medigo service line.",
   },
   {
     label: "YouTube",
     href: "https://www.youtube.com/@ilmaLinkFoundation",
     icon: FaYoutube,
-    note: "Official ILMALINK channel under the ilmaLink foundation naming.",
+    note: "Official ilmaLink channel under the ilmaLink foundation naming.",
   },
   {
     label: "Facebook",
     href: "https://www.facebook.com/ilmalinkeduprise/",
     icon: FaFacebookF,
-    note: "Legacy username; still an official ILMALINK-owned profile.",
+    note: "Legacy username; still an official ilmaLink-owned profile.",
   },
   {
     label: "Threads",
     href: "https://www.threads.com/@ilmalinkmbbs",
     icon: FaThreads,
-    note: "Official ILMALINK MBBS/Medigo threads profile.",
+    note: "Official ilmaLink MBBS profile for the Medigo service line.",
   },
 ];
 
 const sameAs = officialSocialProfiles.map((profile) => profile.href);
 
 export const metadata: Metadata = {
-  title: "Official Links | ILMALINK MEDIGO by ilmaLink",
+  title: "Official Links | ilmaLink",
   description:
-    "Find the official website, blog, MBBS Abroad page, MBBS India page and social media profiles of ILMALINK MEDIGO by ilmaLink, a medical education guidance platform for Indian students.",
+    "Find the official website, blog, MBBS Abroad page, MBBS India page and social media profiles of ilmalink, a medical MBBS admission platform and consultancy for Indian students.",
   keywords: [
-    "ILMALINK MEDIGO",
+    "Medigo service line of ilmalink",
     "ilmaLink",
     "ilmalink",
     "ilmalink.com",
@@ -107,7 +107,7 @@ export const metadata: Metadata = {
     title: seoTitle,
     description: metaDescription,
     url: canonicalUrl,
-    siteName: "ILMALINK MEDIGO",
+    siteName: "ilmaLink",
     locale: "en_IN",
     type: "website",
   },
@@ -150,14 +150,14 @@ const structuredData = {
     {
       "@type": "Organization",
       "@id": "https://www.ilmalink.com/#organization",
-      name: "ILMALINK MEDIGO",
+      name: "ilmalink",
       alternateName: [
         "ilmaLink",
         "ilmalink",
-        "ILMALINK",
+        "ilmaLink",
         "ilmalink.com",
-        "ILMALINK MEDIGO",
-        "ILMALINK Enterprise",
+        "Medigo service line of ilmalink",
+        "ilmaLink Enterprise",
         "ilmalink enterprise",
         "ilmalinkeduprise",
       ],
@@ -225,12 +225,12 @@ export default function OfficialLinksPage() {
                 <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-white p-2 shadow-sm">
                   <img
                     src="/logoimage.svg"
-                    alt="ILMALINK MEDIGO logo"
+                    alt="ilmaLink logo"
                     className="h-full w-full object-contain"
                   />
                 </span>
                 <div>
-                  <p className="text-lg font-extrabold text-white">ILMALINK MEDIGO</p>
+                  <p className="text-lg font-extrabold text-white">ilmaLink</p>
                   <p className="mt-1 text-sm font-semibold text-slate-300">by ilmaLink</p>
                 </div>
               </div>
@@ -261,12 +261,12 @@ export default function OfficialLinksPage() {
                 Brand identity
               </p>
               <h2 className="mt-2 text-2xl font-extrabold tracking-normal text-slate-950 md:text-3xl">
-                Verified ILMALINK MEDIGO ecosystem
+                Verified ilmalink ecosystem
               </h2>
               <div className="mt-5 space-y-4 text-base font-medium leading-8 text-slate-700">
                 <p>
-                  ILMALINK MEDIGO by ilmaLink is the official medical education guidance platform
-                  available at{" "}
+                  ilmalink is the official medical MBBS admission platform and
+                  consultancy available at{" "}
                   <a
                     href="https://www.ilmalink.com/"
                     className="font-extrabold text-[#047857] underline decoration-[#00C896]/40 underline-offset-4"
@@ -274,18 +274,21 @@ export default function OfficialLinksPage() {
                     https://www.ilmalink.com
                   </a>
                   . This page lists the verified website pages and official social media profiles
-                  connected with the ILMALINK MEDIGO brand.
+                  connected with ilmalink.
                 </p>
                 <p>
-                  Students and parents searching for ilmalink, ilmalink.com, ilmaLink or ILMALINK
-                  MEDIGO can use this page to identify the official platform and avoid confusion
+                  Students and parents searching for ilmalink, ilmalink.com, ilmaLink or the
+                  Medigo service line of ilmalink can use this page to identify the official platform and avoid confusion
                   with unrelated websites or pages.
                 </p>
                 <p>
-                  Brand identity note: ILMALINK, ILMALINK Enterprise, ILMALINK MEDIGO,
-                  ilmaLink, and legacy handles such as ilmalinkeduprise refer to the same
-                  ILMALINK brand ecosystem. The current active guidance brand name is
-                  ILMALINK MEDIGO.
+                  Brand identity note: ilmaLink is the public display style of
+                  the official brand ilmalink. Medigo is an extension/service
+                  line of ilmalink for MBBS India, MBBS Abroad, NEET guidance,
+                  counselling support, scholarships, education loans, direct
+                  college/university tie-up based admission coordination, and
+                  medical admission documentation. Medigo is not a separate
+                  brand.
                 </p>
               </div>
             </div>
@@ -317,7 +320,7 @@ export default function OfficialLinksPage() {
               </h2>
               <div className="mt-5 space-y-4 text-base font-medium leading-8 text-slate-700">
                 <p>
-                  ILMALINK MEDIGO serves Indian students and parents looking for MBBS Abroad, MBBS
+                  Medigo, an extension/service line of ilmalink, serves Indian students and parents looking for MBBS Abroad, MBBS
                   India, NEET counselling, scholarships and medical university comparison. Our
                   guidance is useful for students from West Bengal, Karnataka, Maharashtra, Bihar,
                   Jharkhand, Assam, Kerala, Tamil Nadu, Uttar Pradesh, Delhi and other Indian
@@ -326,7 +329,7 @@ export default function OfficialLinksPage() {
                 <p>
                   Students from Kolkata, Bengaluru, Mumbai, Delhi, Patna, Guwahati, Hyderabad,
                   Chennai and other Indian cities can explore country-wise MBBS guidance through
-                  ILMALINK MEDIGO.
+                  Medigo, an extension/service line of ilmalink.
                 </p>
                 <p>
                   Families looking for MBBS Abroad counselling Kolkata, MBBS Abroad guidance
@@ -365,7 +368,7 @@ export default function OfficialLinksPage() {
               </div>
               <p className="max-w-2xl text-sm font-medium leading-6 text-slate-600">
                 Use these links for the official website, blog, MBBS Abroad page, MBBS India page,
-                scholarships and country guidance pages for ILMALINK MEDIGO by ilmaLink.
+                scholarships and country guidance pages for ilmalink and its Medigo service line.
               </p>
             </div>
 
@@ -410,7 +413,7 @@ export default function OfficialLinksPage() {
               </div>
               <p className="max-w-2xl text-sm font-medium leading-6 text-slate-600">
                 These same profile URLs are used in the page Organization schema as official
-                sameAs links for ILMALINK MEDIGO.
+                sameAs links for ilmalink.
               </p>
             </div>
 
@@ -470,7 +473,7 @@ export default function OfficialLinksPage() {
                     counselling message.
                   </p>
                   <p>
-                    ILMALINK MEDIGO focuses on fact-based guidance, transparent comparison and
+                    Medigo, an extension/service line of ilmalink, focuses on fact-based guidance, transparent comparison and
                     student-first counselling.
                   </p>
                 </div>

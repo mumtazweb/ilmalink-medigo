@@ -770,7 +770,7 @@ type JourneyStep = {
 
 const abroadJourneySteps: JourneyStep[] = [
   {
-    title: "Connect ILMALINK",
+    title: "Connect ilmaLink",
     detail: "Open personalised counselling and share your goal.",
     icon: Headset,
     connect: true,
@@ -817,13 +817,13 @@ const abroadJourneySteps: JourneyStep[] = [
   },
   {
     title: "Reach College",
-    detail: "Arrival and college-reaching support from the ILMALINK team.",
+    detail: "Arrival and college-reaching support from the ilmaLink team.",
     icon: GraduationCap,
   },
   {
     title: "Academic Observation",
     detail:
-      "Study under ILMALINK team observation with add-on Indian faculty support.",
+      "Study under ilmaLink team observation with add-on Indian faculty support.",
     icon: UserRound,
   },
   {
@@ -835,14 +835,14 @@ const abroadJourneySteps: JourneyStep[] = [
   {
     title: "24×7 Course Support",
     detail:
-      "ILMALINK assistance throughout the entire foreign medical course.",
+      "ilmaLink assistance throughout the entire foreign medical course.",
     icon: Headset,
   },
 ];
 
 const indiaJourneySteps: JourneyStep[] = [
   {
-    title: "Connect ILMALINK",
+    title: "Connect ilmaLink",
     detail: "Open personalised counselling and share your goal.",
     icon: Headset,
     connect: true,
@@ -884,7 +884,7 @@ const indiaJourneySteps: JourneyStep[] = [
   },
   {
     title: "Admission Support",
-    detail: "Complete joining with the ILMALINK support system.",
+    detail: "Complete joining with the ilmaLink support system.",
     icon: CheckCircle2,
   },
   {
@@ -1366,22 +1366,18 @@ export default function HomeHeroClient() {
 
           <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-5 px-4 pb-6 pt-7 sm:px-6 md:pb-9 md:pt-9 lg:min-h-[540px] lg:grid-cols-[minmax(0,0.98fr)_minmax(360px,0.92fr)_minmax(255px,0.68fr)] lg:gap-5 lg:px-10 lg:py-12 xl:grid-cols-[minmax(420px,1.02fr)_minmax(410px,0.96fr)_minmax(285px,0.72fr)] xl:gap-8 xl:px-12">
             {/* Left content */}
-                        <div className="relative z-20 min-h-[245px] pr-[30%] text-left md:min-h-0 md:pr-0 md:text-center lg:flex lg:min-h-[420px] lg:flex-col lg:justify-center lg:text-left xl:min-h-[450px]">
+            <div className="relative z-20 min-h-[245px] pr-[30%] text-left md:min-h-0 md:pr-0 md:text-center lg:flex lg:min-h-[420px] lg:flex-col lg:justify-center lg:text-left xl:min-h-[450px]">
               <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-white/[0.85] sm:text-xs lg:text-[12px] lg:tracking-[0.48em]">
                 Your Gateway To
               </p>
 
-              <h1 className="mt-2 text-[1.75rem] font-extrabold leading-[1.02] tracking-[-0.02em] text-white sm:text-[2.35rem] md:text-[2.6rem] lg:max-w-[500px] lg:text-[3.4rem] lg:leading-[1.0] lg:tracking-[-0.01em] xl:text-[3.7rem]">
+              <h1 className="mt-3 text-[1.9rem] font-extrabold leading-[0.95] tracking-[-0.05em] text-white sm:text-[2.55rem] md:text-[2.8rem] lg:max-w-[560px] lg:text-[3.7rem] lg:leading-[0.94] lg:tracking-[-0.03em] lg:[word-spacing:0.08em] xl:text-[3.95rem]">
                 <span className="block lg:whitespace-nowrap">Global Medical</span>
                 <span className="block">Education</span>
               </h1>
               <div className="mt-4 space-y-1 text-sm text-white/[0.82] sm:text-[15px] lg:mt-5 lg:max-w-[520px] lg:text-base lg:leading-7">
-                <p>480+ FMGE-2025  Universities in 54+ Countries.</p>
+                <p>Explore 480+ FMGE-2025  Universities in 54+ Countries.</p>
                 <p className="hidden md:block">As Per FMGE Screening Test 2025</p>
-<div className="mt-2.5 space-y-0 text-[13px] text-white/[0.8] sm:text-[14px] md:text-[14.5px] lg:mt-3 lg:max-w-[480px] lg:text-[15px] lg:leading-6">
-                <p className="font-medium">Explore 480+ NMC-Approved Universities across 54+ countries</p>
-                <p className="hidden md:block text-white/[0.65] text-[12px] lg:text-[13px] lg:leading-5 lg:mt-1">Verified with FMGE standards & international recognition</p>
-              </div>
               </div>
 
               <div className="mx-auto mt-5 hidden max-w-[520px] grid-cols-2 gap-3 sm:grid-cols-4 md:grid lg:mx-0 lg:mt-7 lg:max-w-[480px] lg:grid-cols-2 lg:gap-2.5 lg:rounded-2xl lg:border lg:border-white/15 lg:bg-white/[0.075] lg:p-3 lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_18px_44px_rgba(0,0,0,0.16)] lg:backdrop-blur-xl">
@@ -1425,7 +1421,10 @@ export default function HomeHeroClient() {
                   </div>
                 </div>
               </div>
-              
+              <p className="mt-3 hidden max-w-[520px] text-[9px] font-medium leading-none tracking-wide text-white/45 md:mx-auto md:block md:text-center md:text-[10px] lg:mx-0 lg:max-w-[480px] lg:text-left">
+                Data compiled from official public sources
+              </p>
+
               <div className="mx-0 mt-5 flex w-full max-w-[190px] flex-col items-stretch justify-center gap-2 md:mx-auto md:mt-6 md:max-w-[600px] md:flex-row md:flex-wrap lg:mx-0 lg:mt-8 lg:max-w-[650px] lg:justify-start lg:gap-3">
                 <button
                   type="button"
@@ -1443,7 +1442,7 @@ export default function HomeHeroClient() {
                   onClick={() => setShowRankPredictor(true)}
                   className="inline-flex min-w-0 flex-none items-center justify-center whitespace-nowrap rounded-xl border border-white/25 bg-white/10 px-2 py-2 text-[11px] font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/[0.15] sm:px-3 sm:text-xs md:flex-1 lg:min-w-[190px] lg:flex-none lg:rounded-[16px] lg:px-6 lg:py-3.5 lg:text-sm"
                 >
-                  NEET Rank Card
+                  NEET Rank Predictor
                 </button>
                 </div>
             </div>
@@ -1673,7 +1672,7 @@ export default function HomeHeroClient() {
               100% {
                 transform: translateY(0) scale(1);
               }
-              80% {F
+              80% {
                 transform: translateY(-4px) scale(1.06);
               }
               88% {
@@ -1978,7 +1977,7 @@ export default function HomeHeroClient() {
                     <span className="h-px w-6 bg-gradient-to-r from-transparent to-amber-400 sm:w-20" />
                     <p className="inline-flex items-center gap-2 rounded-full border border-cyan-200/30 bg-white/10 px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,.18),0_10px_24px_rgba(0,0,0,.2)] backdrop-blur-xl sm:px-5 sm:text-xs sm:tracking-[0.22em]">
                       <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-                      WHY ILMALINK MEDIGO
+                      WHY ilmaLink
                     </p>
                     <span className="h-px w-6 bg-gradient-to-l from-transparent to-amber-400 sm:w-20" />
                   </div>
@@ -1988,7 +1987,7 @@ export default function HomeHeroClient() {
                     <span className="bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent">MBBS</span>Admission Guidance
                   </h2>
                   <p className="mx-auto mt-2 max-w-3xl text-[11px] font-medium leading-[1.25] text-blue-100/82 sm:mt-3 sm:text-sm sm:leading-6">
-                    ILMALINK helps Indian students and parents  choose the best MBBS college in India & abroad 
+                    ilmaLink helps Indian students and parents  choose the best MBBS college in India & abroad 
                     , NEET score & budget-based opportunities, scholarship and loan support,
                      on-campus guidance, pre- and post-admission support, with FMGE/NEXT/NEET-PG preaparation
                   </p>
@@ -2321,7 +2320,7 @@ export default function HomeHeroClient() {
                       Live admission dashboard
                     </p>
                     <p className="mt-1 text-[10px] font-semibold text-slate-500">
-                      ILMALINK support activity
+                      ilmaLink support activity
                     </p>
                   </div>
                   <BarChart3 className="h-6 w-6 text-[#0F4CFF]" />
@@ -2359,7 +2358,7 @@ export default function HomeHeroClient() {
                   })}
                 </div>
                 <p className="relative mt-3 text-[9px] font-medium leading-4 text-slate-500">
-                  Compiled from ILMALINK MEDIGO guidance records and official public sources.
+                  Compiled from ilmalink guidance records and official public sources.
                 </p>
               </section>
             </aside>
@@ -2381,7 +2380,7 @@ export default function HomeHeroClient() {
                 </span>
               </h2>
               <p className="mx-auto mt-2 max-w-3xl text-[11px] font-medium leading-5 text-slate-600 sm:text-sm">
-                ILMALINK MEDIGO helps identify whether India or Abroad is the
+                The Medigo service line of ilmalink helps identify whether India or Abroad is the
                 stronger fit, then supports each official step from profile
                 analysis to college joining.
               </p>
@@ -2394,7 +2393,7 @@ export default function HomeHeroClient() {
               >
                 <span className="absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-18deg] bg-white/35 blur-md transition duration-700 group-hover:left-[115%]" />
                 <Headset className="relative h-4 w-4" />
-                <span className="relative">Connect ILMALINK</span>
+                <span className="relative">Connect ilmaLink</span>
                 <ArrowUpRight className="relative h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </button>
             </div>
@@ -2423,7 +2422,7 @@ export default function HomeHeroClient() {
             <div className="relative mx-auto mt-3.5 flex max-w-3xl items-center justify-center gap-2 rounded-[18px] border border-white bg-white/82 px-3 py-2.5 text-center shadow-[inset_0_1px_0_rgba(255,255,255,1),0_12px_28px_rgba(15,45,91,0.08)] backdrop-blur-xl">
               <ShieldCheck className="h-5 w-5 shrink-0 text-[#00A876]" />
               <p className="text-[10px] font-bold leading-4 text-[#15315f] sm:text-xs">
-                ILMALINK support follows the applicable official counselling,
+                ilmaLink support follows the applicable official counselling,
                 university, visa and government processes for the student’s
                 selected pathway.
               </p>
@@ -2471,7 +2470,7 @@ export default function HomeHeroClient() {
                 ))}
               </div>
               <p className="mt-3 text-[10px] font-medium leading-4 text-slate-500">
-                Data compiled from ILMALINK MEDIGO student guidance records and official public sources.
+                Data compiled from ilmalink student guidance records and official public sources.
               </p>
             </div>
 

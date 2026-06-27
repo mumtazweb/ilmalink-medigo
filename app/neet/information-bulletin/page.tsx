@@ -272,7 +272,7 @@ function Hero() {
           <div className="mt-6 grid gap-2.5 sm:grid-cols-3">
             <HeroAction href={neet2026OfficialLinks.bulletin} external icon={Download} title="Download Official Bulletin" note="NTA source" tone="blue" />
             <HeroAction href="/?rank-predictor=open" icon={Clock3} title="Check Rank Predictor" note="Estimate your rank" tone="teal" />
-            <HeroAction href="https://wa.me/919563910223?text=I%20need%20help%20understanding%20NEET%20UG%202026%20eligibility%20and%20counselling." external icon={MessageCircle} title="Ask ILMALINK Counsellor" note="Chat with an expert" tone="violet" />
+            <HeroAction href="https://wa.me/919563910223?text=I%20need%20help%20understanding%20NEET%20UG%202026%20eligibility%20and%20counselling." external icon={MessageCircle} title="Ask ilmaLink Counsellor" note="Chat with an expert" tone="violet" />
           </div>
         </div>
         <BulletinIllustration />
@@ -419,7 +419,7 @@ function NriDocumentsSection() {
 }
 
 function ApplicationSection() {
-  return <SectionShell id="neet-2026-application-process" eyebrow="Chapter 3" title="NEET UG 2026 Application Process and Form Filling Instructions" icon={FileText}><BulletList items={applicationRules} /><Note warning>This section describes the official NTA application flow. It is separate from ILMALINK&apos;s optional student-profile signup.</Note></SectionShell>;
+  return <SectionShell id="neet-2026-application-process" eyebrow="Chapter 3" title="NEET UG 2026 Application Process and Form Filling Instructions" icon={FileText}><BulletList items={applicationRules} /><Note warning>This section describes the official NTA application flow. It is separate from ilmaLink&apos;s optional student-profile signup.</Note></SectionShell>;
 }
 
 function AdmitCardSection() {
@@ -444,9 +444,9 @@ function CtaLink({ href, icon: Icon, label, external = false, wide = false }: { 
 }
 
 function ImportantLinks() {
-  return <section id="neet-2026-important-links" className="mt-5 scroll-mt-5 rounded-2xl border border-[#DCE7F2] bg-white p-5"><div className="grid gap-5 lg:grid-cols-2"><div><h2 className="text-lg font-black text-[#071A45]">Official NEET UG 2026 Links</h2><div className="mt-3 flex flex-wrap gap-2">{officialBulletinLinks.map(([label, href]) => <a key={href} href={href} target="_blank" rel="noopener noreferrer" className="rounded-full border border-blue-100 bg-blue-50 px-3 py-2 text-xs font-black text-[#1769E8]">{label}</a>)}</div></div><div><h2 className="text-lg font-black text-[#071A45]">Related ILMALINK Guides</h2><div className="mt-3 flex flex-wrap gap-2">{relatedLinks.map(([label, href]) => <Link key={href} href={href} className="rounded-full border border-emerald-100 bg-emerald-50 px-3 py-2 text-xs font-black text-[#087F78]">{label}</Link>)}</div></div></div></section>;
+  return <section id="neet-2026-important-links" className="mt-5 scroll-mt-5 rounded-2xl border border-[#DCE7F2] bg-white p-5"><div className="grid gap-5 lg:grid-cols-2"><div><h2 className="text-lg font-black text-[#071A45]">Official NEET UG 2026 Links</h2><div className="mt-3 flex flex-wrap gap-2">{officialBulletinLinks.map(([label, href]) => <a key={href} href={href} target="_blank" rel="noopener noreferrer" className="rounded-full border border-blue-100 bg-blue-50 px-3 py-2 text-xs font-black text-[#1769E8]">{label}</a>)}</div></div><div><h2 className="text-lg font-black text-[#071A45]">Related ilmaLink Guides</h2><div className="mt-3 flex flex-wrap gap-2">{relatedLinks.map(([label, href]) => <Link key={href} href={href} className="rounded-full border border-emerald-100 bg-emerald-50 px-3 py-2 text-xs font-black text-[#087F78]">{label}</Link>)}</div></div></div></section>;
 }
 
 function Disclaimer() {
-  return <section className="mt-5 rounded-xl border border-amber-300 bg-amber-50 p-4 text-xs font-semibold leading-5 text-amber-950"><p><strong>Disclaimer:</strong> This ILMALINK MEDIGO page is a student-friendly guide based on the NEET UG 2026 Information Bulletin. For final and legally binding instructions, candidates must rely on NTA, MCC, NMC, NCISM, NCH, AACCC and respective State counselling authorities.</p><div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-amber-200 pt-3"><span>Always verify updates on official websites.</span><span className="font-black">Last updated: 22 June 2026</span></div></section>;
+  return <section className="mt-5 rounded-xl border border-amber-300 bg-amber-50 p-4 text-xs font-semibold leading-5 text-amber-950"><p><strong>Disclaimer:</strong> This ilmaLink page is a student-friendly guide based on the NEET UG 2026 Information Bulletin. For final and legally binding instructions, candidates must rely on NTA, MCC, NMC, NCISM, NCH, AACCC and respective State counselling authorities.</p><div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-amber-200 pt-3"><span>Always verify updates on official websites.</span><span className="font-black">Last updated: 22 June 2026</span></div></section>;
 }

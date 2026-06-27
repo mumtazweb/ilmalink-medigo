@@ -6,14 +6,14 @@ import VerificationCounsellingCard from "../../components/VerificationCounsellin
 const pageUrl = "https://www.ilmalink.com/mbbs-abroad/malaysia/";
 
 export const metadata: Metadata = {
-  title: "MBBS in Malaysia | Eligibility, Costs, NMC/FMGL Caution | ILMALINK MEDIGO",
+  title: "MBBS in Malaysia | Eligibility, Costs, NMC/FMGL Caution | ilmaLink",
   description:
     "Study MBBS in Malaysia with a verification-first approach for NEET eligibility, NMC/FMGL compliance, WDOMS caution, fee and living-cost planning.",
   alternates: {
     canonical: pageUrl,
   },
   openGraph: {
-    title: "MBBS in Malaysia | ILMALINK MEDIGO",
+    title: "MBBS in Malaysia | ilmaLink",
     description:
       "Malaysia MBBS overview with NEET, NMC/FMGL, WDOMS caution and verification guidance for Indian students.",
     url: pageUrl,
@@ -194,7 +194,7 @@ export default function MalaysiaPage() {
 
       <VerificationCounsellingCard
         countryName="Malaysia MBBS"
-        title="Check Malaysia MBBS eligibility with ILMALINK"
+        title="Check Malaysia MBBS eligibility with ilmaLink"
         buttonLabel="Get Malaysia MBBS Counselling"
       />
     </main>

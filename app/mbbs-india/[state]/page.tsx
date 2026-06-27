@@ -49,7 +49,7 @@ export async function generateMetadata({
 
   if (!group) {
     return {
-      title: "MBBS State Not Found | ILMALINK MEDIGO",
+      title: "MBBS State Not Found | ilmaLink",
     };
   }
 

@@ -24,7 +24,7 @@ const counsellingHref = "/?counselling=open";
 
 export const metadata: Metadata = {
   title:
-    "MBBS in Nepal 2026 | Eligibility, MECEE-BL, NEET & Colleges | ILMALINK MEDIGO",
+    "MBBS in Nepal 2026 | Eligibility, MECEE-BL, NEET & Colleges | ilmaLink",
   description:
     "Study MBBS in Nepal with strict eligibility guidance for Indian students: individual PCB 50%, general NEET 50th percentile benchmark, MECEE-BL priority, limited foreign seats, MEC matching and college comparison.",
   keywords: [
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     description:
       "Nepal MBBS is not a simple direct-admission route. Learn individual PCB 50%, general NEET 50th percentile benchmark, MECEE-BL priority, limited seats and college comparison.",
     url: canonicalUrl,
-    siteName: "ILMALINK MEDIGO",
+    siteName: "ilmaLink",
     type: "article",
     locale: "en_IN",
   },
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "MBBS in Nepal 2026 | Eligibility, MECEE-BL & Colleges",
     description:
-      "Strict Nepal MBBS eligibility guidance for Indian students by ILMALINK MEDIGO.",
+      "Strict Nepal MBBS eligibility guidance for Indian students by ilmalink.",
   },
 };
 
@@ -94,7 +94,7 @@ const keyInsights = [
   {
     title: "Individual PCB 50% safer benchmark",
     description:
-      "ILMALINK checks Physics, Chemistry and Biology separately instead of relying only on aggregate marks.",
+      "ilmaLink checks Physics, Chemistry and Biology separately instead of relying only on aggregate marks.",
   },
   {
     title: "General NEET 50th percentile benchmark",
@@ -218,12 +218,12 @@ const faqs = [
   {
     question: "Does Nepal accept Indian reserved-category NEET cutoff?",
     answer:
-      "Students should not assume that Nepal accepts only Indian reserved-category NEET qualification. ILMALINK MEDIGO uses the general NEET 50th percentile benchmark for Nepal's foreign NEET-based route unless MEC issues fresh official clarification.",
+      "Students should not assume that Nepal accepts only Indian reserved-category NEET qualification. Medigo, an extension/service line of ilmalink, uses the general NEET 50th percentile benchmark for Nepal's foreign NEET-based route unless MEC issues fresh official clarification.",
   },
   {
     question: "Is PCB aggregate 50% enough for Nepal MBBS?",
     answer:
-      "For safe counselling, no. ILMALINK MEDIGO checks minimum 50% individually in Physics, Chemistry and Biology, along with any MEC/university aggregate or CGPA requirement.",
+      "For safe counselling, no. Medigo, an extension/service line of ilmalink, checks minimum 50% individually in Physics, Chemistry and Biology, along with any MEC/university aggregate or CGPA requirement.",
   },
   {
     question: "Are seats limited in Nepal?",
@@ -465,7 +465,7 @@ export default function NepalPage() {
                   </div>
                 ))}
               </div>
-              <CtaLink className="mt-6">Ask ILMALINK Counsellor</CtaLink>
+              <CtaLink className="mt-6">Ask ilmaLink Counsellor</CtaLink>
             </div>
           </div>
         </div>
@@ -516,7 +516,7 @@ export default function NepalPage() {
                 </h3>
               </div>
               <p className="mt-4 text-sm font-medium leading-7 text-slate-700">
-                For Nepal MBBS counselling, ILMALINK MEDIGO uses a safer
+                For Nepal MBBS counselling, Medigo, an extension/service line of ilmalink, uses a safer
                 eligibility benchmark of minimum 50% individually in Physics,
                 Chemistry and Biology. Students should also satisfy the latest
                 MEC/university aggregate or CGPA requirement where applicable.
@@ -552,7 +552,7 @@ export default function NepalPage() {
               <p className="mt-3 text-sm font-medium leading-7 text-slate-700">
                 For Nepal&apos;s foreign NEET-based route, Indian students should
                 not assume that reserved-category NEET qualification is enough.
-                ILMALINK MEDIGO uses the general NEET qualifying benchmark /
+                Medigo, an extension/service line of ilmalink, uses the general NEET qualifying benchmark /
                 50th percentile and above as the safer standard, unless Nepal
                 Medical Education Commission issues fresh official
                 clarification.
@@ -807,7 +807,7 @@ export default function NepalPage() {
               </h2>
               <p className="mt-4 text-sm font-medium leading-7 text-slate-700 md:text-base">
                 Students from West Bengal, Karnataka, Maharashtra and other
-                Indian states can request ILMALINK MEDIGO counselling before
+                Indian states can request Medigo service-line counselling under ilmalink before
                 choosing Nepal, because Nepal&apos;s route is stricter than many
                 other MBBS abroad destinations.
               </p>
@@ -859,7 +859,7 @@ export default function NepalPage() {
       <VerificationCounsellingCard
         countryName="Nepal MBBS"
         title="Check Nepal MBBS eligibility before choosing a college"
-        description="ILMALINK MEDIGO can screen individual PCB marks, NEET benchmark, MECEE-BL planning, MEC matching risk, document readiness, and college verification before admission."
+        description="Medigo, an extension/service line of ilmalink, can screen individual PCB marks, NEET benchmark, MECEE-BL planning, MEC matching risk, document readiness, and college verification before admission."
         buttonLabel="Get Nepal MBBS Counselling"
       />
     </main>

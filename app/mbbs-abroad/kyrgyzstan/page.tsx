@@ -40,7 +40,7 @@ export const dynamic = "force-static";
 
 const pageUrl = "https://www.ilmalink.com/mbbs-abroad/kyrgyzstan/";
 const kyrgyzWhatsappUrl = `${whatsappCounsellingUrl}?text=${encodeURIComponent(
-  "Hello ILMALINK MEDIGO, I want a verified Kyrgyzstan MBBS university shortlist.",
+  "Hello ilmaLink, I want a verified Kyrgyzstan MBBS university shortlist.",
 )}`;
 
 const kyrgyzCountryFmge =
@@ -176,7 +176,7 @@ export const metadata: Metadata = {
     description:
       "Review Kyrgyzstan MBBS options using accreditation guidance, fee examples, FMGE references, and university-level verification notes.",
     url: pageUrl,
-    siteName: "ILMALINK MEDIGO",
+    siteName: "ilmaLink",
     locale: "en_IN",
     type: "website",
     images: [kyrgyzstanCountryHeroImage],
@@ -777,7 +777,7 @@ function FmgeAndCounselling() {
               Need a verified shortlist?
             </p>
             <h2 className="mt-2 text-2xl font-black sm:text-3xl">
-              Get Kyrgyzstan admission guidance from ILMALINK MEDIGO
+              Get Kyrgyzstan admission guidance from ilmalink
             </h2>
             <p className="mt-3 max-w-3xl text-sm font-medium leading-7 text-blue-100">
               Compare accreditation status, fees, eligibility, documents, FMGE references, WDOMS, hostel terms, and current university standing before payment.

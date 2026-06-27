@@ -7,7 +7,7 @@ import CounsellingPopup from "./CounsellingPopup";
 const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
 
 /**
- * ILMALINK MEDIGO: Global floating "CONTACT NOW" sticky button
+ * ilmaLink: Global floating "CONTACT NOW" sticky button
  * Appears on the right side of all blog pages
  * Opens the existing CounsellingPopup component
  */

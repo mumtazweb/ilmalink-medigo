@@ -80,7 +80,7 @@ export function buildKyrgyzstanUniversityMetadata(
       title,
       description,
       url: canonical,
-      siteName: "ILMALINK MEDIGO",
+      siteName: "ilmaLink",
       locale: "en_IN",
       type: "article",
       images: [image],

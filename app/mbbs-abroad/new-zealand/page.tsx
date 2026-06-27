@@ -2,7 +2,7 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in New Zealand 2026 | FMGE Exempt Pathway | ILMALINK MEDIGO",
+    "Study MBBS in New Zealand 2026 | FMGE Exempt Pathway | ilmaLink",
 
   description:
     "Study MBBS in New Zealand for Indian students with world-class universities, advanced clinical exposure, FMGE exemption possibilities and international medical career opportunities.",

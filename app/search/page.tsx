@@ -6,9 +6,9 @@ import Navbar from "../components/navbar";
 import { searchInternalSiteData } from "@/lib/siteDataSearch";
 
 export const metadata: Metadata = {
-  title: "Search ILMALINK MEDIGO | MBBS, NEET, Countries, Colleges & Blogs",
+  title: "Search ilmaLink | MBBS, NEET, Countries, Colleges & Blogs",
   description:
-    "Search ILMALINK MEDIGO for MBBS abroad countries, MBBS India colleges, FMGE data, NEET guidance, scholarships, loans, and blogs.",
+    "Search ilmaLink for MBBS abroad countries, MBBS India colleges, FMGE data, NEET guidance, scholarships, loans, and blogs.",
   alternates: {
     canonical: "https://www.ilmalink.com/search",
   },
@@ -43,8 +43,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     "@context": "https://schema.org",
     "@type": "SearchResultsPage",
     name: query
-      ? `ILMALINK MEDIGO search results for ${query}`
-      : "ILMALINK MEDIGO search",
+      ? `ilmaLink search results for ${query}`
+      : "ilmaLink search",
     url: pageUrl,
     inLanguage: "en-IN",
     mainEntity: {
@@ -75,7 +75,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             <Sparkles size={14} /> Site content search
           </p>
           <h1 className="mt-4 text-3xl font-black tracking-normal md:text-5xl">
-            Search ILMALINK MEDIGO
+            Search ilmaLink
           </h1>
           <p className="mt-3 max-w-3xl text-sm font-semibold leading-6 text-slate-200 md:text-base md:leading-7">
             Find distinct pages, country sections, MBBS India data, FMGE records, scholarships, loans, and blogs.
@@ -83,7 +83,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
           <form action="/search" className="mt-6 flex flex-col gap-3 rounded-2xl border border-white/15 bg-white/10 p-2 sm:flex-row">
             <label htmlFor="site-search-page-input" className="sr-only">
-              Search ILMALINK MEDIGO
+              Search ilmaLink
             </label>
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -110,7 +110,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 {query ? "Search results" : "Suggested content"}
               </p>
               <h2 className="mt-1 text-2xl font-black tracking-normal text-[#081B35]">
-                {query ? `Results for "${query}"` : "Start with popular ILMALINK content"}
+                {query ? `Results for "${query}"` : "Start with popular ilmaLink content"}
               </h2>
             </div>
             <p className="text-sm font-semibold text-slate-500">

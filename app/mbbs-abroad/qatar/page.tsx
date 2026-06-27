@@ -4,7 +4,7 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in Qatar 2026 | Premium Gulf Medical Education | ILMALINK MEDIGO",
+    "Study MBBS in Qatar 2026 | Premium Gulf Medical Education | ilmaLink",
 
   description:
     "Study MBBS in Qatar for Indian students with world-class Gulf healthcare infrastructure, advanced hospitals, research-focused universities and premium international medical exposure.",
@@ -399,7 +399,7 @@ export default function QatarPage() {
 
       <VerificationCounsellingCard
         countryName="Qatar MBBS"
-        title="Check Qatar MBBS eligibility with ILMALINK"
+        title="Check Qatar MBBS eligibility with ilmaLink"
         buttonLabel="Get Qatar MBBS Counselling"
       />
 </main>

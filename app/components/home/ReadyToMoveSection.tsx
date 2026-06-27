@@ -41,7 +41,7 @@ export default function ReadyToMoveSection({
           <p className="mt-3 max-w-2xl text-[11px] font-medium leading-6 text-blue-100/82 sm:text-sm">
             Start with your NEET profile, compare India and Abroad budgets,
             review country and college fit, then move through the applicable
-            official admission pathway with ILMALINK MEDIGO support.
+            official admission pathway with Medigo service-line support under ilmalink.
           </p>
 
           <div className="mt-4 grid grid-cols-3 gap-2">

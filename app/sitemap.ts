@@ -7,6 +7,7 @@ import { georgiaUniversities } from "./data/georgiaUniversities";
 import { neet2026Questions } from "./data/neet2026Questions";
 import { globalSearchIndex } from "./data/searchIndex";
 import { BLOGS_PAGE_SIZE } from "./lib/blog/pagination";
+import { isBlockedBlogSlug, isBlockedPublicPath } from "./lib/unwantedUrls";
 
 const SITE_URL = "https://www.ilmalink.com";
 
@@ -125,6 +126,10 @@ function cleanRoute(url: string) {
 function shouldIncludeRoute(route: string) {
   if (route === "") {
     return true;
+  }
+
+  if (isBlockedPublicPath(route)) {
+    return false;
   }
 
   return !excludedRoutes.some(
@@ -283,6 +288,7 @@ function addBlogRoute(
   publishDate?: unknown
 ) {
   if (!slug) return;
+  if (isBlockedBlogSlug(slug)) return;
 
   const route = normalizeBlogRoute(slug);
 

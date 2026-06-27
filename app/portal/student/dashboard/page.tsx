@@ -39,12 +39,12 @@ import { parseStoredInterests } from "../../../lib/portal/validation";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Student Dashboard | ILMALINK MEDIGO",
+  title: "Student Dashboard | ilmaLink",
   robots: { index: false, follow: false },
 };
 
 const supportWhatsAppUrl =
-  "https://wa.me/919563910223?text=I%20need%20help%20with%20my%20ILMALINK%20MEDIGO%20student%20profile.";
+  "https://wa.me/919563910223?text=I%20need%20help%20with%20my%20ilmaLink%20student%20profile.";
 
 const quickActions = [
   {
@@ -168,7 +168,7 @@ export default async function StudentDashboardPage() {
             Welcome back, {studentName} 👋
           </h1>
           <p className="mt-1 text-sm font-medium text-[#34415F]">
-            Your ILMALINK MEDIGO student dashboard
+            Your ilmaLink student dashboard
           </p>
         </div>
 
@@ -342,7 +342,7 @@ export default async function StudentDashboardPage() {
           <div className="mt-4 flex items-center gap-3">
             <Image
               src="/portal/counsellor-placeholder.webp"
-              alt="ILMALINK support counsellor placeholder"
+              alt="ilmaLink support counsellor placeholder"
               width={64}
               height={64}
               className="h-14 w-14 rounded-full border-2 border-white object-cover shadow-sm"
@@ -352,7 +352,7 @@ export default async function StudentDashboardPage() {
               <p className="text-sm font-black text-[#15223D]">
                 {student.assignedToName || "Counsellor not assigned yet"}
               </p>
-              <p className="text-[11px] font-medium text-[#77417A]">ILMALINK Support Team</p>
+              <p className="text-[11px] font-medium text-[#77417A]">ilmaLink Support Team</p>
             </div>
           </div>
           <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-2">

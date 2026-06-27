@@ -13,7 +13,7 @@ import { toPortalLeadRow } from "../../../lib/portal/presentation";
 import { requirePortalStaff } from "../../../lib/portal/session";
 
 export const metadata: Metadata = {
-  title: "Counsellor Dashboard | ILMALINK MEDIGO",
+  title: "Counsellor Dashboard | ilmaLink",
   robots: { index: false, follow: false },
 };
 

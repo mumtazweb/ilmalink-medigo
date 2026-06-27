@@ -23,7 +23,7 @@ export default function VerificationCounsellingCard({
   const cardTitle = title ?? `Need help checking ${countryName} eligibility?`;
   const cardDescription =
     description ??
-    "Compare course duration, internship, English-medium teaching, WDOMS listing, local licence eligibility, fees, safety, and NMC/FMGL rules with an ILMALINK counsellor before final admission.";
+    "Compare course duration, internship, English-medium teaching, WDOMS listing, local licence eligibility, fees, safety, and NMC/FMGL rules with an ilmaLink counsellor before final admission.";
   const ctaLabel = buttonLabel ?? `Check ${countryName} Eligibility`;
 
   return (

@@ -6,7 +6,7 @@ import { requirePortalStaff } from "../../../lib/portal/session";
 import { isSiteOwnerAdminEmail } from "../../../lib/siteOwner";
 
 export const metadata: Metadata = {
-  title: "Portal User Access | ILMALINK MEDIGO",
+  title: "Portal User Access | ilmaLink",
   robots: { index: false, follow: false },
 };
 

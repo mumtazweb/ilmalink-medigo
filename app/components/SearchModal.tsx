@@ -92,7 +92,7 @@ type AskSuggestedLink = {
   whySuggested?: string;
 };
 
-type AskIlmalinkResponse = {
+type AskilmaLinkResponse = {
   answer: string;
   confidence: "high" | "medium" | "low";
   detectedFilters: string[];
@@ -114,12 +114,12 @@ const MAX_RESULTS = 16;
 const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
 const OPEN_RANK_PREDICTOR_EVENT = "ilmalink:open-rank-predictor";
 const noMatchAnswer =
-  "I could not find a confident match in ILMALINK data. You can ask in another way or connect with ILMALINK MEDIGO for counselling support.";
+  "I could not find a confident match in ilmaLink data. You can ask in another way or connect with ilmalink for counselling support.";
 
 const isColdNoMatchAnswer = (answer: string) =>
   /not available|not yet available|no exact|no data|no result|information is not/i.test(answer);
 const answerDisclaimer =
-  "Cutoffs, fees, counselling rules, accreditation, FMGE/NExT outcomes, and NMC/FMGL compliance can change. Use Connect ILMALINK for a personalised eligibility review before final admission.";
+  "Cutoffs, fees, counselling rules, accreditation, FMGE/NExT outcomes, and NMC/FMGL compliance can change. Use Connect ilmaLink for a personalised eligibility review before final admission.";
 const searchSpellingAliases: Record<string, string> = {
   collage: "college",
   colage: "college",
@@ -1096,7 +1096,7 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
     }
   });
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const [askAnswer, setAskAnswer] = useState<AskIlmalinkResponse | null>(null);
+  const [askAnswer, setAskAnswer] = useState<AskilmaLinkResponse | null>(null);
   const [askLoading, setAskLoading] = useState(false);
   const [askError, setAskError] = useState("");
   const [hasAsked, setHasAsked] = useState(false);
@@ -1169,7 +1169,7 @@ const displayedAskAnswer = askAnswer?.answer;
   }, [onClose, onOpenCounselling]);
 
   const handleConnectClick = useCallback(() => {
-    storeRecentSearch(query || "Ask ILMALINK counselling");
+    storeRecentSearch(query || "Ask ilmaLink counselling");
     openCounselling();
   }, [openCounselling, query, storeRecentSearch]);
 
@@ -1199,10 +1199,10 @@ const displayedAskAnswer = askAnswer?.answer;
       });
 
       if (!response.ok) {
-        throw new Error(`Ask ILMALINK API failed: ${response.status}`);
+        throw new Error(`Ask ilmaLink API failed: ${response.status}`);
       }
 
-      const data = (await response.json()) as AskIlmalinkResponse;
+      const data = (await response.json()) as AskilmaLinkResponse;
 
       if (controller.signal.aborted) return;
       setAskAnswer(data);
@@ -1427,7 +1427,7 @@ window.setTimeout(() => {
                   id="ask-ilmalink-title"
                   className="text-base font-black tracking-tight text-[#071f3f] sm:text-lg"
                 >
-                  Ask ILMALINK
+                  Ask ilmaLink
                 </h2>
                 <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
@@ -1435,7 +1435,7 @@ window.setTimeout(() => {
                 </span>
               </div>
               <p className="text-[10px] font-semibold text-slate-500 sm:text-xs">
-                AI search across verified ILMALINK data
+                AI search across verified ilmaLink data
               </p>
             </div>
             <button
@@ -1507,7 +1507,7 @@ window.setTimeout(() => {
             className="relative order-2 min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-3 sm:px-5 sm:py-4"
             role="log"
             aria-live="polite"
-            aria-label="Ask ILMALINK conversation"
+            aria-label="Ask ilmaLink conversation"
           >
             {!query && !hasAsked && (
               <div className="mx-auto max-w-xl py-3 sm:py-6">
@@ -1569,7 +1569,7 @@ window.setTimeout(() => {
                   }`}>
                     <div className="flex items-center justify-between gap-2">
                       <p className="text-xs font-black uppercase tracking-[0.14em] text-[#087a6a]">
-                        {shouldShowPersonalisedCounselling ? "Personalised counselling recommended" : "ILMALINK answer"}
+                        {shouldShowPersonalisedCounselling ? "Personalised counselling recommended" : "ilmaLink answer"}
                       </p>
                       {askAnswer && !askAnswer.notFound && (
                         <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-bold uppercase text-emerald-700">
@@ -1682,7 +1682,7 @@ window.setTimeout(() => {
                       <MessageCircle size={15} />
                       {askAnswer?.notFound || askError
                         ? "Let’s Connect"
-                        : "Connect ILMALINK Expert"}
+                        : "Connect ilmaLink Expert"}
                     </Link>
                   </div>
                 </div>

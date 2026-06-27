@@ -7,7 +7,7 @@ export const metadata = {
     "Study MBBS in Vietnam 2026 for Indian Students | Fees, WDOMS & NMC/FMGL Checks",
 
   description:
-    "Explore MBBS in Vietnam for Indian students with 29 WDOMS-listed medical schools, fee guidance, eligibility checks, NMC/FMGL rule review, documents and ILMALINK MEDIGO counselling support.",
+    "Explore MBBS in Vietnam for Indian students with 29 WDOMS-listed medical schools, fee guidance, eligibility checks, NMC/FMGL rule review, documents and Medigo service-line counselling support under ilmalink.",
 
   keywords: [
     "MBBS in Vietnam",
@@ -221,7 +221,7 @@ export default function VietnamPage() {
             </li>
 
             <li>
-              ✔ ILMALINK MEDIGO can support document verification and counselling
+              ✔ Medigo, an extension/service line of ilmalink, can support document verification and counselling
             </li>
 
           </ul>
@@ -462,7 +462,7 @@ export default function VietnamPage() {
 
       <VerificationCounsellingCard
         countryName="Vietnam MBBS"
-        title="Check Vietnam MBBS eligibility with ILMALINK"
+        title="Check Vietnam MBBS eligibility with ilmaLink"
         buttonLabel="Get Vietnam MBBS Counselling"
       />
     </main>

@@ -5,7 +5,7 @@ import ToolPlaceholderPage from "../components/ToolPlaceholderPage";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "MBBS Career Planner | ILMALINK MEDIGO",
+  title: "MBBS Career Planner | ilmaLink",
   description:
     "Plan an MBBS journey using admission timeline, budget, country or college fit, licensing pathway and long-term career goals.",
   alternates: {

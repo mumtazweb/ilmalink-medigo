@@ -193,14 +193,14 @@ const portalRoot = document.getElementById("modal-root") ?? document.body;
                   <img
                     src="/logoimage.svg"
                     className="w-8 h-8 md:w-10 md:h-10"
-                    alt="ILMALINK MEDIGO Logo"
+                    alt="ilmaLink logo"
                   />
                   <div className="flex items-center gap-2">
                     <h3 className="font-bold text-base md:text-lg leading-none">
-                      <span className="text-green-600">Ilma</span>
+                      <span className="text-green-600">ilma</span>
                       <span className="text-red-500">Link</span>
                     </h3>
-                    <span className="text-blue-600 font-semibold text-xs md:text-sm">MEDIGO</span>
+                    <span className="text-blue-600 font-semibold text-xs md:text-sm">Medigo service line</span>
                   </div>
                 </div>
               </div>
@@ -553,7 +553,7 @@ function CounsellingSuccess({
           Your counselling request is with our team.
         </h1>
         <p className="mt-3 text-sm font-semibold leading-6 text-[#60738F] md:text-base">
-          We saved your details in the ILMALINK MEDIGO counselling system.
+          We saved your details in the ilmaLink counselling system.
           Your request ID is{" "}
           <strong className="text-[#0B4AA2]">{leadCode}</strong>.
         </p>

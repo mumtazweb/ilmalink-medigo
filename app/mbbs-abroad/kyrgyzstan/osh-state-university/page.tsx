@@ -109,12 +109,12 @@ const faqs = [
   {
     question: "Is USD 1,700 per semester the official OshSU fee?",
     answer:
-      "No. ILMALINK MEDIGO is showing USD 1,700 only as an unconfirmed working estimate. Students must obtain a current written invoice from the university or a verified authorized entity.",
+      "No. Medigo, an extension/service line of ilmalink, is showing USD 1,700 only as an unconfirmed working estimate. Students must obtain a current written invoice from the university or a verified authorized entity.",
   },
   {
     question: "Does Osh State University have one exclusive Indian contractor?",
     answer:
-      "ILMALINK MEDIGO has not yet confirmed one exclusive or universal India-side contractor. Agency fees, inclusions, payment recipients and responsibilities may differ.",
+      "Medigo, an extension/service line of ilmalink, has not yet confirmed one exclusive or universal India-side contractor. Agency fees, inclusions, payment recipients and responsibilities may differ.",
   },
   {
     question: "What does WDOMS report for the English program?",
@@ -295,7 +295,7 @@ export default function OshStateUniversityMedicalFacultyPage() {
                     Main contractor not yet confirmed
                   </h2>
                   <p className="mt-3 text-sm font-semibold leading-7 text-amber-950">
-                    ILMALINK MEDIGO is in contact with the medical faculty, but
+                    Medigo, an extension/service line of ilmalink, is in contact with the medical faculty, but
                     has not yet confirmed one exclusive or universal contractor
                     for Indian admissions. Fees, inclusions and responsibility
                     can differ between agencies.
@@ -455,7 +455,7 @@ export default function OshStateUniversityMedicalFacultyPage() {
                 No reliable public fee schedule has been found on the official
                 university or medical-faculty website. The amount below is an
                 unconfirmed working estimate from a source considered reliable
-                by ILMALINK MEDIGO. Obtain a written university invoice before
+                by ilmalink. Obtain a written university invoice before
                 payment.
               </p>
             </div>

@@ -1,7 +1,7 @@
 # Editorial Media System Documentation
 
 ## Overview
-Professional editorial image system for ILMALINK MEDIGO blog platform with advanced positioning controls, format validation, and optimized performance.
+Professional editorial image system for the ilmaLink blog platform with advanced positioning controls, format validation, and optimized performance.
 
 ## Features Implemented
 

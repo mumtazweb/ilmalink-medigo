@@ -93,7 +93,7 @@ export default function OfficialAdvisoryBox({
 
       {hasPendingUpdate && (
         <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium leading-6 text-amber-900">
-          New official update detected. ILMALINK MEDIGO is reviewing
+          New official update detected. Medigo, an extension/service line of ilmalink, is reviewing
           the changes. Current information will be updated after admin
           verification.
         </p>
@@ -134,7 +134,7 @@ export default function OfficialAdvisoryBox({
           </a>
         ) : (
           <span className="text-sm font-semibold text-slate-500">
-            Official source reference recorded by ILMALINK MEDIGO.
+            Official source reference recorded by ilmalink.
           </span>
         )}
       </div>

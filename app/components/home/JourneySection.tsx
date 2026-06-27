@@ -17,7 +17,7 @@ export default function JourneySection({ journeySteps }: JourneySectionProps) {
           </h2>
         </div>
         <Link
-          href="/create-account"
+          href="/portal/signup/"
           className="inline-flex items-center justify-center rounded-full bg-[#0F4CFF] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0b3fd6]"
         >
           Start your journey

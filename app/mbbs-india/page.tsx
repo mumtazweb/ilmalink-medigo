@@ -15,7 +15,7 @@ import {
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Study MBBS in India | NMC Medical College List | ILMALINK MEDIGO",
+  title: "Study MBBS in India | NMC Medical College List | ilmaLink",
   description:
     "Explore the complete MBBS India medical college list with state-wise government and private colleges, MBBS seats, establishment year, and counselling guidance.",
   alternates: {
@@ -320,7 +320,7 @@ export default function MBBSIndiaPage() {
             </h2>
             <div className="mt-3 flex max-w-4xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm font-medium leading-6 text-slate-600">
-                Use this state-wise list to compare government/private college availability, seats, and counselling route indicators. For current quota, document, seat matrix, and reporting guidance, connect with ILMALINK.
+                Use this state-wise list to compare government/private college availability, seats, and counselling route indicators. For current quota, document, seat matrix, and reporting guidance, connect with ilmaLink.
               </p>
               <CounsellingActionButton className="inline-flex flex-shrink-0 items-center justify-center rounded-lg border border-[#00C896]/40 bg-white px-4 py-2.5 text-sm font-extrabold text-[#047857] shadow-sm transition hover:bg-[#ECFDF5]">
                 Check State Counselling Fit

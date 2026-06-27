@@ -5,7 +5,7 @@ import ToolPlaceholderPage from "../components/ToolPlaceholderPage";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "MBBS Abroad Eligibility Check | ILMALINK MEDIGO",
+  title: "MBBS Abroad Eligibility Check | ilmaLink",
   description:
     "Check the main academic, NEET, document, university, course and NMC/FMGL considerations before planning MBBS abroad.",
   alternates: {

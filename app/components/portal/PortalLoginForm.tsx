@@ -165,11 +165,7 @@ export default function PortalLoginForm({
           </>
         ) : (
           <p className="text-xs leading-5 text-[#60738F]">
-            Blog publishing login remains available separately at{" "}
-            <Link href="/login" className="font-black text-[#0B4AA2]">
-              Blog Login
-            </Link>
-            .
+            Staff access is limited to approved education portal accounts.
           </p>
         )}
       </div>

@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import Navbar from "@/app/components/navbar";
-import { getCurrentBlogUser } from "@/app/lib/blog/auth";
+import { requirePortalStaff } from "@/app/lib/portal/session";
 import {
   approveTextVersion,
   getApprovedVersions,
@@ -21,7 +20,7 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export const metadata: Metadata = {
-  title: "Official Advisory Monitor | ILMALINK MEDIGO Admin",
+  title: "Official Advisory Monitor | ilmaLink Admin",
   description:
     "Admin monitor for official source updates, review queue, approvals and advisory history.",
 };
@@ -432,17 +431,7 @@ function VersionList({
 }
 
 async function requireAdminUser() {
-  const user = await getCurrentBlogUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
-  if (user.role !== "admin") {
-    redirect("/dashboard");
-  }
-
-  return user;
+  return requirePortalStaff(["super_admin", "education_admin"]);
 }
 
 export default async function AdvisoryMonitorPage() {

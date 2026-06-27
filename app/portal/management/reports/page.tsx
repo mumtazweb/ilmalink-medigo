@@ -6,7 +6,7 @@ import { toPortalLeadRow } from "../../../lib/portal/presentation";
 import { getMonthlySignupSummary } from "../../../lib/portal/queries";
 
 export const metadata: Metadata = {
-  title: "Management Reports | ILMALINK MEDIGO",
+  title: "Management Reports | ilmaLink",
   robots: { index: false, follow: false },
 };
 

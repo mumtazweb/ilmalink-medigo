@@ -10,7 +10,7 @@ export const NEET_ANSWER_KEY_DOWNLOADS = {
 
   "questions-answer-key-code-50": {
     resource: "questions-answer-key-code-50",
-    fileName: "re NEET_2026_Clean_Questions_Answers_Analysis_Ilmalink_Mumtaz.pdf",
+    fileName: "re NEET_2026_Clean_Questions_Answers_Analysis_ilmaLink_Mumtaz.pdf",
     title: "Questions with Answer Key - Code 50",
     description:
       "Re-NEET UG 2026 question-and-answer PDF with Code 50 answer references, explanations and analysis.",

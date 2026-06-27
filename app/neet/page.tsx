@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     "MBBS admission guidance",
   ],
   openGraph: {
-    title: "NEET UG 2026 Student Hub | ILMALINK MEDIGO",
+    title: "NEET UG 2026 Student Hub | ilmaLink",
     description:
       "NEET 2026 exam information, questions, answer keys, preparation, counselling and MBBS admission support in one hub.",
     url: "https://www.ilmalink.com/neet",
@@ -484,7 +484,7 @@ export default function NeetHubPage() {
             </Link>
           </section>
 
-          <section className="neet-soft-card mt-3 grid grid-cols-4 gap-0 rounded-[13px] border border-[#D5E3F0] bg-[linear-gradient(135deg,#F5F9FD,#EAF4FC)] px-1 py-2 lg:hidden" aria-label="Why students trust ILMALINK MEDIGO">
+          <section className="neet-soft-card mt-3 grid grid-cols-4 gap-0 rounded-[13px] border border-[#D5E3F0] bg-[linear-gradient(135deg,#F5F9FD,#EAF4FC)] px-1 py-2 lg:hidden" aria-label="Why students trust ilmaLink">
             {trustItems.map((item, index) => (
               <div key={item.title} className={`flex min-w-0 items-center gap-1 px-1.5 ${index ? "border-l border-[#CBD8E6]" : ""}`}>
                 <item.icon className="h-4 w-4 shrink-0 text-[#0B4AA2] sm:h-5 sm:w-5" />
@@ -494,7 +494,7 @@ export default function NeetHubPage() {
           </section>
         </div>
 
-        <section className="hidden border-y border-[#D7E7F5] bg-[linear-gradient(90deg,#E9F4FF,#F5FAFF,#E9F7F6)] px-8 py-3 lg:block" aria-label="Why students trust ILMALINK MEDIGO">
+        <section className="hidden border-y border-[#D7E7F5] bg-[linear-gradient(90deg,#E9F4FF,#F5FAFF,#E9F7F6)] px-8 py-3 lg:block" aria-label="Why students trust ilmaLink">
           <div className="mx-auto grid max-w-[1180px] grid-cols-4">
             {trustItems.map((item, index) => (
               <div key={item.title} className={`flex items-center justify-center gap-3 px-5 ${index ? "border-l border-[#BDD0E2]" : ""}`}>
@@ -510,7 +510,7 @@ export default function NeetHubPage() {
             <div>
               <Link href="/" className="flex items-center gap-2 !text-white">
                 <Image src="/logoimage.svg" alt="" width={40} height={40} className="h-10 w-10 rounded-lg bg-white p-1 object-contain" />
-                <span><strong className="block text-lg tracking-wide">ILMALINK MEDIGO</strong><span className="block text-[10px] font-semibold">Global Medical Education</span></span>
+                <span><strong className="block text-lg tracking-wide">ilmaLink</strong><span className="block text-[10px] font-semibold">Global Medical Education</span></span>
               </Link>
               <p className="mt-3 max-w-[230px] text-[11px] font-medium leading-4 text-blue-100">Empowering future doctors with trusted guidance and resources.</p>
             </div>

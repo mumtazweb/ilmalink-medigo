@@ -9,9 +9,9 @@ import { buildBreadcrumbSchema, buildSiteNavigationSchema } from "../lib/schema"
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Explore Study and Support Pages | ILMALINK MEDIGO",
+  title: "Explore Study and Support Pages | ilmaLink",
   description:
-    "Explore ILMALINK MEDIGO study destinations, NEET guidance, scholarships, official updates and student-support pages.",
+    "Explore ilmaLink study destinations, NEET guidance, scholarships, official updates and student-support pages.",
   alternates: {
     canonical: "https://www.ilmalink.com/site-hierarchy",
   },
@@ -93,7 +93,7 @@ const hierarchyGroups = [
     ],
   },
   {
-    title: "About ILMALINK MEDIGO",
+    title: "About ilmaLink",
     links: [
       { label: "GEO Profile Hub", href: "/geo-profile" },
       { label: "Organization details", href: "/geo-profile" },
@@ -103,7 +103,7 @@ const hierarchyGroups = [
   {
     title: "About & Contact",
     links: [
-      { label: "About ILMALINK MEDIGO", href: "/about" },
+      { label: "About ilmaLink", href: "/about" },
       { label: "Book Counselling", href: "/" },
       { label: "Official contact links", href: "/official-links" },
     ],
@@ -135,7 +135,7 @@ export default function SiteHierarchyPage() {
       <section className="bg-[#061D3F] px-4 pb-12 pt-8 text-white sm:px-6 sm:pt-10 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#5EEAD4]">
-            Explore ILMALINK MEDIGO
+            Explore ilmaLink
           </p>
           <h1 className="mt-3 text-4xl font-extrabold tracking-normal md:text-6xl">
             Study and Support Directory

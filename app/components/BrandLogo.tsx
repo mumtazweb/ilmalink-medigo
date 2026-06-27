@@ -2,7 +2,7 @@
 
 <span className="text-green-600">
 
-Ilma
+ilma
 
 </span>
 
@@ -14,7 +14,7 @@ Link
 
 <span className="text-blue-500">
 
- MEDIGO
+ Medigo service line
 
 </span>
 

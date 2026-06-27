@@ -4,7 +4,7 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in Tajikistan 2026 | Affordable MBBS Abroad | ILMALINK MEDIGO",
+    "Study MBBS in Tajikistan 2026 | Affordable MBBS Abroad | ilmaLink",
 
   description:
     "Study MBBS in Tajikistan for Indian students with affordable tuition fees, English-medium medical education, growing Indian student community and NMC guideline awareness.",
@@ -398,7 +398,7 @@ export default function TajikistanPage() {
 
       <VerificationCounsellingCard
         countryName="Tajikistan MBBS"
-        title="Check Tajikistan MBBS eligibility with ILMALINK"
+        title="Check Tajikistan MBBS eligibility with ilmaLink"
         buttonLabel="Get Tajikistan MBBS Counselling"
       />
 </main>

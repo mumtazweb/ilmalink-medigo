@@ -523,7 +523,7 @@ export default function Neet2026DiscussionClient({
             <p className="mt-3 text-sm font-semibold leading-7 text-slate-700">
               File size: {pdfSizeLabel}. Unlock requires name, WhatsApp number
               and OTP verification. Verified lead details can be sent to the
-              configured ILMALINK email.
+              configured ilmaLink email.
             </p>
             <a
               href={expertLink(

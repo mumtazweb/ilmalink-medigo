@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     "Re-NEET 2026 Biology questions",
   ],
   openGraph: {
-    title: "Search NEET 2026 Questions | ILMALINK MEDIGO",
+    title: "Search NEET 2026 Questions | ilmaLink",
     description:
       "Search the supplied NEET 2026 question set with answer markers, source images and individual question pages.",
     url: "https://www.ilmalink.com/neet/questions",

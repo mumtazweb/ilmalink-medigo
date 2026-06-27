@@ -4,7 +4,7 @@ import { CheckCircle2, CircleAlert, Database, KeyRound, Mail, MessageSquareText 
 import { requirePortalStaff } from "../../../lib/portal/session";
 
 export const metadata: Metadata = {
-  title: "Education Portal Settings | ILMALINK MEDIGO",
+  title: "Education Portal Settings | ilmaLink",
   robots: { index: false, follow: false },
 };
 

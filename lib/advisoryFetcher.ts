@@ -274,7 +274,7 @@ export async function fetchAdvisorySource(
         Accept:
           "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "User-Agent":
-          "ILMALINK-MEDIGO-Official-Advisory-Tracker/1.0",
+          "ilmaLink-Official-Advisory-Tracker/1.0",
       },
       signal: controller.signal,
     });

@@ -57,7 +57,7 @@ export async function generateMetadata({
 
   if (!college) {
     return {
-      title: "Medical College Not Found | ILMALINK MEDIGO",
+      title: "Medical College Not Found | ilmaLink",
     };
   }
 

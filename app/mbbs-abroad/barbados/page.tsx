@@ -4,7 +4,7 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in Barbados 2026 | Caribbean Medical Universities | ILMALINK MEDIGO",
+    "Study MBBS in Barbados 2026 | Caribbean Medical Universities | ilmaLink",
 
   description:
     "Study MBBS in Barbados for Indian students with Caribbean medical universities, English-medium education, US-based curriculum and global medical career pathways.",
@@ -358,7 +358,7 @@ export default function BarbadosPage() {
 
       <VerificationCounsellingCard
         countryName="Barbados MBBS"
-        title="Check Barbados MBBS eligibility with ILMALINK"
+        title="Check Barbados MBBS eligibility with ilmaLink"
         buttonLabel="Get Barbados MBBS Counselling"
       />
 </main>

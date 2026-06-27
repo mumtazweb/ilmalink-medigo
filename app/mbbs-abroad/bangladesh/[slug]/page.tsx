@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!college) {
     return {
-      title: "Bangladesh Medical College | ILMALINK MEDIGO",
+      title: "Bangladesh Medical College | ilmaLink",
     };
   }
 
@@ -68,7 +68,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: `${college.name} | Fees, FMGE & Eligibility`,
       description: college.summary,
       url: pageUrl,
-      siteName: "ILMALINK MEDIGO",
+      siteName: "ilmaLink",
       images: [
         {
           url: college.image,
@@ -163,7 +163,7 @@ function buildJsonLd(college: NonNullable<ReturnType<typeof getBangladeshUnivers
 
 function CtaButtons({ collegeName }: { collegeName: string }) {
   const url = `${whatsappCounsellingUrl}?text=${encodeURIComponent(
-    `Hello ILMALINK MEDIGO, I want to verify ${collegeName} Bangladesh MBBS fees, eligibility and admission route.`,
+    `Hello ilmaLink, I want to verify ${collegeName} Bangladesh MBBS fees, eligibility and admission route.`,
   )}`;
 
   return (

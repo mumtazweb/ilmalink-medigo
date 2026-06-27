@@ -4,7 +4,7 @@ function smsMessage(otp: string) {
   const domain =
     process.env.NEXT_PUBLIC_SITE_HOST?.trim() ||
     (process.env.NODE_ENV === "production" ? "www.ilmalink.com" : "");
-  const base = `Your ILMALINK MEDIGO verification code is ${otp}.`;
+  const base = `Your ilmaLink verification code is ${otp}.`;
   return domain ? `${base}\n\n@${domain} #${otp}` : base;
 }
 
@@ -16,7 +16,7 @@ export async function sendStudentOtp(mobile: string, otp: string) {
 
   if (!provider || !apiKey) {
     if (process.env.NODE_ENV !== "production") {
-      console.info(`[DEV ONLY] ILMALINK student OTP for ${mobile}: ${otp}`);
+      console.info(`[DEV ONLY] ilmaLink student OTP for ${mobile}: ${otp}`);
       return { ok: true as const, development: true as const };
     }
     return {

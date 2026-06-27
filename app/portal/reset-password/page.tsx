@@ -8,8 +8,8 @@ import { PortalResetPasswordForm } from "../../components/portal/PortalResetForm
 import { normalizeIndianMobile } from "../../lib/portal/validation";
 
 export const metadata: Metadata = {
-  title: "Reset Student Password | ILMALINK MEDIGO",
-  description: "Reset an ILMALINK MEDIGO student portal password.",
+  title: "Reset Student Password | ilmaLink",
+  description: "Reset an ilmaLink student portal password.",
   robots: { index: false, follow: false },
 };
 

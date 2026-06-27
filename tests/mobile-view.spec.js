@@ -4,7 +4,7 @@ test.use({
   ...devices["Pixel 7"],
 });
 
-test("ILMALINK mobile homepage screenshot", async ({ page }) => {
+test("ilmaLink mobile homepage screenshot", async ({ page }) => {
   await page.goto("https://ilmalink.com", {
     waitUntil: "networkidle",
   });

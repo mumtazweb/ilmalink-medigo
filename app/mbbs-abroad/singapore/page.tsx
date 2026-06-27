@@ -4,7 +4,7 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in Singapore 2026 | Premium Asian Medical Education | ILMALINK MEDIGO",
+    "Study MBBS in Singapore 2026 | Premium Asian Medical Education | ilmaLink",
 
   description:
     "Study MBBS in Singapore for Indian students with globally ranked universities, advanced healthcare infrastructure, research-focused medical education and international exposure.",
@@ -409,7 +409,7 @@ export default function SingaporePage() {
 
       <VerificationCounsellingCard
         countryName="Singapore MBBS"
-        title="Check Singapore MBBS eligibility with ILMALINK"
+        title="Check Singapore MBBS eligibility with ilmaLink"
         buttonLabel="Get Singapore MBBS Counselling"
       />
 </main>

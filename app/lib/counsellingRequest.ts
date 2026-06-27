@@ -17,7 +17,7 @@ export function buildCounsellingWhatsAppMessage(
     request.preference === "India" ? "Preferred State" : "Preferred Country";
 
   return [
-    "Hello ILMALINK MEDIGO,",
+    "Hello ilmaLink,",
     "",
     "I have submitted my counselling request and would like an instant reply.",
     "",

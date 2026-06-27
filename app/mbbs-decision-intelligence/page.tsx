@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title:
     "MBBS Decision Intelligence | Costs, Countries, NEET & Admission Support",
   description:
-    "Compare indicative MBBS India and MBBS Abroad budgets, country checks, NEET pathways and ILMALINK MEDIGO admission support for Indian students.",
+    "Compare indicative MBBS India and MBBS Abroad budgets, country checks, NEET pathways and Medigo service-line admission support under ilmalink for Indian students.",
   keywords: [
     "MBBS cost comparison",
     "MBBS abroad country comparison",
@@ -28,14 +28,14 @@ export const metadata: Metadata = {
     "MBBS admission journey",
     "FMGE preparation support",
     "NExT preparation support",
-    "ILMALINK MEDIGO",
+    "Medigo service line of ilmalink",
   ],
   alternates: {
     canonical: "https://www.ilmalink.com/mbbs-decision-intelligence",
   },
   openGraph: {
     title:
-      "MBBS Decision Intelligence | ILMALINK MEDIGO",
+      "MBBS Decision Intelligence | ilmaLink",
     description:
       "Crawlable MBBS cost, country, NEET pathway and admission-support guidance for Indian students.",
     url: "https://www.ilmalink.com/mbbs-decision-intelligence",
@@ -52,15 +52,15 @@ const faqs = [
   {
     question: "Are the MBBS cost figures final university fees?",
     answer:
-      "No. They are indicative planning estimates from the current ILMALINK MEDIGO dataset. Students must verify the latest written university, college or counselling fee structure, exchange rate and official charges before payment.",
+      "No. They are indicative planning estimates from the current Medigo service-line dataset of ilmalink. Students must verify the latest written university, college or counselling fee structure, exchange rate and official charges before payment.",
   },
   {
-    question: "How does ILMALINK support MBBS India admission?",
+    question: "How does ilmaLink support MBBS India admission?",
     answer:
       mbbsDecisionSupportSummary.india,
   },
   {
-    question: "How does ILMALINK support MBBS Abroad admission?",
+    question: "How does ilmaLink support MBBS Abroad admission?",
     answer:
       mbbsDecisionSupportSummary.abroad,
   },

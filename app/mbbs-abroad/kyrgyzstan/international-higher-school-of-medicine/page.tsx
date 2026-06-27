@@ -24,7 +24,7 @@ export const dynamic = "force-static";
 
 export const metadata: Metadata = {
   title:
-    "International Higher School of Medicine Fee Structure 2026 | IHSM Kyrgyzstan MBBS | ILMALINK MEDIGO",
+    "International Higher School of Medicine Fee Structure 2026 | IHSM Kyrgyzstan MBBS | ilmaLink",
   description:
     "International Higher School of Medicine Kyrgyzstan two-campus MBBS guide with Central Campus and Elite Campus fee structure, accreditation, admission requirements, documents, facilities, and FMGE data.",
   keywords: [

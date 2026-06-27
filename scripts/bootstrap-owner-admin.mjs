@@ -8,7 +8,7 @@ const email = (
   .trim()
   .toLowerCase();
 const password = process.env.OWNER_ADMIN_PASSWORD || "";
-const name = (process.env.OWNER_ADMIN_NAME || "ILMALINK Owner Admin").trim();
+const name = (process.env.OWNER_ADMIN_NAME || "ilmaLink Owner Admin").trim();
 
 if (password.length < 8) {
   console.error(

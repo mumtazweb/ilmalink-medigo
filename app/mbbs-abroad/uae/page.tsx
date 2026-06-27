@@ -4,7 +4,7 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in UAE 2026 | Dubai Medical Universities | ILMALINK MEDIGO",
+    "Study MBBS in UAE 2026 | Dubai Medical Universities | ilmaLink",
 
   description:
     "Study MBBS in UAE for Indian students with modern Gulf medical universities, advanced hospitals, international exposure and premium healthcare infrastructure.",
@@ -414,7 +414,7 @@ export default function UAEPage() {
 
       <VerificationCounsellingCard
         countryName="UAE MBBS"
-        title="Check UAE MBBS eligibility with ILMALINK"
+        title="Check UAE MBBS eligibility with ilmaLink"
         buttonLabel="Get UAE MBBS Counselling"
       />
 </main>

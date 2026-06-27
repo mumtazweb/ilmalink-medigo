@@ -5,7 +5,7 @@ import ToolPlaceholderPage from "../components/ToolPlaceholderPage";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "MBBS Admission Document Checklist | ILMALINK MEDIGO",
+  title: "MBBS Admission Document Checklist | ilmaLink",
   description:
     "Prepare the common academic, identity, NEET, admission, financial and visa documents used for MBBS India and MBBS Abroad planning.",
   alternates: {

@@ -9,17 +9,17 @@ export default function PortalPublicHeader() {
         <Link href="/" className="flex items-center gap-2.5">
           <Image
             src="/logoimage.svg"
-            alt="ILMALINK MEDIGO"
+            alt="ilmaLink logo"
             width={40}
             height={40}
             className="h-10 w-10 object-contain"
           />
           <span>
             <strong className="block text-sm font-black tracking-wide text-[#082A62]">
-              ILMALINK <span className="text-[#009C95]">MEDIGO</span>
+              ilmaLink
             </strong>
             <span className="block text-[9px] font-semibold text-[#60738F]">
-              Education Portal
+              Medigo service line portal
             </span>
           </span>
         </Link>

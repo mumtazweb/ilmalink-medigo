@@ -15,7 +15,7 @@ export const runtime = "nodejs";
 
 export const metadata: Metadata = {
   title:
-    "Student Alert: MBBS/BDS Admission Fraud in India & Abroad | ILMALINK MEDIGO",
+    "Student Alert: MBBS/BDS Admission Fraud in India & Abroad | ilmaLink",
   description:
     "Important alert for Indian students and parents: no agent can directly admit students to MBBS, BDS or NEET-UG courses in India. Learn how to avoid fake admission promises, cash traps, fake allotment letters and MBBS abroad agency fraud.",
   keywords: [
@@ -32,18 +32,18 @@ export const metadata: Metadata = {
     "MCC counselling",
     "MBBS India admission",
     "MBBS abroad safety checklist",
-    "ILMALINK MEDIGO alert",
+    "Medigo service-line alert for ilmalink",
   ],
   alternates: {
     canonical: "https://www.ilmalink.com/alert/",
   },
   openGraph: {
     title:
-      "Student Alert: MBBS/BDS Admission Fraud in India & Abroad | ILMALINK MEDIGO",
+      "Student Alert: MBBS/BDS Admission Fraud in India & Abroad | ilmaLink",
     description:
       "Protect Indian students and parents from MBBS/BDS admission fraud risks in India and abroad. Verify NEET, MCC, NMC and WDOMS before paying any agency.",
     url: "https://www.ilmalink.com/alert/",
-    siteName: "ILMALINK MEDIGO",
+    siteName: "ilmaLink",
     locale: "en_IN",
   },
   robots: {
@@ -121,8 +121,8 @@ function JsonLdScripts() {
     description:
       "Important alert and safety checklist to protect Indian students and parents from medical admission fraud risks in India and abroad.",
     mainEntityOfPage: "https://www.ilmalink.com/alert/",
-    author: { "@type": "Organization", name: "ILMALINK MEDIGO" },
-    publisher: { "@type": "Organization", name: "ILMALINK MEDIGO" },
+    author: { "@type": "Organization", name: "ilmalink" },
+    publisher: { "@type": "Organization", name: "ilmalink" },
   };
 
   return (
@@ -185,7 +185,7 @@ export default function AlertPage() {
               <div className="mt-5 flex flex-wrap gap-3">
                 <a href="#india-alert" className="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-bold text-white shadow-2xl transform hover:-translate-y-0.5">Read India Alert</a>
                 <a href="#abroad-checklist" className="inline-flex items-center gap-2 rounded-lg border border-amber-200 bg-white/60 px-4 py-2 text-sm font-bold text-amber-700 hover:bg-amber-50">MBBS Abroad Checklist</a>
-                <Link href="/create-account/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-4 py-2 text-sm font-bold text-[#008f72]">Contact ILMALINK</Link>
+                <Link href="/portal/signup/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-4 py-2 text-sm font-bold text-[#008f72]">Contact ilmaLink</Link>
               </div>
             </div>
 
@@ -294,7 +294,7 @@ export default function AlertPage() {
                 ))}
               </ol>
               <div className="mt-4">
-                <Link href="/create-account/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-3 py-2 text-sm font-bold text-[#008f72]">Contact ILMALINK</Link>
+                <Link href="/portal/signup/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-3 py-2 text-sm font-bold text-[#008f72]">Contact ilmaLink</Link>
               </div>
             </aside>
           </div>
@@ -304,7 +304,7 @@ export default function AlertPage() {
         <section id="fraud-reporting" className="mt-10">
           <h2 className="text-xl font-extrabold text-[#081B35]">Fraud reporting & victim support</h2>
 
-          <p className="mt-3 text-sm text-slate-700">If you believe you have been targeted by an admission fraudster or agency, act quickly. The guidance below is legally-safe, practical, and focuses on protecting victims and preserving evidence. ILMALINK MEDIGO does not publish unverified allegations or personal names without reliable public sources.</p>
+          <p className="mt-3 text-sm text-slate-700">If you believe you have been targeted by an admission fraudster or agency, act quickly. The guidance below is legally-safe, practical, and focuses on protecting victims and preserving evidence. Medigo, an extension/service line of ilmalink, does not publish unverified allegations or personal names without reliable public sources.</p>
 
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
@@ -317,10 +317,10 @@ export default function AlertPage() {
                 <li>File a police complaint (FIR) at your local police station — insist on a written FIR number and keep a copy.</li>
                 <li>Report online/cybercrime: use the Indian National Cyber Crime Reporting Portal (https://cybercrime.gov.in/) or your country’s official cybercrime portal.</li>
                 <li>If you are being threatened or blackmailed, inform the police and avoid direct confrontation; seek legal advice where available.</li>
-                <li>Contact ILMALINK for guidance and to help document the steps you have taken.</li>
+                <li>Contact ilmaLink for guidance and to help document the steps you have taken.</li>
               </ol>
               <div className="mt-4">
-                <Link href="/create-account/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-3 py-2 text-sm font-bold text-[#008f72]">Contact ILMALINK</Link>
+                <Link href="/portal/signup/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-3 py-2 text-sm font-bold text-[#008f72]">Contact ilmaLink</Link>
               </div>
             </div>
 
@@ -339,12 +339,12 @@ export default function AlertPage() {
 
           <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
             <h4 className="text-sm font-bold text-[#081B35]">Verified case reports & West Bengal example (placeholders)</h4>
-            <p className="mt-2 text-sm text-slate-700">ILMALINK does not publish unverified lists of individuals. We can include names and court-case references only when supported by reliable public sources (news reports, court records or police press releases). Below we provide placeholders you can replace with verified links or documents.</p>
+            <p className="mt-2 text-sm text-slate-700">ilmaLink does not publish unverified lists of individuals. We can include names and court-case references only when supported by reliable public sources (news reports, court records or police press releases). Below we provide placeholders you can replace with verified links or documents.</p>
             <ul className="mt-3 list-disc pl-5 text-sm text-slate-700">
               <li>Example: <span className="font-semibold">West Bengal arrests —</span> <em>replace with a verified news link or court document URL</em></li>
               <li>Example: <span className="font-semibold">Reported agency cases —</span> <em>replace with verified case links</em></li>
             </ul>
-            <p className="mt-3 text-sm text-slate-700">If you have published, reliable links (news articles, police press releases, or court dockets), share them with ILMALINK and we will add the verified case summaries and court references here.</p>
+            <p className="mt-3 text-sm text-slate-700">If you have published, reliable links (news articles, police press releases, or court dockets), share them with ilmaLink and we will add the verified case summaries and court references here.</p>
           </div>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -371,14 +371,14 @@ export default function AlertPage() {
           </div>
 
           <div className="mt-6 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-            <h4 className="text-sm font-bold text-[#081B35]">Contact ILMALINK Legal Support</h4>
-            <p className="mt-2 text-sm text-slate-700">If you are a victim of admission fraud, ILMALINK has a legal support team that may help victims with documentation, evidence preservation, referral to local counsel, and guidance on properly reporting to police and cyber cells. ILMALINK can assist only through proper legal channels and does not replace formal police or court action.</p>
+            <h4 className="text-sm font-bold text-[#081B35]">Contact ilmaLink Legal Support</h4>
+            <p className="mt-2 text-sm text-slate-700">If you are a victim of admission fraud, ilmaLink has a legal support team that may help victims with documentation, evidence preservation, referral to local counsel, and guidance on properly reporting to police and cyber cells. ilmaLink can assist only through proper legal channels and does not replace formal police or court action.</p>
             <ul className="mt-3 list-disc pl-5 text-sm text-slate-700">
-              <li>How ILMALINK can help: document review, drafting complaint templates, referrals to local lawyers, and liaising with police on behalf of the student where appropriate.</li>
-              <li>What ILMALINK cannot do: act as a law firm for you, guarantee legal outcomes, or publish unverified personal accusations.</li>
+              <li>How ilmaLink can help: document review, drafting complaint templates, referrals to local lawyers, and liaising with police on behalf of the student where appropriate.</li>
+              <li>What ilmaLink cannot do: act as a law firm for you, guarantee legal outcomes, or publish unverified personal accusations.</li>
             </ul>
             <div className="mt-4 flex flex-wrap gap-2">
-              <Link href="/create-account/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-3 py-2 text-sm font-bold text-[#008f72]">Contact ILMALINK</Link>
+              <Link href="/portal/signup/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-3 py-2 text-sm font-bold text-[#008f72]">Contact ilmaLink</Link>
               <a href="mailto:middya@ilmalink.com" className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800">Email Legal Team</a>
               <a href="https://wa.me/919563910223" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800">WhatsApp</a>
             </div>
@@ -450,7 +450,7 @@ export default function AlertPage() {
             </ol>
           
             <div className="mt-4">
-              <Link href="/create-account/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-3 py-2 text-sm font-bold text-[#008f72]">Contact ILMALINK</Link>
+              <Link href="/portal/signup/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-3 py-2 text-sm font-bold text-[#008f72]">Contact ilmaLink</Link>
             </div>
           </div>
 
@@ -469,10 +469,10 @@ export default function AlertPage() {
           </div>
         </section>
 
-        {/* ILMALINK SECTION */}
+        {/* ilmaLink SECTION */}
         <section className="mt-10">
-          <h2 className="text-xl font-extrabold text-[#081B35]">What ILMALINK MEDIGO does</h2>
-          <p className="mt-3 text-sm text-slate-700">ILMALINK MEDIGO does not promote blind admission selling. We focus on counselling guidance, data guidance, eligibility verification, cutoff understanding, country comparison, university comparison, risk analysis, scholarship and loan guidance, official source awareness and student safety.</p>
+          <h2 className="text-xl font-extrabold text-[#081B35]">What Medigo Does Under ilmalink</h2>
+          <p className="mt-3 text-sm text-slate-700">Medigo, an extension/service line of ilmalink, does not promote blind admission selling. We focus on counselling guidance, data guidance, eligibility verification, cutoff understanding, country comparison, university comparison, risk analysis, scholarship and loan guidance, official source awareness and student safety.</p>
 
           <ul className="mt-4 grid gap-2 sm:grid-cols-2 text-sm text-slate-700">
             {[
@@ -495,10 +495,10 @@ export default function AlertPage() {
           </ul>
 
           <div className="mt-6 rounded-xl bg-white/30 backdrop-blur ring-1 ring-white/30 p-4 shadow-[0_14px_34px_rgba(8,27,53,0.08)]">
-            <h4 className="text-sm font-extrabold text-[#081B35]">About ILMALINK MEDIGO</h4>
-            <p className="mt-2 text-sm text-slate-700">ILMALINK MEDIGO is not an agency. We act as a watchdog and information service with verified updates and resources. Our team includes members with over 10 years&apos; experience in the medical education sector, including college administration, NEET tutoring and counselling-system experience. We publish verified guidance to protect students and parents from fraud risks.</p>
+            <h4 className="text-sm font-extrabold text-[#081B35]">About ilmaLink</h4>
+            <p className="mt-2 text-sm text-slate-700">Medigo is an extension/service line of ilmalink, not a separate agency brand. We act as a watchdog and information service with verified updates and resources. Our team includes members with over 10 years&apos; experience in the medical education sector, including college administration, NEET tutoring and counselling-system experience. We publish verified guidance to protect students and parents from fraud risks.</p>
             <div className="mt-3 flex gap-3">
-              <Link href="/create-account/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-4 py-2 text-sm font-bold text-[#008f72]">Contact ILMALINK</Link>
+              <Link href="/portal/signup/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-4 py-2 text-sm font-bold text-[#008f72]">Contact ilmaLink</Link>
               <Link href="/blogs" className="inline-flex items-center gap-2 rounded-lg bg-white/50 px-4 py-2 text-sm font-semibold text-slate-800">Read latest updates</Link>
             </div>
           </div>
@@ -506,7 +506,7 @@ export default function AlertPage() {
 
         {/* What we do not claim */}
         <section className="mt-10">
-          <h2 className="text-xl font-extrabold text-[#081B35]">What ILMALINK MEDIGO does not claim</h2>
+          <h2 className="text-xl font-extrabold text-[#081B35]">What Medigo Does Not Claim</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {[
               "Guaranteed MBBS admission in India",

@@ -5,7 +5,7 @@ import ToolPlaceholderPage from "../components/ToolPlaceholderPage";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Best Available MBBS Counselling | ILMALINK MEDIGO",
+  title: "Best Available MBBS Counselling | ilmaLink",
   description:
     "Compare practical MBBS counselling pathways based on NEET profile, budget, preferred location, eligibility and admission goals.",
   alternates: {

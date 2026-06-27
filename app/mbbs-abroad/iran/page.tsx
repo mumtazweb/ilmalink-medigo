@@ -4,7 +4,7 @@ export const dynamic = "force-static";
 
 export const metadata = {
   title:
-    "Study MBBS in Iran 2026 | WDOMS & NMC-Regulation-Aware Shortlisting | ILMALINK MEDIGO",
+    "Study MBBS in Iran 2026 | WDOMS & NMC-Regulation-Aware Shortlisting | ilmaLink",
 
   description:
     "Study MBBS in Iran for Indian students with affordable tuition fees, strong clinical exposure, English-medium medical education and globally recognized universities.",
@@ -418,7 +418,7 @@ export default function IranPage() {
 
       <VerificationCounsellingCard
         countryName="Iran MBBS"
-        title="Check Iran MBBS eligibility with ILMALINK"
+        title="Check Iran MBBS eligibility with ilmaLink"
         buttonLabel="Get Iran MBBS Counselling"
       />
 </main>

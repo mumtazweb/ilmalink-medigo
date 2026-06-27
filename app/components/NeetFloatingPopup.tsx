@@ -8,8 +8,6 @@ import { useEffect, useState } from "react";
 const STORAGE_KEY = "ilmalink_neet_popup_closed";
 
 const hiddenRoutePrefixes = [
-  "/dashboard",
-  "/dashboard/login",
   "/portal/login",
   "/portal/signup",
   "/portal/student",

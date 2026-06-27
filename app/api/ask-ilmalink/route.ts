@@ -76,7 +76,7 @@ async function getApprovedAdvisoryRecords(): Promise<SiteSearchRecord[]> {
       ].join(" "),
       priority: 108,
       matchedDataType: "Official Advisory",
-      sourceLabel: "Approved ILMALINK official-source update",
+      sourceLabel: "Approved ilmaLink official-source update",
       lastUpdated: version.lastChecked ?? version.detectedAt,
       data: {
         kind: "approved-advisory",
@@ -145,12 +145,12 @@ export async function POST(request: NextRequest) {
       })),
     });
    } catch (error) {
-    console.error("Ask ILMALINK API error:", error);
+    console.error("Ask ilmaLink API error:", error);
 
     return Response.json(
       {
         answer:
-          "I could not find a confident match in ILMALINK data. You can ask in another way or connect with ILMALINK MEDIGO for counselling support.",
+          "I could not find a confident match in ilmaLink data. You can ask in another way or connect with ilmalink for counselling support.",
         confidence: "low",
         detectedFilters: [],
         matchedItems: [],

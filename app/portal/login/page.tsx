@@ -6,9 +6,9 @@ import PortalPublicHeader from "../../components/portal/PortalPublicHeader";
 import { normalizePortalReturnPath } from "../../lib/portal/validation";
 
 export const metadata: Metadata = {
-  title: "Education Portal Login | ILMALINK MEDIGO",
+  title: "Education Portal Login | ilmaLink",
   description:
-    "Student, education admin, counsellor and management login for the separate ILMALINK MEDIGO Education Portal.",
+    "Student, education admin, counsellor and management login for the separate ilmaLink Education Portal.",
   alternates: { canonical: "https://www.ilmalink.com/portal/login" },
   robots: { index: true, follow: true },
 };
@@ -29,7 +29,7 @@ export default async function PortalLoginPage({
         <div className="hidden lg:block">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#BFD8F3] bg-white px-3 py-1.5 text-xs font-black text-[#0B4AA2]">
             <ShieldCheck className="h-4 w-4 text-[#08A776]" />
-            Separate from Blog Publishing Login
+            Secure education portal access
           </span>
           <h2 className="mt-5 text-5xl font-black leading-[1.05] tracking-[-.04em] text-[#082A62]">
             Your education journey,{" "}

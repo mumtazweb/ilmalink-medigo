@@ -7,7 +7,7 @@ import Navbar from "../components/navbar";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Trust Center | Alerts, Links, GEO and Advisories | ILMALINK MEDIGO",
+  title: "Trust Center | Alerts, Links, GEO and Advisories | ilmaLink",
   description:
     "Trust Center hub for student safety pages: Alert, Official Links, GEO Profile and Official Advisories.",
   alternates: {

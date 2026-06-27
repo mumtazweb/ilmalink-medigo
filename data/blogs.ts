@@ -17,7 +17,7 @@ export const blogs = [
 
     country: "Kyrgyzstan",
 
-    author: "ILMALINK MEDIGO",
+    author: "ilmalink",
 
     publishedAt: "2026-05-27",
 

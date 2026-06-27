@@ -6,7 +6,6 @@ import {
   CalendarClock,
   ChevronRight,
   ContactRound,
-  ExternalLink,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -100,10 +99,10 @@ export default function PortalDashboardShell({
               />
               <span className="min-w-0">
                 <strong className="block truncate text-sm font-black">
-                  ILMALINK <span className="text-[#009C95]">MEDIGO</span>
+                  ilmaLink
                 </strong>
                 <span className="block truncate text-[9px] font-bold uppercase tracking-[.12em] text-[#60738F]">
-                  Education Portal
+                  Medigo service line portal
                 </span>
               </span>
             </Link>
@@ -115,7 +114,6 @@ export default function PortalDashboardShell({
                   ["Admin", "/portal/admin/dashboard"],
                   ["Counsellor", "/portal/counsellor/dashboard"],
                   ["Management", "/portal/management/dashboard"],
-                  ["Blog", "/dashboard"],
                 ].map(([label, href]) => (
                   <Link
                     key={href}
@@ -123,9 +121,6 @@ export default function PortalDashboardShell({
                     className="inline-flex h-8 items-center gap-1 rounded-lg px-2.5 text-[10px] font-black text-[#31577F] transition hover:bg-white hover:text-[#0B4AA2]"
                   >
                     {label}
-                    {label === "Blog" ? (
-                      <ExternalLink className="h-3 w-3" />
-                    ) : null}
                   </Link>
                 ))}
               </div>
@@ -199,7 +194,6 @@ export default function PortalDashboardShell({
                   <Link href="/portal/admin/dashboard" onClick={() => setMobileOpen(false)} className="rounded-lg bg-[#F4F8FC] px-3 py-2 text-xs font-black text-[#0B4AA2]">Admin dashboard</Link>
                   <Link href="/portal/counsellor/dashboard" onClick={() => setMobileOpen(false)} className="rounded-lg bg-[#F4F8FC] px-3 py-2 text-xs font-black text-[#0B4AA2]">Counsellor dashboard</Link>
                   <Link href="/portal/management/dashboard" onClick={() => setMobileOpen(false)} className="rounded-lg bg-[#F4F8FC] px-3 py-2 text-xs font-black text-[#0B4AA2]">Management dashboard</Link>
-                  <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="rounded-lg bg-[#F4F8FC] px-3 py-2 text-xs font-black text-[#0B4AA2]">Blog dashboard</Link>
                 </div>
               </div>
             ) : null}

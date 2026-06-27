@@ -63,7 +63,7 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: "Blog Not Found | ILMALINK MEDIGO",
+      title: "Blog Not Found | ilmaLink",
     };
   }
 
@@ -229,7 +229,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
     },
     {
       label: "Follow",
-      ariaPrefix: "Follow ILMALINK on",
+      ariaPrefix: "Follow ilmaLink on",
       links: followLinks,
     },
   ];
@@ -264,7 +264,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
     },
     publisher: {
       "@type": "Organization",
-      name: "ILMALINK MEDIGO",
+      name: "ilmaLink",
       logo: {
         "@type": "ImageObject",
         url: `${SITE_URL}/logoimage.svg`,
@@ -336,7 +336,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
 
               <div className="mt-4 inline-flex items-center gap-2 rounded-2xl border border-[#00A986]/25 bg-white px-4 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-[#008A73] shadow-sm">
                 <ShieldCheck size={15} />
-                ILMALINK MEDIGO Article
+                ilmaLink Article
               </div>
 
               <h1 className="mt-5 max-w-4xl text-[2rem] font-black leading-[1.04] tracking-tight text-[#061733] sm:text-5xl lg:text-[4rem]">
@@ -393,7 +393,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
               <div className="absolute right-0 top-0 h-[350px] w-[460px] overflow-hidden rounded-bl-[8rem] rounded-tl-[8rem] bg-[linear-gradient(135deg,#EAF3FF,#CFF8F0)] shadow-[0_30px_90px_rgba(8,27,53,0.12)]">
                 <Image
                   src={heroImage}
-                  alt={post.imageAlt || "MBBS and NEET article by ILMALINK MEDIGO"}
+                  alt={post.imageAlt || "MBBS and NEET article by ilmalink"}
                   fill
                   priority
                   sizes="460px"
@@ -409,7 +409,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
                   Article
                 </p>
                 <p className="text-xs font-bold text-slate-600">
-                  ILMALINK MEDIGO
+                  Medigo service line of ilmalink
                 </p>
                 <p className="mt-2 text-[#00A986]">★★★★★</p>
               </div>
@@ -484,7 +484,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
               <div className="hidden flex-wrap items-center gap-2 sm:flex">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-[#00C896]/25 bg-[#00C896]/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-[#047857]">
                   <ShieldCheck size={14} />
-                  Verified ILMALINK update
+                  Verified ilmaLink update
                 </span>
 
                 <span className="w-fit rounded-full border border-[#0F4CFF]/15 bg-[#0F4CFF]/10 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-[#0F4CFF]">
@@ -736,7 +736,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
 
       <nav
         className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 px-2 py-1.5 shadow-[0_-14px_30px_rgba(15,23,42,0.16)] backdrop-blur sm:hidden"
-        aria-label="Follow ILMALINK"
+        aria-label="Follow ilmaLink"
       >
         <div className="mx-auto flex h-9 max-w-md items-center justify-center gap-2 overflow-x-auto">
           <span className="shrink-0 text-[10px] font-black uppercase tracking-[0.12em] text-slate-600">
@@ -752,8 +752,8 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`Follow ILMALINK on ${item.label}`}
-                title={`Follow ILMALINK on ${item.label}`}
+                aria-label={`Follow ilmaLink on ${item.label}`}
+                title={`Follow ilmaLink on ${item.label}`}
                 className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-sm shadow-sm transition ${item.className}`}
               >
                 <Icon aria-hidden="true" />

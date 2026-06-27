@@ -29,7 +29,7 @@ import {
   type GeorgiaUniversityPageData,
 } from "@/app/data/georgiaUniversities";
 
-export type AskIlmalinkAnswer = {
+export type AskilmaLinkAnswer = {
   answer: string;
   confidence: SearchConfidence;
   detectedFilters: string[];
@@ -47,7 +47,7 @@ type BuiltAnswer = {
 };
 
 const fallbackAnswer =
-  "I could not find a confident match in ILMALINK data. You can ask in another way or connect with ILMALINK MEDIGO for counselling support.";
+  "I could not find a confident match in ilmaLink data. You can ask in another way or connect with ilmalink for counselling support.";
 
 function asNumber(value: unknown) {
   return typeof value === "number" && Number.isFinite(value)
@@ -120,7 +120,7 @@ function buildIntentBasedCounsellingAnswer(
           description:
             "Compare Indian medical colleges using institution type, established year, seats and available counselling data.",
           url: "/mbbs-india",
-          sourceLabel: "ILMALINK MBBS India dataset",
+          sourceLabel: "ilmaLink MBBS India dataset",
           dataType: "MBBS India College",
         },
         {
@@ -128,23 +128,23 @@ function buildIntentBasedCounsellingAnswer(
           description:
             "Start with country-wise MBBS Abroad comparison and guidance.",
           url: "/mbbs-abroad",
-          sourceLabel: "ILMALINK destination pages",
+          sourceLabel: "ilmaLink destination pages",
           dataType: "Country Page",
         },
         {
           title: "Best Kyrgyzstan universities",
           description:
-            "Compare Kyrgyzstan options using ILMALINK counselling priority and FMGE references.",
+            "Compare Kyrgyzstan options using ilmaLink counselling priority and FMGE references.",
           url: "/mbbs-abroad/kyrgyzstan",
-          sourceLabel: "ILMALINK Kyrgyzstan university data",
+          sourceLabel: "ilmaLink Kyrgyzstan university data",
           dataType: "University",
         },
         {
           title: "Best Georgia universities",
           description:
-            "Compare Georgia options using ILMALINK counselling priority and available university data.",
+            "Compare Georgia options using ilmaLink counselling priority and available university data.",
           url: "/mbbs-abroad/georgia",
-          sourceLabel: "ILMALINK Georgia university data",
+          sourceLabel: "ilmaLink Georgia university data",
           dataType: "University",
         },
         {
@@ -152,7 +152,7 @@ function buildIntentBasedCounsellingAnswer(
           description:
             "Compare featured Bangladesh medical colleges and FMGE references.",
           url: "/mbbs-abroad/bangladesh",
-          sourceLabel: "ILMALINK Bangladesh university data",
+          sourceLabel: "ilmaLink Bangladesh university data",
           dataType: "University",
         },
       ],
@@ -182,8 +182,8 @@ function buildIntentBasedCounsellingAnswer(
 
     return {
       answer: intent.best
-        ? `Suggested order based on ILMALINK data for ${filterText}. Location and college-type filters were applied before ranking, followed by institution priority, established year, seat count and available data. Verify official counselling data; final admission depends on official rules.`
-        : `Showing only ${filterText} results from the current ILMALINK dataset. Results are ordered by location fit, requested college type, established year, seats and available counselling data. Verify official counselling data before choice filling.`,
+        ? `Suggested order based on ilmaLink data for ${filterText}. Location and college-type filters were applied before ranking, followed by institution priority, established year, seat count and available data. Verify official counselling data; final admission depends on official rules.`
+        : `Showing only ${filterText} results from the current ilmaLink dataset. Results are ordered by location fit, requested college type, established year, seats and available counselling data. Verify official counselling data before choice filling.`,
       suggestedLinks: search.suggestedLinks,
     };
   }
@@ -193,10 +193,10 @@ function buildIntentBasedCounsellingAnswer(
 
     return {
       answer: intent.best
-        ? `Suggested order based on ILMALINK ranking logic, FMGE appearance volume, available data and counselling priority for ${intent.country}. This is indicative guidance, not an absolute “best” claim.`
+        ? `Suggested order based on ilmaLink ranking logic, FMGE appearance volume, available data and counselling priority for ${intent.country}. This is indicative guidance, not an absolute “best” claim.`
         : intent.fmgePreference
-          ? `Based on ILMALINK data, these are the closest ${intent.country} FMGE and institution matches, ordered using country-level relevance and available FMGE appearance volume.`
-          : `Showing only ${subject} from the current ILMALINK dataset. Country filtering was applied before ranking; compare FMGE references, recognition, fees, course structure and NMC/FMGL requirements before admission.`,
+          ? `Based on ilmaLink data, these are the closest ${intent.country} FMGE and institution matches, ordered using country-level relevance and available FMGE appearance volume.`
+          : `Showing only ${subject} from the current ilmaLink dataset. Country filtering was applied before ranking; compare FMGE references, recognition, fees, course structure and NMC/FMGL requirements before admission.`,
       suggestedLinks: search.suggestedLinks,
     };
   }
@@ -373,7 +373,7 @@ function indiaCollegeLink(
     title: college.collegeName,
     description,
     url: getMBBSIndiaCollegeHref(college),
-    sourceLabel: "ILMALINK MBBS India college data",
+    sourceLabel: "ilmaLink MBBS India college data",
     dataType: "MBBS India College",
   };
 }
@@ -555,7 +555,7 @@ function buildFmgeCountryVolumeAnswer() {
     .join("\n");
 
   return [
-    `By FMGE appeared count, ${formatCountryName(leader.country)} has the strongest student-volume signal in the current ILMALINK FMGE dataset.`,
+    `By FMGE appeared count, ${formatCountryName(leader.country)} has the strongest student-volume signal in the current ilmaLink FMGE dataset.`,
     `Top countries by appeared count:\n${countryList}`,
     "Use appeared count as a demand/experience signal, then compare pass rate, university recognition, budget, safety, course duration, internship, English medium, and NMC/FMGL compliance before choosing.",
   ].join("\n\n");
@@ -572,7 +572,7 @@ function buildFmgeCollegeVolumeAnswer() {
     .join("\n");
 
   return [
-    `By FMGE appeared count, ${leader.name} has the strongest college/university volume signal in the current ILMALINK FMGE dataset.`,
+    `By FMGE appeared count, ${leader.name} has the strongest college/university volume signal in the current ilmaLink FMGE dataset.`,
     `Top colleges/universities by appeared count:\n${collegeList}`,
     "Appeared count can suggest student volume and past Indian-student presence, but it is not an admission guarantee. Compare pass rate, accreditation, fees, safety, course duration, internship, English medium, and NMC/FMGL compliance before final admission.",
   ].join("\n\n");
@@ -604,7 +604,7 @@ function buildCutoffAnswer(search: SiteDataSearchResponse): BuiltAnswer {
         normalizedQuery.includes("rank")
           ? `rank ${formatNumber(numericValue)}`
           : `${numericValue} marks`
-      }, ILMALINK does not select one college without category, quota, domicile and counselling round. Use the NEET Rank Predictor and compare the India counselling/cutoff results listed below.`,
+      }, ilmaLink does not select one college without category, quota, domicile and counselling round. Use the NEET Rank Predictor and compare the India counselling/cutoff results listed below.`,
       suggestedLinks,
       shouldAutoOpenCounselling: false,
     };
@@ -764,7 +764,7 @@ function buildStateCounsellingAnswer(search: SiteDataSearchResponse) {
   const state = getTopByKind(search, "mbbs-india-state");
 
   if (!state) {
-    return "Counselling rules depend on domicile, quota, round, seat type, documents, and reporting instructions. Connect ILMALINK for personalised guidance on this question.";
+    return "Counselling rules depend on domicile, quota, round, seat type, documents, and reporting instructions. Connect ilmaLink for personalised guidance on this question.";
   }
 
   const accessDetail = asString(state.data?.accessDetail);
@@ -779,21 +779,21 @@ function buildSeatMatrixAnswer(search: SiteDataSearchResponse) {
   const state = getTopByKind(search, "mbbs-india-state");
 
   if (advisory) {
-    return `The closest seat matrix or round update is "${advisory.title}". ${advisory.description} Use Connect ILMALINK for a round-wise counselling review before choice filling.${getSourceText()}${getLastUpdatedText(search)}`;
+    return `The closest seat matrix or round update is "${advisory.title}". ${advisory.description} Use Connect ilmaLink for a round-wise counselling review before choice filling.${getSourceText()}${getLastUpdatedText(search)}`;
   }
 
   if (state) {
     return `For ${state.title}, seat matrix details can change round-wise. Verify the latest official counselling notice before choice filling, especially if the question is about a current round.`;
   }
 
-  return "Seat matrix updates are round-wise and time-sensitive. This question can be answered better by our experts after checking the exact state, round and quota. Connect ILMALINK for a personalised review.";
+  return "Seat matrix updates are round-wise and time-sensitive. This question can be answered better by our experts after checking the exact state, round and quota. Connect ilmaLink for a personalised review.";
 }
 
 function buildCollegeAnswer(search: SiteDataSearchResponse) {
   const college = getTopByKind(search, "mbbs-india-college");
 
   if (!college) {
-    return "For college shortlisting, the college/state name, NEET score, category, domicile and budget matter together. Connect ILMALINK for personalised college shortlisting.";
+    return "For college shortlisting, the college/state name, NEET score, category, domicile and budget matter together. Connect ilmaLink for personalised college shortlisting.";
   }
 
   return `${college.title} is listed as ${college.description}${formatFacts(college)} Cutoff, fee, quota, and admission chances must be verified with NEET score, category, domicile, and counselling round.`;
@@ -834,7 +834,7 @@ function buildCountryComparisonAnswer(search: SiteDataSearchResponse) {
 function buildUniversityRecommendationAnswer(): BuiltAnswer {
   return {
     answer: [
-      "Based on the verified university data currently available on ILMALINK, my first shortlist would be International Higher School of Medicine (IHSM) and Kyrgyz State Medical Academy (KSMA).",
+      "Based on the verified university data currently available on ilmaLink, my first shortlist would be International Higher School of Medicine (IHSM) and Kyrgyz State Medical Academy (KSMA).",
       "If you want one default starting option, IHSM is the cleaner first recommendation because its listed campuses have 6-year accreditation, structured fee tables and a dedicated Indian-student pathway. KSMA is also marked Recommended and is a strong public-academy option, but its special regulatory status still needs separate current verification.",
       "The final choice should depend on your budget, preferred campus, course/internship structure, hostel plan and latest NMC/FMGL checks.",
     ].join("\n\n"),
@@ -844,7 +844,7 @@ function buildUniversityRecommendationAnswer(): BuiltAnswer {
         description:
           "Open the full IHSM page with Central and Elite campus fees, accreditation, documents and FMGE references.",
         url: "/mbbs-abroad/kyrgyzstan/international-higher-school-of-medicine/",
-        sourceLabel: "ILMALINK Kyrgyzstan university data",
+        sourceLabel: "ilmaLink Kyrgyzstan university data",
         dataType: "University",
       },
       {
@@ -852,7 +852,7 @@ function buildUniversityRecommendationAnswer(): BuiltAnswer {
         description:
           "Open the full KSMA page with its 2026 fee structure, requirements, accreditation position and admission details.",
         url: "/mbbs-abroad/kyrgyzstan/kyrgyz-state-medical-academy/",
-        sourceLabel: "ILMALINK Kyrgyzstan university data",
+        sourceLabel: "ilmaLink Kyrgyzstan university data",
         dataType: "University",
       },
     ],
@@ -875,7 +875,7 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
 
     if (unavailable) {
       return {
-        answer: `The verified 2026 fee for ${resolvedIndiaCollege.collegeName} has not yet been updated on this website. Please contact an ILMALINK expert for the latest official fee structure.`,
+        answer: `The verified 2026 fee for ${resolvedIndiaCollege.collegeName} has not yet been updated on this website. Please contact an ilmaLink expert for the latest official fee structure.`,
         suggestedLinks: [targetLink],
         shouldAutoOpenCounselling: true,
       };
@@ -909,7 +909,7 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
       title: resolvedKyrgyzUniversity.name,
       description: `Open the full ${resolvedKyrgyzUniversity.name} page for the complete semester-wise fee structure and admission details.`,
       url: `/mbbs-abroad/kyrgyzstan/${resolvedKyrgyzUniversity.slug}/`,
-      sourceLabel: "ILMALINK Kyrgyzstan university data",
+      sourceLabel: "ilmaLink Kyrgyzstan university data",
       dataType: "University Fee",
     };
 
@@ -947,7 +947,7 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
 
     if (explicitlyUnverified || !firstFee) {
       return {
-        answer: `The verified 2026 fee for ${resolvedKyrgyzUniversity.name} has not yet been updated on this website. Please contact an ILMALINK expert for the latest university-issued fee structure.`,
+        answer: `The verified 2026 fee for ${resolvedKyrgyzUniversity.name} has not yet been updated on this website. Please contact an ilmaLink expert for the latest university-issued fee structure.`,
         suggestedLinks: [targetLink],
         shouldAutoOpenCounselling: true,
       };
@@ -970,7 +970,7 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
         : `/mbbs-abroad/georgia/?q=${encodeURIComponent(
             resolvedGeorgiaUniversity.name
           )}#georgia-universities`,
-      sourceLabel: "ILMALINK Georgia university data",
+      sourceLabel: "ilmaLink Georgia university data",
       dataType: "University Fee",
     };
 
@@ -979,7 +979,7 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
       resolvedGeorgiaUniversity.feeRows.length === 0
     ) {
       return {
-        answer: `The verified 2026 fee for ${resolvedGeorgiaUniversity.name} has not yet been updated on this website. Please contact an ILMALINK expert for the latest university-issued fee structure.`,
+        answer: `The verified 2026 fee for ${resolvedGeorgiaUniversity.name} has not yet been updated on this website. Please contact an ilmaLink expert for the latest university-issued fee structure.`,
         suggestedLinks: [targetLink],
         shouldAutoOpenCounselling: true,
       };
@@ -1020,7 +1020,7 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
 
     if (unavailable) {
       return {
-        answer: `The verified 2026 fee for ${target.title} has not yet been updated on this website. Please contact an ILMALINK expert for the latest official fee structure.`,
+        answer: `The verified 2026 fee for ${target.title} has not yet been updated on this website. Please contact an ilmaLink expert for the latest official fee structure.`,
         suggestedLinks: [targetLink],
         shouldAutoOpenCounselling: true,
       };
@@ -1040,7 +1040,7 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
 
     if (!feeSummary && feeRows.length === 0) {
       return {
-        answer: `The verified 2026 fee for ${target.title} has not yet been updated on this website. Please contact an ILMALINK expert for the latest university-issued fee structure.`,
+        answer: `The verified 2026 fee for ${target.title} has not yet been updated on this website. Please contact an ilmaLink expert for the latest university-issued fee structure.`,
         suggestedLinks: [targetLink],
         shouldAutoOpenCounselling: true,
       };
@@ -1076,7 +1076,7 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
 
   if (!firstFee) {
     return {
-      answer: `The verified 2026 fee for ${target.title} has not yet been updated on this website. Please contact an ILMALINK expert for the latest university-issued fee structure.`,
+      answer: `The verified 2026 fee for ${target.title} has not yet been updated on this website. Please contact an ilmaLink expert for the latest university-issued fee structure.`,
       suggestedLinks: [targetLink],
       shouldAutoOpenCounselling: true,
     };
@@ -1100,14 +1100,14 @@ function buildAccreditationAnswer(search: SiteDataSearchResponse) {
   const university = getTopByKind(search, "kyrgyz-university");
 
   if (!university) {
-    return "Accreditation, recognition, WDOMS listing, and NMC/FMGL compliance must be checked carefully before admission. Connect ILMALINK if you want this institution checked by name.";
+    return "Accreditation, recognition, WDOMS listing, and NMC/FMGL compliance must be checked carefully before admission. Connect ilmaLink if you want this institution checked by name.";
   }
 
   const label = asString(university.data?.accreditationLabel);
   const recommendation = asString(university.data?.recommendationLevel);
   const message = asString(university.data?.recommendationMessage);
 
-  return `${university.title} is marked as "${label ?? university.description}". Recommendation status: ${recommendation ?? "needs expert review before admission"}. ${message ?? ""} Use Connect ILMALINK to check latest accreditation, course duration, internship, WDOMS, local licence eligibility, and NMC/FMGL compliance.`;
+  return `${university.title} is marked as "${label ?? university.description}". Recommendation status: ${recommendation ?? "needs expert review before admission"}. ${message ?? ""} Use Connect ilmaLink to check latest accreditation, course duration, internship, WDOMS, local licence eligibility, and NMC/FMGL compliance.`;
 }
 
 function buildFmgeAnswer(search: SiteDataSearchResponse) {
@@ -1135,7 +1135,7 @@ function buildFmgeAnswer(search: SiteDataSearchResponse) {
     getTopByKind(search, "fmge-college");
 
   if (!fmgeItem) {
-    return "For FMGE comparison, enter a country or university name. Connect ILMALINK for a personalised country/university comparison.";
+    return "For FMGE comparison, enter a country or university name. Connect ilmaLink for a personalised country/university comparison.";
   }
 
   return `${fmgeItem.title}: ${fmgeItem.description}${formatFacts(fmgeItem)} FMGE data is only one planning indicator and does not mean NMC approval or admission suitability.`;
@@ -1156,10 +1156,10 @@ function buildAdvisoryAnswer(search: SiteDataSearchResponse) {
   );
 
   if (advisory) {
-    return `The closest advisory match is "${advisory.title}". ${advisory.description}${getLastUpdatedText(search)} Use Connect ILMALINK if you want an expert to review this advisory before you act.`;
+    return `The closest advisory match is "${advisory.title}". ${advisory.description}${getLastUpdatedText(search)} Use Connect ilmaLink if you want an expert to review this advisory before you act.`;
   }
 
-  return "Official advisories can be time-sensitive. Connect ILMALINK and our experts can review the exact country, university, counselling body or advisory topic with you.";
+  return "Official advisories can be time-sensitive. Connect ilmaLink and our experts can review the exact country, university, counselling body or advisory topic with you.";
 }
 
 function buildGeneralAnswer(search: SiteDataSearchResponse) {
@@ -1169,12 +1169,12 @@ function buildGeneralAnswer(search: SiteDataSearchResponse) {
     return fallbackAnswer;
   }
 
-  return `The closest match is "${top.title}". ${top.description}${formatFacts(top)}${getSourceText()} Use Connect ILMALINK for latest rules, fees, cutoffs, accreditation, and counselling-instruction review before final admission.`;
+  return `The closest match is "${top.title}". ${top.description}${formatFacts(top)}${getSourceText()} Use Connect ilmaLink for latest rules, fees, cutoffs, accreditation, and counselling-instruction review before final admission.`;
 }
 
 export function buildSiteAnswerFromSearch(
   search: SiteDataSearchResponse
-): AskIlmalinkAnswer {
+): AskilmaLinkAnswer {
   const intentBasedAnswer = buildIntentBasedCounsellingAnswer(search);
 
   if (intentBasedAnswer) {

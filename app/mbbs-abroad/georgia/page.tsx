@@ -39,7 +39,7 @@ export const dynamic = "force-static";
 
 const pageUrl = "https://www.ilmalink.com/mbbs-abroad/georgia/";
 const georgiaWhatsappUrl = `${whatsappCounsellingUrl}?text=${encodeURIComponent(
-  "Hello ILMALINK MEDIGO, I want to talk to a Georgia MBBS admission expert."
+  "Hello ilmaLink, I want to talk to a Georgia MBBS admission expert."
 )}`;
 
 export const metadata: Metadata = {
@@ -66,9 +66,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "MBBS in Georgia 2026 | Universities, Fees & FMGE",
     description:
-      "Compare all Georgia medical universities in the ILMALINK MEDIGO data, including full fee and admission pages for GAU, ALTE and EEU.",
+      "Compare all Georgia medical universities in the Medigo service-line data of ilmalink, including full fee and admission pages for GAU, ALTE and EEU.",
     url: pageUrl,
-    siteName: "ILMALINK MEDIGO",
+    siteName: "ilmaLink",
     images: [
       {
         url: "/georgia/georgia-tbilisi-student-life.jpg",
@@ -472,7 +472,7 @@ function AdmissionUpdate() {
           <p className="mt-1 text-sm font-medium leading-6 text-[#26394d]">
             Georgia admission rules, university intake, fee terms, document
             criteria and visa requirements are dynamic and may change. Contact
-            ILMALINK MEDIGO for current guidance. Final admission depends on
+            ilmalink for current guidance. Final admission depends on
             eligibility, documents, university approval, visa approval and
             applicable Georgian and Indian regulations.
           </p>
@@ -758,7 +758,7 @@ function FmgeAndCounselling() {
               Need a university comparison?
             </p>
             <h2 className="mt-2 text-2xl font-black sm:text-3xl">
-              Get Georgia admission guidance from ILMALINK MEDIGO
+              Get Georgia admission guidance from ilmalink
             </h2>
             <p className="mt-3 max-w-3xl text-sm font-medium leading-7 text-blue-100">
               Compare fees, eligibility, documents, FMGE references, WDOMS,
@@ -793,7 +793,7 @@ function VerificationAndFaq() {
           <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold leading-7 text-amber-950">
             Final admission depends on eligibility, documents, university
             approval, visa approval and applicable Georgian and Indian
-            regulations. Contact ILMALINK MEDIGO for current guidance before
+            regulations. Contact ilmalink for current guidance before
             making a payment or travel commitment.
           </p>
 

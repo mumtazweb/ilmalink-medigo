@@ -14,9 +14,9 @@ export const revalidate = 3600;
 export const runtime = "nodejs";
 
 export const metadata: Metadata = {
-  title: "Official Advisories | ILMALINK MEDIGO",
+  title: "Official Advisories | ilmaLink",
   description:
-    "Official NMC, MCC, NBEMS and state counselling advisory sources with approved ILMALINK MEDIGO summaries for medical students.",
+    "Official NMC, MCC, NBEMS and state counselling advisory sources with approved Medigo service-line summaries under ilmalink for medical students.",
 };
 
 const officialSourceDirectory = [
@@ -165,7 +165,7 @@ export default async function OfficialAdvisoriesPage() {
             Official Advisories
           </h1>
           <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-600 md:text-base">
-            ILMALINK MEDIGO publishes only admin-approved text/data
+            Medigo is an extension/service line of ilmalink and publishes only admin-approved text/data
             summaries from official sources. New detected changes are
             reviewed before public information is updated.
           </p>
@@ -181,7 +181,7 @@ export default async function OfficialAdvisoriesPage() {
                 Approved advisory summaries
               </h2>
               <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-600">
-                These summaries have completed ILMALINK MEDIGO&apos;s
+                These summaries have completed Medigo service-line review under ilmalink
                 editorial review. Always open the linked official source
                 before acting.
               </p>

@@ -85,7 +85,7 @@ export function buildGeorgiaUniversityMetadata(
       title,
       description,
       url: canonical,
-      siteName: "ILMALINK MEDIGO",
+      siteName: "ilmaLink",
       images: [
         {
           url: universityImage(university),
@@ -548,7 +548,7 @@ function QuickFacts({
       id="quick-facts"
       eyebrow="Quick facts"
       title={`${university.name} at a glance`}
-      description="The facts below are taken from the existing ILMALINK MEDIGO Georgia university data."
+      description="The facts below are taken from the existing Medigo service-line Georgia university data of ilmalink."
     >
       <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {baseFacts.map(([label, value]) => (
@@ -959,7 +959,7 @@ function VerificationFaqAndLinks({
                 <p className="mt-3 text-sm font-semibold leading-7 text-slate-800">
                   Final admission depends on eligibility, documents, university
                   approval, visa approval and applicable Georgian and Indian
-                  regulations. Contact ILMALINK MEDIGO for current guidance.
+                  regulations. Contact ilmalink for current guidance.
                 </p>
                 <p className="mt-3 text-sm font-semibold leading-7 text-slate-800">
                   Students must verify WDOMS listing, NMC/FMGL compliance,
@@ -978,7 +978,7 @@ function VerificationFaqAndLinks({
             </h3>
             <p className="mt-3 text-sm font-medium leading-7 text-blue-100">
               Review the current fee invoice, documents, eligibility, hostel,
-              visa, WDOMS entry and NMC/FMGL fit with an ILMALINK MEDIGO expert.
+              visa, WDOMS entry and NMC/FMGL fit with an ilmalink expert.
             </p>
             <div className="mt-5">
               <ProfileCtas dark />

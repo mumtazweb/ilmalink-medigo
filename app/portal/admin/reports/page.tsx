@@ -9,7 +9,7 @@ import {
 } from "../../../lib/portal/queries";
 
 export const metadata: Metadata = {
-  title: "Education Portal Reports | ILMALINK MEDIGO",
+  title: "Education Portal Reports | ilmaLink",
   robots: { index: false, follow: false },
 };
 

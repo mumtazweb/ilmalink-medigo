@@ -14,8 +14,8 @@ function mailFrom(provider: "smtp" | "resend") {
   return (
     process.env.MAIL_FROM?.trim() ||
     (provider === "smtp"
-      ? "ILMALINK MEDIGO <middya@ilmalink.com>"
-      : "ILMALINK MEDIGO <onboarding@resend.dev>")
+      ? "ilmaLink <middya@ilmalink.com>"
+      : "ilmaLink <onboarding@resend.dev>")
   );
 }
 
@@ -60,8 +60,8 @@ export async function sendStudentResetOtpEmail(
 ) {
   await sendMail({
     to: email,
-    subject: "ILMALINK MEDIGO Student Password Reset Code",
-    text: `Your ILMALINK MEDIGO password reset code is ${otp}. It expires in 5 minutes.`,
+    subject: "ilmaLink Student Password Reset Code",
+    text: `Your ilmaLink password reset code is ${otp}. It expires in 5 minutes.`,
     html: `
       <div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;padding:24px;color:#082a62">
         <h2>Reset your student password</h2>
@@ -135,11 +135,11 @@ export async function sendNewStudentAlert(student: LeadAlertStudent) {
 
   await sendMail({
     to,
-    subject: "New Student Signup - ILMALINK MEDIGO",
+    subject: "New Student Signup - ilmaLink",
     text: `${text}\nDashboard: https://www.ilmalink.com/portal/admin/leads`,
     html: `
       <div style="font-family:Arial,sans-serif;max-width:680px;margin:auto;padding:24px;color:#082a62">
-        <h2>New Student Signup - ILMALINK MEDIGO</h2>
+        <h2>New Student Signup - ilmaLink</h2>
         <table style="width:100%;border-collapse:collapse">
           ${fields
             .map(
@@ -204,7 +204,7 @@ export async function sendCounsellingRequestAlert(
       <div style="background:#f3f8fc;padding:28px 12px;font-family:Arial,sans-serif;color:#17396e">
         <div style="max-width:700px;margin:auto;overflow:hidden;border:1px solid #d8e4ef;border-radius:18px;background:#ffffff;box-shadow:0 12px 32px rgba(8,42,98,.08)">
           <div style="padding:24px;background:linear-gradient(135deg,#087a60,#0b4aa2);color:#ffffff">
-            <p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">ILMALINK MEDIGO</p>
+            <p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">ilmaLink</p>
             <h2 style="margin:0;font-size:24px">New counselling request</h2>
             <p style="margin:8px 0 0;color:#dff7f0">The request was saved in the Education Portal before this alert was sent.</p>
           </div>

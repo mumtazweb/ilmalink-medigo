@@ -13,7 +13,7 @@ export default function WhyUsSection({ featureBlocks }: WhyUsSectionProps) {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm uppercase tracking-[0.24em] text-[#7DD3FC]">
-            Why ILMALINK MEDIGO
+            Why ilmaLink
           </p>
           <h2 className="mt-3 text-2xl font-semibold">
             Premium student-first admission support.

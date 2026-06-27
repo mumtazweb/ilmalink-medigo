@@ -69,7 +69,7 @@ export async function generateMetadata({
     alternates: { canonical },
     keywords: question.keywords,
     openGraph: {
-      title: `${title} | ILMALINK MEDIGO`,
+      title: `${title} | ilmaLink`,
       description,
       url: canonical,
       type: "article",

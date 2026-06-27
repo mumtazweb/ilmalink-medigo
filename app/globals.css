@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Premium ILMALINK MEDIGO design tokens */
+  /* Premium ilmaLink design tokens */
   --background: #f8fafc;
   --surface: #ffffff;
   --surface-soft: #eef4fb;
