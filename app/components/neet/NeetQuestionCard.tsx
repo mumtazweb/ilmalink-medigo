@@ -40,8 +40,9 @@ export default function NeetQuestionCard({
       <div className="mt-3 flex items-start gap-2 rounded-xl bg-[#F0FAF6] px-3 py-2.5">
         <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#08A776]" />
         <p className="text-xs font-bold leading-5 text-[#17634F]">
-          {question.correctAnswer}
-        </p>
+  {question.correctOption ? `Answer: ${question.correctOption} · ` : ""}
+  {question.correctAnswer}
+</p>
       </div>
       <Link
         href={`/neet/questions/${question.slug}`}

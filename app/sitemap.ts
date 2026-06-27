@@ -27,7 +27,6 @@ const additionalPublicCountryRoutes = [
 const staticRoutes = [
   "",
   "/about",
-  "/geo-profile",
   "/contact",
   "/data-methodology",
   "/official-links",

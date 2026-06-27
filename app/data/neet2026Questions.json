@@ -1003,7 +1003,7 @@
     "sourceImages": [
       "/images/neet/questions/q021.webp"
     ],
-    "sourceText": "21. A unit positive point charge is taken slowly through an infinitesimally thin tube that is inside a charged dielectric sphere of radius R, having uniform positive charge density p, as shown in the figure. The initial and final positions of the charge are marked by A and B at distances 2R and 3R respectively, from the centre of the sphere. In this process, the magnitude of the total work done on the point charge is PR® ne, The value of nis : (e, is the permittivity of vacuum) B 3R 7 (1) 2 (2) 6 3) 9 4) 18 Ane (4)",
+    "sourceText": "21. A unit positive point charge is taken slowly through an infinitesimally thin tube that is inside a charged dielectric sphere of radius R, having uniform positive charge density p, as shown in the figure. The initial and final positions of the charge are marked by A and B at distances 2R and 3R respectively, from the centre of the sphere. In this process, the magnitude of the total work done on the point charge is PR® ne, The value of nis : (e, is the permittivity of vacuum) B 3R 7 (1) 2 (2) 6 3) 9 4) 18 Ans. (4)",
     "isBonus": false,
     "reviewStatus": "Source image verified; text transcription pending final academic review."
   },
@@ -1228,8 +1228,8 @@
         "text": "1.04 cm"
       }
     ],
-    "correctAnswer": "Bonus question in the supplied source booklet.",
-    "correctOption": null,
+    "correctAnswer": "Drop",
+    "correctOption": "Drop",
     "explanation": "Explanation will be updated after review.",
     "keywords": [
       "NEET 2026",
@@ -1243,9 +1243,9 @@
     "sourceImages": [
       "/images/neet/questions/q026.webp"
     ],
-    "sourceText": "26. One main scale division otf a Vernier calliper is equal to 1 mm and the number of divisions on the Vernier scale is 10. When both the jaws touch each other, the Vernier scale shifts to the left of zero of the main scale in such a way that 4™ Vernier division coincides with a division of the main scale. If this Vernier calliper measures the length of a wire to be 1 cm, the actual length of the wire is : (1) 0.60 cm (2) 0.96 cm (3) 1.00 cm (4) 1.04 cm Ans. (Bonus)",
-    "isBonus": true,
-    "reviewStatus": "Source image verified; text transcription pending final academic review."
+    "sourceText": "26. One main scale division otf a Vernier calliper is equal to 1 mm and the number of divisions on the Vernier scale is 10. When both the jaws touch each other, the Vernier scale shifts to the left of zero of the main scale in such a way that 4™ Vernier division coincides with a division of the main scale. If this Vernier calliper measures the length of a wire to be 1 cm, the actual length of the wire is : (1) 0.60 cm (2) 0.96 cm (3) 1.00 cm (4) 1.04 cm Ans. (Drop)",
+    "isBonus": false,
+    "reviewStatus": "Answer key updated as Drop as per NTA provisional official answer key."
   },
   {
     "id": "neet-2026-q27",
@@ -1806,8 +1806,8 @@
         "text": "The direction of propagation of the electromagnetic wave is along +z"
       }
     ],
-    "correctAnswer": "Option 2 - The wavelength of the electromagnetic wave inside the medium is 300 m",
-    "correctOption": "2",
+    "correctAnswer": "Options 2 and 3",
+    "correctOption": "2,3",
     "explanation": "Explanation will be updated after review.",
     "keywords": [
       "NEET 2026",
@@ -1823,7 +1823,7 @@
     ],
     "sourceText": "38. An electromagnetic wave travelling in a lossless dielectric medium having a dielectric constant €, = 9, has the electric field, E, = E, sin (kz — 2 x 10%) Vm™ where E; is the amplitude and k is the wave vector. Among the following options, the incorrect choice is : (1) The speed of the electromagnetic wave inside the medium is 10° ms™ (2) The wavelength of the electromagnetic wave inside the medium is 300 m (3) The magnetic field is given by the relation B, = Zo gin(le-2rx10° t) where v is the speed of the electromagnetic wave inside the medium (4) The direction of propagation of the electromagnetic wave is along +z Ans. (2,3)",
     "isBonus": false,
-    "reviewStatus": "Source image verified; text transcription pending final academic review."
+    "reviewStatus": "Answer key updated with multiple accepted options as per NTA provisional official answer key."
   },
   {
     "id": "neet-2026-q39",
@@ -6434,7 +6434,7 @@
     "sourceImages": [
       "/images/neet/questions/q134.webp"
     ],
-    "sourceText": "134. Arrange the following elements in descending order of their contribution to percentage weight of the human body. (a) Oxygen {b) Carbon {(c) Hydrogen {d) Nitrogen Choose the correct answer from the options given below : (1) (a), (o), (c}, (d) (2) c), @), {b), (d) (3) (b), (0), d), (a) (4) ®b), @), (0), (d Ans. (1) For class 12th pass students Here's your chance torankup in NEET (UG) 2027 Join ALLEN'’s LEADER COURSE Online Courses EErmsa & Classroom Courses 2 25 sune'26 (Q) 000000",
+    "sourceText": "134. Arrange the following elements in descending order of their contribution to percentage weight of the human body. (a) Oxygen {b) Carbon {(c) Hydrogen {d) Nitrogen Choose the correct answer from the options given below : (1) (a), (o), (c}, (d) (2) c), @), {b), (d) (3) (b), (0), d), (a) (4) ®b), @), (0), (d Ans. (1) For class 12th pass students Here's your chance torankup in NEET (UG) 2027 Join ALLEN'’s LEADER COURSE Online Courses EErmsa & Classroom Courses 2 25 sune'26 (Q) 000000 Ans. (1)",
     "isBonus": false,
     "reviewStatus": "Source image verified; text transcription pending final academic review."
   },
@@ -6578,7 +6578,7 @@
     "sourceImages": [
       "/images/neet/questions/q137.webp"
     ],
-    "sourceText": "137. The inactive form of Bt toxin is converted to the active form in the insect gut . (1) due to alkaline pH (2) due to acidic pH (3) by proteases (4) by nucleases Ans. (1) ALLEN 2 vie & ~ RY : ht 1 T. | IY y _ I. i» | - { Enrol Now Ma",
+    "sourceText": "137. The inactive form of Bt toxin is converted to the active form in the insect gut . (1) due to alkaline pH (2) due to acidic pH (3) by proteases (4) by nucleases Ans. (1) ALLEN 2 vie & ~ RY : ht 1 T. | IY y _ I. i» | - { Enrol Now Ma Ans. (1)",
     "isBonus": false,
     "reviewStatus": "Source image verified; text transcription pending final academic review."
   },

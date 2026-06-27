@@ -60,7 +60,7 @@ export async function generateMetadata({
   }
 
   const title = `NEET 2026 ${question.subject} Question ${question.questionNumber}`;
-  const description = `${question.question.slice(0, 145)} Read the supplied answer marker, source image and review note.`;
+  const description = `${question.question.slice(0, 145)} Read the NTA provisional answer marker, source image and review note.`;
   const canonical = `https://www.ilmalink.com/neet/questions/${question.slug}`;
 
   return {
@@ -111,7 +111,7 @@ export default async function NeetQuestionDetailPage({
       question.correctOption || question.isBonus
         ? {
             "@type": "Answer",
-            text: `Supplied booklet marker: ${question.correctAnswer}`,
+            text: `NTA provisional answer marker: ${question.correctAnswer}`,
           }
         : undefined,
   };
@@ -144,7 +144,7 @@ export default async function NeetQuestionDetailPage({
               Question {question.questionNumber}
             </>
           }
-          subtitle="Read the question, supplied answer marker, source image and current academic review note."
+          subtitle="Read the question, NTA provisional answer marker, source image and current academic review note."
         />
 
         <NeetPageFrame>
@@ -211,7 +211,12 @@ export default async function NeetQuestionDetailPage({
                 </h2>
                 <ol className="mt-3 grid gap-2 sm:grid-cols-2">
                   {question.options.map((option) => {
-                    const isAnswer = option.label === question.correctOption;
+                    const acceptedOptions =
+  question.correctOption && question.correctOption !== "Drop"
+    ? question.correctOption.split(",").map((value) => value.trim())
+    : [];
+
+const isAnswer = acceptedOptions.includes(option.label);
 
                     return (
                       <li
@@ -243,7 +248,7 @@ export default async function NeetQuestionDetailPage({
                   <CheckCircle2 className="mt-0.5 h-6 w-6 shrink-0 text-[#08A776]" />
                   <div>
                     <h2 className="font-black text-[#075F45]">
-                      Supplied answer marker
+                      NTA provisional answer marker
                     </h2>
                     <p className="mt-1 text-sm font-bold leading-6 text-[#17634F]">
                       {question.correctAnswer}

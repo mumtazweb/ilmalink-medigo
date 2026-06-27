@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     "/api/neet-answer-key-download",
     request.url
   );
-  protectedDownload.searchParams.set("resource", "question-paper-analysis");
+  protectedDownload.searchParams.set("resource", "all-codes-key");
 
   return Response.redirect(protectedDownload, 307);
 }

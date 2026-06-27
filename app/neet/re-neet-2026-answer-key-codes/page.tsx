@@ -28,9 +28,9 @@ import { buildBreadcrumbSchema } from "../../lib/schema";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Re-NEET 2026 Answer Key Codes 50, 60, 70 & 80",
+  title: "Re-NEET 2026 NTA Provisional Official Answer Key Codes 50, 60, 70 & 80",
   description:
-    "Read the complete Re-NEET 2026 answer-key table for Paper Codes 50, 60, 70 and 80, covering Questions 1 to 180 with bonus and multiple-answer entries.",
+    "Read the NTA provisional official Re-NEET 2026 answer-key table for Paper Codes 50, 60, 70 and 80, covering Questions 1 to 180 with Drop and multiple-answer entries.",
   alternates: {
     canonical:
       "https://www.ilmalink.com/neet/re-neet-2026-answer-key-codes",
@@ -41,29 +41,30 @@ export const metadata: Metadata = {
     "Re-NEET 2026 Code 70 answer key",
     "Re-NEET 2026 Code 80 answer key",
     "NEET 2026 all paper code answer key",
+    "NTA provisional official answer key",
   ],
   openGraph: {
-    title: "Re-NEET 2026 Code-wise Answer Keys | ILMALINK MEDIGO",
+    title: "NTA Provisional Official Answer Key | Re-NEET 2026 Codes 50, 60, 70 & 80",
     description:
-      "Complete browser-readable answer tables for Re-NEET 2026 Paper Codes 50, 60, 70 and 80.",
+      "Official provisional answer-key tables for Re-NEET 2026 Paper Codes 50, 60, 70 and 80 in browser-readable format.",
     url: "https://www.ilmalink.com/neet/re-neet-2026-answer-key-codes",
     type: "article",
   },
 };
 
 const specialAnswers = [
-  { code: "50", text: "Question 26: Bonus; Question 38: Options 2 and 3" },
-  { code: "60", text: "Question 36: Options 1 and 4; Question 43: Bonus" },
-  { code: "70", text: "Question 22: Options 3 and 4; Question 40: Bonus" },
-  { code: "80", text: "Question 2: Bonus; Question 5: Options 1 and 2" },
+  { code: "50", text: "Question 26: Drop; Question 38: Options 2 and 3" },
+  { code: "60", text: "Question 36: Options 1 and 4; Question 43: Drop" },
+  { code: "70", text: "Question 22: Options 3 and 4; Question 40: Drop" },
+  { code: "80", text: "Question 2: Drop; Question 5: Options 1 and 2" },
 ] as const;
 
 const datasetSchema = {
   "@context": "https://schema.org",
   "@type": "Dataset",
-  name: "Re-NEET 2026 Answer Keys for Paper Codes 50, 60, 70 and 80",
+  name: "NTA Provisional Official Re-NEET 2026 Answer Keys for Paper Codes 50, 60, 70 and 80",
   description:
-    "Question-number and answer-key table for 180 questions across Re-NEET 2026 Paper Codes 50, 60, 70 and 80.",
+    "NTA provisional official question-number and answer-key table for 180 questions across Re-NEET 2026 Paper Codes 50, 60, 70 and 80.",
   url: "https://www.ilmalink.com/neet/re-neet-2026-answer-key-codes/",
   creator: {
     "@type": "Organization",
@@ -75,7 +76,7 @@ const datasetSchema = {
   variableMeasured: RE_NEET_2026_PAPER_CODES.map((code) => ({
     "@type": "PropertyValue",
     name: `Paper Code ${code} answer`,
-    description: `Supplied answer marker for Questions 1 to 180 in Paper Code ${code}.`,
+    description: `NTA provisional official answer marker for Questions 1 to 180 in Paper Code ${code}.`,
   })),
   isAccessibleForFree: true,
 };
@@ -109,10 +110,10 @@ export default function ReNeet2026CodeAnswerKeysPage() {
           title={
             <>
               Re-NEET 2026{" "}
-              <span className="text-[#009C95]">Code-wise Answer Keys</span>
+              <span className="text-[#009C95]">NTA Provisional Official Answer Key</span>
             </>
           }
-          subtitle="Read all 180 answer entries for Paper Codes 50, 60, 70 and 80 directly in your browser."
+          subtitle="Read the NTA provisional official answer entries for Paper Codes 50, 60, 70 and 80 directly in your browser."
         />
 
         <NeetPageFrame>
@@ -139,15 +140,15 @@ export default function ReNeet2026CodeAnswerKeysPage() {
                 <ShieldAlert className="mt-0.5 h-6 w-6 shrink-0 text-[#C78613]" />
                 <div>
                   <h2 className="font-black text-[#6E5319]">
-                    What the supplied PDF contains
+                    What the NTA provisional official PDF contains
                   </h2>
                   <p className="mt-1 text-sm font-semibold leading-6 text-[#755F2A]">
-                    The supplied {reNeet2026CodeAnswerSource.pageCount}-page PDF
-                    contains answer-key tables only. It provides question
+                    The NTA provisional official {reNeet2026CodeAnswerSource.pageCount}-page
+                    PDF contains answer-key tables only. It provides question
                     numbers and answer markers for four paper codes, not the
-                    full question text. “B” means Bonus. This is a
-                    student-reference compilation, not an official NTA answer
-                    key.
+                    full question text. “Drop” means the question is dropped;
+                    multiple accepted answers are shown with comma-separated
+                    options.
                   </p>
                 </div>
               </div>
@@ -155,8 +156,9 @@ export default function ReNeet2026CodeAnswerKeysPage() {
 
             <NeetDownloadCard
               resource="codes-50-60-70-80"
-              title="Download All Question Answer Keys - Codes 50, 60, 70 & 80"
-              actionLabel="Download Code-wise PDF"
+              title="Download NTA Provisional Official Answer Key"
+              description="Official provisional answer key PDF covering Paper Codes 50, 60, 70 and 80 in a single download."
+              actionLabel="Download PDF"
             />
 
             <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -192,11 +194,11 @@ export default function ReNeet2026CodeAnswerKeysPage() {
                     id="complete-answer-table-title"
                     className="text-xl font-black text-[#082A62]"
                   >
-                    Complete Questions 1-180 Answer Table
+                    NTA Provisional Official Questions 1-180 Answer Table
                   </h2>
                   <p className="mt-1 text-xs font-semibold leading-5 text-[#60738F] sm:text-sm">
-                    Compare the supplied answer marker for the same question
-                    number across all four paper codes.
+                    Compare the NTA provisional official answer marker for
+                    the same question number across all four paper codes.
                   </p>
                 </div>
               </div>
@@ -204,7 +206,7 @@ export default function ReNeet2026CodeAnswerKeysPage() {
               <div className="mt-4 overflow-x-auto rounded-xl border border-[#DCE5EF]">
                 <table className="w-full min-w-[620px] border-collapse text-center text-xs sm:text-sm">
                   <caption className="sr-only">
-                    Re-NEET 2026 answer keys for Paper Codes 50, 60, 70 and 80
+                    NTA provisional official Re-NEET 2026 answer keys for Paper Codes 50, 60, 70 and 80
                   </caption>
                   <thead>
                     <tr className="bg-[#0B4AA2] text-white">
@@ -246,7 +248,7 @@ export default function ReNeet2026CodeAnswerKeysPage() {
                                   : "text-[#31577F]"
                               }`}
                             >
-                              {answer === "B" ? "Bonus (B)" : answer}
+                              {answer === "B" || answer === "Drop" ? "Drop" : answer}
                             </td>
                           );
                         })}

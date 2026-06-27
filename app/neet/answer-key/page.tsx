@@ -24,9 +24,9 @@ import { buildBreadcrumbSchema } from "../../lib/schema";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Re-NEET 2026 Answer Key PDF - Codes 50, 60, 70 & 80",
+  title: "Re-NEET 2026 NTA Provisional Answer Key - Codes 50, 60, 70 & 80",
   description:
-    "Read the Re-NEET 2026 answer keys for paper Codes 50, 60, 70 and 80, and download the protected code-wise or question-and-answer PDFs.",
+    "Download the official NTA provisional answer key PDF for Re-NEET UG 2026 Paper Codes 50, 60, 70 and 80, and read the code-wise answer table online.",
   alternates: {
     canonical: "https://www.ilmalink.com/neet/answer-key",
   },
@@ -54,11 +54,12 @@ export default function NeetAnswerKeyPage() {
           ]}
           title={
             <>
-              Re-NEET 2026 <span className="text-[#009C95]">Answer Key</span>{" "}
-              Downloads
+              Re-NEET 2026{" "}
+              <span className="text-[#009C95]">NTA Provisional</span> Answer
+              Key
             </>
           }
-          subtitle="Choose the earlier question-and-answer booklet or the complete code-wise answer-key tables for Paper Codes 50, 60, 70 and 80."
+          subtitle="Download the official NTA provisional answer key PDF or read the code-wise online table for Re-NEET UG 2026 Paper Codes 50, 60, 70 and 80."
         />
 
         <NeetPageFrame>
@@ -66,28 +67,23 @@ export default function NeetAnswerKeyPage() {
             <section id="downloads" className="scroll-mt-24 space-y-3">
               <div>
                 <p className="text-xs font-black uppercase tracking-[.14em] text-[#1769E8]">
-                  Two protected downloads
+                  Official PDF + online code table
                 </p>
                 <h2 className="mt-1 text-2xl font-black text-[#082A62]">
-                  Select the answer-key resource you need
+                  Download or read the answer key
                 </h2>
                 <p className="mt-2 max-w-3xl text-sm font-semibold leading-6 text-[#526985]">
-                  PDF downloads require a verified free student profile. The
-                  extracted answer-key tables remain readable in the browser.
+                  PDF download requires a verified free student profile. The
+                  online code-wise answer table is available as normal browser
+                  text for quick checking.
                 </p>
               </div>
 
               <NeetDownloadCard
-                title="Download Questions with Supplied Answers"
-                description="Earlier Re-NEET 2026 booklet containing question text and supplied answer markers. The source does not identify a specific Paper Code."
-                actionLabel="Download Questions PDF"
-              />
-
-              <NeetDownloadCard
                 resource="codes-50-60-70-80"
-                title="Download All Question Answer Keys - Codes 50, 60, 70 & 80"
-                description="Complete answer-key tables for all four Re-NEET 2026 paper codes, covering Questions 1 to 180. B means Bonus."
-                actionLabel="Download All Code Keys"
+                title="Download NTA Provisional Official Answer Key PDF"
+                description="Official NTA provisional answer key PDF for Re-NEET UG 2026 Paper Codes 50, 60, 70 and 80."
+                actionLabel="Download PDF"
               />
 
               <Link
@@ -99,11 +95,11 @@ export default function NeetAnswerKeyPage() {
                 </span>
                 <span>
                   <strong className="block text-base text-[#082A62]">
-                    Read Codes 50, 60, 70 and 80 Answer Keys Online
+                    Read Code-wise Answer Key Online
                   </strong>
                   <span className="mt-1 block text-xs font-semibold leading-5 text-[#526985]">
-                    All 180 answer rows are available as normal browser text,
-                    including bonus and multiple-answer entries.
+                    View all 180 answer rows for Codes 50, 60, 70 and 80,
+                    including Drop entries and multiple accepted options.
                   </span>
                 </span>
                 <ArrowRight className="h-5 w-5 text-[#087B59] transition group-hover:translate-x-1" />
@@ -118,10 +114,10 @@ export default function NeetAnswerKeyPage() {
                     Source and verification note
                   </h2>
                   <p className="mt-1 text-sm font-semibold leading-6 text-[#755F2A]">
-                    These are supplied student-reference resources and are not
-                    presented as an official NTA answer key. The code-wise PDF
-                    contains question numbers and answer keys only, not full
-                    question text. Check the latest official notice separately.
+                    This page is based on the NTA Provisional Answer Key for
+                    Re-NEET UG 2026. Since it is provisional, students should
+                    also check the latest official NTA notice before making any
+                    final calculation or objection decision.
                   </p>
                 </div>
               </div>
@@ -132,7 +128,7 @@ export default function NeetAnswerKeyPage() {
                 href="/neet/questions"
                 icon={Search}
                 title="Search Questions"
-                text="Find question text, options and supplied answers."
+                text="Find question text, options and answer references."
               />
               <ResourceLink
                 href="/neet/re-neet-2026-questions"
@@ -162,10 +158,10 @@ export default function NeetAnswerKeyPage() {
                 </h2>
               </div>
               <ul className="mt-3 grid gap-2 text-sm font-semibold leading-6 text-[#405779] sm:grid-cols-2">
-                <li>Earlier question-and-answer study booklet</li>
+                <li>Official NTA provisional answer key PDF download</li>
                 <li>Code 50 answers for Questions 1-180</li>
                 <li>Code 60 and Code 70 answers for Questions 1-180</li>
-                <li>Code 80 answers, bonus entries and multiple answers</li>
+                <li>Code 80 answers, Drop entries and multiple accepted options</li>
               </ul>
             </section>
 

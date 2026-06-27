@@ -19,22 +19,10 @@ function isDownloadResource(
 }
 
 function readProtectedPdf(resource: NeetAnswerKeyDownloadResource) {
-  if (resource === "question-paper-analysis") {
-    return fs.readFile(
-      path.join(
-        process.cwd(),
-        "private-assets",
-        "re-neet-2026-questions-with-answers-ilmalink.pdf"
-      )
-    );
-  }
+  const metadata = NEET_ANSWER_KEY_DOWNLOADS[resource];
 
   return fs.readFile(
-    path.join(
-      process.cwd(),
-      "private-assets",
-      "re-neet-2026-answer-key-codes-50-60-70-80.pdf"
-    )
+    path.join(process.cwd(), "private-assets", metadata.fileName)
   );
 }
 

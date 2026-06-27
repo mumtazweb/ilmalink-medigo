@@ -174,7 +174,7 @@ export function NeetQuickActionCard({
 
 export function NeetDownloadCard({
   className = "",
-  resource = "question-paper-analysis",
+  resource = "codes-50-60-70-80",
   title,
   description,
   actionLabel = "Download PDF",

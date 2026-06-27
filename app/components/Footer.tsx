@@ -339,24 +339,24 @@ export default function Footer() {
             <Link
               href="/"
               className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white p-1.5 shadow-sm"
-              aria-label="ILMALINK MEDIGO home"
+              aria-label="ilmaLink Medigo home"
             >
               <img src="/logoimage.svg" alt="" className="h-full w-full object-contain" />
             </Link>
            <div className="min-w-0">
   <p className="text-base font-semibold tracking-wide text-white">
-    ILMALINK MEDIGO <span className="text-emerald-200">by ilmaLink</span>
+    ilmaLink Medigo <span className="text-emerald-200">by ilmaLink</span>
   </p>
   <p className="mt-1 max-w-xl text-sm leading-5 text-slate-400">
-    ILMALINK MEDIGO guides Indian students for MBBS Abroad, MBBS India, NEET
+    ilmaLink Medigo guides Indian students for MBBS Abroad, MBBS India, NEET
     counselling, scholarships, education loans and medical admission documentation
     through transparent support from Kolkata, Bengaluru and Mumbai contact points.
   </p>
   <p className="mt-2 max-w-xl text-xs leading-5 text-slate-500">
-    ILMALINK is the main brand behind ILMALINK MEDIGO. ILMALINK, ilmalink, ilmaLink,
-    ilmalink.com and ILMALINK MEDIGO refer to the same ILMALINK education consultancy
-    entity. ILMALINK MEDIGO is the MBBS India, MBBS abroad and NEET guidance extension
-    of ILMALINK.
+    ilmalink is the main brand behind ilmaLink Medigo. ilmalink, ilmalink, ilmaLink,
+    ilmalink.com and ilmaLink Medigo refer to the same ilmalink education consultancy
+    entity. ilmaLink Medigo is the MBBS India, MBBS abroad and NEET guidance extension
+    of ilmalink.
   </p>
 </div>
           </div>
@@ -565,7 +565,7 @@ export default function Footer() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`Follow ILMALINK on ${social.label}`}
+                    aria-label={`Follow ilmalink on ${social.label}`}
                     className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/[0.03] text-slate-300 transition hover:border-emerald-300/50 hover:bg-emerald-300/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200"
                   >
                     <Icon className="h-4 w-4" />
@@ -577,11 +577,11 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col gap-1 pt-3 text-xs leading-5 text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 ILMALINK MEDIGO. All Rights Reserved.</p>
+          <p>© 2026 ilmaLink Medigo. All Rights Reserved.</p>
           <p>
             Developed and guided by{" "}
             <Link href="/" className="font-semibold text-slate-300 transition hover:text-white">
-              ILMALINK
+              ilmalink
             </Link>
             .
           </p>
