@@ -177,7 +177,7 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
             }
           }}
           disabled={uploading}
-          className="hidden"
+          className="sr-only"
         />
 
         <button
@@ -342,3 +342,4 @@ export default function ImageUploader({ images, onImagesChange }: ImageUploaderP
     </div>
   );
 }
+

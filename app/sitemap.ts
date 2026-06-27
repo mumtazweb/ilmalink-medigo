@@ -30,6 +30,7 @@ const staticRoutes = [
   "/about",
   "/contact",
   "/data-methodology",
+  "/geo-profile",
   "/official-links",
   "/site-hierarchy",
   "/blogs",
@@ -152,6 +153,7 @@ function routePriority(route: string) {
   if (route === "/about") return 0.94;
   if (route === "/contact") return 0.9;
   if (route === "/trust-center") return 0.9;
+  if (route === "/geo-profile") return 0.72;
   if (route === "/official-links") return 0.86;
   if (route === "/data-methodology") return 0.84;
 

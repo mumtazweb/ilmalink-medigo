@@ -426,11 +426,11 @@ export default function Navbar() {
 
                   {/* Brand Text Stack - Desktop */}
                   <div className="hidden flex-col gap-0.5 xl:flex">
-                    <span className="font-[family-name:var(--font-plus-jakarta)] text-lg font-extrabold tracking-tight text-[#081B35] leading-tight">
+                    <span className="font-[family-name:var(--font-plus-jakarta)] text-xl font-extrabold tracking-tight text-[#081B35] leading-tight">
                       ilmaLink
                     </span>
-                    <span className="font-[family-name:var(--font-plus-jakarta)] text-lg font-extrabold tracking-tight text-[#00C896] leading-tight">
-                      Medigo service line
+                    <span className="font-[family-name:var(--font-plus-jakarta)] text-xl font-extrabold tracking-tight text-[#00C896] leading-tight">
+                      Medigo
                     </span>
                     <p className="text-[10px] font-medium text-slate-500 tracking-wide mt-0.5">
                       Global Medical Education
@@ -439,11 +439,11 @@ export default function Navbar() {
 
                   {/* Brand Text Stack - Mobile & Tablet */}
                   <div className="flex min-w-0 flex-col gap-0.5 overflow-hidden xl:hidden">
-                    <span className="min-w-0 truncate whitespace-nowrap font-[family-name:var(--font-plus-jakarta)] text-xs sm:text-sm font-extrabold leading-none">
+                    <span className="min-w-0 truncate whitespace-nowrap font-[family-name:var(--font-plus-jakarta)] text-xm sm:text- font-extrabold leading-none">
                       <span className="text-[#081B35]">ilmaLink</span>{" "}
-                      <span className="text-[#00C896]">Medigo service line</span>
+                      <span className="text-[#00C896]">Medigo </span>
                     </span>
-                    <p className="truncate text-[8px] sm:text-[9px] font-medium leading-tight text-slate-500">
+                    <p className="truncate text-[9px] sm:text-[10px] font-medium leading-tight text-slate-500">
                       Global Medical Education
                     </p>
                   </div>

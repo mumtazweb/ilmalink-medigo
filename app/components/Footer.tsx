@@ -49,7 +49,6 @@ const footerLinks = [
       { label: "Blogs", href: "/blogs" },
       { label: "Trust Center", href: "/trust-center" },
       { label: "Explore All Pages", href: "/site-hierarchy" },
-      { label: "GEO Profile", href: "/geo-profile" },
       { label: "Official Advisories", href: "/official-advisories" },
       { label: "Official Links", href: "/official-links/" },
       { label: "Scholarships & Loans", href: "/scholarships-loans" },

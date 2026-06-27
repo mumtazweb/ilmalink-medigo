@@ -374,6 +374,10 @@ function isUsefulSectionHeading(value, pageTitle) {
 }
 
 function routeContextLabel(url, pageTitle) {
+  if (url === "/geo-profile") {
+    return "Official Entity Reference";
+  }
+
   const parts = url.split("/").filter(Boolean);
   const lastPart = parts.at(-1);
   if (!lastPart) return "Home";
@@ -735,6 +739,8 @@ async function buildRouteEntries() {
       const description =
         extractMetadataField(source, "description") ||
         sentenceExcerpt(content);
+      const routeTag =
+        url === "/geo-profile" ? routeContextLabel(url, title) : titleCase(url);
       const pageEntry = {
         id: `page-${slugify(url || "home") || "home"}`,
         title,
@@ -743,7 +749,7 @@ async function buildRouteEntries() {
         category: group === "Destinations" ? "Destinations" : "Pages",
         group,
         type: entryTypeForGroup(group),
-        tags: [group, titleCase(url)],
+        tags: [group, routeTag],
         content,
         priority: group === "Destinations" ? 70 : 55,
       };

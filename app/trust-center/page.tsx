@@ -7,9 +7,9 @@ import Navbar from "../components/navbar";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Trust Center | Alerts, Links, GEO and Advisories | ilmaLink",
+  title: "Trust Center | Alerts, Links and Advisories | ilmaLink",
   description:
-    "Trust Center hub for student safety pages: Alert, Official Links, GEO Profile and Official Advisories.",
+    "Trust Center hub for student safety pages: Alert, Official Links and Official Advisories.",
   alternates: {
     canonical: "https://www.ilmalink.com/trust-center",
   },
@@ -25,11 +25,6 @@ const trustLinks = [
     label: "Official Links",
     href: "/official-links",
     description: "Verified brand domains and social profiles.",
-  },
-  {
-    label: "GEO Profile",
-    href: "/geo-profile",
-    description: "Entity profile and knowledge graph signals.",
   },
   {
     label: "Official Advisories",

@@ -1489,7 +1489,7 @@ export default function HomeHeroClient() {
                 </div>
               </div>
               <p className="mb-1 mt-3 text-center text-[9px] font-small leading-none tracking-wide text-white/45">
-                These figures are compiled from official sources for student information & guidance.
+                (These figures are compiled from official sources for student guidance)
               </p>
             </div>
 
@@ -2373,17 +2373,7 @@ export default function HomeHeroClient() {
                 <Workflow className="h-4 w-4" />
                 Your admission journey
               </p>
-              <h2 className="mx-auto mt-3 max-w-3xl text-[25px] font-black leading-[1.08] tracking-[-0.04em] text-[#071B44] sm:text-4xl">
-                One support system.{" "}
-                <span className="bg-gradient-to-r from-[#0F4CFF] via-cyan-500 to-[#00A876] bg-clip-text text-transparent">
-                  Two smart pathways.
-                </span>
-              </h2>
-              <p className="mx-auto mt-2 max-w-3xl text-[11px] font-medium leading-5 text-slate-600 sm:text-sm">
-                The Medigo service line of ilmalink helps identify whether India or Abroad is the
-                stronger fit, then supports each official step from profile
-                analysis to college joining.
-              </p>
+            
 
               <button
                 type="button"

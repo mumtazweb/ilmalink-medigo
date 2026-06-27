@@ -14,6 +14,7 @@ Allow: /official-advisories/
 Allow: /about/
 Allow: /contact/
 Allow: /data-methodology/
+Allow: /geo-profile/
 Allow: /official-links/
 Allow: /site-hierarchy/
 Allow: /portal/signup/

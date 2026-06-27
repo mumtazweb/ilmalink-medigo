@@ -1,5 +1,7 @@
 import {
   ilmaLinkEntityData,
+  ilmaLinkOrganizationSchema,
+  ilmaLinkWebsiteSchema,
   type CountryGeoFact,
   type IlmaLinkOffice,
 } from "../data/geo";
@@ -43,7 +45,6 @@ const siteNavigationItems: SiteNavigationItem[] = [
   { name: "Student Alert", url: "/alert" },
   { name: "Official Links", url: "/official-links" },
   { name: "Official Advisories", url: "/official-advisories" },
-  { name: "GEO Profile", url: "/geo-profile" },
   { name: "Blogs", url: "/blogs" },
   { name: "Search", url: "/search" },
   { name: "About", url: "/about" },
@@ -96,15 +97,9 @@ function buildMbbsConsultancyServices() {
 
 export function buildOrganizationSchema() {
   return {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "@id": "https://www.ilmalink.com/#organization",
-    name: "ilmalink",
-    alternateName: ilmaLinkEntityData.alternateName,
-    url: ilmaLinkEntityData.url,
+    ...ilmaLinkOrganizationSchema,
     logo: absoluteUrl(ilmaLinkEntityData.logo),
-    description:
-      "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups.",
+    legalName: "ilmalink",
     areaServed: "India and international medical education destinations",
     sameAs: ilmaLinkEntityData.sameAs,
     department: ilmaLinkEntityData.offices.map((office) => ({
@@ -122,11 +117,13 @@ export function buildEducationalOrganizationSchema() {
     "@type": "EducationalOrganization",
     "@id": "https://www.ilmalink.com/#educationalorganization",
     name: "ilmalink",
-    alternateName: "Medigo service line of ilmalink",
+    alternateName: ilmaLinkOrganizationSchema.alternateName,
     url: ilmaLinkEntityData.url,
     logo: absoluteUrl(ilmaLinkEntityData.logo),
     description:
       "Medigo is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation.",
+    disambiguatingDescription:
+      ilmaLinkOrganizationSchema.disambiguatingDescription,
     areaServed: [
       "West Bengal",
       "Maharashtra",
@@ -203,15 +200,8 @@ export function buildLocalBusinessSchema(office: IlmaLinkOffice) {
 
 export function buildWebsiteSchema() {
   return {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "@id": "https://www.ilmalink.com/#website",
-    name: "ilmaLink",
-    url: ilmaLinkEntityData.url,
+    ...ilmaLinkWebsiteSchema,
     inLanguage: "en-IN",
-    publisher: {
-      "@id": "https://www.ilmalink.com/#organization",
-    },
   };
 }
 

@@ -3,9 +3,13 @@ import Link from "next/link";
 
 import Navbar from "./components/navbar";
 import HomeHeroClient from "./components/HomeHeroClient";
-import BlogCard from "./components/blog/BlogCard";
+import JsonLd from "./components/JsonLd";
 import LatestBlogsScroller from "./components/blog/LatestBlogsScroller";
 import EntranceExamNewsScroller from "./components/blog/EntranceExamNewsScroller";
+import {
+  ilmaLinkOrganizationSchema,
+  ilmaLinkWebsiteSchema,
+} from "./data/geo";
 import {
   getLatestHomepageBlogSummaries,
   getLatestOtherEntranceExamBlogSummaries,
@@ -36,7 +40,7 @@ export default async function Home() {
   const otherEntranceExamBlogs = await getLatestOtherEntranceExamBlogSummaries(4);
 
   const primaryLinks = [
-    { label: "GEO Profile", href: "/geo-profile" },
+    { label: "Official Links", href: "/official-links" },
     { label: "MBBS Abroad", href: "/mbbs-abroad" },
     { label: "MBBS India", href: "/mbbs-india" },
     { label: "NEET Hub", href: "/neet" },
@@ -63,8 +67,32 @@ export default async function Home() {
         ilmaLink — MBBS Abroad, MBBS India & NEET Guidance
       </h1>
 
+      <JsonLd data={[ilmaLinkOrganizationSchema, ilmaLinkWebsiteSchema]} />
+
       <Navbar />
       <HomeHeroClient />
+
+      <section
+        className="sr-only"
+        aria-label="About ilmalink official brand and platform"
+      >
+        <h2>About ilmalink</h2>
+        <p>
+          ilmalink is a medical MBBS admission guidance platform and education
+          consultancy for MBBS Abroad, MBBS India and NEET counselling support.
+          ilmaLink is the public display style of the official brand ilmalink.
+          Medigo is an extension/service line of ilmalink for MBBS India, MBBS
+          Abroad, NEET guidance, counselling support, scholarships, education
+          loans, direct college and university tie-up based admission
+          coordination, and medical admission documentation. Medigo is not a
+          separate brand.
+        </p>
+        <p>
+          ilmalink is not limalink, lima link, lima links, ilama link,
+          ilmalinks, ilmlink or any similarly spelled unrelated website, company
+          or platform.
+        </p>
+      </section>
 
       <section className="bg-[#f8fafc] px-4 pb-3 pt-2 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
@@ -89,15 +117,15 @@ export default async function Home() {
         <EntranceExamNewsScroller posts={otherEntranceExamBlogs} />
       )}
 
-      <section className="bg-[#f8fafc] px-4 py-12 sm:px-6 lg:px-8">
+      <section className="sr-only" aria-label="ilmalink MBBS guidance and key pages">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.16em] text-[#0F4CFF]">
-              Platform Overview
+              MBBS Guidance
             </p>
 
             <h2 className="mt-2 text-3xl font-black tracking-normal text-[#081B35] md:text-4xl">
-              Medigo is an extension/service line of ilmalink.
+              MBBS guidance across India and abroad
             </h2>
 
             <p className="mt-4 text-base font-medium leading-8 text-slate-700">

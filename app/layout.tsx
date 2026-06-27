@@ -8,7 +8,11 @@ import FloatingContactButton from "./components/FloatingContactButton";
 import JsonLd from "./components/JsonLd";
 import NeetFloatingPopup from "./components/NeetFloatingPopup";
 import UniversalTranslator from "./components/UniversalTranslator";
-import { ilmaLinkEntityData } from "./data/geo";
+import {
+  ilmaLinkEntityData,
+  ilmaLinkOrganizationSchema,
+  ilmaLinkWebsiteSchema,
+} from "./data/geo";
 import {
   buildEducationalOrganizationSchema,
   buildGuidanceDisclaimerSchema,
@@ -36,74 +40,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
   display: "swap",
 });
-
-const brandOrganizationSchema = {
-  "@context": "https://schema.org",
-  "@type": ["Organization", "EducationalOrganization"],
-  "@id": "https://www.ilmalink.com/#organization",
-  name: "ilmalink",
-  alternateName: [
-    "ilmaLink",
-    "Medigo service line of ilmalink",
-    "ilmalink.com",
-    "ilmaLink Education Consultancy",
-  ],
-  legalName: "ilmalink",
-  url: "https://www.ilmalink.com/",
-  description:
-    "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups. ilmaLink is the public display style of the official brand ilmalink. Medigo is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. Medigo is not a separate brand.",
-  slogan: "Student-first MBBS admission guidance for Indian students.",
-  areaServed: [
-    {
-      "@type": "Country",
-      name: "India",
-    },
-    {
-      "@type": "Place",
-      name: "Global MBBS abroad destinations",
-    },
-  ],
-  knowsAbout: [
-    "ilmaLink",
-    "Medigo service line of ilmalink",
-    "MBBS Abroad",
-    "MBBS in India",
-    "NEET Guidance",
-    "NEET UG Counselling",
-    "Medical Admission Counselling",
-    "Medical University Verification",
-    "FMGE",
-    "NMC FMGL",
-    "WDOMS Verification",
-    "Education Loans",
-    "Scholarships",
-    "MBBS in Uzbekistan",
-    "MBBS in Georgia",
-    "MBBS in Bangladesh",
-    "MBBS in Kyrgyzstan",
-  ],
-  brand: {
-    "@type": "Brand",
-    "@id": "https://www.ilmalink.com/#brand",
-    name: "ilmalink",
-    alternateName: ["Medigo service line of ilmalink", "ilmalink", "ilmaLink", "ilmalink.com"],
-  },
-};
-
-const brandWebsiteSchema = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "@id": "https://www.ilmalink.com/#website",
-  name: "ilmaLink",
-  alternateName: ["Medigo service line of ilmalink", "ilmalink", "ilmaLink", "ilmalink.com"],
-  url: "https://www.ilmalink.com/",
-  publisher: {
-    "@id": "https://www.ilmalink.com/#organization",
-  },
-  inLanguage: "en-IN",
-  description:
-    "Official website of ilmalink, a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities.",
-};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.ilmalink.com"),
@@ -202,8 +138,8 @@ export default function RootLayout({
 
         <JsonLd
           data={[
-            brandOrganizationSchema,
-            brandWebsiteSchema,
+            ilmaLinkOrganizationSchema,
+            ilmaLinkWebsiteSchema,
             buildOrganizationSchema(),
             buildEducationalOrganizationSchema(),
             buildWebsiteSchema(),

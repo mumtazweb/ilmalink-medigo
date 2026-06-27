@@ -61,7 +61,6 @@ const hierarchyGroups = [
       { label: "Trust Center Hub", href: "/trust-center" },
       { label: "Student Alert", href: "/alert" },
       { label: "Official Links", href: "/official-links" },
-      { label: "GEO Profile", href: "/geo-profile" },
       { label: "Official Advisories", href: "/official-advisories" },
     ],
   },
@@ -95,9 +94,9 @@ const hierarchyGroups = [
   {
     title: "About ilmaLink",
     links: [
-      { label: "GEO Profile Hub", href: "/geo-profile" },
-      { label: "Organization details", href: "/geo-profile" },
-      { label: "Country guidance overview", href: "/geo-profile" },
+      { label: "About ilmaLink", href: "/about" },
+      { label: "Official Links", href: "/official-links" },
+      { label: "Data methodology", href: "/data-methodology" },
     ],
   },
   {

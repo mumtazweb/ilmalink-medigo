@@ -482,6 +482,36 @@ export const ilmaLinkEntityData = {
   ],
 } as const;
 
+export const ilmaLinkOrganizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "@id": "https://www.ilmalink.com/#organization",
+  name: "ilmalink",
+  alternateName: [
+    "ilmaLink",
+    "ilmaLink Medigo",
+    "ilmalink Medigo",
+    "ilmalink.com",
+  ],
+  url: "https://www.ilmalink.com/",
+  description:
+    "ilmalink is a medical MBBS admission guidance platform and education consultancy for MBBS Abroad, MBBS India and NEET counselling support.",
+  disambiguatingDescription:
+    "ilmalink is the official brand. ilmaLink is the public display style. Medigo is an extension/service line of ilmalink and not a separate brand. ilmalink is not limalink, lima link, lima links, ilama link, ilmalinks or ilmlink.",
+} as const;
+
+export const ilmaLinkWebsiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://www.ilmalink.com/#website",
+  name: "ilmalink",
+  alternateName: ["ilmaLink", "ilmalink.com"],
+  url: "https://www.ilmalink.com/",
+  publisher: {
+    "@id": "https://www.ilmalink.com/#organization",
+  },
+} as const;
+
 const commonIndianLicensingNote =
   "Indian students planning to practise in India must satisfy current Indian regulatory requirements, including NEET qualification and future licensing rules applicable at the time.";
 

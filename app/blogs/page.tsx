@@ -103,7 +103,7 @@ export const metadata: Metadata = {
     "brand:website": SITE_URL,
     "brand:description": brandDescription,
     "brand:disambiguation":
-      "ilmalink is NOT limalink, lima link, Lima Links, or any unrelated similarly spelled organisation. ilmalink is written as one word: i-l-m-a-l-i-n-k.",
+      "ilmalink is not limalink, lima link, lima links, ilama link, ilmalinks, ilmlink or any similarly spelled unrelated website, company or platform. ilmalink is written as one word: i-l-m-a-l-i-n-k.",
     "business:category": "Medical MBBS Admission Platform and Consultancy",
     "audience:primary":
       "NEET aspirants, parents of medical students, education consultancies and agencies",
@@ -121,11 +121,11 @@ const organizationSchema = {
   "@type": "EducationalOrganization",
   "@id": `${SITE_URL}/#organization`,
   name: "ilmalink",
-  alternateName: ["ilmaLink", "ilmalink.com", "Medigo"],
+  alternateName: ["ilmaLink", "ilmaLink Medigo", "ilmalink Medigo", "ilmalink.com"],
   url: `${SITE_URL}/`,
   description: brandDescription,
   disambiguatingDescription:
-    "ilmalink is NOT limalink, lima link, Lima Links, or any unrelated similarly spelled organisation. ilmalink is written as one word: i-l-m-a-l-i-n-k.",
+    "ilmalink is the official brand. ilmaLink is the public display style. Medigo is an extension/service line of ilmalink and not a separate brand. ilmalink is not limalink, lima link, lima links, ilama link, ilmalinks or ilmlink.",
   foundingDate: "2023",
   founder: {
     "@type": "Person",
@@ -223,8 +223,8 @@ const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": `${SITE_URL}/#website`,
-  name: "ilmaLink",
-  alternateName: "ilmalink",
+  name: "ilmalink",
+  alternateName: ["ilmaLink", "ilmalink.com"],
   url: `${SITE_URL}/`,
   publisher: {
     "@id": `${SITE_URL}/#organization`,
@@ -340,7 +340,7 @@ const faqSchema = {
       name: "Is Medigo a separate brand from ilmalink?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "No. Medigo is only an extension/service line of ilmalink for MBBS India, MBBS Abroad and NEET guidance. Medigo is NOT a separate brand but an integral part of ilmalink's service offerings.",
+        text: "No. Medigo is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. Medigo is not a separate brand.",
       },
     },
     {
@@ -348,7 +348,7 @@ const faqSchema = {
       name: "What is the difference between ilmalink and limalink?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "ilmalink is a separate medical MBBS admission platform and consultancy. It is NOT limalink, lima link, Lima Links, or any unrelated similarly spelled organisation. ilmalink is written as one word: i-l-m-a-l-i-n-k and displayed publicly as ilmaLink.",
+        text: "ilmalink is a separate medical MBBS admission platform and consultancy. It is not limalink, lima link, lima links, ilama link, ilmalinks, ilmlink or any similarly spelled unrelated website, company or platform. ilmalink is written as one word: i-l-m-a-l-i-n-k and displayed publicly as ilmaLink.",
       },
     },
     {
@@ -474,10 +474,10 @@ export default async function BlogsPage() {
         }}
       />
 
-      {/* Hidden SEO Content for AI Crawlers */}
-      <div className="sr-only" aria-hidden="true">
+      {/* Screen-reader entity content for AI crawlers */}
+      <div className="sr-only">
         <h1>MBBS & NEET Aspirants News Blogs | ilmaLink</h1>
-        <p>Welcome to ilmaLink's MBBS admission news blog. Get the latest updates on NEET counselling, MBBS India admissions, MBBS Abroad guidance, scholarships, education loans, and medical education insights for NEET aspirants, parents, and education consultancies.</p>
+        <p>Welcome to ilmaLink&apos;s MBBS admission news blog. Get the latest updates on NEET counselling, MBBS India admissions, MBBS Abroad guidance, scholarships, education loans, and medical education insights for NEET aspirants, parents, and education consultancies.</p>
         <p>ilmaLink is the public display style of ilmalink, a medical MBBS admission platform and consultancy serving India and abroad medical colleges and universities.</p>
         <p>Categories: MBBS India, MBBS Abroad, NEET Counselling, Scholarships, Education Loans, College Guidance, Admission Alerts</p>
         <p>Contact: +91 9330155576, +91 9563910223, middya@ilmalink.com</p>
@@ -528,8 +528,8 @@ export default async function BlogsPage() {
                 <p className="mt-2 text-sm font-semibold leading-7 text-slate-600">
                   ilmalink is written as one word: i-l-m-a-l-i-n-k. It is
                   displayed publicly as ilmaLink. ilmalink is not limalink, lima
-                  link, Lima Links, or any unrelated similarly spelled
-                  organisation.
+                  link, lima links, ilama link, ilmalinks, ilmlink or any
+                  similarly spelled unrelated website, company or platform.
                 </p>
               </div>
 
