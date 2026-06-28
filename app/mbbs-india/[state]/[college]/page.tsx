@@ -18,11 +18,13 @@ import {
   getMBBSIndiaStateHref,
   getMBBSIndiaStateSlug,
 } from "../../../data/exploreLinks";
+import { getMBBSIndiaFeeStructure } from "../../../data/mbbsIndiaFeeStructure";
 import {
   CutoffTable,
   PriorYearCounsellingNotice,
   SeatMatrixTable,
 } from "../../CounsellingDataTables";
+import { FeeStructureNotice, FeeStructureTable } from "../../FeeStructureTables";
 
 export const dynamic = "force-static";
 export const dynamicParams = false;
@@ -65,10 +67,14 @@ export async function generateMetadata({
   const counsellingLabel = counselling
     ? " Includes 2025 prior-year seat matrix and cutoff data."
     : "";
+  const feeStructure = getMBBSIndiaFeeStructure(college);
+  const feeLabel = feeStructure
+    ? " Includes supplied 2025-26 state and management quota fee details with expected 2026 planning ranges."
+    : "";
 
   return {
     title: `${college.collegeName}: MBBS Seats & Counselling Data`,
-    description: `${college.collegeName} is a ${college.category.toLowerCase()} medical college in ${college.state} with ${formatNumber(college.seatCapacity)} MBBS seats.${counsellingLabel}`,
+    description: `${college.collegeName} is a ${college.category.toLowerCase()} medical college in ${college.state} with ${formatNumber(college.seatCapacity)} MBBS seats.${counsellingLabel}${feeLabel}`,
     alternates: {
       canonical: `${SITE_URL}${getMBBSIndiaCollegeHref(college)}`,
     },
@@ -107,6 +113,7 @@ export default async function MBBSIndiaCollegePage({
   if (!college) notFound();
 
   const counselling = getMBBSIndiaCollegeCounselling2025(college.collegeName);
+  const feeStructure = getMBBSIndiaFeeStructure(college);
   const stateCounselling = getMBBSIndiaStateCounselling2025(college.state);
   const stateGroup = mbbsIndiaCollegesByState.find(
     (group) => group.state === college.state
@@ -237,14 +244,36 @@ export default async function MBBSIndiaCollegePage({
             />
           </div>
 
-          <div className="mt-5 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-            <h2 className="text-xl font-extrabold">Fee status</h2>
-            <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
-              {college.fees === "To be updated"
-                ? "A verified fee figure is not included in this college record."
-                : college.fees}
-            </p>
-          </div>
+          {feeStructure ? (
+            <div className="mt-8">
+              <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[#047857]">
+                MBBS fee structure
+              </p>
+              <h2 className="mt-2 text-3xl font-extrabold">
+                State quota and management quota fees
+              </h2>
+              <p className="mt-3 max-w-4xl text-sm font-medium leading-6 text-slate-600">
+                Supplied 2025-26 values are shown separately by quota, with
+                per-semester amounts, nine-semester tuition totals, and expected
+                2026 planning ranges.
+              </p>
+              <div className="mt-5">
+                <FeeStructureNotice />
+              </div>
+              <div className="mt-5">
+                <FeeStructureTable records={[feeStructure]} showCollege={false} />
+              </div>
+            </div>
+          ) : (
+            <div className="mt-5 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h2 className="text-xl font-extrabold">Fee status</h2>
+              <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
+                {college.fees === "To be updated"
+                  ? "A verified fee figure is not included in this college record."
+                  : college.fees}
+              </p>
+            </div>
+          )}
         </div>
       </section>
 

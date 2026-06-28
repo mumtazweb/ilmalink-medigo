@@ -11,6 +11,14 @@ export type IndiaTopResult = {
   title: string;
   fit: string;
   reason: string;
+  imageSrc: string;
+};
+
+export type IndiaBackupOption = {
+  title: string;
+  fit: string;
+  reason: string;
+  imageSrc: string;
 };
 
 export type CountryMatch = {
@@ -72,29 +80,49 @@ export const domicileStateOptions: FinderOption[] = [
   { label: "Other State", value: "other" },
 ];
 
+const indiaCampusImage = "/home/mbbs-college-finder/india-campus-premium.webp";
+const collegeImage = "/home/mbbs-college-finder/college-campus-premium.webp";
+
 export const indiaTopResults: IndiaTopResult[] = [
   {
-    title: "Government MBBS",
-    fit: "Very High Possibility",
+    title: "AIIMS Kalyani",
+    fit: "Fit Level: 98%",
     reason:
-      "Your rank may fall in a strong range and your domicile state may support counselling possibilities.",
+      "Your rank and domicile are a strong match. Fits your budget well.",
+    imageSrc: indiaCampusImage,
   },
   {
-    title: "Semi-Government / Private MBBS",
-    fit: "Good Backup Option",
-    reason: "Useful as a backup if government allotment does not happen.",
+    title: "R.G. Kar Medical College",
+    fit: "Fit Level: 94%",
+    reason:
+      "Excellent rank match for your domicile and within budget.",
+    imageSrc: collegeImage,
   },
 ];
 
-export const indiaBackupOptions = [
-  "BDS / AYUSH",
-  "Private MBBS Counselling",
-  "Management Quota Route",
-  "Abroad Backup Comparison",
+export const indiaBackupOptions: IndiaBackupOption[] = [
+  {
+    title: "Medical College Kolkata",
+    fit: "Fit Level: 82%",
+    reason: "Strong state counselling backup with practical fee planning.",
+    imageSrc: collegeImage,
+  },
+  {
+    title: "NRS Medical College Kolkata",
+    fit: "Fit Level: 78%",
+    reason: "Useful backup if the top round allotment shifts.",
+    imageSrc: indiaCampusImage,
+  },
+  {
+    title: "Calcutta National Medical College",
+    fit: "Fit Level: 72%",
+    reason: "Relevant backup within the same domicile strategy.",
+    imageSrc: collegeImage,
+  },
 ];
 
 export const indiaImportantLogicNote =
-  "Rank within 35000 generally means government MBBS should be explored first. Budget is not the main deciding factor in this case. Focus on MCC and state counselling strategy.";
+  "If rank is within 30,000, government MBBS becomes the primary route, so budget matters less. Focus on MCC and state counselling strategy.";
 
 export const abroadCountryMatches: CountryMatch[] = [
   {
@@ -125,8 +153,6 @@ export const abroadCountryMatches: CountryMatch[] = [
     imageSrc: "/home/mbbs-college-finder/country-georgia-premium.webp",
   },
 ];
-
-const collegeImage = "/home/mbbs-college-finder/college-campus-premium.webp";
 
 export const abroadCollegeRecommendations: Record<
   MbbsFinderCountry,

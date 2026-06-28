@@ -14,10 +14,12 @@ import {
   getMBBSIndiaStateHref,
   getMBBSIndiaStateSlug,
 } from "../../data/exploreLinks";
+import { getMBBSIndiaFeeStructuresForState } from "../../data/mbbsIndiaFeeStructure";
 import {
   PriorYearCounsellingNotice,
   SeatMatrixTable,
 } from "../CounsellingDataTables";
+import { FeeStructureNotice, FeeStructureTable } from "../FeeStructureTables";
 
 export const dynamic = "force-static";
 export const dynamicParams = false;
@@ -57,10 +59,15 @@ export async function generateMetadata({
   const counsellingLabel = counselling
     ? " with 2025 seat matrix and cutoff reference"
     : "";
+  const hasFeeStructures =
+    getMBBSIndiaFeeStructuresForState(group.state).length > 0;
+  const feeLabel = hasFeeStructures
+    ? " plus private MBBS state and management quota fee structure"
+    : "";
 
   return {
     title: `MBBS Colleges in ${group.state}: Seats & Counselling Data`,
-    description: `Explore ${group.governmentCount} government and ${group.privateCount} private MBBS colleges in ${group.state}, ${formatNumber(group.totalSeats)} seats${counsellingLabel}.`,
+    description: `Explore ${group.governmentCount} government and ${group.privateCount} private MBBS colleges in ${group.state}, ${formatNumber(group.totalSeats)} seats${counsellingLabel}${feeLabel}.`,
     alternates: {
       canonical: `${SITE_URL}${getMBBSIndiaStateHref(group.state)}`,
     },
@@ -81,6 +88,7 @@ export default async function MBBSIndiaStatePage({ params }: StatePageProps) {
 
   const access = getMBBSIndiaAdmissionAccess(group.state, group.privateCount);
   const counselling = getMBBSIndiaStateCounselling2025(group.state);
+  const feeStructures = getMBBSIndiaFeeStructuresForState(group.state);
   const colleges = [...group.governmentColleges, ...group.privateColleges];
   const canonicalUrl = `${SITE_URL}${getMBBSIndiaStateHref(group.state)}`;
   const structuredData = [
@@ -208,6 +216,30 @@ export default async function MBBSIndiaStatePage({ params }: StatePageProps) {
           </div>
         </div>
       </section>
+
+      {feeStructures.length > 0 ? (
+        <section className="px-4 pb-10 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-5">
+              <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[#047857]">
+                Private MBBS fee structure
+              </p>
+              <h2 className="mt-2 text-3xl font-extrabold">
+                {group.state} state and management quota fees
+              </h2>
+              <p className="mt-3 max-w-4xl text-sm font-medium leading-6 text-slate-600">
+                Supplied 2025-26 fee data is split by quota, per-semester
+                amount, nine-semester total tuition, and expected 2026 planning
+                range for private MBBS colleges.
+              </p>
+            </div>
+            <FeeStructureNotice />
+            <div className="mt-5">
+              <FeeStructureTable records={feeStructures} />
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {counselling ? (
         <section className="px-4 pb-10 sm:px-6 lg:px-8">

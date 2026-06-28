@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { type ReactNode, useMemo, useState } from "react";
 import {
@@ -16,6 +15,7 @@ import {
   PlaneTakeoff,
   ShieldCheck,
   Trophy,
+  WalletCards,
 } from "lucide-react";
 
 import type {
@@ -47,42 +47,79 @@ type FinderView =
   | "abroad-countries"
   | "abroad-colleges";
 
+type Tone = "blue" | "teal";
+
 const trustChips = ["India or Abroad", "Budget-based", "Quick guidance"];
+
+const finderStats = [
+  { label: "Countries", value: "20+", icon: Globe2 },
+  { label: "Universities", value: "800+", icon: Building2 },
+  { label: "Students Guided", value: "1L+", icon: GraduationCap },
+  { label: "Years Experience", value: "15+", icon: BadgeCheck },
+];
 
 const pathwayCards = [
   {
     pathway: "india" as const,
     title: "MBBS in India",
-    description:
-      "For India, NEET rank/score, domicile state and budget matter.",
     bullets: ["NEET score/rank", "Domicile state", "Budget"],
-    buttonLabel: "Start India Finder",
     imageSrc: "/home/mbbs-college-finder/india-campus-premium.webp",
     icon: Landmark,
-    tone:
-      "border-blue-200 bg-[linear-gradient(145deg,#ffffff_0%,#eef5ff_55%,#f8fbff_100%)] text-[#0F4CFF]",
+    tone: "blue" as const,
   },
   {
     pathway: "abroad" as const,
     title: "MBBS Abroad",
-    description:
-      "For abroad, NEET qualification and budget are the main starting points. No domicile factor.",
     bullets: ["NEET qualified", "Budget"],
-    buttonLabel: "Start Abroad Finder",
     imageSrc: "/home/mbbs-college-finder/abroad-globe-plane-premium.webp",
     icon: Globe2,
-    tone:
-      "border-teal-200 bg-[linear-gradient(145deg,#ffffff_0%,#ecfffb_55%,#f7fffc_100%)] text-[#058c83]",
+    tone: "teal" as const,
   },
 ];
+
+const toneClasses = {
+  blue: {
+    border: "border-blue-100",
+    icon: "border-blue-100 bg-blue-50 text-[#0F4CFF]",
+    text: "text-[#0F4CFF]",
+    button: "bg-[#0F4CFF] text-white shadow-[0_10px_22px_rgba(15,76,255,0.24)]",
+    soft: "border-blue-100 bg-blue-50 text-[#0F4CFF]",
+    card:
+      "border-blue-200 bg-[linear-gradient(145deg,#ffffff_0%,#eff6ff_58%,#f8fbff_100%)] text-[#0F4CFF]",
+  },
+  teal: {
+    border: "border-teal-100",
+    icon: "border-teal-100 bg-teal-50 text-[#058c83]",
+    text: "text-[#058c83]",
+    button: "bg-[#058c83] text-white shadow-[0_10px_22px_rgba(5,140,131,0.23)]",
+    soft: "border-teal-100 bg-teal-50 text-[#058c83]",
+    card:
+      "border-teal-200 bg-[linear-gradient(145deg,#ffffff_0%,#ecfffb_58%,#f8fffd_100%)] text-[#058c83]",
+  },
+};
 
 function getOptionLabel(options: FinderOption[], value: string, fallback: string) {
   return options.find((option) => option.value === value)?.label ?? fallback;
 }
 
-function openCounsellingPopup() {
-  if (typeof window === "undefined") return;
-  window.dispatchEvent(new CustomEvent("ilmalink:open-counselling"));
+function FinderPanel({
+  children,
+  tone = "blue",
+  wide = false,
+}: {
+  children: ReactNode;
+  tone?: Tone;
+  wide?: boolean;
+}) {
+  return (
+    <article
+      className={`relative mx-auto w-full overflow-hidden rounded-[18px] border bg-white p-3 shadow-[0_18px_45px_rgba(15,45,91,0.11)] sm:p-5 ${
+        toneClasses[tone].border
+      } ${wide ? "max-w-[430px] sm:max-w-5xl" : "max-w-[430px] sm:max-w-3xl"}`}
+    >
+      {children}
+    </article>
+  );
 }
 
 function FormField({
@@ -96,7 +133,7 @@ function FormField({
 }) {
   return (
     <label htmlFor={id} className="block">
-      <span className="mb-2 block text-sm font-black text-[#0B1D39]">
+      <span className="mb-1.5 block text-[12px] font-black text-[#0B1D39]">
         {label}
       </span>
       {children}
@@ -104,10 +141,62 @@ function FormField({
   );
 }
 
-function InfoBox({ children }: { children: ReactNode }) {
+function StepProgress({
+  total,
+  active,
+  tone = "blue",
+}: {
+  total: number;
+  active: number;
+  tone?: Tone;
+}) {
   return (
-    <div className="flex gap-3 rounded-[18px] border border-cyan-200 bg-cyan-50/80 p-3 text-sm font-semibold leading-6 text-[#10526a] shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
-      <Info className="mt-0.5 h-5 w-5 shrink-0 text-[#0F4CFF]" />
+    <div
+      aria-hidden="true"
+      className="mx-auto mt-4 flex w-full max-w-[220px] items-center justify-center"
+    >
+      {Array.from({ length: total }, (_, index) => {
+        const step = index + 1;
+        const isActive = step === active;
+        const isPast = step < active;
+
+        return (
+          <div key={step} className="flex flex-1 items-center last:flex-none">
+            <span
+              className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-[12px] font-black ${
+                isActive || isPast
+                  ? `${toneClasses[tone].button} border-transparent`
+                  : "border-slate-200 bg-white text-slate-500"
+              }`}
+            >
+              {step}
+            </span>
+            {step < total && (
+              <span
+                className={`mx-2 h-px flex-1 ${
+                  isPast ? "bg-[#0F4CFF]" : "bg-slate-200"
+                }`}
+              />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function InfoBox({
+  children,
+  tone = "blue",
+}: {
+  children: ReactNode;
+  tone?: Tone;
+}) {
+  return (
+    <div
+      className={`flex gap-2 rounded-[10px] border p-3 text-[12px] font-semibold leading-5 ${toneClasses[tone].soft}`}
+    >
+      <Info className="mt-0.5 h-4 w-4 shrink-0" />
       <p>{children}</p>
     </div>
   );
@@ -121,38 +210,204 @@ function SectionButton({
 }: {
   children: ReactNode;
   onClick?: () => void;
-  variant?: "blue" | "teal" | "quiet";
+  variant?: Tone | "quiet";
   type?: "button" | "submit";
 }) {
-  const variants = {
-    blue:
-      "border-blue-300/50 bg-[linear-gradient(135deg,#0F4CFF,#075ee8_54%,#00A876)] text-white shadow-[0_18px_36px_rgba(15,76,255,0.26)] hover:shadow-[0_24px_44px_rgba(15,76,255,0.34)]",
-    teal:
-      "border-teal-300/50 bg-[linear-gradient(135deg,#009d9a,#00C896_58%,#35df9b)] text-[#031f2c] shadow-[0_18px_36px_rgba(0,168,118,0.24)] hover:shadow-[0_24px_44px_rgba(0,168,118,0.32)]",
-    quiet:
-      "border-slate-200 bg-white text-[#0B1D39] shadow-[0_12px_26px_rgba(15,45,91,0.08)] hover:border-blue-200 hover:text-[#0F4CFF]",
-  };
+  const variantClass =
+    variant === "quiet"
+      ? "border-slate-200 bg-white text-[#0B1D39] shadow-[0_8px_16px_rgba(15,45,91,0.08)]"
+      : `${toneClasses[variant].button} border-transparent`;
 
   return (
     <button
       type={type}
       onClick={onClick}
-      className={`group relative inline-flex min-h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-[18px] border px-4 py-3 text-sm font-black transition duration-300 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-200/70 sm:w-auto ${variants[variant]}`}
+      className={`inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[10px] border px-4 py-2.5 text-[13px] font-black transition hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-100 ${variantClass}`}
     >
-      {variant !== "quiet" && (
-        <span className="absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-18deg] bg-white/35 blur-md transition duration-700 group-hover:left-[115%]" />
-      )}
-      <span className="relative inline-flex items-center gap-2">{children}</span>
+      {children}
     </button>
   );
 }
 
 function SummaryChip({ label, value }: { label: string; value: string }) {
   return (
-    <div className="min-w-0 rounded-[16px] border border-blue-100 bg-white/90 px-3 py-2 text-center shadow-[0_10px_20px_rgba(15,45,91,0.08)]">
-      <p className="truncate text-[11px] font-black text-slate-500">{label}</p>
-      <p className="mt-1 truncate text-sm font-black text-[#071B44]">{value}</p>
+    <div className="min-w-0 rounded-[8px] border border-blue-100 bg-white px-2 py-2 text-center shadow-[0_8px_16px_rgba(15,45,91,0.07)]">
+      <p className="truncate text-[9px] font-black text-slate-500">{label}</p>
+      <p className="mt-0.5 truncate text-[12px] font-black text-[#071B44]">
+        {value}
+      </p>
     </div>
+  );
+}
+
+function RoundBackButton({
+  onClick,
+  label,
+  tone = "blue",
+}: {
+  onClick: () => void;
+  label: string;
+  tone?: Tone;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-100 ${toneClasses[tone].soft}`}
+    >
+      <ArrowLeft className="h-4 w-4" />
+    </button>
+  );
+}
+
+function FinderHeader({
+  title,
+  subtitle,
+  tone = "blue",
+  icon,
+  onBack,
+}: {
+  title: string;
+  subtitle?: string;
+  tone?: Tone;
+  icon: ReactNode;
+  onBack?: () => void;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <div className="flex min-w-0 items-center gap-3">
+        <span
+          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full border shadow-[0_8px_18px_rgba(15,45,91,0.09)] ${toneClasses[tone].icon}`}
+        >
+          {icon}
+        </span>
+        <div className="min-w-0">
+          <h3 className={`text-[20px] font-black leading-6 ${toneClasses[tone].text}`}>
+            {title}
+          </h3>
+          {subtitle && (
+            <p className="mt-0.5 text-[11px] font-semibold text-slate-500">
+              {subtitle}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {onBack && (
+        <RoundBackButton
+          onClick={onBack}
+          label="Change pathway"
+          tone={tone}
+        />
+      )}
+    </div>
+  );
+}
+
+function ResultSectionTitle({
+  children,
+  icon,
+}: {
+  children: ReactNode;
+  icon: ReactNode;
+}) {
+  return (
+    <p className="mt-4 flex items-center gap-2 border-t border-slate-100 pt-3 text-[12px] font-black text-[#0B1D39]">
+      {icon}
+      {children}
+    </p>
+  );
+}
+
+function BestFitCard({
+  label,
+  name,
+  fit,
+  reason,
+  imageSrc,
+  tone = "blue",
+}: {
+  label: string;
+  name: string;
+  fit?: string;
+  reason: string;
+  imageSrc: string;
+  tone?: Tone;
+}) {
+  return (
+    <article className="min-w-0 overflow-hidden rounded-[10px] border border-slate-200 bg-white shadow-[0_10px_20px_rgba(15,45,91,0.08)]">
+      <div className="relative h-[70px] sm:h-28">
+        <Image
+          src={imageSrc}
+          alt=""
+          fill
+          sizes="(max-width: 640px) 50vw, 320px"
+          aria-hidden="true"
+          className="object-cover"
+        />
+        <span
+          className={`absolute left-0 top-0 rounded-br-[8px] px-2 py-1 text-[9px] font-black text-white ${toneClasses[tone].button}`}
+        >
+          {label}
+        </span>
+      </div>
+      <div className="p-2 text-center sm:p-3">
+        <h4 className="text-[12px] font-black leading-4 text-[#071B44] sm:text-base sm:leading-5">
+          {name}
+        </h4>
+        {fit && (
+          <p className="mx-auto mt-1 inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[9px] font-black text-emerald-700 sm:text-[11px]">
+            {fit}
+          </p>
+        )}
+        <p className="mt-1.5 text-[10px] font-semibold leading-4 text-slate-600 sm:text-[12px] sm:leading-5">
+          <span className="font-black text-[#0B1D39]">Why: </span>
+          {reason}
+        </p>
+      </div>
+    </article>
+  );
+}
+
+function BackupFitCard({
+  name,
+  fit,
+  reason,
+  imageSrc,
+}: {
+  name: string;
+  fit?: string;
+  reason: string;
+  imageSrc?: string;
+}) {
+  return (
+    <article className="min-w-0 overflow-hidden rounded-[8px] border border-slate-200 bg-white text-center shadow-[0_8px_16px_rgba(15,45,91,0.07)]">
+      {imageSrc && (
+        <div className="relative h-11 sm:h-16">
+          <Image
+            src={imageSrc}
+            alt=""
+            fill
+            sizes="(max-width: 640px) 33vw, 220px"
+            aria-hidden="true"
+            className="object-cover"
+          />
+        </div>
+      )}
+      <div className="p-2">
+        <h4 className="text-[10px] font-black leading-3 text-[#071B44] sm:text-[12px] sm:leading-4">
+          {name}
+        </h4>
+        {fit && (
+          <p className="mt-1 text-[9px] font-black text-[#058c83]">{fit}</p>
+        )}
+        <p className="mt-1 text-[9px] font-semibold leading-3 text-slate-600 sm:text-[11px] sm:leading-4">
+          <span className="font-black text-[#0B1D39]">Why: </span>
+          {reason}
+        </p>
+      </div>
+    </article>
   );
 }
 
@@ -173,17 +428,17 @@ export default function MBBSCollegeFinderSection() {
   const domicileLabel = getOptionLabel(
     domicileStateOptions,
     domicileState,
-    "Not selected",
+    "West Bengal",
   );
   const indiaBudgetLabel = getOptionLabel(
     indiaBudgetOptions,
     indiaBudget,
-    "Not selected",
+    "Rs. 30-50 lakh",
   );
   const abroadBudgetLabel = getOptionLabel(
     abroadBudgetOptions,
     abroadBudget,
-    "Not selected",
+    "Rs. 20-25 lakh",
   );
 
   const showPathway = (nextPathway: MbbsFinderPathway) => {
@@ -191,93 +446,94 @@ export default function MBBSCollegeFinderSection() {
     setView(nextPathway === "india" ? "india-input" : "abroad-input");
   };
 
-
   const renderIntro = () => (
-    <article className="relative overflow-hidden rounded-[28px] border border-white/80 bg-[radial-gradient(circle_at_12%_0%,rgba(85,210,255,0.32),transparent_32%),linear-gradient(145deg,#061b46_0%,#0b3a83_54%,#087b7a_100%)] px-4 pb-4 pt-0 text-white shadow-[0_28px_70px_rgba(3,27,70,0.34),inset_0_1px_0_rgba(255,255,255,0.24)] sm:px-6 sm:pb-6 sm:pt-3">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:linear-gradient(rgba(255,255,255,.32)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.32)_1px,transparent_1px)] [background-size:28px_28px]" />
-      <div className="relative grid gap-5 lg:grid-cols-[1fr_260px] lg:items-center">
-        <div className="min-w-0">
-          <h3 className="mt-4 text-[1.7rem] font-black leading-tight text-white sm:text-4xl">
-            MBBS College Finder 2026
+    <article className="relative mx-auto flex min-h-[390px] w-full max-w-[430px] overflow-hidden rounded-[18px] border border-white/80 bg-[#061b46] p-3 text-white shadow-[0_24px_58px_rgba(3,27,70,0.32)] sm:max-w-4xl sm:p-5">
+      <Image
+        src="/home/mbbs-college-finder/india-campus-premium.webp"
+        alt=""
+        fill
+        priority={false}
+        sizes="(max-width: 640px) 100vw, 900px"
+        aria-hidden="true"
+        className="object-cover opacity-58"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,20,55,0.54)_0%,rgba(6,27,70,0.88)_58%,rgba(4,18,45,0.96)_100%)]" />
+
+      <div className="relative flex min-h-full w-full flex-col justify-center py-4">
+        <div className="mx-auto max-w-[330px] text-center">
+          <h3 className="text-[28px] font-black leading-[1.08] text-white sm:text-4xl">
+            Your MBBS Journey Starts Here
           </h3>
-          <p className="mt-2 max-w-2xl text-[16px] font-normal leading-[21px] text-blue-50">
-  Find your best available MBBS admission pathway in India or abroad
-  based on NEET score, domicile, budget and eligibility.
-</p>
-
-          <div className="mt-5">
-            <button
-              type="button"
-              onClick={() => setView("pathway")}
-              className="group relative inline-flex min-h-14 w-full items-center justify-center gap-3 overflow-hidden rounded-[20px] border border-cyan-100/70 bg-[linear-gradient(135deg,#0F4CFF,#008bcc_48%,#00C896)] px-5 py-4 text-base font-black text-white shadow-[0_20px_44px_rgba(0,200,150,0.34),0_0_35px_rgba(34,211,238,0.32),inset_0_1px_0_rgba(255,255,255,0.42)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_58px_rgba(0,200,150,0.42),0_0_45px_rgba(34,211,238,0.42)] focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-200/80 sm:w-auto"
-            >
-              <span className="absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-18deg] bg-white/35 blur-md transition duration-700 group-hover:left-[115%]" />
-              <GraduationCap className="relative h-5 w-5" />
-              <span className="relative">Find My Best MBBS College</span>
-              <ArrowRight className="relative h-5 w-5 transition group-hover:translate-x-1" />
-            </button>
-            <p className="sr-only">
-              India or Abroad <span aria-hidden="true">&bull;</span> 3-click
-              pathway guidance <span aria-hidden="true">&bull;</span>{" "}
-              Budget-based
-            </p>
-          </div>
-
-          <div className="sr-only">
-  {trustChips.map((chip) => (
-    <span key={chip}>{chip}</span>
-  ))}
-</div>
+          <p className="mt-2 text-[14px] font-semibold leading-5 text-blue-50 sm:text-base">
+            Expert guidance to help you find the best MBBS college, in India or
+            abroad.
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
-          {pathwayCards.map((card) => (
-            <div
-              key={card.pathway}
-              className="overflow-hidden rounded-[18px] border border-white/24 bg-white/12 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur"
-            >
-              <Image
-                src={card.imageSrc}
-                alt=""
-                width={640}
-                height={360}
-                aria-hidden="true"
-                className="h-24 w-full rounded-[14px] object-cover"
-              />
-              <p className="mt-2 text-center text-xs font-black text-white">
-                {card.title}
-              </p>
-            </div>
-          ))}
+        <button
+          type="button"
+          onClick={() => setView("pathway")}
+          className="group relative mx-auto mt-6 inline-flex min-h-13 w-full max-w-[340px] items-center justify-center gap-3 overflow-hidden rounded-full border border-cyan-100/80 bg-[linear-gradient(135deg,#12d6e4_0%,#09adc7_42%,#00C896_100%)] px-5 py-3 text-[15px] font-black text-white shadow-[0_15px_30px_rgba(0,200,150,0.32),0_0_28px_rgba(34,211,238,0.32),inset_0_1px_0_rgba(255,255,255,0.5)] transition hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-100"
+        >
+          <span className="absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-18deg] bg-white/35 blur-md transition duration-700 group-hover:left-[115%]" />
+          <GraduationCap className="relative h-5 w-5" />
+          <span className="relative">Find My Best MBBS College</span>
+          <ArrowRight className="relative h-5 w-5 transition group-hover:translate-x-1" />
+        </button>
+
+        <p className="mt-3 text-center text-[12px] font-semibold text-blue-50">
+          {trustChips.join("  |  ")}
+        </p>
+
+        <div className="mt-7 grid grid-cols-4 overflow-hidden rounded-[14px] border border-white/85 bg-white/94 text-[#071B44] shadow-[0_12px_28px_rgba(0,0,0,0.18)]">
+          {finderStats.map((stat, index) => {
+            const Icon = stat.icon;
+
+            return (
+              <div
+                key={stat.label}
+                className={`min-w-0 px-1.5 py-2.5 text-center ${
+                  index > 0 ? "border-l border-slate-200" : ""
+                }`}
+              >
+                <Icon className="mx-auto h-5 w-5 text-[#0F4CFF]" />
+                <p className="mt-1 text-[12px] font-black leading-4">
+                  {stat.value}
+                </p>
+                <p className="text-[8px] font-semibold leading-3 text-slate-600 sm:text-[10px]">
+                  {stat.label}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </article>
   );
 
   const renderPathwaySelection = () => (
-    <article className="rounded-[28px] border border-blue-100 bg-white p-4 shadow-[0_26px_64px_rgba(15,45,91,0.12)] sm:p-6">
-      <div className="mx-auto max-w-2xl text-center">
-        <p className="text-sm font-black text-[#0F4CFF]">
-          Pathway selection after click
-        </p>
-        <h3 className="mt-2 text-3xl font-black text-[#081B35]">
+    <FinderPanel wide>
+      <div className="text-center">
+        <h3 className="text-[25px] font-black leading-8 text-[#081B35]">
           MBBS College Finder
         </h3>
-        <p className="mt-2 text-sm font-semibold text-slate-600">
+        <p className="mt-1 text-[13px] font-semibold text-slate-600">
           Choose your pathway
         </p>
+        <span className="mx-auto mt-2 block h-0.5 w-14 rounded-full bg-[#058c83]" />
       </div>
 
-      <div className="mt-5 grid gap-4 md:grid-cols-2">
+      <div className="mt-5 grid grid-cols-2 gap-3 sm:gap-5">
         {pathwayCards.map((card) => {
           const Icon = card.icon;
+
           return (
             <button
               type="button"
               key={card.pathway}
               onClick={() => showPathway(card.pathway)}
               aria-pressed={pathway === card.pathway}
-              className={`group flex h-full min-h-[360px] flex-col overflow-hidden rounded-[22px] border p-3 text-left shadow-[0_18px_40px_rgba(15,45,91,0.1)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_56px_rgba(15,76,255,0.16)] focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-200 ${card.tone}`}
+              className={`group flex min-h-[262px] min-w-0 flex-col overflow-hidden rounded-[14px] border p-2 text-center shadow-[0_12px_24px_rgba(15,45,91,0.09)] transition hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-cyan-100 sm:min-h-[340px] sm:p-3 ${toneClasses[card.tone].card}`}
             >
               <Image
                 src={card.imageSrc}
@@ -285,27 +541,25 @@ export default function MBBSCollegeFinderSection() {
                 width={640}
                 height={360}
                 aria-hidden="true"
-                className="h-32 w-full rounded-[18px] object-cover"
+                className="h-24 w-full rounded-[10px] object-cover sm:h-36"
               />
-              <div className="flex flex-1 flex-col p-2">
-                <h4 className="mt-2 flex items-center gap-2 text-2xl font-black">
-                  <Icon className="h-6 w-6" />
+              <div className="flex flex-1 flex-col items-center px-1 py-2">
+                <h4 className="flex flex-col items-center gap-1 text-[17px] font-black leading-5 sm:text-2xl">
+                  <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                   {card.title}
                 </h4>
-                <p className="mt-3 text-sm font-semibold leading-6 text-slate-600">
-                  {card.description}
-                </p>
-                <ul className="mt-3 space-y-2 text-sm font-bold text-[#17396e]">
+                <ul className="mt-3 space-y-1 text-[11px] font-bold leading-4 text-[#17396e] sm:text-sm sm:leading-5">
                   {card.bullets.map((bullet) => (
-                    <li key={bullet} className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-[#00A876]" />
+                    <li key={bullet} className="flex items-center justify-center gap-1.5">
+                      <span className="h-1 w-1 rounded-full bg-current" />
                       {bullet}
                     </li>
                   ))}
                 </ul>
-                <span className="mt-auto inline-flex h-12 w-full items-center justify-center gap-2 rounded-[16px] bg-[#0F4CFF] px-4 text-sm font-black text-white shadow-[0_14px_28px_rgba(15,76,255,0.24)] transition group-hover:bg-[#083fcf]">
-                  {card.buttonLabel}
-                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                <span
+                  className={`mt-auto flex h-11 w-11 items-center justify-center rounded-full text-white transition group-hover:translate-x-0.5 ${toneClasses[card.tone].button}`}
+                >
+                  <ArrowRight className="h-5 w-5" />
                 </span>
               </div>
             </button>
@@ -313,39 +567,25 @@ export default function MBBSCollegeFinderSection() {
         })}
       </div>
 
-      <p className="mt-5 flex items-center justify-center gap-2 text-center text-xs font-semibold text-slate-500">
+      <p className="mt-4 flex items-center justify-center gap-2 text-center text-[11px] font-semibold text-slate-500">
         <ShieldCheck className="h-4 w-4 text-[#64748b]" />
         Your data is safe and secure with us.
       </p>
-    </article>
+    </FinderPanel>
   );
 
   const renderIndiaInput = () => (
-    <article className="rounded-[28px] border border-blue-100 bg-white p-4 shadow-[0_26px_64px_rgba(15,45,91,0.12)] sm:p-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
-          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-blue-100 bg-blue-50 text-[#0F4CFF]">
-            <Landmark className="h-6 w-6" />
-          </span>
-          <div>
-            <p className="text-sm font-black text-[#0F4CFF]">MBBS in India</p>
-            <h3 className="text-2xl font-black text-[#081B35]">
-              Prefilled input view
-            </h3>
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={() => setView("pathway")}
-          className="inline-flex items-center gap-2 text-sm font-black text-[#0F4CFF]"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Change pathway
-        </button>
-      </div>
+    <FinderPanel tone="blue">
+      <FinderHeader
+        title="MBBS in India"
+        subtitle="Find your best India options"
+        icon={<Landmark className="h-6 w-6" />}
+        onBack={() => setView("pathway")}
+      />
+      <StepProgress total={3} active={1} tone="blue" />
 
       <form
-        className="mt-5 grid gap-4"
+        className="mt-5 grid gap-3"
         onSubmit={(event) => {
           event.preventDefault();
           setView("india-result");
@@ -353,14 +593,14 @@ export default function MBBSCollegeFinderSection() {
       >
         <FormField id="mbbs-finder-india-rank" label="NEET Rank / Score">
           <div className="relative">
-            <GraduationCap className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            <GraduationCap className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <input
               id="mbbs-finder-india-rank"
               name="mbbsFinderIndiaRank"
               value={indiaRank}
               onChange={(event) => setIndiaRank(event.target.value)}
               placeholder="Enter your NEET rank or score"
-              className="h-12 w-full rounded-[16px] border border-slate-200 bg-white py-2 pl-11 pr-3 text-sm font-bold text-[#081B35] shadow-[inset_0_1px_0_rgba(255,255,255,1),0_10px_22px_rgba(15,45,91,0.06)] outline-none focus:border-[#0F4CFF] focus:ring-4 focus:ring-blue-100"
+              className="h-11 w-full rounded-[8px] border border-slate-200 bg-white px-3 pr-10 text-[13px] font-bold text-[#081B35] shadow-[0_7px_16px_rgba(15,45,91,0.05)] outline-none focus:border-[#0F4CFF] focus:ring-4 focus:ring-blue-100"
             />
           </div>
         </FormField>
@@ -371,7 +611,7 @@ export default function MBBSCollegeFinderSection() {
             name="mbbsFinderDomicile"
             value={domicileState}
             onChange={(event) => setDomicileState(event.target.value)}
-            className="h-12 w-full rounded-[16px] border border-slate-200 bg-white px-3 text-sm font-bold text-[#081B35] shadow-[0_10px_22px_rgba(15,45,91,0.06)] outline-none focus:border-[#0F4CFF] focus:ring-4 focus:ring-blue-100"
+            className="h-11 w-full rounded-[8px] border border-slate-200 bg-white px-3 text-[13px] font-bold text-[#081B35] shadow-[0_7px_16px_rgba(15,45,91,0.05)] outline-none focus:border-[#0F4CFF] focus:ring-4 focus:ring-blue-100"
           >
             <option value="">Select your domicile state</option>
             {domicileStateOptions.map((option) => (
@@ -388,7 +628,7 @@ export default function MBBSCollegeFinderSection() {
             name="mbbsFinderIndiaBudget"
             value={indiaBudget}
             onChange={(event) => setIndiaBudget(event.target.value)}
-            className="h-12 w-full rounded-[16px] border border-slate-200 bg-white px-3 text-sm font-bold text-[#081B35] shadow-[0_10px_22px_rgba(15,45,91,0.06)] outline-none focus:border-[#0F4CFF] focus:ring-4 focus:ring-blue-100"
+            className="h-11 w-full rounded-[8px] border border-slate-200 bg-white px-3 text-[13px] font-bold text-[#081B35] shadow-[0_7px_16px_rgba(15,45,91,0.05)] outline-none focus:border-[#0F4CFF] focus:ring-4 focus:ring-blue-100"
           >
             <option value="">Select your budget range</option>
             {indiaBudgetOptions.map((option) => (
@@ -399,64 +639,48 @@ export default function MBBSCollegeFinderSection() {
           </select>
         </FormField>
 
-        <InfoBox>
-          For MBBS in India, NEET rank/score, domicile state and budget decide
-          the practical admission pathway. If rank is within 30,000, government
-          MBBS is usually the first route, so budget becomes less important than
-          counselling strategy.
-        </InfoBox>
-
         <SectionButton type="submit" variant="blue">
-          See My Best India Options
+          See My Best Options
           <ArrowRight className="h-4 w-4" />
         </SectionButton>
+
+        <InfoBox tone="blue">
+          For India, NEET rank/score, domicile state and budget matter.
+        </InfoBox>
       </form>
-    </article>
+    </FinderPanel>
   );
 
   const renderAbroadInput = () => (
-    <article className="rounded-[28px] border border-teal-100 bg-white p-4 shadow-[0_26px_64px_rgba(15,45,91,0.12)] sm:p-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
-          <span className="flex h-12 w-12 items-center justify-center rounded-full border border-teal-100 bg-teal-50 text-[#058c83]">
-            <Globe2 className="h-6 w-6" />
-          </span>
-          <div>
-            <p className="text-sm font-black text-[#058c83]">MBBS Abroad</p>
-            <h3 className="text-2xl font-black text-[#081B35]">
-              Prefilled input view
-            </h3>
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={() => setView("pathway")}
-          className="inline-flex items-center gap-2 text-sm font-black text-[#058c83]"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Change pathway
-        </button>
-      </div>
+    <FinderPanel tone="teal">
+      <FinderHeader
+        title="MBBS Abroad"
+        subtitle="Find your best country matches"
+        tone="teal"
+        icon={<Globe2 className="h-6 w-6" />}
+        onBack={() => setView("pathway")}
+      />
+      <StepProgress total={2} active={1} tone="teal" />
 
       <form
-        className="mt-5 grid gap-4"
+        className="mt-5 grid gap-3"
         onSubmit={(event) => {
           event.preventDefault();
           setView("abroad-countries");
         }}
       >
         <div>
-          <p className="mb-2 text-sm font-black text-[#0B1D39]">
+          <p className="mb-1.5 text-[12px] font-black text-[#0B1D39]">
             NEET Qualified?
           </p>
           <div
             role="group"
             aria-label="NEET qualified status"
-            className="flex rounded-[16px] border border-emerald-200 bg-emerald-50 p-2"
+            className="rounded-[8px] border border-emerald-200 bg-white p-1 shadow-[0_7px_16px_rgba(15,45,91,0.05)]"
           >
             <span
               aria-label="Qualified selected"
-              className="inline-flex h-10 w-full items-center justify-between rounded-[12px] bg-white px-3 text-sm font-black text-[#075E59] shadow-[0_8px_18px_rgba(0,168,118,0.1)]"
+              className="inline-flex h-10 w-full items-center justify-between rounded-[7px] bg-emerald-50 px-3 text-[13px] font-black text-[#075E59]"
             >
               Qualified
               <CheckCircle2 className="h-5 w-5 text-[#00A876]" />
@@ -470,9 +694,9 @@ export default function MBBSCollegeFinderSection() {
             name="mbbsFinderAbroadBudget"
             value={abroadBudget}
             onChange={(event) => setAbroadBudget(event.target.value)}
-            className="h-12 w-full rounded-[16px] border border-slate-200 bg-white px-3 text-sm font-bold text-[#081B35] shadow-[0_10px_22px_rgba(15,45,91,0.06)] outline-none focus:border-[#058c83] focus:ring-4 focus:ring-teal-100"
+            className="h-11 w-full rounded-[8px] border border-slate-200 bg-white px-3 text-[13px] font-bold text-[#081B35] shadow-[0_7px_16px_rgba(15,45,91,0.05)] outline-none focus:border-[#058c83] focus:ring-4 focus:ring-teal-100"
           >
-            <option value="">Select your total budget</option>
+            <option value="">Select your budget range</option>
             {abroadBudgetOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -481,161 +705,151 @@ export default function MBBSCollegeFinderSection() {
           </select>
         </FormField>
 
-        <InfoBox>
-          For MBBS abroad, NEET qualification will be automatically marked and
-          budget is the main starting point. Domicile state is not required.
-        </InfoBox>
-
         <SectionButton type="submit" variant="teal">
           See My Best Country Matches
           <ArrowRight className="h-4 w-4" />
         </SectionButton>
+
+        <InfoBox tone="teal">
+          For MBBS abroad, NEET qualification and budget matter. No domicile
+          factor.
+        </InfoBox>
       </form>
-    </article>
+    </FinderPanel>
   );
 
   const renderIndiaResult = () => (
-    <article className="rounded-[28px] border border-blue-100 bg-[linear-gradient(145deg,#ffffff_0%,#f5fbff_100%)] p-4 shadow-[0_26px_64px_rgba(15,45,91,0.12)] sm:p-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="flex items-center gap-2 text-sm font-black text-[#0F4CFF]">
-            <Trophy className="h-5 w-5 text-amber-500" />
-            Post-filled India result view
-          </p>
-          <h3 className="mt-2 text-2xl font-black text-[#081B35]">
-            Your Best India Matches
-          </h3>
+    <FinderPanel wide>
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-blue-100 bg-blue-50 text-[#0F4CFF]">
+            <Landmark className="h-5 w-5" />
+          </span>
+          <div className="min-w-0">
+            <h3 className="text-[20px] font-black leading-6 text-[#071B44]">
+              Your Best India Matches
+            </h3>
+            <p className="text-[11px] font-semibold text-slate-500">
+              Based on your NEET rank, domicile and budget
+            </p>
+          </div>
         </div>
-        <SectionButton onClick={() => setView("india-input")} variant="quiet">
-          Edit Inputs
-        </SectionButton>
+        <RoundBackButton
+          onClick={() => setView("india-input")}
+          label="Edit India inputs"
+        />
       </div>
 
-      <div className="mt-4 grid gap-2 sm:grid-cols-3">
+      <div className="mt-4 grid grid-cols-3 gap-2">
         <SummaryChip
           label="NEET Rank / Score"
-          value={indiaRank.trim() || "Not entered"}
+          value={indiaRank.trim() || "18,450"}
         />
         <SummaryChip label="Domicile State" value={domicileLabel} />
         <SummaryChip label="Budget" value={indiaBudgetLabel} />
       </div>
 
-      <div className="mt-5 grid gap-4 md:grid-cols-2">
+      <ResultSectionTitle icon={<Trophy className="h-4 w-4 text-amber-500" />}>
+        Top Best Fits
+      </ResultSectionTitle>
+
+      <div className="mt-2 grid grid-cols-2 gap-3">
         {indiaTopResults.map((result, index) => (
-          <div
+          <BestFitCard
             key={result.title}
-            className="overflow-hidden rounded-[22px] border border-blue-100 bg-white shadow-[0_18px_38px_rgba(15,45,91,0.1)]"
-          >
-            <div className="bg-[linear-gradient(135deg,#0F4CFF,#08a5ca)] px-4 py-2 text-xs font-black text-white">
-              Best Fit {index + 1}
-            </div>
-            <div className="p-4">
-              <Building2 className="h-8 w-8 text-[#0F4CFF]" />
-              <h4 className="mt-3 text-xl font-black text-[#081B35]">
-                {result.title}
-              </h4>
-              <p className="mt-2 inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
-                {result.fit}
-              </p>
-              <p className="mt-3 text-sm font-semibold leading-6 text-slate-600">
-                <span className="font-black text-[#0B1D39]">Why: </span>
-                {result.reason}
-              </p>
-            </div>
-          </div>
+            label={`Best Fit ${index + 1}`}
+            name={result.title}
+            fit={result.fit}
+            reason={result.reason}
+            imageSrc={result.imageSrc}
+          />
         ))}
       </div>
 
-      <div className="mt-5">
-        <p className="text-sm font-black text-[#0B1D39]">Backup options</p>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {indiaBackupOptions.map((option) => (
-            <div
-              key={option}
-              className="rounded-[18px] border border-slate-200 bg-white p-3 text-sm font-black text-[#17396e] shadow-[0_12px_24px_rgba(15,45,91,0.08)]"
-            >
-              <BadgeCheck className="mb-2 h-5 w-5 text-[#00A876]" />
-              {option}
-            </div>
-          ))}
+      <ResultSectionTitle icon={<ShieldCheck className="h-4 w-4 text-[#0F4CFF]" />}>
+        Backup Options
+      </ResultSectionTitle>
+
+      <div className="mt-2 grid grid-cols-3 gap-2">
+        {indiaBackupOptions.map((option) => (
+          <BackupFitCard
+            key={option.title}
+            name={option.title}
+            fit={option.fit}
+            reason={option.reason}
+            imageSrc={option.imageSrc}
+          />
+        ))}
+      </div>
+
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <InfoBox>
+          These colleges match your NEET rank, domicile state and stay within
+          your specified budget.
+        </InfoBox>
+        <div className="flex gap-2 rounded-[10px] border border-amber-200 bg-amber-50 p-3 text-[11px] font-semibold leading-4 text-amber-900">
+          <WalletCards className="mt-0.5 h-4 w-4 shrink-0" />
+          <p>{indiaImportantLogicNote}</p>
         </div>
       </div>
-
-      <div className="mt-5 rounded-[18px] border border-amber-200 bg-amber-50 p-4 text-sm font-semibold leading-6 text-amber-900">
-        {indiaImportantLogicNote}
-      </div>
-
-      <div className="mt-5 grid gap-3 sm:grid-cols-2">
-        <SectionButton onClick={openCounsellingPopup} variant="blue">
-          Talk to ILMALINK Counsellor
-          <ArrowRight className="h-4 w-4" />
-        </SectionButton>
-        <Link
-          href="/portal/signup"
-          className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[18px] border border-emerald-200 bg-white px-4 py-3 text-sm font-black text-[#075E59] shadow-[0_12px_26px_rgba(15,45,91,0.08)] transition hover:-translate-y-0.5 hover:border-emerald-300 hover:text-[#047857] focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-100"
-        >
-          Create Free Profile
-          <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
-    </article>
+    </FinderPanel>
   );
 
   const renderAbroadCountryResults = () => (
-    <article className="rounded-[28px] border border-teal-100 bg-[linear-gradient(145deg,#ffffff_0%,#f2fffb_100%)] p-4 shadow-[0_26px_64px_rgba(15,45,91,0.12)] sm:p-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="flex items-center gap-2 text-sm font-black text-[#058c83]">
+    <FinderPanel tone="teal">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-teal-100 bg-teal-50 text-[#058c83]">
             <Globe2 className="h-5 w-5" />
-            Post-filled abroad result view
-          </p>
-          <h3 className="mt-2 text-2xl font-black text-[#081B35]">
-            Your Best Country Matches
-          </h3>
-          <p className="mt-1 text-sm font-semibold text-slate-600">
-            Based on your NEET qualification and budget
-          </p>
+          </span>
+          <div className="min-w-0">
+            <h3 className="text-[20px] font-black leading-6 text-[#071B44]">
+              Your Best Country Matches
+            </h3>
+            <p className="text-[11px] font-semibold text-slate-500">
+              Based on your NEET qualification and budget
+            </p>
+          </div>
         </div>
-        <SectionButton onClick={() => setView("abroad-input")} variant="quiet">
-          Edit Inputs
-        </SectionButton>
+        <RoundBackButton
+          onClick={() => setView("abroad-input")}
+          label="Edit abroad inputs"
+          tone="teal"
+        />
       </div>
 
-      <div className="mt-4 grid gap-2 sm:grid-cols-2">
+      <div className="mt-4 grid grid-cols-2 gap-2">
         <SummaryChip label="NEET Qualified" value="Qualified" />
         <SummaryChip label="Budget" value={abroadBudgetLabel} />
       </div>
 
-      <div className="mt-5 grid gap-4">
+      <div className="mt-4 grid gap-2.5">
         {abroadCountryMatches.map((match, index) => (
           <article
             key={match.country}
-            className="grid gap-3 overflow-hidden rounded-[22px] border border-teal-100 bg-white p-3 shadow-[0_18px_38px_rgba(15,45,91,0.1)] sm:grid-cols-[160px_1fr_auto] sm:items-center"
+            className="grid grid-cols-[88px_1fr_32px] items-center gap-2 overflow-hidden rounded-[10px] border border-teal-100 bg-white p-2 shadow-[0_10px_20px_rgba(15,45,91,0.08)]"
           >
-            <Image
-              src={match.imageSrc}
-              alt=""
-              width={640}
-              height={360}
-              aria-hidden="true"
-              className="h-28 w-full rounded-[16px] object-cover sm:h-24"
-            />
-            <div className="min-w-0">
-              <p className="inline-flex rounded-full bg-[#058c83] px-3 py-1 text-xs font-black text-white">
+            <div className="relative h-[70px] overflow-hidden rounded-[8px]">
+              <Image
+                src={match.imageSrc}
+                alt=""
+                fill
+                sizes="90px"
+                aria-hidden="true"
+                className="object-cover"
+              />
+              <span className="absolute left-0 top-0 rounded-br-[7px] bg-[#058c83] px-1.5 py-0.5 text-[8px] font-black text-white">
                 Match {index + 1}
-              </p>
-              <h4 className="mt-2 text-xl font-black text-[#081B35]">
+              </span>
+            </div>
+            <div className="min-w-0">
+              <h4 className="truncate text-[14px] font-black text-[#071B44]">
                 {match.country}
               </h4>
-              <div className="mt-2 flex flex-wrap gap-2 text-xs font-black">
-                <span className="rounded-full bg-emerald-50 px-3 py-1 text-emerald-700">
-                  Fit Level: {match.fitLevel}
-                </span>
-                <span className="rounded-full bg-blue-50 px-3 py-1 text-blue-700">
-                  {match.neetStatus}
-                </span>
-              </div>
-              <p className="mt-3 text-sm font-semibold leading-6 text-slate-600">
+              <p className="mt-1 inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[9px] font-black text-emerald-700">
+                Fit Level: {match.fitLevel}
+              </p>
+              <p className="mt-1 text-[10px] font-semibold leading-4 text-slate-600">
                 {match.reason}
               </p>
             </div>
@@ -645,134 +859,85 @@ export default function MBBSCollegeFinderSection() {
                 setSelectedCountry(match.country);
                 setView("abroad-colleges");
               }}
-              aria-pressed={selectedCountry === match.country}
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[16px] border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-black text-[#075E59] transition hover:-translate-y-0.5 hover:border-teal-300 hover:bg-white focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-100 sm:w-auto"
+              aria-label={`View recommended colleges in ${match.country}`}
+              className="flex h-8 w-8 items-center justify-center rounded-full text-[#058c83] transition hover:bg-teal-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-100"
             >
-              View Recommended Colleges
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-5 w-5" />
             </button>
           </article>
         ))}
       </div>
 
-      <div className="mt-5">
-        <InfoBox>
-          Click any country to see recommended colleges. Top 2 colleges are
-          shown as best fit. Other colleges are shown as backup options.
+      <div className="mt-3">
+        <InfoBox tone="teal">
+          Click any country to see recommended colleges.
         </InfoBox>
       </div>
-    </article>
+    </FinderPanel>
   );
 
   const renderAbroadCollegeResults = () => (
-    <article className="rounded-[28px] border border-teal-100 bg-[linear-gradient(145deg,#ffffff_0%,#f4fffd_100%)] p-4 shadow-[0_26px_64px_rgba(15,45,91,0.12)] sm:p-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="flex items-center gap-2 text-sm font-black text-[#058c83]">
+    <FinderPanel tone="teal" wide>
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-teal-100 bg-teal-50 text-[#058c83]">
             <PlaneTakeoff className="h-5 w-5" />
-            Clicked country college result view
-          </p>
-          <h3 className="mt-2 text-2xl font-black text-[#081B35]">
-            {selectedCountry} - Recommended Colleges
-          </h3>
+          </span>
+          <div className="min-w-0">
+            <h3 className="text-[20px] font-black leading-6 text-[#071B44]">
+              {selectedCountry} - Recommended Colleges
+            </h3>
+            <p className="text-[11px] font-semibold text-slate-500">
+              Based on your NEET qualification and budget
+            </p>
+          </div>
         </div>
-        <SectionButton
+        <RoundBackButton
           onClick={() => setView("abroad-countries")}
-          variant="quiet"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Country Matches
-        </SectionButton>
+          label="Back to country matches"
+          tone="teal"
+        />
       </div>
 
-      <div className="mt-5">
-        <p className="text-sm font-black text-[#0B1D39]">Top best fits</p>
-        <div className="mt-3 grid gap-4 md:grid-cols-2">
-          {selectedCollegeRecommendation.bestFit.slice(0, 2).map((college, index) => (
-            <article
-              key={college.name}
-              className="overflow-hidden rounded-[22px] border border-teal-100 bg-white shadow-[0_18px_38px_rgba(15,45,91,0.1)]"
-            >
-              <Image
-                src={college.imageSrc}
-                alt=""
-                width={640}
-                height={360}
-                aria-hidden="true"
-                className="h-28 w-full object-cover"
-              />
-              <div className="p-4">
-                <p className="inline-flex rounded-full bg-[#058c83] px-3 py-1 text-xs font-black text-white">
-                  Best Fit College {index + 1}
-                </p>
-                <h4 className="mt-3 text-lg font-black text-[#081B35]">
-                  {college.name}
-                </h4>
-                <p className="mt-2 text-sm font-semibold leading-6 text-slate-600">
-                  <span className="font-black text-[#0B1D39]">Why: </span>
-                  {college.reason}
-                </p>
-                <button
-                  type="button"
-                  onClick={openCounsellingPopup}
-                  className="mt-4 inline-flex h-10 w-full items-center justify-center rounded-[14px] bg-teal-50 px-4 text-sm font-black text-[#075E59] transition hover:bg-teal-100 focus:outline-none focus-visible:ring-4 focus-visible:ring-teal-100"
-                >
-                  Verify Fit
-                </button>
-              </div>
-            </article>
-          ))}
-        </div>
+      <ResultSectionTitle icon={<Trophy className="h-4 w-4 text-amber-500" />}>
+        Top Best Fits
+      </ResultSectionTitle>
+
+      <div className="mt-2 grid grid-cols-2 gap-3">
+        {selectedCollegeRecommendation.bestFit.slice(0, 2).map((college, index) => (
+          <BestFitCard
+            key={college.name}
+            label={`Best Fit College ${index + 1}`}
+            name={college.name}
+            reason={college.reason}
+            imageSrc={college.imageSrc}
+            tone="teal"
+          />
+        ))}
       </div>
 
-      <div className="mt-5">
-        <p className="text-sm font-black text-[#0B1D39]">Backup colleges</p>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {selectedCollegeRecommendation.backup.map((college) => (
-            <article
-              key={college.name}
-              className="rounded-[18px] border border-slate-200 bg-white p-3 shadow-[0_12px_24px_rgba(15,45,91,0.08)]"
-            >
-              <h4 className="text-sm font-black text-[#081B35]">
-                {college.name}
-              </h4>
-              <p className="mt-2 text-xs font-semibold leading-5 text-slate-600">
-                <span className="font-black text-[#0B1D39]">Why: </span>
-                {college.reason}
-              </p>
-              <button
-                type="button"
-                onClick={openCounsellingPopup}
-                className="mt-3 inline-flex h-9 w-full items-center justify-center rounded-[12px] border border-slate-200 text-xs font-black text-[#0F4CFF] transition hover:border-blue-200 hover:bg-blue-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-100"
-              >
-                Verify Fit
-              </button>
-            </article>
-          ))}
-        </div>
+      <ResultSectionTitle icon={<ShieldCheck className="h-4 w-4 text-[#058c83]" />}>
+        Backup Colleges
+      </ResultSectionTitle>
+
+      <div className="mt-2 grid grid-cols-3 gap-2">
+        {selectedCollegeRecommendation.backup.map((college) => (
+          <BackupFitCard
+            key={college.name}
+            name={college.name}
+            reason={college.reason}
+            imageSrc={college.imageSrc}
+          />
+        ))}
       </div>
 
-      <div className="mt-5 grid gap-3 lg:grid-cols-3">
-        <SectionButton onClick={openCounsellingPopup} variant="teal">
-          Verify My Admission Possibility
-        </SectionButton>
-        <SectionButton onClick={openCounsellingPopup} variant="blue">
-          Talk to ILMALINK Counsellor
-        </SectionButton>
-        <Link
-          href="/portal/signup"
-          className="inline-flex min-h-12 w-full items-center justify-center rounded-[18px] border border-emerald-200 bg-white px-4 py-3 text-sm font-black text-[#075E59] shadow-[0_12px_26px_rgba(15,45,91,0.08)] transition hover:-translate-y-0.5 hover:border-emerald-300 hover:text-[#047857] focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-100"
-        >
-          Create Free Profile
-        </Link>
+      <div className="mt-3">
+        <InfoBox tone="teal">
+          Top 2 colleges are shown as best fit. Other colleges are shown as
+          backup options.
+        </InfoBox>
       </div>
-
-      <p className="mt-5 rounded-[18px] border border-amber-200 bg-amber-50 p-4 text-sm font-semibold leading-6 text-amber-900">
-        This tool gives pathway guidance only. Final admission depends on NEET
-        qualification, eligibility, documents, budget, seat availability,
-        counselling rules, university approval and official norms.
-      </p>
-    </article>
+    </FinderPanel>
   );
 
   const renderActiveView = () => {
@@ -785,14 +950,12 @@ export default function MBBSCollegeFinderSection() {
     return renderAbroadCollegeResults();
   };
 
-     return (
+  return (
     <section
       id="mbbs-college-finder-2026"
       aria-labelledby="mbbs-college-finder-title"
-      className="relative isolate scroll-mt-32 overflow-hidden bg-[linear-gradient(180deg,#f8fbff_0%,#eff8ff_48%,#f4fffb_100%)] px-3 pt-0 pb-10 sm:px-6 sm:pt-0 sm:pb-14 lg:px-8"
+      className="relative isolate scroll-mt-32 overflow-hidden bg-[linear-gradient(180deg,#f8fbff_0%,#eff8ff_48%,#f4fffb_100%)] px-3 pb-10 pt-2 sm:px-6 sm:pb-14 lg:px-8"
     >
-      <div className="pointer-events-none absolute inset-0 opacity-[0.55] [background-image:radial-gradient(circle_at_center,rgba(15,76,255,0.11)_1px,transparent_1.4px)] [background-size:24px_24px]" />
-
       <div className="sr-only">
         <h2 id="mbbs-college-finder-title">MBBS College Finder 2026</h2>
         <p>
@@ -806,7 +969,7 @@ export default function MBBSCollegeFinderSection() {
       </div>
 
       <div className="relative mx-auto max-w-7xl">
-        <div className="min-w-0">{renderActiveView()}</div>
+        {renderActiveView()}
       </div>
     </section>
   );

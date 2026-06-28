@@ -4,6 +4,7 @@ import CounsellingActionButton from "../components/CounsellingActionButton";
 import Navbar from "../components/navbar";
 import { mbbsIndiaCounselling2025 } from "../data/mbbsIndiaCounselling";
 import { mbbsIndiaColleges, mbbsIndiaCollegesByState, type MBBSIndiaCollege } from "../data/mbbsIndiaColleges";
+import { getMBBSIndiaFeeSummary } from "../data/mbbsIndiaFeeStructure";
 import { getMBBSIndiaAdmissionAccess, type MBBSIndiaAdmissionAccess } from "../data/mbbsIndiaAdmissionAccess";
 import {
   getMBBSIndiaCollegeAnchor,
@@ -34,7 +35,11 @@ const counsellingCutoffRows = mbbsIndiaCounselling2025.cutoffs.reduce(
 
 const formatNumber = (value: number) => value.toLocaleString("en-IN");
 
-const formatCollegeFee = (fee: string) => {
+const formatCollegeFee = (college: MBBSIndiaCollege) => {
+  const feeSummary = getMBBSIndiaFeeSummary(college);
+  if (feeSummary?.label) return feeSummary.label;
+
+  const fee = college.fees;
   const normalized = fee.trim().toLowerCase();
   if (!normalized || normalized === "##" || normalized === "na" || normalized === "n/a") {
     return "To be updated";
@@ -87,7 +92,7 @@ function CollegeList({ title, colleges, tone }: { title: string; colleges: MBBSI
                 {college.collegeName}
               </Link>
               <p className="mt-2 text-xs font-semibold leading-5 text-slate-600">
-                Seats: {formatNumber(college.seatCapacity)} | Established: {college.establishmentYear} | Fees: {formatCollegeFee(college.fees)}
+                Seats: {formatNumber(college.seatCapacity)} | Established: {college.establishmentYear} | Fees: {formatCollegeFee(college)}
               </p>
             </article>
           ))
