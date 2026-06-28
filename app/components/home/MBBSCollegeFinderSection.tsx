@@ -9,15 +9,12 @@ import {
   BadgeCheck,
   Building2,
   CheckCircle2,
-  Compass,
   GraduationCap,
   Globe2,
   Info,
   Landmark,
   PlaneTakeoff,
   ShieldCheck,
-  Sparkles,
-  Stethoscope,
   Trophy,
 } from "lucide-react";
 
@@ -49,24 +46,6 @@ type FinderView =
   | "abroad-input"
   | "abroad-countries"
   | "abroad-colleges";
-
-const stepByView: Record<FinderView, number> = {
-  intro: 0,
-  pathway: 1,
-  "india-input": 2,
-  "india-result": 3,
-  "abroad-input": 2,
-  "abroad-countries": 3,
-  "abroad-colleges": 4,
-};
-
-const finderSteps = [
-  "Start",
-  "Pathway",
-  "Inputs",
-  "Matches",
-  "Colleges",
-];
 
 const trustChips = ["India or Abroad", "Budget-based", "Quick guidance"];
 
@@ -187,7 +166,6 @@ export default function MBBSCollegeFinderSection() {
   const [selectedCountry, setSelectedCountry] =
     useState<MbbsFinderCountry>("Kyrgyzstan");
 
-  const activeStep = stepByView[view];
   const selectedCollegeRecommendation = useMemo(
     () => abroadCollegeRecommendations[selectedCountry],
     [selectedCountry],
@@ -213,28 +191,19 @@ export default function MBBSCollegeFinderSection() {
     setView(nextPathway === "india" ? "india-input" : "abroad-input");
   };
 
-  const resetFlow = () => {
-    setView("intro");
-    setPathway(null);
-    setSelectedCountry("Kyrgyzstan");
-  };
 
   const renderIntro = () => (
-    <article className="relative overflow-hidden rounded-[28px] border border-white/80 bg-[radial-gradient(circle_at_12%_0%,rgba(85,210,255,0.32),transparent_32%),linear-gradient(145deg,#061b46_0%,#0b3a83_54%,#087b7a_100%)] p-4 text-white shadow-[0_28px_70px_rgba(3,27,70,0.34),inset_0_1px_0_rgba(255,255,255,0.24)] sm:p-6">
+    <article className="relative overflow-hidden rounded-[28px] border border-white/80 bg-[radial-gradient(circle_at_12%_0%,rgba(85,210,255,0.32),transparent_32%),linear-gradient(145deg,#061b46_0%,#0b3a83_54%,#087b7a_100%)] px-4 pb-4 pt-0 text-white shadow-[0_28px_70px_rgba(3,27,70,0.34),inset_0_1px_0_rgba(255,255,255,0.24)] sm:px-6 sm:pb-6 sm:pt-3">
       <div className="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:linear-gradient(rgba(255,255,255,.32)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.32)_1px,transparent_1px)] [background-size:28px_28px]" />
       <div className="relative grid gap-5 lg:grid-cols-[1fr_260px] lg:items-center">
         <div className="min-w-0">
-          <p className="inline-flex items-center gap-2 rounded-full border border-cyan-200/50 bg-white/10 px-3 py-1.5 text-xs font-black text-cyan-100">
-            <Sparkles className="h-4 w-4" />
-            New experimental ILMALINK tool
-          </p>
-          <h3 className="mt-4 text-3xl font-black leading-tight text-white sm:text-4xl">
+          <h3 className="mt-4 text-[1.7rem] font-black leading-tight text-white sm:text-4xl">
             MBBS College Finder 2026
           </h3>
-          <p className="mt-3 max-w-2xl text-sm font-semibold leading-6 text-blue-50 sm:text-base">
-            Find your best available MBBS admission pathway in India or abroad
-            based on NEET score, domicile, budget and eligibility.
-          </p>
+          <p className="mt-2 max-w-2xl text-[16px] font-normal leading-[21px] text-blue-50">
+  Find your best available MBBS admission pathway in India or abroad
+  based on NEET score, domicile, budget and eligibility.
+</p>
 
           <div className="mt-5">
             <button
@@ -247,23 +216,18 @@ export default function MBBSCollegeFinderSection() {
               <span className="relative">Find My Best MBBS College</span>
               <ArrowRight className="relative h-5 w-5 transition group-hover:translate-x-1" />
             </button>
-            <p className="mt-3 text-center text-xs font-semibold text-cyan-50/90 sm:text-left">
+            <p className="sr-only">
               India or Abroad <span aria-hidden="true">&bull;</span> 3-click
               pathway guidance <span aria-hidden="true">&bull;</span>{" "}
               Budget-based
             </p>
           </div>
 
-          <div className="mt-5 flex flex-wrap gap-2">
-            {trustChips.map((chip) => (
-              <span
-                key={chip}
-                className="rounded-full border border-white/18 bg-white/10 px-3 py-1.5 text-xs font-black text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]"
-              >
-                {chip}
-              </span>
-            ))}
-          </div>
+          <div className="sr-only">
+  {trustChips.map((chip) => (
+    <span key={chip}>{chip}</span>
+  ))}
+</div>
         </div>
 
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
@@ -821,159 +785,28 @@ export default function MBBSCollegeFinderSection() {
     return renderAbroadCollegeResults();
   };
 
-  return (
+     return (
     <section
       id="mbbs-college-finder-2026"
       aria-labelledby="mbbs-college-finder-title"
-      className="relative isolate scroll-mt-32 overflow-hidden bg-[linear-gradient(180deg,#f8fbff_0%,#eff8ff_48%,#f4fffb_100%)] px-3 py-10 sm:px-6 sm:py-14 lg:px-8"
+      className="relative isolate scroll-mt-32 overflow-hidden bg-[linear-gradient(180deg,#f8fbff_0%,#eff8ff_48%,#f4fffb_100%)] px-3 pt-0 pb-10 sm:px-6 sm:pt-0 sm:pb-14 lg:px-8"
     >
       <div className="pointer-events-none absolute inset-0 opacity-[0.55] [background-image:radial-gradient(circle_at_center,rgba(15,76,255,0.11)_1px,transparent_1.4px)] [background-size:24px_24px]" />
-      <div className="sr-only" aria-label={mbbsCollegeFinderSeoHeading}>
-        <h2>{mbbsCollegeFinderSeoHeading}</h2>
+
+      <div className="sr-only">
+        <h2 id="mbbs-college-finder-title">MBBS College Finder 2026</h2>
+        <p>
+          Find your best available MBBS admission pathway in India or abroad
+          based on NEET score, domicile, budget and eligibility.
+        </p>
+        <h3>{mbbsCollegeFinderSeoHeading}</h3>
         {mbbsCollegeFinderSeoParagraphs.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>
         ))}
       </div>
 
       <div className="relative mx-auto max-w-7xl">
-        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-3xl">
-            <p className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-white px-3 py-1.5 text-xs font-black text-[#0F4CFF] shadow-[0_10px_22px_rgba(15,76,255,0.08)]">
-              <Compass className="h-4 w-4" />
-              Experimental guidance section
-            </p>
-            <h2
-              id="mbbs-college-finder-title"
-              className="mt-4 text-3xl font-black leading-tight text-[#081B35] sm:text-4xl lg:text-5xl"
-            >
-              MBBS College Finder 2026
-            </h2>
-            <p className="mt-3 text-base font-semibold leading-7 text-slate-600 sm:text-lg">
-              Find your best available MBBS admission pathway in India or abroad
-              based on NEET score, domicile, budget and eligibility.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            {finderSteps.map((step, index) => (
-              <span
-                key={step}
-                aria-current={activeStep === index ? "step" : undefined}
-                className={`inline-flex h-9 items-center gap-2 rounded-full border px-3 text-xs font-black ${
-                  activeStep >= index
-                    ? "border-blue-200 bg-white text-[#0F4CFF] shadow-[0_10px_20px_rgba(15,76,255,0.08)]"
-                    : "border-slate-200 bg-white/70 text-slate-400"
-                }`}
-              >
-                <span
-                  className={`flex h-5 w-5 items-center justify-center rounded-full text-[11px] ${
-                    activeStep >= index
-                      ? "bg-[#0F4CFF] text-white"
-                      : "bg-slate-100 text-slate-500"
-                  }`}
-                >
-                  {index + 1}
-                </span>
-                <span className="hidden sm:inline">{step}</span>
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid gap-4 xl:grid-cols-[0.86fr_1.14fr] xl:items-start">
-          <aside className="relative overflow-hidden rounded-[28px] border border-white/80 bg-white/86 p-4 shadow-[0_26px_64px_rgba(15,45,91,0.12),inset_0_1px_0_rgba(255,255,255,1)] backdrop-blur sm:p-5">
-            <div className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-cyan-200/50 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-24 -left-20 h-56 w-56 rounded-full bg-emerald-200/45 blur-3xl" />
-            <div className="relative">
-              <div className="flex items-center gap-3">
-                <span className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-[linear-gradient(135deg,#0F4CFF,#00C896)] text-white shadow-[0_14px_28px_rgba(15,76,255,0.24)]">
-                  <Stethoscope className="h-6 w-6" />
-                </span>
-                <div>
-                  <p className="text-sm font-black text-[#0F4CFF]">
-                    Main button on homepage hero
-                  </p>
-                  <p className="text-xs font-semibold text-slate-500">
-                    Placeholder flow, final logic later
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-                {pathwayCards.map((card) => (
-                  <div
-                    key={card.pathway}
-                    className={`rounded-[20px] border p-3 ${
-                      pathway === card.pathway
-                        ? "border-[#0F4CFF] bg-blue-50/70"
-                        : "border-slate-200 bg-white"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <Image
-                        src={card.imageSrc}
-                        alt=""
-                        width={640}
-                        height={360}
-                        aria-hidden="true"
-                        className="h-16 w-20 rounded-[14px] object-cover"
-                      />
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-black text-[#081B35]">
-                          {card.title}
-                        </p>
-                        <p className="mt-1 text-xs font-semibold leading-5 text-slate-500">
-                          {card.bullets.join(" + ")}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-5 grid grid-cols-3 gap-2">
-                {[
-                  ["20+", "Countries"],
-                  ["800+", "Universities"],
-                  ["15+", "Years Experience"],
-                ].map(([value, label]) => (
-                  <div
-                    key={label}
-                    className="rounded-[16px] border border-slate-200 bg-white p-3 text-center shadow-[0_10px_20px_rgba(15,45,91,0.08)]"
-                  >
-                    <p className="text-lg font-black text-[#0F4CFF]">{value}</p>
-                    <p className="mt-1 text-[11px] font-bold text-slate-500">
-                      {label}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row xl:flex-col">
-                {view === "intro" ? (
-                  <SectionButton onClick={() => setView("pathway")} variant="blue">
-                    Find My Best MBBS College
-                    <ArrowRight className="h-4 w-4" />
-                  </SectionButton>
-                ) : (
-                  <SectionButton onClick={resetFlow} variant="quiet">
-                    Restart Finder
-                  </SectionButton>
-                )}
-                <button
-                  type="button"
-                  onClick={openCounsellingPopup}
-                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-[18px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-black text-[#075E59] transition hover:bg-white focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-100"
-                >
-                  <ShieldCheck className="h-4 w-4" />
-                  Talk to counsellor
-                </button>
-              </div>
-            </div>
-          </aside>
-
-          <div className="min-w-0">{renderActiveView()}</div>
-        </div>
+        <div className="min-w-0">{renderActiveView()}</div>
       </div>
     </section>
   );

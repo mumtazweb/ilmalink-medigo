@@ -639,7 +639,7 @@ export default function GeoProfilePage() {
           </div>
 
           <div className="mt-5 overflow-x-auto rounded-2xl border border-slate-200">
-            <table className="w-full min-w-[860px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[860px] border-collapse text-left text-sm">in
               <thead className="bg-[#061733] text-white">
                 <tr>
                   <th className="px-4 py-3 font-black">Country</th>
