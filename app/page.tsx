@@ -6,6 +6,7 @@ import HomeHeroClient from "./components/HomeHeroClient";
 import JsonLd from "./components/JsonLd";
 import LatestBlogsScroller from "./components/blog/LatestBlogsScroller";
 import EntranceExamNewsScroller from "./components/blog/EntranceExamNewsScroller";
+import MBBSCollegeFinderSection from "./components/home/MBBSCollegeFinderSection";
 import {
   ilmaLinkOrganizationSchema,
   ilmaLinkWebsiteSchema,
@@ -177,6 +178,8 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Experimental MBBS College Finder section - placed after footer/copyright for future development */}
+      <MBBSCollegeFinderSection />
     </main>
   );
 }
