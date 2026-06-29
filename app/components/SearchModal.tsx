@@ -92,15 +92,26 @@ type AskSuggestedLink = {
   whySuggested?: string;
 };
 
+type AskSource = {
+  title: string;
+  description?: string;
+  url: string;
+  category?: string;
+};
+
 type AskilmaLinkResponse = {
   answer: string;
   confidence: "high" | "medium" | "low";
-  detectedFilters: string[];
-  matchedItems: unknown[];
-  suggestedLinks: AskSuggestedLink[];
-  shouldShowConnectCTA: true;
+  sources?: AskSource[];
+  dataAvailable?: boolean;
+  needsCounselling?: boolean;
+  openCounsellingPopup?: boolean;
+  detectedFilters?: string[];
+  matchedItems?: unknown[];
+  suggestedLinks?: AskSuggestedLink[];
+  shouldShowConnectCTA?: boolean;
   shouldAutoOpenCounselling?: boolean;
-  notFound: boolean;
+  notFound?: boolean;
 };
 
 type SearchModalProps = {
@@ -1154,6 +1165,17 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
 );
 
 const displayedAskAnswer = askAnswer?.answer;
+const displayedDetectedFilters = askAnswer?.detectedFilters ?? [];
+const displayedSuggestedLinks: AskSuggestedLink[] =
+  askAnswer?.suggestedLinks?.length
+    ? askAnswer.suggestedLinks
+    : askAnswer?.sources?.map((source) => ({
+        title: source.title,
+        description: source.description || "",
+        url: source.url,
+        sourceLabel: "ilmaLink local source",
+        dataType: source.category || "Page",
+      })) ?? [];
 
   const openCounselling = useCallback(() => {
     onClose();
@@ -1207,16 +1229,15 @@ const displayedAskAnswer = askAnswer?.answer;
       if (controller.signal.aborted) return;
       setAskAnswer(data);
 
-      const shouldOpenCounsellingAfterPreview =
-  data.shouldAutoOpenCounselling;
-
-if (shouldOpenCounsellingAfterPreview) {
-  window.setTimeout(() => {
-    if (!controller.signal.aborted) {
-      openCounselling();
-    }
-  }, 2_800);
-}
+      if (data.openCounsellingPopup) {
+        window.dispatchEvent(new Event("ilmalink:open-counselling"));
+      } else if (data.shouldAutoOpenCounselling) {
+        window.setTimeout(() => {
+          if (!controller.signal.aborted) {
+            openCounselling();
+          }
+        }, 2_800);
+      }
     } catch (error) {
       if (
         controller.signal.aborted ||
@@ -1591,12 +1612,12 @@ window.setTimeout(() => {
                       <p className="mt-3 text-sm leading-6 text-slate-700">{askError}</p>
                     ) : askAnswer ? (
                       <>
-                        {askAnswer.detectedFilters.length > 0 && (
+                        {displayedDetectedFilters.length > 0 && (
                           <div className="mt-3 flex flex-wrap items-center gap-1.5">
                             <span className="text-[10px] font-black uppercase tracking-[0.12em] text-slate-400">
                               Detected:
                             </span>
-                            {askAnswer.detectedFilters.map((filter) => (
+                            {displayedDetectedFilters.map((filter) => (
                               <span
                                 key={filter}
                                 className="rounded-full border border-emerald-100 bg-emerald-50 px-2 py-1 text-[10px] font-bold text-emerald-800"
@@ -1611,9 +1632,9 @@ window.setTimeout(() => {
                           {displayedAskAnswer}
                         </p>
 
-                        {askAnswer.suggestedLinks.length > 0 && (
+                        {displayedSuggestedLinks.length > 0 && (
                           <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                            {askAnswer.suggestedLinks.slice(0, 6).map((link, index) => (
+                            {displayedSuggestedLinks.slice(0, 6).map((link, index) => (
                               <button
                                 key={`${link.url}-${link.title}`}
                                 type="button"
@@ -1658,12 +1679,6 @@ window.setTimeout(() => {
                           </div>
                         )}
 
-                        {askAnswer.shouldAutoOpenCounselling && (
-                          <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] font-bold leading-4 text-amber-800">
-                            Verified data is unavailable. Opening expert counselling…
-                          </p>
-                        )}
-
                         <p className="mt-3 border-t border-slate-200/80 pt-2.5 text-[10px] leading-4 text-slate-500">
                           {answerDisclaimer}
                         </p>
@@ -1681,7 +1696,7 @@ window.setTimeout(() => {
                     >
                       <MessageCircle size={15} />
                       {askAnswer?.notFound || askError
-                        ? "Let’s Connect"
+                        ? "Let's Connect"
                         : "Connect ilmaLink Expert"}
                     </Link>
                   </div>

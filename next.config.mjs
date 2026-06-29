@@ -1,4 +1,9 @@
 ﻿/** @type {import('next').NextConfig} */
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const projectRoot = path.dirname(fileURLToPath(import.meta.url));
+
 const serverActionAllowedOrigins = [
   "ilmalink.com",
   "www.ilmalink.com",
@@ -26,6 +31,9 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
+  },
+  turbopack: {
+    root: projectRoot,
   },
   experimental: {
     serverActions: {

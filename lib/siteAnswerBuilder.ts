@@ -28,6 +28,11 @@ import {
   georgiaUniversities,
   type GeorgiaUniversityPageData,
 } from "@/app/data/georgiaUniversities";
+import {
+  bangladeshFeaturedUniversities,
+  type BangladeshCollegeProfile,
+} from "@/app/data/bangladeshUniversities";
+import { getMBBSIndiaFeeStructure } from "@/app/data/mbbsIndiaFeeStructure";
 
 export type AskilmaLinkAnswer = {
   answer: string;
@@ -365,6 +370,31 @@ function resolveGeorgiaUniversity(
   return best?.university ?? null;
 }
 
+function resolveBangladeshCollege(
+  query: string
+): BangladeshCollegeProfile | null {
+  let best:
+    | {
+        college: BangladeshCollegeProfile;
+        score: number;
+      }
+    | undefined;
+
+  for (const college of bangladeshFeaturedUniversities) {
+    const score = getInstitutionMatchScore(query, [
+      ...getInstitutionAliases(college.name),
+      college.slug.replace(/-/g, " "),
+      college.slug.replace(/-/g, ""),
+    ]);
+
+    if (score > 0 && (!best || score > best.score)) {
+      best = { college, score };
+    }
+  }
+
+  return best?.college ?? null;
+}
+
 function indiaCollegeLink(
   college: MBBSIndiaCollege,
   description: string
@@ -375,6 +405,218 @@ function indiaCollegeLink(
     url: getMBBSIndiaCollegeHref(college),
     sourceLabel: "ilmaLink MBBS India college data",
     dataType: "MBBS India College",
+  };
+}
+
+function formatWestBengalFeeAnswer(college: MBBSIndiaCollege) {
+  const feeStructure = getMBBSIndiaFeeStructure(college);
+  if (!feeStructure) return null;
+
+  const state2025 = feeStructure.rows.find(
+    (row) => row.yearLabel === "2025" && row.quota === "State quota"
+  );
+  const management2025 = feeStructure.rows.find(
+    (row) => row.yearLabel === "2025" && row.quota === "Management quota"
+  );
+  const expected2026 = feeStructure.rows.filter(
+    (row) => row.yearLabel === "2026 expected"
+  );
+  const parts = [
+    state2025
+      ? `State quota 2025-26: ${state2025.perSemester.display} per semester, ${state2025.totalTuition.display} total tuition`
+      : "",
+    management2025
+      ? `Management quota 2025-26: ${management2025.perSemester.display} per semester, ${management2025.totalTuition.display} total tuition`
+      : "",
+    expected2026.length
+      ? `2026-27 expected planning range: ${expected2026
+          .map((row) => `${row.quota} total ${row.totalTuition.display}`)
+          .join("; ")}`
+      : "",
+  ].filter(Boolean);
+
+  return `${feeStructure.collegeName} MBBS fee structure: ${parts.join(
+    ". "
+  )}. Verify the current WBMCC notice before payment or choice filling.`;
+}
+
+function getFeeRowDisplay(
+  rows: unknown[],
+  yearLabel: string,
+  quota: string
+) {
+  const row = rows.find(
+    (item) =>
+      item &&
+      typeof item === "object" &&
+      (item as { yearLabel?: unknown }).yearLabel === yearLabel &&
+      (item as { quota?: unknown }).quota === quota
+  ) as
+    | {
+        perSemester?: { display?: unknown };
+        totalTuition?: { display?: unknown };
+      }
+    | undefined;
+
+  const perSemester =
+    typeof row?.perSemester?.display === "string"
+      ? row.perSemester.display
+      : null;
+  const total =
+    typeof row?.totalTuition?.display === "string"
+      ? row.totalTuition.display
+      : null;
+
+  return perSemester || total
+    ? [perSemester ? `${perSemester}/sem` : "", total ? `${total} total` : ""]
+        .filter(Boolean)
+        .join(", ")
+    : null;
+}
+
+function buildIndiaFeeSummaryAnswer(item: SiteSearchMatch): BuiltAnswer | null {
+  const feeStructures = Array.isArray(item.data?.feeStructures)
+    ? item.data.feeStructures
+    : [];
+
+  if (feeStructures.length === 0) return null;
+
+  const lines = feeStructures
+    .slice(0, 6)
+    .map((structure) => {
+      if (!structure || typeof structure !== "object") return "";
+
+      const collegeName =
+        typeof (structure as { collegeName?: unknown }).collegeName ===
+        "string"
+          ? (structure as { collegeName: string }).collegeName
+          : "College";
+      const rows = Array.isArray((structure as { rows?: unknown }).rows)
+        ? ((structure as { rows: unknown[] }).rows)
+        : [];
+      const state2025 = getFeeRowDisplay(rows, "2025", "State quota");
+      const management2025 = getFeeRowDisplay(
+        rows,
+        "2025",
+        "Management quota"
+      );
+      const state2026 = getFeeRowDisplay(
+        rows,
+        "2026 expected",
+        "State quota"
+      );
+      const management2026 = getFeeRowDisplay(
+        rows,
+        "2026 expected",
+        "Management quota"
+      );
+
+      return `${collegeName}: 2025 state ${state2025 ?? "not available"}; 2025 management ${management2025 ?? "not available"}; 2026 expected state ${state2026 ?? "not available"}; 2026 expected management ${management2026 ?? "not available"}`;
+    })
+    .filter(Boolean)
+    .join("\n");
+
+  return {
+    answer: `${item.title}: ${feeStructures.length} West Bengal private MBBS fee records are available with state quota, management quota, 2025-26 per-semester/total tuition and 2026-27 expected planning ranges.\n${lines}\nOpen the full page for the complete college-wise table. Verify the current WBMCC notice before payment or choice filling.`,
+    suggestedLinks: [toDirectLink(item)],
+  };
+}
+
+const feeQuestionWords = new Set([
+  "admission",
+  "budget",
+  "college",
+  "cost",
+  "fee",
+  "fees",
+  "government",
+  "hospital",
+  "institute",
+  "management",
+  "mbbs",
+  "medical",
+  "package",
+  "private",
+  "quota",
+  "state",
+  "structure",
+  "tuition",
+  "university",
+]);
+
+function getNamedFeePhraseCandidate(query: string) {
+  const terms = normalizeSiteSearchText(query)
+    .split(" ")
+    .filter((term) => term.length > 1 && !feeQuestionWords.has(term));
+
+  return terms.length >= 2 ? terms.join(" ") : null;
+}
+
+function searchMatchesPhrase(search: SiteDataSearchResponse, phrase: string) {
+  return search.matchedItems.some((item) => {
+    const text = normalizeSiteSearchText(
+      [
+        item.title,
+        item.description,
+        item.tags.join(" "),
+        item.collegeName ?? "",
+        item.url,
+      ].join(" ")
+    );
+
+    return includesNormalizedPhrase(text, phrase);
+  });
+}
+
+function shouldAvoidBroadFeeFallback(search: SiteDataSearchResponse) {
+  if (!search.counsellingIntent.feePreference) return false;
+
+  const phrase = getNamedFeePhraseCandidate(search.query);
+  if (!phrase) return false;
+
+  return !searchMatchesPhrase(search, phrase);
+}
+
+function buildBangladeshFeeSummaryAnswer(
+  search: SiteDataSearchResponse,
+  item: SiteSearchMatch
+): BuiltAnswer {
+  const feeItems = search.matchedItems
+    .filter(
+      (match) =>
+        match.data?.kind === "bangladesh-university" &&
+        match.matchedDataType === "University Fee"
+    )
+    .slice(0, 5)
+    .map((match) => {
+      const fees =
+        asString(match.data?.fees) ??
+        asString(match.data?.feeSummary) ??
+        "fee row available on the linked page";
+
+      return `${match.title}: ${fees}`;
+    })
+    .join("\n");
+
+  return {
+    answer: `${item.title}: college-wise Bangladesh MBBS fee rows are available in the current ilmaLink dataset. ${feeItems ? `Sample rows:\n${feeItems}\n` : ""}Open the Bangladesh fee section for the complete available list, hostel/food notes and payment cautions. Verify the latest college-issued fee letter before payment.`,
+    suggestedLinks: [toDirectLink(item)],
+  };
+}
+
+function bangladeshCollegeLink(
+  college: BangladeshCollegeProfile,
+  description: string
+): SuggestedSiteLink {
+  return {
+    title: college.name,
+    description,
+    url:
+      college.pageExists === false
+        ? "/mbbs-abroad/bangladesh#bangladesh-universities"
+        : `/mbbs-abroad/bangladesh/${college.slug}/`,
+    sourceLabel: "ilmaLink Bangladesh university data",
+    dataType: "University Fee",
   };
 }
 
@@ -412,12 +654,16 @@ function getRequestedCutoffCategory(
   ];
 
   const matched = aliases.find(([terms]) =>
-    terms.some((term) => normalized.includes(term))
+    terms.some((term) => includesNormalizedPhrase(normalized, term))
   )?.[1];
 
   return matched
     ? rows.find((row) => row.category === matched) ?? null
     : null;
+}
+
+function includesNormalizedPhrase(text: string, phrase: string) {
+  return ` ${text} `.includes(` ${normalizeSiteSearchText(phrase)} `);
 }
 
 function getRequestedRound(query: string) {
@@ -860,18 +1106,49 @@ function buildUniversityRecommendationAnswer(): BuiltAnswer {
 }
 
 function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
+  if (shouldAvoidBroadFeeFallback(search)) {
+    return {
+      answer:
+        "I found the country/admission context, but there is no verified fee row for that exact college name in the local ilmaLink admission dataset yet. Please verify the latest official college fee notice before payment.",
+      suggestedLinks: search.suggestedLinks.slice(0, 3),
+      shouldAutoOpenCounselling: true,
+    };
+  }
+
+  const topFeeSummary = search.matchedItems.find(
+    (item) => item.data?.kind === "mbbs-india-fees"
+  );
+
+  if (
+    topFeeSummary &&
+    search.matchedItems[0]?.id === topFeeSummary.id &&
+    !search.counsellingIntent.entity
+  ) {
+    const summaryAnswer = buildIndiaFeeSummaryAnswer(topFeeSummary);
+    if (summaryAnswer) return summaryAnswer;
+  }
+
   const resolvedIndiaCollege = resolveIndiaCollege(search.query);
 
   if (resolvedIndiaCollege) {
+    const structuredFeeAnswer = formatWestBengalFeeAnswer(resolvedIndiaCollege);
+    const targetLink = indiaCollegeLink(
+      resolvedIndiaCollege,
+      `Open the full ${resolvedIndiaCollege.collegeName} page for its available fee status, seats and counselling data.`
+    );
+
+    if (structuredFeeAnswer) {
+      return {
+        answer: structuredFeeAnswer,
+        suggestedLinks: [targetLink],
+      };
+    }
+
     const unavailable =
       !resolvedIndiaCollege.fees ||
       normalizeSiteSearchText(resolvedIndiaCollege.fees).includes(
         "to be updated"
       );
-    const targetLink = indiaCollegeLink(
-      resolvedIndiaCollege,
-      `Open the full ${resolvedIndiaCollege.collegeName} page for its available fee status, seats and counselling data.`
-    );
 
     if (unavailable) {
       return {
@@ -883,6 +1160,32 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
 
     return {
       answer: `${resolvedIndiaCollege.collegeName} fee: ${resolvedIndiaCollege.fees}. Open the college page below for the complete available record.`,
+      suggestedLinks: [targetLink],
+    };
+  }
+
+  const resolvedBangladeshCollege = resolveBangladeshCollege(search.query);
+
+  if (resolvedBangladeshCollege) {
+    const targetLink = bangladeshCollegeLink(
+      resolvedBangladeshCollege,
+      `Open the full ${resolvedBangladeshCollege.name} page for fee rows, payment schedule, eligibility, documents and FMGE reference.`
+    );
+    const feeRows = resolvedBangladeshCollege.feeRows
+      .slice(0, 5)
+      .map((row) =>
+        [row.label, row.amount, row.note].filter(Boolean).join(": ")
+      )
+      .join("; ");
+    const additionalFees = resolvedBangladeshCollege.additionalFees
+      .slice(0, 4)
+      .map((row) =>
+        [row.label, row.amount, row.note].filter(Boolean).join(": ")
+      )
+      .join("; ");
+
+    return {
+      answer: `${resolvedBangladeshCollege.name} MBBS fee: ${resolvedBangladeshCollege.fees}. Listed total: ${resolvedBangladeshCollege.totalCourseFeeLabel}. ${feeRows ? `Main fee rows: ${feeRows}. ` : ""}${additionalFees ? `Additional/hostel-food notes: ${additionalFees}. ` : ""}Verify the latest college-issued fee letter and Bangladesh eligibility route before payment.`,
       suggestedLinks: [targetLink],
     };
   }
@@ -995,12 +1298,28 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
   }
 
   const target = search.matchedItems.find((item) =>
-    ["mbbs-india-college", "kyrgyz-university", "georgia-university"].includes(
+    [
+      "mbbs-india-college",
+      "mbbs-india-fees",
+      "mbbs-india-fee-structure",
+      "bangladesh-fees",
+      "kyrgyz-university",
+      "georgia-university",
+      "bangladesh-university",
+    ].includes(
       String(item.data?.kind)
     )
   );
 
   if (!target) {
+    if (search.counsellingIntent.entity && search.matchedItems.length > 0) {
+      return {
+        answer: `I found ${search.counsellingIntent.entity} in the current ilmaLink data, but there is no verified fee structure for it in the local admission dataset yet. Use the matched page below for available ranking/FMGE context and verify the fee from the latest official college notice before payment.`,
+        suggestedLinks: search.suggestedLinks.slice(0, 3),
+        shouldAutoOpenCounselling: true,
+      };
+    }
+
     return {
       answer:
         "I could not identify the exact college or university from the question. Please type its full name or common short name so I can check whether a verified fee is available.",
@@ -1014,6 +1333,18 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
   );
 
   if (target.data?.kind === "mbbs-india-college") {
+    const feeStructure = target.data.feeStructure;
+    if (
+      feeStructure &&
+      typeof feeStructure === "object" &&
+      Array.isArray((feeStructure as { rows?: unknown[] }).rows)
+    ) {
+      return {
+        answer: `${target.title} has a structured fee table in the current ilmalink data. Open the college page below for state quota, management quota, per-semester and total tuition details.`,
+        suggestedLinks: [targetLink],
+      };
+    }
+
     const fees = asString(target.data.fees);
     const unavailable =
       !fees || normalizeSiteSearchText(fees).includes("to be updated");
@@ -1030,6 +1361,51 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
       answer: `${target.title} fee: ${fees}. Open the college page below for the complete available record.`,
       suggestedLinks: [targetLink],
     };
+  }
+
+  if (target.data?.kind === "mbbs-india-fee-structure") {
+    const rows = Array.isArray(target.data.rows) ? target.data.rows : [];
+    const rowText = rows
+      .slice(0, 4)
+      .map((row) =>
+        row && typeof row === "object"
+          ? [
+              (row as { academicYear?: string }).academicYear,
+              (row as { quota?: string }).quota,
+              (row as { perSemester?: { display?: string } }).perSemester?.display,
+              (row as { totalTuition?: { display?: string } }).totalTuition?.display,
+            ]
+              .filter(Boolean)
+              .join(" ")
+          : ""
+      )
+      .filter(Boolean)
+      .join("; ");
+
+    return {
+      answer: `${target.title} MBBS fee structure: ${rowText}. Verify the current WBMCC notice before payment or choice filling.`,
+      suggestedLinks: [targetLink],
+    };
+  }
+
+  if (target.data?.kind === "mbbs-india-fees") {
+    const summaryAnswer = buildIndiaFeeSummaryAnswer(target);
+    if (summaryAnswer) return summaryAnswer;
+  }
+
+  if (target.data?.kind === "bangladesh-university") {
+    const fees = asString(target.data.fees) ?? asString(target.data.feeSummary);
+
+    return {
+      answer: `${target.title} MBBS fee: ${
+        fees ?? "fee details are available on the linked Bangladesh college page"
+      }. Open the page below for payment schedule, hostel/food notes, eligibility, documents and FMGE reference.`,
+      suggestedLinks: [targetLink],
+    };
+  }
+
+  if (target.data?.kind === "bangladesh-fees") {
+    return buildBangladeshFeeSummaryAnswer(search, target);
   }
 
   if (target.data?.kind === "georgia-university") {
@@ -1093,6 +1469,61 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
   return {
     answer: `${target.title} — ${feeLine} Open the fee page below for the full semester-wise structure and notes.`,
     suggestedLinks: [targetLink],
+  };
+}
+
+function buildAdmissionFactAnswer(search: SiteDataSearchResponse): BuiltAnswer | null {
+  const top = search.matchedItems[0];
+  if (!top) return null;
+
+  if (
+    ![
+      "Eligibility",
+      "Documents",
+      "Recognition",
+      "Hostel",
+      "Ranking",
+      "Seats",
+    ].includes(top.matchedDataType)
+  ) {
+    return null;
+  }
+
+  const directLink = toDirectLink(top);
+
+  if (top.matchedDataType === "Eligibility") {
+    const eligibility = Array.isArray(top.data?.eligibility)
+      ? top.data.eligibility
+      : [];
+    const points = eligibility
+      .filter((item): item is string => typeof item === "string")
+      .slice(0, 5)
+      .join(" ");
+
+    return {
+      answer: `${top.title}: ${points || top.description} Verify the latest official circular before payment or admission processing.`,
+      suggestedLinks: [directLink],
+    };
+  }
+
+  if (top.matchedDataType === "Documents") {
+    const documents = Array.isArray(top.data?.documents)
+      ? top.data.documents
+      : [];
+    const points = documents
+      .filter((item): item is string => typeof item === "string")
+      .slice(0, 7)
+      .join(" ");
+
+    return {
+      answer: `${top.title}: ${points || top.description}`,
+      suggestedLinks: [directLink],
+    };
+  }
+
+  return {
+    answer: `${top.title}: ${top.description}`,
+    suggestedLinks: [directLink, ...search.suggestedLinks.slice(0, 3)],
   };
 }
 
@@ -1177,7 +1608,11 @@ export function buildSiteAnswerFromSearch(
 ): AskilmaLinkAnswer {
   const intentBasedAnswer = buildIntentBasedCounsellingAnswer(search);
 
-  if (intentBasedAnswer) {
+  if (
+    intentBasedAnswer &&
+    (search.counsellingIntent.greeting ||
+      search.counsellingIntent.ambiguousBest)
+  ) {
     return {
       answer: intentBasedAnswer.answer,
       confidence: search.confidence,
@@ -1241,6 +1676,37 @@ export function buildSiteAnswerFromSearch(
       shouldShowConnectCTA: true,
       shouldAutoOpenCounselling:
         built.shouldAutoOpenCounselling ?? false,
+      notFound: false,
+    };
+  }
+
+  const admissionFactAnswer = buildAdmissionFactAnswer(search);
+
+  if (admissionFactAnswer) {
+    return {
+      answer: admissionFactAnswer.answer,
+      confidence: search.confidence,
+      detectedFilters: search.detectedFilters,
+      matchedItems: search.matchedItems,
+      suggestedLinks:
+        admissionFactAnswer.suggestedLinks ?? search.suggestedLinks,
+      shouldShowConnectCTA: true,
+      shouldAutoOpenCounselling:
+        admissionFactAnswer.shouldAutoOpenCounselling ?? false,
+      notFound: false,
+    };
+  }
+
+  if (intentBasedAnswer) {
+    return {
+      answer: intentBasedAnswer.answer,
+      confidence: search.confidence,
+      detectedFilters: search.detectedFilters,
+      matchedItems: search.matchedItems,
+      suggestedLinks:
+        intentBasedAnswer.suggestedLinks ?? search.suggestedLinks,
+      shouldShowConnectCTA: true,
+      shouldAutoOpenCounselling: false,
       notFound: false,
     };
   }

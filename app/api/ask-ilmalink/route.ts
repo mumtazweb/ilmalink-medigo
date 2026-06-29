@@ -1,8 +1,13 @@
-import type { NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
-import { buildSiteAnswerFromSearch } from "@/lib/siteAnswerBuilder";
 import {
-  searchInternalSiteData,
+  generateIlmalinkGeminiAnswer,
+  ILMALINK_COUNSELLING_FALLBACK,
+  type SearchSource,
+} from "@/lib/ilmalinkGeminiAnswer";
+import {
+  searchSiteData,
+  type SiteSearchMatch,
   type SiteSearchRecord,
 } from "@/lib/siteDataSearch";
 
@@ -105,18 +110,65 @@ async function getApprovedAdvisoryRecords(): Promise<SiteSearchRecord[]> {
   }
 }
 
+function toSearchSource(item: SiteSearchMatch): SearchSource {
+  return {
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    url: item.url,
+    category: item.category,
+    content: item.content,
+    priority: item.priority,
+    dataType: item.matchedDataType,
+    sourceLabel: item.sourceLabel,
+    lastUpdated: item.lastUpdated,
+    score: item.score,
+    keyFacts: item.keyFacts,
+  };
+}
+
+function toPublicSource(source: SearchSource) {
+  return {
+    title: source.title,
+    url: source.url,
+    category: source.category || source.dataType,
+    description: source.description,
+  };
+}
+
+function toSuggestedLink(source: SearchSource) {
+  return {
+    title: source.title,
+    description: source.description || "",
+    url: source.url,
+    sourceLabel: source.sourceLabel || "ilmaLink local source",
+    dataType: source.dataType || source.category || "Page",
+    lastUpdated: source.lastUpdated,
+  };
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const body = (await request.json()) as { question?: unknown };
+    const body = (await request.json()) as {
+      question?: unknown;
+      query?: unknown;
+    };
     const question =
-      typeof body.question === "string" ? body.question.trim() : "";
+      typeof body.question === "string"
+        ? body.question.trim()
+        : typeof body.query === "string"
+          ? body.query.trim()
+          : "";
 
     if (!question) {
-      return Response.json(
+      return NextResponse.json(
         {
-          answer:
-            "Please type a keyword or MBBS-related question.",
+          answer: ILMALINK_COUNSELLING_FALLBACK,
+          sources: [],
           confidence: "low",
+          dataAvailable: false,
+          needsCounselling: true,
+          openCounsellingPopup: true,
           detectedFilters: [],
           matchedItems: [],
           suggestedLinks: [],
@@ -129,34 +181,55 @@ export async function POST(request: NextRequest) {
     }
 
     const advisoryRecords = await getApprovedAdvisoryRecords();
-    const search = searchInternalSiteData(question, {
+    const search = searchSiteData(question, {
+      limit: 12,
       extraRecords: advisoryRecords,
     });
-    const answer = buildSiteAnswerFromSearch(search);
+    const localSources = search.matchedItems
+      .slice(0, 8)
+      .map(toSearchSource);
+    const aiResult = await generateIlmalinkGeminiAnswer({
+      query: question,
+      sources: localSources,
+    });
+    const publicSources = aiResult.sourcesUsed.map(toPublicSource);
 
-    return Response.json({
-      ...answer,
-      matchedItems: answer.matchedItems.slice(0, 4).map((item) => ({
+    return NextResponse.json({
+      answer: aiResult.answer,
+      sources: publicSources,
+      confidence: aiResult.confidence,
+      dataAvailable: aiResult.dataAvailable,
+      needsCounselling: aiResult.needsCounselling,
+      openCounsellingPopup: aiResult.openCounsellingPopup,
+      detectedFilters: search.detectedFilters,
+      matchedItems: search.matchedItems.slice(0, 4).map((item) => ({
         id: item.id,
         title: item.title,
         url: item.url,
         dataType: item.matchedDataType,
         score: item.score,
       })),
+      suggestedLinks: aiResult.sourcesUsed.map(toSuggestedLink),
+      shouldShowConnectCTA: true,
+      shouldAutoOpenCounselling: aiResult.openCounsellingPopup,
+      notFound: !aiResult.dataAvailable,
     });
    } catch (error) {
     console.error("Ask ilmaLink API error:", error);
 
-    return Response.json(
+    return NextResponse.json(
       {
-        answer:
-          "I could not find a confident match in ilmaLink data. You can ask in another way or connect with ilmalink for counselling support.",
+        answer: ILMALINK_COUNSELLING_FALLBACK,
+        sources: [],
         confidence: "low",
+        dataAvailable: false,
+        needsCounselling: true,
+        openCounsellingPopup: true,
         detectedFilters: [],
         matchedItems: [],
         suggestedLinks: [],
         shouldShowConnectCTA: true,
-        shouldAutoOpenCounselling: false,
+        shouldAutoOpenCounselling: true,
         notFound: true,
       },
       { status: 500 }

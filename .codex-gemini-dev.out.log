@@ -1,0 +1,84 @@
+
+> ilmalink-medigo@0.1.0 predev
+> npm run search:index
+
+
+> ilmalink-medigo@0.1.0 search:index
+> node scripts/generate-search-index.mjs
+
+Generated app\data\searchIndex.ts with 1751 entries.
+
+> ilmalink-medigo@0.1.0 dev
+> next dev --port 3000
+
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.97.24.23:3000
+- Environments: .env.development.local, .env.local, .env
+✓ Ready in 1996ms
+Creating turbopack project { dir: 'C:\\Users\\91956\\ilmalink-medigo', testMode: true }
+- Experiments (use with caution):
+  · proxyClientMaxBodySize: "100mb"
+  · serverActions
+
+ POST /api/ask-ilmalink 200 in 30.0s (next.js: 754ms, proxy.ts: 424ms, application-code: 28.8s)
+ POST /api/ask-ilmalink 200 in 1699ms (next.js: 627ms, proxy.ts: 118ms, application-code: 955ms)
+ POST /api/ask-ilmalink 200 in 32.6s (next.js: 12ms, proxy.ts: 14ms, application-code: 32.5s)
+ POST /api/ask-ilmalink 200 in 14.9s (next.js: 12ms, proxy.ts: 16ms, application-code: 14.9s)
+ POST /api/ask-ilmalink 200 in 45s (next.js: 10ms, proxy.ts: 15ms, application-code: 45s)
+ POST /api/ask-ilmalink 200 in 9.5s (next.js: 10ms, proxy.ts: 13ms, application-code: 9.5s)
+ POST /api/ask-ilmalink 200 in 9.0s (next.js: 10ms, proxy.ts: 13ms, application-code: 8.9s)
+ POST /api/ask-ilmalink 200 in 9.1s (next.js: 15ms, proxy.ts: 22ms, application-code: 9.1s)
+ POST /api/ask-ilmalink 200 in 9.1s (next.js: 16ms, proxy.ts: 15ms, application-code: 9.1s)
+ POST /api/ask-ilmalink 200 in 9.1s (next.js: 17ms, proxy.ts: 13ms, application-code: 9.1s)
+ POST /api/ask-ilmalink 200 in 8.5s (next.js: 11ms, proxy.ts: 13ms, application-code: 8.4s)
+ POST /api/ask-ilmalink 200 in 8.5s (next.js: 10ms, proxy.ts: 12ms, application-code: 8.5s)
+ POST /api/ask-ilmalink 200 in 8.7s (next.js: 10ms, proxy.ts: 13ms, application-code: 8.7s)
+ POST /api/ask-ilmalink 200 in 8.3s (next.js: 11ms, proxy.ts: 11ms, application-code: 8.3s)
+ POST /api/ask-ilmalink 200 in 8.2s (next.js: 9ms, proxy.ts: 11ms, application-code: 8.2s)
+ POST /api/ask-ilmalink 200 in 8.1s (next.js: 9ms, proxy.ts: 14ms, application-code: 8.1s)
+ POST /api/ask-ilmalink 200 in 823ms (next.js: 9ms, proxy.ts: 9ms, application-code: 804ms)
+ POST /api/ask-ilmalink 200 in 8.3s (next.js: 9ms, proxy.ts: 11ms, application-code: 8.3s)
+ POST /api/ask-ilmalink 200 in 8.0s (next.js: 11ms, proxy.ts: 14ms, application-code: 7.9s)
+ POST /api/ask-ilmalink 200 in 8.4s (next.js: 11ms, proxy.ts: 10ms, application-code: 8.3s)
+ POST /api/ask-ilmalink 200 in 867ms (next.js: 9ms, proxy.ts: 9ms, application-code: 849ms)
+ POST /api/ask-ilmalink 200 in 10.3s (next.js: 824ms, proxy.ts: 139ms, application-code: 9.3s)
+ POST /api/ask-ilmalink 200 in 251ms (next.js: 11ms, proxy.ts: 11ms, application-code: 230ms)
+ POST /api/ask-ilmalink 200 in 789ms (next.js: 9ms, proxy.ts: 10ms, application-code: 770ms)
+ GET / 200 in 5.0s (next.js: 420ms, proxy.ts: 12ms, application-code: 4.6s)
+ GET / 200 in 1327ms (next.js: 13ms, proxy.ts: 12ms, application-code: 1301ms)
+ GET /api/blog/ticker/ 200 in 613ms (next.js: 109ms, proxy.ts: 13ms, application-code: 492ms)
+ GET / 200 in 1252ms (next.js: 12ms, proxy.ts: 11ms, application-code: 1229ms)
+ GET /api/blog/ticker/ 200 in 377ms (next.js: 11ms, proxy.ts: 13ms, application-code: 353ms)
+ POST /api/ask-ilmalink 200 in 880ms (next.js: 9ms, proxy.ts: 11ms, application-code: 859ms)
+ GET / 200 in 1966ms (next.js: 17ms, proxy.ts: 15ms, application-code: 1933ms)
+ GET /api/blog/ticker/ 200 in 599ms (next.js: 11ms, proxy.ts: 10ms, application-code: 578ms)
+ POST /api/ask-ilmalink 200 in 623ms (next.js: 11ms, proxy.ts: 11ms, application-code: 601ms)
+ POST /api/ask-ilmalink 200 in 10.5s (next.js: 11ms, proxy.ts: 12ms, application-code: 10.5s)
+✓ Compiled in 562ms
+ GET / 200 in 1470ms (next.js: 221ms, proxy.ts: 149ms, application-code: 1100ms)
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.97.24.23:3000
+- Environments: .env.development.local, .env.local, .env
+✓ Ready in 1426ms
+Creating turbopack project { dir: 'C:\\Users\\91956\\ilmalink-medigo', testMode: true }
+- Experiments (use with caution):
+  · proxyClientMaxBodySize: "100mb"
+  · serverActions
+
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.97.24.23:3000
+- Environments: .env.development.local, .env.local, .env
+✓ Ready in 781ms
+Creating turbopack project { dir: 'C:\\Users\\91956\\ilmalink-medigo', testMode: true }
+- Experiments (use with caution):
+  · proxyClientMaxBodySize: "100mb"
+  · serverActions
+
+○ Compiling /_error ...
+ GET / 404 in 12.9s (next.js: -2592241µs, proxy.ts: 12.6s, application-code: 2.9s)
+○ Compiling /_not-found/page ...
+ GET / 404 in 23.0s (next.js: -4131023µs, proxy.ts: 20.7s, application-code: 6.4s)
+✓ Finished writing to filesystem cache in 75s

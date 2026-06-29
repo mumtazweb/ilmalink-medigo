@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "prisma generate",
-    "predev": "npm run search:index",
+    "postinstall": "prisma generate && node scripts/repair-next-compare-states.mjs",
+    "predev": "node scripts/repair-next-compare-states.mjs && npm run search:index",
     "dev": "next dev",
-    "prebuild": "npm run search:index",
+    "prebuild": "node scripts/repair-next-compare-states.mjs && npm run search:index",
     "build": "next build",
     "start": "next start",
     "export": "next export",
@@ -19,6 +19,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@google/genai": "^2.10.0",
     "@prisma/client": "^6.19.3",
     "@types/nodemailer": "^7.0.12",
     "@vercel/analytics": "^2.0.1",

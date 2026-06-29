@@ -55,6 +55,14 @@ export type SiteSearchDataType =
   | "University"
   | "University Fee"
   | "Accreditation"
+  | "Cutoff"
+  | "Seats"
+  | "Eligibility"
+  | "Documents"
+  | "Recognition"
+  | "Ranking"
+  | "Hostel"
+  | "Admission Route"
   | "MBBS India State"
   | "MBBS India College"
   | "FMGE Country"
@@ -69,6 +77,33 @@ export type SiteSearchRecord = GlobalSearchEntry & {
   keyFacts?: string[];
   data?: Record<string, unknown>;
 };
+
+const siteSearchDataTypeLabels = new Set<SiteSearchDataType>([
+  "Page",
+  "Page Section",
+  "Country Page",
+  "University",
+  "University Fee",
+  "Accreditation",
+  "Cutoff",
+  "Seats",
+  "Eligibility",
+  "Documents",
+  "Recognition",
+  "Ranking",
+  "Hostel",
+  "Admission Route",
+  "MBBS India State",
+  "MBBS India College",
+  "FMGE Country",
+  "FMGE College",
+  "Official Advisory",
+  "Blog",
+]);
+
+function isSiteSearchDataType(value: unknown): value is SiteSearchDataType {
+  return typeof value === "string" && siteSearchDataTypeLabels.has(value as SiteSearchDataType);
+}
 
 export type SiteSearchMatch = SiteSearchRecord & {
   score: number;
@@ -107,6 +142,12 @@ export type CounsellingSearchIntent = {
   best: boolean;
   oldCollege: boolean;
   seatPreference: boolean;
+  feePreference: boolean;
+  cutoffPreference: boolean;
+  eligibilityPreference: boolean;
+  documentsPreference: boolean;
+  recognitionPreference: boolean;
+  hostelPreference: boolean;
   fmgePreference: boolean;
   ambiguousBest: boolean;
   directed: boolean;
@@ -196,6 +237,35 @@ export function detectCounsellingSearchIntent(
   const best = includesPhrase(normalized, "best") ||
     includesPhrase(normalized, "recommended") ||
     includesPhrase(normalized, "suggest");
+  const feePreference =
+    profile.intents.fees ||
+    /\bfee|fees|fee structure|cost|package|tuition|hostel|mess|budget|expense|payment\b/.test(
+      normalized
+    );
+  const cutoffPreference =
+    profile.intents.rankMarks ||
+    /\bcutoff|cut off|closing rank|last rank|opening rank|rank|neet rank|score|allotment\b/.test(
+      normalized
+    );
+  const eligibilityPreference =
+    profile.intents.eligibility ||
+    /\beligibility|eligible|neet required|pcb|gpa|gap rule|age|marks required\b/.test(
+      normalized
+    );
+  const documentsPreference =
+    profile.intents.documents ||
+    /\bdocument|documents|required documents|passport|marksheet|certificate|embassy certificate|oci|nri\b/.test(
+      normalized
+    );
+  const recognitionPreference =
+    profile.intents.fmgeNmc ||
+    /\bnmc|wdoms|fmgl|recognition|accreditation|approved|listed|license|licence\b/.test(
+      normalized
+    );
+  const hostelPreference =
+    /\bhostel|mess|food|accommodation|living cost|safety|campus\b/.test(
+      normalized
+    );
   const collegeType: CounsellingCollegeTypeIntent | undefined =
     includesPhrase(normalized, "private")
       ? "Private"
@@ -264,6 +334,12 @@ export function detectCounsellingSearchIntent(
         /\bseat|seats|intake\b/.test(normalized)
           ? "Higher seat count"
           : undefined,
+        feePreference ? "Fee structure" : undefined,
+        cutoffPreference ? "Cutoff/rank" : undefined,
+        eligibilityPreference ? "Eligibility" : undefined,
+        documentsPreference ? "Documents" : undefined,
+        recognitionPreference ? "Recognition" : undefined,
+        hostelPreference ? "Hostel/living" : undefined,
         /\bfmge|nbems|appeared|pass rate|passed\b/.test(normalized)
           ? "FMGE data"
           : undefined,
@@ -282,6 +358,12 @@ export function detectCounsellingSearchIntent(
     best,
     oldCollege: /\bold|oldest|legacy|established\b/.test(normalized),
     seatPreference: /\bseat|seats|intake\b/.test(normalized),
+    feePreference,
+    cutoffPreference,
+    eligibilityPreference,
+    documentsPreference,
+    recognitionPreference,
+    hostelPreference,
     fmgePreference: /\bfmge|nbems|appeared|pass rate|passed\b/.test(
       normalized
     ),
@@ -393,9 +475,11 @@ const spellingAliases: Record<string, string> = {
   atest: "latest",
   buget: "budget",
   collage: "college",
+  collg: "college",
   colage: "college",
   colleg: "college",
   collge: "college",
+  colllege: "college",
   colloge: "college",
   counceling: "counselling",
   councling: "counselling",
@@ -453,14 +537,17 @@ const coreVocabulary = [
   "category",
   "college",
   "colleges",
+  "closing",
   "counselling",
   "country",
   "cutoff",
+  "dhaka",
   "domicile",
   "education",
   "eligibility",
   "criteria",
   "embassy",
+  "family",
   "fee",
   "fees",
   "fmge",
@@ -468,6 +555,7 @@ const coreVocabulary = [
   "georgia",
   "government",
   "hostel",
+  "holy",
   "india",
   "institute",
   "institution",
@@ -479,10 +567,14 @@ const coreVocabulary = [
   "matrix",
   "mbbs",
   "medical",
+  "national",
   "neet",
   "nmc",
   "private",
   "quota",
+  "last",
+  "opening",
+  "rank",
   "recognition",
   "recommended",
   "requirements",
@@ -734,7 +826,9 @@ export function detectSiteQuestionIntent(
     text.includes("cutoff") ||
     text.includes("cut off") ||
     text.includes("lowest cutoff") ||
-    text.includes("closing rank")
+    text.includes("closing rank") ||
+    text.includes("last rank") ||
+    text.includes("opening rank")
   ) {
     return "mbbs-india-cutoff";
   }
@@ -1653,8 +1747,9 @@ function buildBaseRecords() {
   }
 
   for (const entry of globalSearchIndex) {
-    const dataType: SiteSearchDataType =
-      entry.subType === "section"
+    const dataType: SiteSearchDataType = isSiteSearchDataType(entry.dataType)
+      ? entry.dataType
+      : entry.subType === "section"
         ? "Page Section"
         : entry.group === "Blogs"
         ? "Blog"
@@ -1668,7 +1763,9 @@ function buildBaseRecords() {
       createRecord(
         entry,
         dataType,
-        entry.subType === "section"
+        entry.dataType
+          ? "ilmaLink admission data"
+          : entry.subType === "section"
           ? "ilmaLink page section"
           : "ilmalink website data",
         entry.subType === "section"
@@ -1695,6 +1792,11 @@ function getSearchableText(record: SiteSearchRecord) {
       record.group,
       record.type,
       record.tags.join(" "),
+      record.intentTags?.join(" ") ?? "",
+      record.country ?? "",
+      record.state ?? "",
+      record.city ?? "",
+      record.collegeName ?? "",
       record.content,
       record.url,
       record.matchedDataType,
@@ -1721,6 +1823,7 @@ function scoreRecord(
   const title = normalizeSiteSearchText(record.title);
   const description = normalizeSiteSearchText(record.description);
   const tags = normalizeSiteSearchText(record.tags.join(" "));
+  const intentTags = normalizeSiteSearchText(record.intentTags?.join(" ") ?? "");
   const content = normalizeSiteSearchText(record.content);
   const matchedTerms = queryTerms.filter((term) =>
     searchableText.includes(term)
@@ -1749,6 +1852,7 @@ function scoreRecord(
   if (title === normalizedQuery) score += 520;
   if (title.includes(normalizedQuery)) score += 220;
   if (tags.includes(normalizedQuery)) score += 160;
+  if (intentTags.includes(normalizedQuery)) score += 170;
   if (description.includes(normalizedQuery)) score += 90;
   if (content.includes(normalizedQuery)) score += 35;
 
@@ -1757,6 +1861,7 @@ function scoreRecord(
     else if (title.includes(term)) score += 60;
 
     if (tags.includes(term)) score += 38;
+    if (intentTags.includes(term)) score += 42;
     if (description.includes(term)) score += 28;
     if (content.includes(term)) score += 10;
   }
@@ -1820,11 +1925,59 @@ function scoreRecord(
 
   if (
     intent === "university-fee" &&
-    ["mbbs-india-college", "kyrgyz-university", "georgia-university"].includes(
+    ["mbbs-india-college", "mbbs-india-fee-structure", "kyrgyz-university", "georgia-university", "bangladesh-university"].includes(
       String(record.data?.kind)
     )
   ) {
     score += 260;
+  }
+
+  if (intent === "university-fee") {
+    if (record.matchedDataType === "University Fee") score += 620;
+    if (record.type === "blog" || record.matchedDataType === "Page") score -= 160;
+  }
+
+  if (intent === "mbbs-india-cutoff") {
+    if (record.matchedDataType === "Cutoff") score += 620;
+    if (record.type === "blog" || record.matchedDataType === "Page") score -= 160;
+  }
+
+  if (profile.intents.eligibility && record.matchedDataType === "Eligibility") {
+    score += 520;
+  }
+
+  if (profile.intents.documents && record.matchedDataType === "Documents") {
+    score += 520;
+  }
+
+  if (
+    profile.intents.fmgeNmc &&
+    ["Recognition", "Accreditation"].includes(record.matchedDataType) &&
+    !queryAsksFmge
+  ) {
+    score += 420;
+  }
+
+  if (queryAsksFmge && ["FMGE College", "FMGE Country"].includes(record.matchedDataType)) {
+    score += 520;
+  }
+
+  if (
+    /\bhostel|mess|food|accommodation|living cost|safety|campus\b/.test(
+      normalizedQuery
+    ) &&
+    record.matchedDataType === "Hostel"
+  ) {
+    score += 500;
+  }
+
+  if (
+    /\bbest|top|ranking|preference|recommended|good college|which college|better college|compare\b/.test(
+      normalizedQuery
+    ) &&
+    record.matchedDataType === "Ranking"
+  ) {
+    score += 540;
   }
 
   if (
@@ -1921,8 +2074,27 @@ function matchesCity(record: SiteSearchRecord, city: string) {
 }
 
 function matchesEntity(record: SiteSearchRecord, entity: string) {
-  const title = normalizeSiteSearchText(record.title);
+  const identity = normalizeSiteSearchText(
+    [
+      record.title,
+      record.collegeName ?? "",
+      record.tags.join(" "),
+      record.url,
+    ].join(" ")
+  );
   const aliases: Record<string, string[]> = {
+    "kpc medical college jadavpur kolkata": [
+      "kpc",
+      "kpc medical college",
+      "kpc medical college and hospital",
+      "kpc medical college jadavpur kolkata",
+    ],
+    "iq city medical college burdwan": [
+      "iq city",
+      "iq-city",
+      "iq city medical college",
+      "iq city medical college and hospital",
+    ],
     "kyrgyz state medical academy": [
       "kyrgyz state medical academy",
       "i k akhunbaev kyrgyz state medical academy",
@@ -1941,12 +2113,22 @@ function matchesEntity(record: SiteSearchRecord, entity: string) {
     "jahurul islam medical college and hospital": [
       "jahurul islam medical college",
     ],
+    "tairunnessa memorial medical college": [
+      "tairunnessa",
+      "tairunnessa memorial",
+      "tairunnessa memorial medical college",
+    ],
+    "holy family red crescent medical college": [
+      "holy family",
+      "holy family red crescent",
+      "holy family red crescent medical college",
+    ],
     "alte university": ["alte university"],
   };
   const normalizedEntity = normalizeSiteSearchText(entity);
 
   return (aliases[normalizedEntity] ?? [normalizedEntity]).some((alias) =>
-    title.includes(alias)
+    identity.includes(alias)
   );
 }
 
@@ -1960,13 +2142,31 @@ function filterCounsellingRecords(
     if (intent.course === "BDS") return [];
 
     return records.filter((record) => {
+      const classification = classifyInternalSearchRecord(record);
       const kind = getRecordKind(record);
+      const searchableText = getSearchableText(record);
+      const isIndiaAdmissionData =
+        classification.regionType === "india" &&
+        (kind === "mbbs-india-fee-structure" ||
+          kind === "mbbs-india-fees" ||
+          kind === "mbbs-india-cutoff" ||
+          kind === "mbbs-india-cutoff-summary" ||
+          kind === "mbbs-india-ranking" ||
+          ["University Fee", "Cutoff", "Seats", "Ranking"].includes(
+            record.matchedDataType
+          ));
       const isIndiaResult =
         kind === "mbbs-india-college" ||
         kind === "mbbs-india-state" ||
+        kind === "rank-predictor" ||
+        isIndiaAdmissionData ||
         record.id === "ask-mbbs-india-directory";
 
       if (!isIndiaResult) return false;
+
+      if (intent.entity && !matchesEntity(record, intent.entity)) {
+        return false;
+      }
 
       if (intent.state) {
         const state = getRecordString(record, "state");
@@ -1983,7 +2183,12 @@ function filterCounsellingRecords(
       }
 
       if (intent.collegeType) {
-        if (kind !== "mbbs-india-college") return false;
+        if (kind !== "mbbs-india-college") {
+          return searchableText.includes(
+            normalizeSiteSearchText(intent.collegeType)
+          );
+        }
+
         const institutionType =
           getRecordString(record, "institutionType") ??
           getRecordString(record, "category");
@@ -2006,16 +2211,27 @@ function filterCounsellingRecords(
         kind === "fmge-college";
       const isCountryGuide =
         kind === "country-page" || kind === "fmge-country";
+      const isAdmissionFact = [
+        "University Fee",
+        "Eligibility",
+        "Documents",
+        "Recognition",
+        "Ranking",
+        "Hostel",
+        "FMGE College",
+      ].includes(record.matchedDataType);
 
       if (
         classification.regionType !== "abroad" ||
         classification.country !== intent.country ||
-        (!isInstitution && !isCountryGuide)
+        (!isInstitution && !isCountryGuide && !isAdmissionFact)
       ) {
         return false;
       }
 
-      if (intent.best && !isInstitution) return false;
+      if (intent.best && !isInstitution && record.matchedDataType !== "Ranking") {
+        return false;
+      }
 
       return true;
     });
@@ -2108,6 +2324,40 @@ function compareIndiaRecords(
   );
   const kindRank = (record: SiteSearchRecord) => {
     const kind = getRecordKind(record);
+    const dataType = record.matchedDataType;
+
+    if (intent.feePreference) {
+      if (kind === "mbbs-india-fee-structure") return intent.entity ? 0 : 1;
+      if (kind === "mbbs-india-fees") return intent.entity ? 1 : 0;
+      if (dataType === "University Fee" || kind.includes("fee")) return 1;
+      if (kind === "mbbs-india-college") return 2;
+      if (kind === "mbbs-india-state") return 3;
+      return 3;
+    }
+
+    if (intent.cutoffPreference) {
+      if (kind === "mbbs-india-cutoff") return intent.entity ? 0 : 1;
+      if (kind === "mbbs-india-cutoff-summary") return intent.entity ? 1 : 0;
+      if (dataType === "Cutoff" || kind.includes("cutoff")) return 1;
+      if (kind === "mbbs-india-college") return 2;
+      if (kind === "mbbs-india-state") return 3;
+      return 3;
+    }
+
+    if (intent.seatPreference) {
+      if (dataType === "Seats") return 0;
+      if (kind === "mbbs-india-college") return 1;
+      if (kind === "mbbs-india-state") return 2;
+      return 3;
+    }
+
+    if (intent.best) {
+      if (dataType === "Ranking") return 0;
+      if (kind === "mbbs-india-college") return 1;
+      if (kind === "mbbs-india-state") return 2;
+      return 3;
+    }
+
     if (prefersCollegeFirst) {
       return kind === "mbbs-india-college"
         ? 0
@@ -2200,6 +2450,52 @@ function compareAbroadRecords(
   b: SiteSearchRecord,
   intent: CounsellingSearchIntent
 ) {
+  const admissionFactRank = (record: SiteSearchRecord) => {
+    const kind = getRecordKind(record);
+
+    if (intent.feePreference) {
+      if (kind === "bangladesh-fees") return intent.entity ? 2 : 0;
+      if (kind === "bangladesh-university") {
+        return intent.entity
+          ? record.matchedDataType === "University Fee"
+            ? 0
+            : 1
+          : 1;
+      }
+      if (record.matchedDataType === "University Fee") return 0;
+      if (["kyrgyz-university", "georgia-university", "bangladesh-university"].includes(kind)) {
+        return 1;
+      }
+      return 3;
+    }
+
+    if (intent.eligibilityPreference) {
+      return record.matchedDataType === "Eligibility" ? 0 : 2;
+    }
+
+    if (intent.documentsPreference) {
+      return record.matchedDataType === "Documents" ? 0 : 2;
+    }
+
+    if (intent.recognitionPreference && !intent.fmgePreference) {
+      if (record.matchedDataType === "Recognition") return 0;
+      if (record.matchedDataType === "Accreditation") return 1;
+      return 2;
+    }
+
+    if (intent.hostelPreference) {
+      return record.matchedDataType === "Hostel" ? 0 : 2;
+    }
+
+    if (intent.best) {
+      return record.matchedDataType === "Ranking" ? 0 : 2;
+    }
+
+    return 1;
+  };
+  const admissionDifference = admissionFactRank(a) - admissionFactRank(b);
+  if (admissionDifference !== 0) return admissionDifference;
+
   if (intent.entity) {
     const normalizedEntity = normalizeSiteSearchText(intent.entity);
     const exactEntityRank = (record: SiteSearchRecord) => {
@@ -2534,4 +2830,14 @@ export function searchInternalSiteData(
     sourceLabels,
     lastUpdated,
   };
+}
+
+export function searchSiteData(
+  query: string,
+  options: {
+    limit?: number;
+    extraRecords?: SiteSearchRecord[];
+  } = {}
+) {
+  return searchInternalSiteData(query, options);
 }

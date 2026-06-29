@@ -121,7 +121,7 @@ const indiaRegions: RegionAlias[] = [
 const countryAliases: CountryAlias[] = [
   { country: "Kyrgyzstan", aliases: ["kyrgyzstan", "kirgizstan"], slugs: ["kyrgyzstan"] },
   { country: "Georgia", aliases: ["georgia", "tbilisi"], slugs: ["georgia"] },
-  { country: "Bangladesh", aliases: ["bangladesh", "dgme", "bmdc"], slugs: ["bangladesh"] },
+  { country: "Bangladesh", aliases: ["bangladesh", "dhaka", "dgme", "bmdc"], slugs: ["bangladesh"] },
   { country: "China", aliases: ["china"], slugs: ["china"] },
   { country: "Nepal", aliases: ["nepal"], slugs: ["nepal"] },
   { country: "Russia", aliases: ["russia", "russian federation"], slugs: ["russia"] },
@@ -147,6 +147,16 @@ const countryAliases: CountryAlias[] = [
 
 const entityAliases: InternalSearchEntity[] = [
   {
+    canonicalName: "KPC Medical College, Jadavpur, Kolkata",
+    country: "India",
+    aliases: ["kpc", "kpc medical college", "kpc medical college kolkata"],
+  },
+  {
+    canonicalName: "IQ-City Medical College, Burdwan",
+    country: "India",
+    aliases: ["iq city", "iq-city", "iq city medical college", "iq-city medical college"],
+  },
+  {
     canonicalName: "Kyrgyz State Medical Academy",
     country: "Kyrgyzstan",
     aliases: ["ksma", "kyrgyz state medical academy", "i k akhunbaev kyrgyz state medical academy"],
@@ -170,6 +180,26 @@ const entityAliases: InternalSearchEntity[] = [
     canonicalName: "Tbilisi State Medical University",
     country: "Georgia",
     aliases: ["tsmu", "tbilisi state medical university"],
+  },
+  {
+    canonicalName: "Green Life Medical College",
+    country: "Bangladesh",
+    aliases: ["green life", "greenlife", "green life medical college", "greenlife medical college"],
+  },
+  {
+    canonicalName: "Jahurul Islam Medical College",
+    country: "Bangladesh",
+    aliases: ["jahurul islam", "jahurul islam medical college"],
+  },
+  {
+    canonicalName: "Tairunnessa Memorial Medical College",
+    country: "Bangladesh",
+    aliases: ["tairunnessa", "tairunnessa memorial", "tairunnessa memorial medical college"],
+  },
+  {
+    canonicalName: "Holy Family Red Crescent Medical College",
+    country: "Bangladesh",
+    aliases: ["holy family", "holy family red crescent", "holy family red crescent medical college"],
   },
 ];
 
@@ -266,7 +296,8 @@ export function buildInternalSearchQueryProfile(
 ): InternalSearchQueryProfile {
   const normalizedQuery = normalizeInternalSearchText(query);
   const entity = findEntity(normalizedQuery);
-  const detectedCountry = entity?.country ?? findCountry(normalizedQuery);
+  const entityIsIndia = entity?.country === "India";
+  const detectedCountry = entityIsIndia ? undefined : entity?.country ?? findCountry(normalizedQuery);
   const region = findIndiaRegion(normalizedQuery);
   const comparison = hasAnyPhrase(normalizedQuery, [
     "compare",
@@ -316,8 +347,10 @@ export function buildInternalSearchQueryProfile(
     "wbjee",
   ]);
   const isIndiaIntent = Boolean(
-    !detectedCountry &&
+    entityIsIndia ||
+      (!detectedCountry &&
       (region.state || indiaSignal || (rankMarks && college && !explicitAbroad))
+      )
   );
 
   return {
@@ -541,8 +574,11 @@ export function getInternalSearchRankingBoost(
   if (profile.intents.college) {
     if (
       kind === "mbbs-india-college" ||
+      kind === "mbbs-india-fee-structure" ||
+      kind === "mbbs-india-cutoff" ||
       kind === "kyrgyz-university" ||
-      kind === "georgia-university"
+      kind === "georgia-university" ||
+      kind === "bangladesh-university"
     ) {
       score += 180;
     }
@@ -551,6 +587,12 @@ export function getInternalSearchRankingBoost(
   }
 
   if (profile.intents.fees && /fee|fees|tuition|cost|budget|hostel|mess|usd|inr|lakh/.test(text)) score += 180;
+  if (
+    profile.intents.fees &&
+    /fee|fees/.test(kind)
+  ) {
+    score += 260;
+  }
   if (profile.intents.eligibility && /eligibility|eligible|criteria|requirement|pcb|gpa|percentage|neet/.test(text)) score += 160;
   if (profile.intents.counselling && /counselling|counseling|choice filling|seat matrix|quota|round|allotment|mcc|aiq/.test(text)) score += 180;
   if (profile.intents.scholarship && /scholarship|loan|financial aid|education loan/.test(text)) score += 220;

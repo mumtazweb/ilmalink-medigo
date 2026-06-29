@@ -1,9 +1,11 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { createJiti } from "jiti";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const appDir = path.join(rootDir, "app");
+const jiti = createJiti(import.meta.url);
 const blogDbPath = path.join(rootDir, "data", "blog-db.json");
 const fmgeDataPath = path.join(rootDir, "app", "data", "fmgeData.ts");
 const neetSearchEntriesPath = path.join(rootDir, "app", "data", "neetSearchEntries.json");
@@ -169,6 +171,106 @@ function slugify(value) {
     .replace(/&/g, " and ")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
+}
+
+function routeSlug(value) {
+  return String(value ?? "")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function loadDataModule(relativePath) {
+  return jiti(path.join(rootDir, relativePath));
+}
+
+function asArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function asUsefulArray(value) {
+  return asArray(value).filter((item) => item !== null && item !== undefined && item !== "");
+}
+
+function flattenTextParts(parts) {
+  return parts
+    .flat(Infinity)
+    .filter((part) => part !== null && part !== undefined && part !== "")
+    .map((part) => {
+      if (typeof part === "string" || typeof part === "number") return String(part);
+      if (typeof part === "object") {
+        return Object.entries(part)
+          .map(([key, value]) => `${key} ${value}`)
+          .join(" ");
+      }
+
+      return "";
+    })
+    .filter(Boolean);
+}
+
+function createStructuredEntry({
+  id,
+  title,
+  description,
+  url,
+  category,
+  group,
+  type,
+  subType,
+  tags = [],
+  intentTags = [],
+  content = [],
+  priority = 100,
+  country,
+  state,
+  city,
+  collegeName,
+  dataType,
+  data,
+}) {
+  const compactAliases = [title, collegeName]
+    .filter(Boolean)
+    .map((value) => normalizeLookupKey(String(value)).replace(/\s+/g, ""))
+    .filter((value, index, list) => value.length > 5 && list.indexOf(value) === index);
+  const fullTags = [...asUsefulArray(tags), ...compactAliases];
+  const textParts = flattenTextParts([
+    title,
+    description,
+    category,
+    dataType,
+    country,
+    state,
+    city,
+    collegeName,
+    fullTags,
+    intentTags,
+    content,
+  ]);
+
+  return {
+    id,
+    title,
+    description,
+    url,
+    category,
+    group,
+    type,
+    subType,
+    tags: fullTags,
+    intentTags: asUsefulArray(intentTags),
+    content: normalizeText(textParts.join(" ")),
+    priority,
+    country,
+    state,
+    city,
+    collegeName,
+    dataType,
+    data,
+  };
 }
 
 function normalizeLookupKey(value) {
@@ -1026,6 +1128,1674 @@ async function buildFmgeEntries() {
   return entries;
 }
 
+function rowListText(rows) {
+  return asArray(rows)
+    .map((row) =>
+      Object.entries(row)
+        .map(([key, value]) => `${key} ${value ?? "not available"}`)
+        .join(" ")
+    )
+    .join(" ");
+}
+
+function hasUpdatedFeeRows(rows) {
+  return asArray(rows).some((row) => {
+    const text = normalizeLookupKey(Object.values(row).join(" "));
+    return text && !text.includes("to be updated") && !text.includes("not available");
+  });
+}
+
+function bangladeshCollegeUrl(college) {
+  return college.pageExists === false
+    ? "/mbbs-abroad/bangladesh#bangladesh-universities"
+    : `/mbbs-abroad/bangladesh/${college.slug}/`;
+}
+
+function kyrgyzUniversityUrl(university) {
+  return university.pageExists
+    ? `/mbbs-abroad/kyrgyzstan/${university.slug}/`
+    : "/mbbs-abroad/kyrgyzstan#universities";
+}
+
+function georgiaUniversityUrl(university) {
+  return university.pageExists
+    ? `/mbbs-abroad/georgia/${university.slug}/`
+    : `/mbbs-abroad/georgia?q=${encodeURIComponent(university.name)}#georgia-universities`;
+}
+
+function mbbsIndiaStateUrl(state) {
+  return `/mbbs-india/${routeSlug(state)}/`;
+}
+
+function mbbsIndiaCollegeUrl(college) {
+  return `${mbbsIndiaStateUrl(college.state)}${routeSlug(college.collegeName)}/`;
+}
+
+function buildBangladeshStructuredEntries() {
+  const {
+    bangladeshFeaturedUniversities = [],
+    bangladeshEligibilityRequirements = [],
+    bangladeshGapRulePoints = [],
+    bangladeshDocumentChecklist = [],
+    bangladeshCountryStats = [],
+    bangladeshGovernmentQuotaPoints = [],
+  } = loadDataModule("app/data/bangladeshUniversities.ts");
+  const { abroadCollegeRecommendations = {} } = loadDataModule(
+    "app/data/mbbsCollegeFinderPlaceholderLogic.ts"
+  );
+  const entries = [];
+  const country = "Bangladesh";
+  const collegeNames = bangladeshFeaturedUniversities.map((college) => college.name);
+  const featuredNames = bangladeshFeaturedUniversities
+    .filter((college) => college.recommendationLevel === "Featured")
+    .map((college) => college.name);
+  const countryFeeText = bangladeshFeaturedUniversities
+    .map(
+      (college) =>
+        `${college.name}: ${college.fees}; ${college.totalCourseFeeLabel}; ${college.hostelNote}`
+    )
+    .join(" ");
+
+  entries.push(
+    createStructuredEntry({
+      id: "fee-bangladesh-mbbs-private-medical-colleges",
+      title: "Bangladesh MBBS Private Medical College Fees",
+      description:
+        "College-wise Bangladesh MBBS fee, hostel, food, payment schedule and total package notes from the current ilmalink dataset.",
+      url: "/mbbs-abroad/bangladesh#fees",
+      category: "Bangladesh Admission Data",
+      group: "Destinations",
+      type: "destination",
+      subType: "fees",
+      dataType: "University Fee",
+      country,
+      tags: [
+        country,
+        "Bangladesh MBBS fees",
+        "private medical college fees",
+        "tuition fee",
+        "hostel fee",
+        "mess fee",
+        "total package",
+        ...collegeNames,
+      ],
+      intentTags: [
+        "fees",
+        "fee structure",
+        "cost",
+        "package",
+        "tuition",
+        "hostel",
+        "mess",
+        "budget",
+        "payment",
+      ],
+      content: [countryFeeText, rowListText(bangladeshCountryStats)],
+      priority: 124,
+      data: {
+        kind: "bangladesh-fees",
+        country,
+        colleges: collegeNames,
+      },
+    }),
+    createStructuredEntry({
+      id: "eligibility-bangladesh-mbbs-indian-students",
+      title: "Bangladesh MBBS Eligibility for Indian Students",
+      description:
+        "Bangladesh MBBS GPA, Biology GP, NEET, gap-rule and admission-route eligibility points.",
+      url: "/mbbs-abroad/bangladesh#eligibility",
+      category: "Bangladesh Admission Data",
+      group: "Destinations",
+      type: "destination",
+      subType: "eligibility",
+      dataType: "Eligibility",
+      country,
+      tags: [
+        country,
+        "Bangladesh MBBS eligibility",
+        "GPA rule",
+        "Biology GP",
+        "NEET required",
+        "gap rule",
+      ],
+      intentTags: [
+        "eligibility",
+        "eligible",
+        "neet required",
+        "pcb",
+        "gpa",
+        "gap rule",
+        "age",
+        "marks required",
+      ],
+      content: [
+        bangladeshEligibilityRequirements,
+        bangladeshGapRulePoints,
+        bangladeshGovernmentQuotaPoints,
+      ],
+      priority: 121,
+      data: {
+        kind: "bangladesh-eligibility",
+        country,
+        eligibility: bangladeshEligibilityRequirements,
+        gapRules: bangladeshGapRulePoints,
+      },
+    }),
+    createStructuredEntry({
+      id: "documents-bangladesh-mbbs",
+      title: "Bangladesh MBBS Required Documents",
+      description:
+        "Documents required for Bangladesh MBBS processing, eligibility, passport, NEET proof and DGME/BMDC route checks.",
+      url: "/mbbs-abroad/bangladesh#documents",
+      category: "Bangladesh Admission Data",
+      group: "Destinations",
+      type: "destination",
+      subType: "documents",
+      dataType: "Documents",
+      country,
+      tags: [
+        country,
+        "Bangladesh MBBS documents",
+        "passport",
+        "marksheet",
+        "certificate",
+        "NEET scorecard",
+        "DGME",
+        "BMDC",
+      ],
+      intentTags: [
+        "documents",
+        "required documents",
+        "passport",
+        "marksheet",
+        "certificate",
+        "embassy certificate",
+        "oci",
+        "nri",
+      ],
+      content: bangladeshDocumentChecklist,
+      priority: 118,
+      data: {
+        kind: "bangladesh-documents",
+        country,
+        documents: bangladeshDocumentChecklist,
+      },
+    }),
+    createStructuredEntry({
+      id: "best-bangladesh-medical-colleges",
+      title: "Best Bangladesh Medical Colleges for Indian Students",
+      description:
+        "Featured Bangladesh private medical colleges with fee letters, FMGE references and eligibility verification notes.",
+      url: "/mbbs-abroad/bangladesh#bangladesh-universities",
+      category: "Bangladesh Admission Data",
+      group: "Destinations",
+      type: "destination",
+      subType: "ranking",
+      dataType: "Ranking",
+      country,
+      tags: [
+        country,
+        "best Bangladesh medical colleges",
+        "top Bangladesh medical colleges",
+        "recommended Bangladesh colleges",
+        ...featuredNames,
+      ],
+      intentTags: [
+        "best",
+        "top",
+        "ranking",
+        "preference",
+        "recommended",
+        "good college",
+        "which college",
+      ],
+      content: [
+        featuredNames.join(", "),
+        ...bangladeshFeaturedUniversities.map(
+          (college) =>
+            `${college.name}: ${college.recommendationLevel}; ${college.recommendationMessage}; ${college.summary}; FMGE ${college.fmge?.appeared ?? "not available"} appeared ${college.fmge?.passed ?? "not available"} passed ${college.fmge?.passRate ?? "not available"} pass rate; ${college.fees}`
+        ),
+      ],
+      priority: 122,
+      data: {
+        kind: "bangladesh-ranking",
+        country,
+        colleges: featuredNames,
+      },
+    })
+  );
+
+  for (const [index, college] of bangladeshFeaturedUniversities.entries()) {
+    const url = bangladeshCollegeUrl(college);
+    const commonTags = [
+      country,
+      "MBBS in Bangladesh",
+      college.name,
+      college.city,
+      college.location,
+      college.slug,
+      college.ownership,
+      college.recommendationLevel,
+    ].filter(Boolean);
+    const collegeContent = [
+      college.summary,
+      college.fees,
+      college.feeHeadline,
+      college.totalCourseFeeLabel,
+      college.hostelNote,
+      rowListText(college.feeRows),
+      rowListText(college.paymentSchedule),
+      rowListText(college.additionalFees),
+      college.feeNotes,
+      college.eligibility,
+      college.documentChecklist,
+      college.highlights,
+      college.facts,
+      college.warnings,
+      college.recommendationMessage,
+      college.disclaimer,
+    ];
+
+    entries.push(
+      createStructuredEntry({
+        id: `fee-bangladesh-${college.slug}`,
+        title: `${college.name} MBBS Fees`,
+        description: `${college.city}, Bangladesh: ${college.fees}. ${college.hostelNote}`,
+        url,
+        category: "Bangladesh Admission Data",
+        group: "Destinations",
+        type: "destination",
+        subType: "fees",
+        dataType: "University Fee",
+        country,
+        city: college.city,
+        collegeName: college.name,
+        tags: [
+          ...commonTags,
+          "fees",
+          "fee structure",
+          "tuition fee",
+          "hostel fee",
+          "mess fee",
+          "total package",
+          "payment schedule",
+        ],
+        intentTags: [
+          "fees",
+          "fee structure",
+          "cost",
+          "package",
+          "tuition",
+          "hostel",
+          "mess",
+          "budget",
+          "payment",
+        ],
+        content: collegeContent,
+        priority: 132 - index,
+        data: {
+          kind: "bangladesh-university",
+          country,
+          city: college.city,
+          name: college.name,
+          slug: college.slug,
+          fees: college.fees,
+          feeSummary: college.fees,
+          totalCourseFeeLabel: college.totalCourseFeeLabel,
+          hostelNote: college.hostelNote,
+          feeRows: college.feeRows,
+          paymentSchedule: college.paymentSchedule,
+          additionalFees: college.additionalFees,
+          feeNotes: college.feeNotes,
+          fmge: college.fmge,
+          pageExists: college.pageExists !== false,
+          projectOrder: index,
+        },
+      }),
+      createStructuredEntry({
+        id: `fmge-bangladesh-${college.slug}`,
+        title: `${college.name} FMGE 2025 Result`,
+        description: `${college.fmge?.appeared ?? "Not available"} appeared, ${college.fmge?.passed ?? "not available"} passed, ${college.fmge?.passRate ?? "not available"} pass rate.`,
+        url,
+        category: "FMGE Data",
+        group: "Destinations",
+        type: "destination",
+        subType: "fmge",
+        dataType: "FMGE College",
+        country,
+        city: college.city,
+        collegeName: college.name,
+        tags: [
+          ...commonTags,
+          "FMGE",
+          "FMGE result",
+          "pass rate",
+          "appeared",
+          "passed",
+          "NBEMS",
+        ],
+        intentTags: [
+          "fmge",
+          "pass rate",
+          "appeared",
+          "passed",
+          "result",
+          "nbems",
+        ],
+        content: [
+          college.fmge?.sourceName,
+          `${college.fmge?.appeared ?? "not available"} appeared`,
+          `${college.fmge?.passed ?? "not available"} passed`,
+          `${college.fmge?.passRate ?? "not available"} pass rate`,
+          college.summary,
+        ],
+        priority: college.fmge?.appeared ? 116 - index : 92,
+        data: {
+          kind: "fmge-college",
+          country,
+          college: college.name,
+          appeared: college.fmge?.appeared,
+          passed: college.fmge?.passed,
+          passRate: college.fmge?.passRate,
+        },
+      }),
+      createStructuredEntry({
+        id: `recognition-bangladesh-${college.slug}`,
+        title: `${college.name} Recognition and Route Checks`,
+        description: `${college.name} affiliation, DGME/BMDC route and NMC/FMGL verification notes for Indian students.`,
+        url,
+        category: "Bangladesh Admission Data",
+        group: "Destinations",
+        type: "destination",
+        subType: "recognition",
+        dataType: "Recognition",
+        country,
+        city: college.city,
+        collegeName: college.name,
+        tags: [
+          ...commonTags,
+          "recognition",
+          "accreditation",
+          "WDOMS",
+          "NMC",
+          "FMGL",
+          "BMDC",
+          "DGME",
+        ],
+        intentTags: [
+          "nmc",
+          "wdoms",
+          "fmgl",
+          "recognition",
+          "accreditation",
+          "approved",
+          "listed",
+          "license",
+          "licence",
+        ],
+        content: [
+          college.universityAffiliation,
+          college.recommendationMessage,
+          college.eligibility,
+          college.warnings,
+          college.disclaimer,
+        ],
+        priority: 104 - index,
+        data: {
+          kind: "bangladesh-recognition",
+          country,
+          city: college.city,
+          college: college.name,
+        },
+      }),
+      createStructuredEntry({
+        id: `hostel-bangladesh-${college.slug}`,
+        title: `${college.name} Hostel, Food and Living Cost`,
+        description: `${college.name}: ${college.hostelNote}`,
+        url,
+        category: "Bangladesh Admission Data",
+        group: "Destinations",
+        type: "destination",
+        subType: "hostel",
+        dataType: "Hostel",
+        country,
+        city: college.city,
+        collegeName: college.name,
+        tags: [
+          ...commonTags,
+          "hostel",
+          "mess",
+          "food",
+          "accommodation",
+          "living cost",
+          "safety",
+          "location",
+        ],
+        intentTags: [
+          "hostel",
+          "mess",
+          "food",
+          "accommodation",
+          "living cost",
+          "safety",
+          "campus",
+        ],
+        content: [
+          college.hostelNote,
+          rowListText(college.additionalFees),
+          college.location,
+          college.highlights,
+          college.warnings,
+        ],
+        priority: 100 - index,
+        data: {
+          kind: "bangladesh-hostel",
+          country,
+          city: college.city,
+          college: college.name,
+        },
+      })
+    );
+  }
+
+  const knownBangladeshCollegeNames = new Set(
+    bangladeshFeaturedUniversities.map((college) => normalizeLookupKey(college.name))
+  );
+  const recommendationGroups = [
+    ...(abroadCollegeRecommendations.Bangladesh?.bestFit ?? []).map((college) => ({
+      ...college,
+      level: "Best fit",
+    })),
+    ...(abroadCollegeRecommendations.Bangladesh?.backup ?? []).map((college) => ({
+      ...college,
+      level: "Backup option",
+    })),
+  ];
+
+  for (const [index, college] of recommendationGroups.entries()) {
+    if (knownBangladeshCollegeNames.has(normalizeLookupKey(college.name))) continue;
+
+    entries.push(
+      createStructuredEntry({
+        id: `ranking-bangladesh-${routeSlug(college.name)}`,
+        title: `${college.name} Bangladesh MBBS Recommendation`,
+        description: `${college.level}: ${college.reason}`,
+        url: "/mbbs-abroad/bangladesh#bangladesh-universities",
+        category: "Bangladesh Admission Data",
+        group: "Destinations",
+        type: "destination",
+        subType: "ranking",
+        dataType: "Ranking",
+        country,
+        collegeName: college.name,
+        tags: [
+          country,
+          college.name,
+          college.level,
+          "Bangladesh MBBS recommendation",
+          "best college",
+          "backup college",
+          "preference",
+        ],
+        intentTags: [
+          "best",
+          "top",
+          "ranking",
+          "preference",
+          "recommended",
+          "good college",
+          "which college",
+        ],
+        content: [college.name, college.level, college.reason],
+        priority: 100 - index,
+        data: {
+          kind: "bangladesh-ranking-college",
+          country,
+          college: college.name,
+          recommendationLevel: college.level,
+          recommendationMessage: college.reason,
+        },
+      })
+    );
+  }
+
+  return entries;
+}
+
+function buildKyrgyzstanStructuredEntries() {
+  const { kyrgyzstanUniversities = [], kyrgyzFinalDisclaimer = "" } =
+    loadDataModule("app/data/kyrgyzstanUniversities.ts");
+  const country = "Kyrgyzstan";
+  const entries = [];
+  const recommended = kyrgyzstanUniversities
+    .filter((university) =>
+      String(university.recommendationLevel).startsWith("Recommended")
+    )
+    .slice(0, 8);
+
+  entries.push(
+    createStructuredEntry({
+      id: "best-kyrgyzstan-medical-universities",
+      title: "Best Recommended Kyrgyzstan Medical Universities",
+      description:
+        "Recommended Kyrgyzstan medical universities based on ilmalink accreditation, fee, FMGE and caution-status data.",
+      url: "/mbbs-abroad/kyrgyzstan#universities",
+      category: "Kyrgyzstan Admission Data",
+      group: "Destinations",
+      type: "destination",
+      subType: "ranking",
+      dataType: "Ranking",
+      country,
+      tags: [
+        country,
+        "best college in Kyrgyzstan",
+        "top medical university in Kyrgyzstan",
+        "recommended Kyrgyzstan universities",
+        ...recommended.map((university) => university.name),
+      ],
+      intentTags: [
+        "best",
+        "top",
+        "ranking",
+        "preference",
+        "recommended",
+        "good college",
+        "which college",
+        "better college",
+        "compare",
+      ],
+      content: [
+        recommended.map(
+          (university, index) =>
+            `${index + 1}. ${university.name}: ${university.recommendationLevel}; ${university.accreditationLabel}; ${university.recommendationMessage}`
+        ),
+        kyrgyzFinalDisclaimer,
+      ],
+      priority: 130,
+      data: {
+        kind: "kyrgyz-ranking",
+        country,
+        universities: recommended.map((university) => university.name),
+      },
+    }),
+    createStructuredEntry({
+      id: "eligibility-kyrgyzstan-mbbs",
+      title: "Kyrgyzstan MBBS Eligibility and Documents",
+      description:
+        "Common Kyrgyzstan MBBS eligibility, NEET/PCB and document checklist points from listed university data.",
+      url: "/mbbs-abroad/kyrgyzstan#eligibility",
+      category: "Kyrgyzstan Admission Data",
+      group: "Destinations",
+      type: "destination",
+      subType: "eligibility",
+      dataType: "Eligibility",
+      country,
+      tags: [
+        country,
+        "Kyrgyzstan MBBS eligibility",
+        "NEET required",
+        "PCB",
+        "documents",
+      ],
+      intentTags: [
+        "eligibility",
+        "eligible",
+        "neet required",
+        "pcb",
+        "marks required",
+        "documents",
+      ],
+      content: kyrgyzstanUniversities.flatMap((university) => [
+        university.name,
+        university.entryRequirements,
+        university.documentChecklist,
+      ]),
+      priority: 116,
+      data: {
+        kind: "kyrgyz-eligibility",
+        country,
+      },
+    })
+  );
+
+  for (const [index, university] of kyrgyzstanUniversities.entries()) {
+    const url = kyrgyzUniversityUrl(university);
+    const commonTags = [
+      country,
+      "MBBS in Kyrgyzstan",
+      university.name,
+      university.slug,
+      university.location,
+      university.accreditationLabel,
+      university.recommendationLevel,
+    ].filter(Boolean);
+    const fmgeSummary = asArray(university.fmgePerformance)
+      .map(
+        (item) =>
+          `${item.sourceName}: ${item.appeared} appeared, ${item.passed} passed, ${item.passRate} pass rate`
+      )
+      .join(" ");
+    const campusFeeText = asArray(university.campuses)
+      .map((campus) => `${campus.name} ${rowListText(campus.feeRows)}`)
+      .join(" ");
+    const feeText = [
+      rowListText(university.feeRows),
+      campusFeeText,
+      rowListText(university.additionalFees),
+      university.feeNotes,
+      university.paymentTerms,
+    ];
+
+    if (hasUpdatedFeeRows(university.feeRows) || campusFeeText) {
+      entries.push(
+        createStructuredEntry({
+          id: `fee-kyrgyzstan-${university.slug}`,
+          title: `${university.name} Fee Structure`,
+          description: `${university.name}, ${university.location}: semester-wise tuition, hostel, mess and total cost where listed.`,
+          url,
+          category: "Kyrgyzstan Admission Data",
+          group: "Destinations",
+          type: "destination",
+          subType: "fees",
+          dataType: "University Fee",
+          country,
+          city: university.location,
+          collegeName: university.name,
+          tags: [
+            ...commonTags,
+            "fees",
+            "fee structure",
+            "tuition",
+            "hostel",
+            "mess",
+            "total package",
+            "budget",
+          ],
+          intentTags: [
+            "fees",
+            "fee structure",
+            "cost",
+            "package",
+            "tuition",
+            "hostel",
+            "mess",
+            "budget",
+            "payment",
+          ],
+          content: [
+            feeText,
+            university.highlights,
+            university.entryRequirements,
+            kyrgyzFinalDisclaimer,
+          ],
+          priority: university.pageExists ? 126 - index : 104 - index,
+          data: {
+            kind: "kyrgyz-university",
+            country,
+            slug: university.slug,
+            name: university.name,
+            location: university.location,
+            feeRows: university.feeRows,
+            campuses: university.campuses,
+            feeNotes: university.feeNotes,
+            recommendationLevel: university.recommendationLevel,
+            accreditationLabel: university.accreditationLabel,
+            pageExists: Boolean(university.pageExists),
+            projectOrder: index,
+          },
+        })
+      );
+    }
+
+    entries.push(
+      createStructuredEntry({
+        id: `recognition-kyrgyzstan-${university.slug}`,
+        title: `${university.name} Recognition and Accreditation`,
+        description: `${university.accreditationLabel}. ${university.recommendationLevel}.`,
+        url,
+        category: "Kyrgyzstan Admission Data",
+        group: "Destinations",
+        type: "destination",
+        subType: "recognition",
+        dataType: "Recognition",
+        country,
+        city: university.location,
+        collegeName: university.name,
+        tags: [
+          ...commonTags,
+          "recognition",
+          "accreditation",
+          "WDOMS",
+          "NMC",
+          "FMGL",
+          "approved",
+          "listed",
+        ],
+        intentTags: [
+          "nmc",
+          "wdoms",
+          "fmgl",
+          "recognition",
+          "accreditation",
+          "approved",
+          "listed",
+          "license",
+          "licence",
+        ],
+        content: [
+          university.accreditationStatus,
+          university.accreditationLabel,
+          university.recommendationLevel,
+          university.recommendationMessage,
+          university.highlights,
+          university.history,
+          kyrgyzFinalDisclaimer,
+        ],
+        priority: university.recommendationLevel === "No Admission" ? 92 : 118 - index,
+        data: {
+          kind: "kyrgyz-recognition",
+          country,
+          slug: university.slug,
+          name: university.name,
+          accreditationLabel: university.accreditationLabel,
+          recommendationLevel: university.recommendationLevel,
+        },
+      })
+    );
+
+    if (fmgeSummary) {
+      entries.push(
+        createStructuredEntry({
+          id: `fmge-kyrgyzstan-${university.slug}`,
+          title: `${university.name} FMGE Result`,
+          description: fmgeSummary,
+          url,
+          category: "FMGE Data",
+          group: "Destinations",
+          type: "destination",
+          subType: "fmge",
+          dataType: "FMGE College",
+          country,
+          city: university.location,
+          collegeName: university.name,
+          tags: [
+            ...commonTags,
+            "FMGE",
+            "FMGE result",
+            "pass rate",
+            "appeared",
+            "passed",
+            "NBEMS",
+          ],
+          intentTags: [
+            "fmge",
+            "pass rate",
+            "appeared",
+            "passed",
+            "result",
+            "nbems",
+          ],
+          content: [fmgeSummary, university.recommendationMessage],
+          priority: 114 - index,
+          data: {
+            kind: "fmge-college",
+            country,
+            college: university.name,
+            fmgePerformance: university.fmgePerformance,
+          },
+        })
+      );
+    }
+
+    if (university.facilities?.length || feeText.length) {
+      entries.push(
+        createStructuredEntry({
+          id: `hostel-kyrgyzstan-${university.slug}`,
+          title: `${university.name} Hostel, Mess and Campus`,
+          description: `${university.name} hostel, mess, accommodation, campus and living notes from the available university data.`,
+          url,
+          category: "Kyrgyzstan Admission Data",
+          group: "Destinations",
+          type: "destination",
+          subType: "hostel",
+          dataType: "Hostel",
+          country,
+          city: university.location,
+          collegeName: university.name,
+          tags: [
+            ...commonTags,
+            "hostel",
+            "mess",
+            "food",
+            "accommodation",
+            "living cost",
+            "safety",
+            "campus",
+          ],
+          intentTags: [
+            "hostel",
+            "mess",
+            "food",
+            "accommodation",
+            "living cost",
+            "safety",
+            "campus",
+          ],
+          content: [
+            university.facilities,
+            university.clinicalCenters,
+            university.feeNotes,
+            university.campuses?.map((campus) => [
+              campus.name,
+              campus.location,
+              campus.facilities,
+              campus.feeNotes,
+            ]),
+          ],
+          priority: 100 - index,
+          data: {
+            kind: "kyrgyz-hostel",
+            country,
+            slug: university.slug,
+          },
+        })
+      );
+    }
+  }
+
+  return entries;
+}
+
+function buildGeorgiaStructuredEntries() {
+  const { georgiaUniversities = [], georgiaFinalDisclaimer = "" } =
+    loadDataModule("app/data/georgiaUniversities.ts");
+  const country = "Georgia";
+  const entries = [];
+  const featured = georgiaUniversities
+    .filter((university) => university.pageExists && university.recommendationLabel)
+    .slice(0, 6);
+
+  entries.push(
+    createStructuredEntry({
+      id: "best-georgia-medical-universities",
+      title: "Best Georgia Medical Universities",
+      description:
+        "Georgia medical universities ranked for comparison using ilmalink fee, FMGE, recognition and recommendation data.",
+      url: "/mbbs-abroad/georgia#georgia-universities",
+      category: "Georgia Admission Data",
+      group: "Destinations",
+      type: "destination",
+      subType: "ranking",
+      dataType: "Ranking",
+      country,
+      tags: [
+        country,
+        "best college in Georgia",
+        "top medical university in Georgia",
+        "recommended Georgia universities",
+        ...featured.map((university) => university.name),
+      ],
+      intentTags: [
+        "best",
+        "top",
+        "ranking",
+        "preference",
+        "recommended",
+        "good college",
+        "which college",
+        "better college",
+        "compare",
+      ],
+      content: featured.map(
+        (university, index) =>
+          `${index + 1}. ${university.name}: ${university.recommendationLabel}; ${university.feeSummary}; ${university.accreditationLabel}; ${university.summary}`
+      ),
+      priority: 124,
+      data: {
+        kind: "georgia-ranking",
+        country,
+        universities: featured.map((university) => university.name),
+      },
+    }),
+    createStructuredEntry({
+      id: "eligibility-georgia-mbbs",
+      title: "Georgia MBBS Eligibility and Documents",
+      description:
+        "Georgia MBBS eligibility, NEET/PCB, English-medium and document checklist points from university data.",
+      url: "/mbbs-abroad/georgia#eligibility",
+      category: "Georgia Admission Data",
+      group: "Destinations",
+      type: "destination",
+      subType: "eligibility",
+      dataType: "Eligibility",
+      country,
+      tags: [
+        country,
+        "Georgia MBBS eligibility",
+        "NEET required",
+        "PCB",
+        "documents",
+        "WDOMS",
+      ],
+      intentTags: [
+        "eligibility",
+        "eligible",
+        "neet required",
+        "pcb",
+        "marks required",
+        "documents",
+      ],
+      content: georgiaUniversities.flatMap((university) => [
+        university.name,
+        university.entryRequirements,
+        university.documentChecklist,
+        university.accreditationLabel,
+      ]),
+      priority: 114,
+      data: {
+        kind: "georgia-eligibility",
+        country,
+      },
+    })
+  );
+
+  for (const [index, university] of georgiaUniversities.entries()) {
+    const url = georgiaUniversityUrl(university);
+    const commonTags = [
+      country,
+      "MBBS in Georgia",
+      university.name,
+      university.shortName,
+      university.slug,
+      university.city,
+      university.location,
+      university.recommendationLabel,
+      university.accreditationLabel,
+    ].filter(Boolean);
+    const fmgeSummary = asArray(university.fmgePerformance)
+      .map(
+        (item) =>
+          `${item.sourceName}: ${item.appeared} appeared, ${item.passed} passed, ${item.passRate} pass rate`
+      )
+      .join(" ");
+
+    if (university.feeRows.length || university.feeSummary) {
+      entries.push(
+        createStructuredEntry({
+          id: `fee-georgia-${university.slug}`,
+          title: `${university.name} Fees`,
+          description: `${university.name}, ${university.city}: ${university.feeSummary}`,
+          url,
+          category: "Georgia Admission Data",
+          group: "Destinations",
+          type: "destination",
+          subType: "fees",
+          dataType: "University Fee",
+          country,
+          city: university.city,
+          collegeName: university.name,
+          tags: [
+            ...commonTags,
+            "fees",
+            "fee structure",
+            "tuition",
+            "hostel",
+            "mess",
+            "total package",
+            "budget",
+          ],
+          intentTags: [
+            "fees",
+            "fee structure",
+            "cost",
+            "package",
+            "tuition",
+            "hostel",
+            "mess",
+            "budget",
+            "payment",
+          ],
+          content: [
+            university.feeSummary,
+            university.totalTuition,
+            university.annualTuition,
+            university.mandatoryHostelMess,
+            university.livingCost,
+            rowListText(university.feeRows),
+            rowListText(university.additionalFees),
+            university.feeNotes,
+            university.paymentTerms,
+          ],
+          priority: university.pageExists ? 126 - index : 100 - index,
+          data: {
+            kind: "georgia-university",
+            country,
+            slug: university.slug,
+            name: university.name,
+            city: university.city,
+            feeSummary: university.feeSummary,
+            totalTuition: university.totalTuition,
+            annualTuition: university.annualTuition,
+            mandatoryHostelMess: university.mandatoryHostelMess,
+            feeRows: university.feeRows,
+            feeNotes: university.feeNotes,
+            recommendationLabel: university.recommendationLabel,
+            pageExists: Boolean(university.pageExists),
+            projectOrder: index,
+          },
+        })
+      );
+    }
+
+    entries.push(
+      createStructuredEntry({
+        id: `recognition-georgia-${university.slug}`,
+        title: `${university.name} Recognition and Accreditation`,
+        description: `${university.accreditationLabel}. ${university.recommendationLabel}.`,
+        url,
+        category: "Georgia Admission Data",
+        group: "Destinations",
+        type: "destination",
+        subType: "recognition",
+        dataType: "Recognition",
+        country,
+        city: university.city,
+        collegeName: university.name,
+        tags: [
+          ...commonTags,
+          "recognition",
+          "accreditation",
+          "WDOMS",
+          "NMC",
+          "FMGL",
+          "approved",
+          "listed",
+        ],
+        intentTags: [
+          "nmc",
+          "wdoms",
+          "fmgl",
+          "recognition",
+          "accreditation",
+          "approved",
+          "listed",
+          "license",
+          "licence",
+        ],
+        content: [
+          university.accreditationLabel,
+          university.recommendationLabel,
+          university.summary,
+          university.highlights,
+          university.facts,
+          georgiaFinalDisclaimer,
+        ],
+        priority: 112 - index,
+        data: {
+          kind: "georgia-recognition",
+          country,
+          slug: university.slug,
+          name: university.name,
+        },
+      })
+    );
+
+    if (fmgeSummary) {
+      entries.push(
+        createStructuredEntry({
+          id: `fmge-georgia-${university.slug}`,
+          title: `${university.name} FMGE Result`,
+          description: fmgeSummary,
+          url,
+          category: "FMGE Data",
+          group: "Destinations",
+          type: "destination",
+          subType: "fmge",
+          dataType: "FMGE College",
+          country,
+          city: university.city,
+          collegeName: university.name,
+          tags: [
+            ...commonTags,
+            "FMGE",
+            "FMGE result",
+            "pass rate",
+            "appeared",
+            "passed",
+            "NBEMS",
+          ],
+          intentTags: [
+            "fmge",
+            "pass rate",
+            "appeared",
+            "passed",
+            "result",
+            "nbems",
+          ],
+          content: [fmgeSummary, university.summary],
+          priority: 112 - index,
+          data: {
+            kind: "fmge-college",
+            country,
+            college: university.name,
+            fmgePerformance: university.fmgePerformance,
+          },
+        })
+      );
+    }
+
+    entries.push(
+      createStructuredEntry({
+        id: `hostel-georgia-${university.slug}`,
+        title: `${university.name} Hostel, Living Cost and Campus`,
+        description: `${university.name}: ${university.mandatoryHostelMess ?? university.livingCost ?? "hostel and living details should be verified"}.`,
+        url,
+        category: "Georgia Admission Data",
+        group: "Destinations",
+        type: "destination",
+        subType: "hostel",
+        dataType: "Hostel",
+        country,
+        city: university.city,
+        collegeName: university.name,
+        tags: [
+          ...commonTags,
+          "hostel",
+          "mess",
+          "food",
+          "accommodation",
+          "living cost",
+          "safety",
+          "campus",
+        ],
+        intentTags: [
+          "hostel",
+          "mess",
+          "food",
+          "accommodation",
+          "living cost",
+          "safety",
+          "campus",
+        ],
+        content: [
+          university.mandatoryHostelMess,
+          university.livingCost,
+          university.facilities,
+          university.supportServices,
+          university.feeNotes,
+          rowListText(university.additionalFees),
+        ],
+        priority: 98 - index,
+        data: {
+          kind: "georgia-hostel",
+          country,
+          slug: university.slug,
+        },
+      })
+    );
+  }
+
+  return entries;
+}
+
+function cutoffRowText(record) {
+  return asArray(record.categories)
+    .map((row) =>
+      `${row.category}: round 1 score ${row.round1Score ?? "not available"} rank ${row.round1Rank ?? "not available"}; round 2 score ${row.round2Score ?? "not available"} rank ${row.round2Rank ?? "not available"}; round 3 score ${row.round3Score ?? "not available"} rank ${row.round3Rank ?? "not available"}; stray score ${row.strayScore ?? "not available"} rank ${row.strayRank ?? "not available"}`
+    )
+    .join(" ");
+}
+
+function seatRowText(rows) {
+  return asArray(rows)
+    .map(
+      (row) =>
+        `${row.quota}: total ${row.totalSeats ?? "not available"} allocated ${row.allocatedCategorySeats ?? "not available"} ${row.instituteType}; ${Object.entries(row.categorySeats ?? {})
+          .map(([category, seats]) => `${category} ${seats ?? "not available"}`)
+          .join(" ")}`
+    )
+    .join(" ");
+}
+
+function buildIndiaStructuredEntries() {
+  const { mbbsIndiaColleges = [], mbbsIndiaCollegesByState = [] } =
+    loadDataModule("app/data/mbbsIndiaColleges.ts");
+  const {
+    mbbsIndiaWestBengalPrivateFeeStructures = [],
+    getMBBSIndiaFeeStructure,
+  } = loadDataModule("app/data/mbbsIndiaFeeStructure.ts");
+
+  return buildIndiaStructuredEntriesFromSources({
+    mbbsIndiaColleges,
+    mbbsIndiaCollegesByState,
+    mbbsIndiaWestBengalPrivateFeeStructures,
+    getMBBSIndiaFeeStructure,
+  });
+}
+
+function buildIndiaStructuredEntriesFromSources({
+  mbbsIndiaColleges,
+  mbbsIndiaCollegesByState,
+  mbbsIndiaWestBengalPrivateFeeStructures,
+  getMBBSIndiaFeeStructure,
+}) {
+  const counselling = globalThis.__mbbsIndiaCounselling2025;
+  const entries = [];
+  const country = "India";
+  const seatRowsByCollege = new Map();
+
+  for (const row of asArray(counselling?.seatMatrix)) {
+    const key = normalizeLookupKey(row.collegeName);
+    seatRowsByCollege.set(key, [...(seatRowsByCollege.get(key) ?? []), row]);
+  }
+
+  entries.push(
+    createStructuredEntry({
+      id: "fee-west-bengal-private-medical-colleges",
+      title: "West Bengal Private MBBS Fee Structure",
+      description:
+        "West Bengal private MBBS college-wise state quota and management quota fees with 2025 totals and 2026 expected planning ranges.",
+      url: "/mbbs-india/west-bengal/",
+      category: "MBBS India Admission Data",
+      group: "Pages",
+      type: "page",
+      subType: "fees",
+      dataType: "University Fee",
+      country,
+      state: "West Bengal",
+      tags: [
+        "West Bengal",
+        "India",
+        "private medical college fees",
+        "MBBS India fees",
+        "state quota",
+        "management quota",
+        ...mbbsIndiaWestBengalPrivateFeeStructures.map((record) => record.collegeName),
+      ],
+      intentTags: [
+        "fees",
+        "fee structure",
+        "cost",
+        "package",
+        "tuition",
+        "hostel",
+        "mess",
+        "budget",
+        "payment",
+        "management quota",
+        "state quota",
+      ],
+      content: mbbsIndiaWestBengalPrivateFeeStructures.flatMap((record) => [
+        record.collegeName,
+        `${record.seatIntake ?? "not available"} seats`,
+        rowListText(record.rows),
+      ]),
+      priority: 130,
+      data: {
+        kind: "mbbs-india-fees",
+        country,
+        state: "West Bengal",
+        feeStructures: mbbsIndiaWestBengalPrivateFeeStructures,
+      },
+    }),
+    createStructuredEntry({
+      id: "cutoff-west-bengal-private-mbbs",
+      title: "West Bengal Private MBBS Cutoff and Last Rank",
+      description:
+        "Prior-year 2025 West Bengal private MBBS cutoff, closing score, closing rank, quota and category reference.",
+      url: "/mbbs-india/west-bengal/",
+      category: "MBBS India Admission Data",
+      group: "Pages",
+      type: "page",
+      subType: "cutoff",
+      dataType: "Cutoff",
+      country,
+      state: "West Bengal",
+      tags: [
+        "West Bengal",
+        "private MBBS cutoff",
+        "last rank",
+        "closing rank",
+        "NEET rank",
+        "management quota",
+        "state quota",
+      ],
+      intentTags: [
+        "cutoff",
+        "cut off",
+        "closing rank",
+        "last rank",
+        "opening rank",
+        "rank",
+        "neet rank",
+        "score",
+        "allotment",
+      ],
+      content: asArray(counselling?.cutoffs).flatMap((record) => [
+        record.collegeName,
+        cutoffRowText(record),
+      ]),
+      priority: 127,
+      data: {
+        kind: "mbbs-india-cutoff-summary",
+        country,
+        state: "West Bengal",
+      },
+    }),
+    createStructuredEntry({
+      id: "rank-west-bengal-private-medical-colleges",
+      title: "West Bengal Private Medical College Preference Data",
+      description:
+        "Compare West Bengal private medical colleges using ilmalink seat, fee and prior-year counselling data.",
+      url: "/mbbs-india/west-bengal/",
+      category: "MBBS India Admission Data",
+      group: "Pages",
+      type: "page",
+      subType: "ranking",
+      dataType: "Ranking",
+      country,
+      state: "West Bengal",
+      tags: [
+        "West Bengal",
+        "best private medical college",
+        "top private medical college",
+        "preference order",
+        "recommended",
+        ...mbbsIndiaWestBengalPrivateFeeStructures.map((record) => record.collegeName),
+      ],
+      intentTags: [
+        "best",
+        "top",
+        "ranking",
+        "preference",
+        "recommended",
+        "good college",
+        "which college",
+        "better college",
+        "compare",
+      ],
+      content: mbbsIndiaWestBengalPrivateFeeStructures.flatMap((record) => [
+        record.collegeName,
+        `${record.seatIntake ?? "not available"} seats`,
+        rowListText(record.rows),
+      ]),
+      priority: 120,
+      data: {
+        kind: "mbbs-india-ranking",
+        country,
+        state: "West Bengal",
+      },
+    })
+  );
+
+  for (const record of mbbsIndiaWestBengalPrivateFeeStructures) {
+    const urlCollege =
+      mbbsIndiaColleges.find((college) =>
+        record.aliases.some(
+          (alias) => normalizeLookupKey(alias) === normalizeLookupKey(college.collegeName)
+        )
+      ) ?? {
+        state: "West Bengal",
+        collegeName: record.aliases[0] ?? record.collegeName,
+      };
+    entries.push(
+      createStructuredEntry({
+        id: `fee-west-bengal-${routeSlug(record.collegeName)}`,
+        title: `${record.collegeName} MBBS Fees`,
+        description: `${record.collegeName}: state quota and management quota fee structure with per-semester and total tuition values.`,
+        url: mbbsIndiaCollegeUrl(urlCollege),
+        category: "MBBS India Admission Data",
+        group: "Pages",
+        type: "page",
+        subType: "fees",
+        dataType: "University Fee",
+        country,
+        state: "West Bengal",
+        collegeName: record.collegeName,
+        tags: [
+          "West Bengal",
+          "India",
+          record.collegeName,
+          ...record.aliases,
+          "fees",
+          "fee structure",
+          "state quota",
+          "management quota",
+          "tuition",
+          "budget",
+        ],
+        intentTags: [
+          "fees",
+          "fee structure",
+          "cost",
+          "package",
+          "tuition",
+          "budget",
+          "payment",
+          "management quota",
+          "state quota",
+        ],
+        content: [
+          record.collegeName,
+          record.aliases,
+          `${record.seatIntake ?? "not available"} seats`,
+          rowListText(record.rows),
+        ],
+        priority: 128,
+        data: {
+          kind: "mbbs-india-fee-structure",
+          country,
+          state: "West Bengal",
+          collegeName: record.collegeName,
+          aliases: record.aliases,
+          seatIntake: record.seatIntake,
+          rows: record.rows,
+        },
+      })
+    );
+  }
+
+  for (const cutoff of asArray(counselling?.cutoffs)) {
+    const college =
+      mbbsIndiaColleges.find(
+        (item) => normalizeLookupKey(item.collegeName) === normalizeLookupKey(cutoff.collegeName)
+      ) ?? {
+        state: cutoff.state,
+        collegeName: cutoff.collegeName,
+      };
+
+    entries.push(
+      createStructuredEntry({
+        id: `cutoff-${routeSlug(cutoff.state)}-${routeSlug(cutoff.collegeName)}`,
+        title: `${cutoff.collegeName} 2025 Cutoff and Last Rank`,
+        description: `2025 ${cutoff.state} prior-year cutoff scores and closing ranks by category and round.`,
+        url: mbbsIndiaCollegeUrl(college),
+        category: "MBBS India Admission Data",
+        group: "Pages",
+        type: "page",
+        subType: "cutoff",
+        dataType: "Cutoff",
+        country,
+        state: cutoff.state,
+        collegeName: cutoff.collegeName,
+        tags: [
+          cutoff.state,
+          cutoff.collegeName,
+          "cutoff",
+          "last rank",
+          "closing rank",
+          "closing score",
+          "NEET rank",
+          "state quota",
+          "management quota",
+        ],
+        intentTags: [
+          "cutoff",
+          "cut off",
+          "closing rank",
+          "last rank",
+          "opening rank",
+          "rank",
+          "neet rank",
+          "score",
+          "allotment",
+        ],
+        content: [cutoff.collegeName, cutoffRowText(cutoff)],
+        priority: 126,
+        data: {
+          kind: "mbbs-india-cutoff",
+          country,
+          state: cutoff.state,
+          collegeName: cutoff.collegeName,
+          cutoff,
+        },
+      })
+    );
+  }
+
+  for (const college of mbbsIndiaColleges) {
+    const feeStructure =
+      typeof getMBBSIndiaFeeStructure === "function"
+        ? getMBBSIndiaFeeStructure(college)
+        : null;
+    const seatRows = seatRowsByCollege.get(normalizeLookupKey(college.collegeName)) ?? [];
+
+    entries.push(
+      createStructuredEntry({
+        id: `seats-${routeSlug(college.state)}-${routeSlug(college.collegeName)}`,
+        title: `${college.collegeName} MBBS Seats and Establishment`,
+        description: `${college.category} medical college in ${college.state} with ${college.seatCapacity.toLocaleString("en-IN")} MBBS seats; established ${college.establishmentYear}.`,
+        url: mbbsIndiaCollegeUrl(college),
+        category: "MBBS India Admission Data",
+        group: "Pages",
+        type: "page",
+        subType: "seats",
+        dataType: "Seats",
+        country,
+        state: college.state,
+        collegeName: college.collegeName,
+        tags: [
+          college.state,
+          college.collegeName,
+          college.category,
+          "MBBS India",
+          "seats",
+          "seat intake",
+          "annual intake",
+          "capacity",
+          "establishment year",
+          "old college",
+          "new college",
+        ],
+        intentTags: [
+          "seats",
+          "intake",
+          "annual intake",
+          "capacity",
+          "establishment year",
+          "old college",
+          "new college",
+        ],
+        content: [
+          college.collegeName,
+          college.state,
+          college.category,
+          `${college.seatCapacity} seats`,
+          `established ${college.establishmentYear}`,
+          college.fees,
+          seatRowText(seatRows),
+          feeStructure ? rowListText(feeStructure.rows) : "",
+        ],
+        priority: college.state === "West Bengal" ? 116 : 96,
+        data: {
+          kind: "mbbs-india-college",
+          country,
+          state: college.state,
+          category: college.category,
+          collegeName: college.collegeName,
+          seatCapacity: college.seatCapacity,
+          establishmentYear: college.establishmentYear,
+          fees: college.fees,
+          feeStructure,
+          seatMatrix: seatRows,
+        },
+      })
+    );
+  }
+
+  for (const group of mbbsIndiaCollegesByState) {
+    entries.push(
+      createStructuredEntry({
+        id: `state-wise-india-college-search-${routeSlug(group.state)}`,
+        title: `${group.state} MBBS College Search`,
+        description: `${group.state}: ${group.privateCount} private, ${group.governmentCount} government and ${group.totalSeats.toLocaleString("en-IN")} total MBBS seats.`,
+        url: mbbsIndiaStateUrl(group.state),
+        category: "MBBS India Admission Data",
+        group: "Pages",
+        type: "page",
+        subType: "state",
+        dataType: "MBBS India State",
+        country,
+        state: group.state,
+        tags: [
+          group.state,
+          "MBBS India",
+          "state wise college search",
+          "medical colleges",
+          "government medical college",
+          "private medical college",
+          "seats",
+          "counselling",
+        ],
+        intentTags: [
+          "state-wise India college search",
+          "seats",
+          "best",
+          "top",
+          "admission route",
+          "counselling route",
+        ],
+        content: [
+          `${group.privateCount} private colleges`,
+          `${group.governmentCount} government colleges`,
+          `${group.totalSeats} seats`,
+          group.privateColleges.map((college) => college.collegeName),
+          group.governmentColleges.map((college) => college.collegeName),
+        ],
+        priority: group.state === "West Bengal" ? 120 : 100,
+        data: {
+          kind: "mbbs-india-state",
+          country,
+          state: group.state,
+          privateCount: group.privateCount,
+          governmentCount: group.governmentCount,
+          totalSeats: group.totalSeats,
+        },
+      })
+    );
+  }
+
+  return entries;
+}
+
+async function buildStructuredAdmissionEntries() {
+  const counsellingPath = path.join(rootDir, "app", "data", "mbbsIndiaCounselling2025.json");
+  const counsellingSource = await fs.readFile(counsellingPath, "utf8");
+
+  globalThis.__mbbsIndiaCounselling2025 = JSON.parse(counsellingSource);
+
+  try {
+    return [
+      ...buildBangladeshStructuredEntries(),
+      ...buildKyrgyzstanStructuredEntries(),
+      ...buildGeorgiaStructuredEntries(),
+      ...buildIndiaStructuredEntries(),
+    ];
+  } finally {
+    delete globalThis.__mbbsIndiaCounselling2025;
+  }
+}
+
 function buildManualEntries() {
   const entries = [
     {
@@ -1289,6 +3059,9 @@ function emitEntry(entry) {
     tags: Array.isArray(entry.tags)
       ? entry.tags.map((tag) => normalizeBrandIdentityText(tag))
       : entry.tags,
+    intentTags: Array.isArray(entry.intentTags)
+      ? entry.intentTags.map((tag) => normalizeBrandIdentityText(tag))
+      : entry.intentTags,
     content: normalizeBrandIdentityText(entry.content),
   };
 
@@ -1301,6 +3074,7 @@ async function main() {
       ...(await buildRouteEntries()),
       ...(await buildBlogEntries()),
       ...(await buildFmgeEntries()),
+      ...(await buildStructuredAdmissionEntries()),
       ...(await readNeetSearchEntries()),
       ...(await readNeetQuestionEntries()),
       ...(await readReNeetCodeAnswerEntries()),
@@ -1308,7 +3082,7 @@ async function main() {
     ].filter((entry) => isPublicSearchUrl(entry.url))
   );
 
-  const output = `// AUTO-GENERATED by npm run search:index.\n// Includes public pages, page sections, FMGE data, manual search entries,\n// and all published blog posts available from Prisma and data/blog-db.json.\n// npm run dev and npm run build regenerate this file before Next.js starts/builds.\nexport type GlobalSearchEntry = {\n  id: string;\n  title: string;\n  description: string;\n  url: string;\n  category: string;\n  group: "Pages" | "Destinations" | "Blogs";\n  type: "page" | "destination" | "blog";\n  subType?: "section";\n  tags: string[];\n  content: string;\n  priority: number;\n};\n\nexport const globalSearchIndex: GlobalSearchEntry[] = [\n${entries.map(emitEntry).join("\n")}\n];\n`;
+  const output = `// AUTO-GENERATED by npm run search:index.\n// Includes public pages, page sections, structured admission data, FMGE data,\n// manual search entries, and published blog posts available from Prisma and data/blog-db.json.\n// npm run dev and npm run build regenerate this file before Next.js starts/builds.\nexport type GlobalSearchEntry = {\n  id: string;\n  title: string;\n  description: string;\n  url: string;\n  category: string;\n  group: "Pages" | "Destinations" | "Blogs";\n  type: "page" | "destination" | "blog";\n  subType?: string;\n  tags: string[];\n  intentTags?: string[];\n  content: string;\n  priority: number;\n  country?: string;\n  state?: string;\n  city?: string;\n  collegeName?: string;\n  dataType?: string;\n  data?: Record<string, unknown>;\n};\n\nexport const globalSearchIndex: GlobalSearchEntry[] = [\n${entries.map(emitEntry).join("\n")}\n];\n`;
 
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
   await fs.writeFile(outputPath, output, "utf8");
