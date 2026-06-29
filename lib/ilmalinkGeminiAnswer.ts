@@ -15,16 +15,27 @@ export type SearchSource = {
   state?: string;
   city?: string;
   collegeName?: string;
+  fees?: string;
+  hasFee?: boolean;
+  seatMatrixText?: string;
+  cutoffText?: string;
   score?: number;
   keyFacts?: string[];
 };
 
 export type IlmalinkAiConfidence = "high" | "medium" | "low";
 
+export type IlmalinkAiAnswerMode =
+  | "strong_answer"
+  | "direct_page_answer"
+  | "no_answer";
+
 export type IlmalinkAiAnswer = {
   answer: string;
+  mode: IlmalinkAiAnswerMode;
   confidence: IlmalinkAiConfidence;
   dataAvailable: boolean;
+  partialData: boolean;
   needsCounselling: boolean;
   openCounsellingPopup: boolean;
   sourcesUsed: SearchSource[];
@@ -47,7 +58,15 @@ Do not search the web.
 Do not invent data.
 Do not guess fees, cutoff, last rank, seats, recognition, FMGE data, eligibility, documents, hostel, scholarship, loan, admission route, or best-college claims.
 
-If the provided ilmalink context does not contain enough exact answer data, say exactly:
+Important answer rule:
+If the provided ilmalink context contains a relevant page, source, excerpt, college, university, country or topic, answer directly.
+Do not say the query is unanswered when relevant ilmalink sources exist.
+Do not use the fallback sentence when sources exist.
+
+If exact numeric values are present in the context, show them clearly.
+If a relevant source exists but exact numeric values are not present, give a helpful page-based answer and guide the user to open the relevant ilmalink source page. Ask the user to verify the latest official fee letter, cutoff notice, counselling update or university document before final decision.
+
+Use this fallback sentence only when there is no relevant ilmalink source at all:
 "${ILMALINK_COUNSELLING_FALLBACK}"
 
 Never mention dataset, index, crawler, script, prompt, SEO, GEO, missing data, technical limitation, or internal system words.
@@ -81,6 +100,8 @@ const INTERNAL_BLOCKED_WORDS = [
   "internal system",
   "provided context does not",
   "not enough information",
+  "exact data is not available",
+  "current ilmalink dataset",
 ];
 
 const GENERIC_QUERY_WORDS = new Set([
@@ -293,6 +314,9 @@ function getSourceText(source: SearchSource) {
       source.state,
       source.city,
       source.collegeName,
+      source.fees,
+      source.seatMatrixText,
+      source.cutoffText,
       source.keyFacts?.join(" "),
     ]
       .filter(Boolean)
@@ -304,43 +328,104 @@ function hasMeaningfulSourceMatch(query: string, sources: SearchSource[]) {
   if (!sources.length) return false;
 
   const combinedSourceText = sources.map(getSourceText).join(" ");
-  const intents = detectLocalIntents(query);
   const importantTokens = getImportantQueryTokens(query);
+
+  if (!importantTokens.length) {
+    return true;
+  }
+
   const matchedTokenCount = importantTokens.filter((token) =>
     combinedSourceText.includes(token)
   ).length;
-  const hasEntityOrLocationEvidence =
-    importantTokens.length > 0 &&
-    matchedTokenCount >= Math.min(2, importantTokens.length);
-  const hasIntentEvidence =
-    intents.length === 0 ||
-    intents.every((intent) => includesAny(combinedSourceText, INTENT_EVIDENCE[intent]));
-  const exactDataIntents: LocalIntent[] = ["fees", "cutoff", "fmge"];
-  const needsNumericEvidence = intents.some((intent) =>
-    exactDataIntents.includes(intent)
-  );
-  const hasNumericEvidence = /\d/.test(combinedSourceText);
-  const hasRichSource = sources.some(
-    (source) =>
-      `${source.description ?? ""} ${source.content ?? ""} ${
-        source.keyFacts?.join(" ") ?? ""
-      }`.trim().length >= 180
-  );
-  if (needsNumericEvidence && !hasNumericEvidence) {
-    return false;
-  }
 
-  return hasIntentEvidence && hasRichSource && hasEntityOrLocationEvidence;
+  return matchedTokenCount >= 1;
 }
 
 function buildCounsellingFallback(sources: SearchSource[] = []): IlmalinkAiAnswer {
   return {
     answer: ILMALINK_COUNSELLING_FALLBACK,
+    mode: "no_answer",
     confidence: "low",
     dataAvailable: false,
+    partialData: false,
     needsCounselling: true,
     openCounsellingPopup: true,
     sourcesUsed: sources.slice(0, 3),
+  };
+}
+
+function buildDirectPageAnswer({
+  query,
+  sources,
+}: {
+  query: string;
+  sources: SearchSource[];
+}): IlmalinkAiAnswer {
+  const topSources = sources.slice(0, 3);
+  const top = topSources[0];
+
+  if (!top) {
+    return buildCounsellingFallback();
+  }
+
+  const normalizedQuery = normalizeText(query);
+  const subject =
+    top.collegeName ||
+    top.title
+      .replace(/fee structure/gi, "")
+      .replace(/fees/gi, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const isFeeQuery = includesAny(normalizedQuery, INTENT_EVIDENCE.fees);
+  const isRankQuery = includesAny(normalizedQuery, INTENT_EVIDENCE.cutoff);
+  const isBestQuery = includesAny(normalizedQuery, INTENT_EVIDENCE.best);
+  const isEligibilityQuery = includesAny(normalizedQuery, INTENT_EVIDENCE.eligibility);
+  const isFmgeQuery = includesAny(normalizedQuery, INTENT_EVIDENCE.fmge);
+  const isRecognitionQuery = includesAny(normalizedQuery, INTENT_EVIDENCE.recognition);
+  const isDocumentQuery = includesAny(normalizedQuery, INTENT_EVIDENCE.documents);
+  const isHostelQuery = includesAny(normalizedQuery, INTENT_EVIDENCE.hostel);
+
+  let answer: string;
+
+  if (isFeeQuery) {
+    const exactFeeSource = topSources.find(
+      (source) =>
+        source.hasFee &&
+        source.fees &&
+        !normalizeText(source.fees).includes("to be updated")
+    );
+
+    answer = exactFeeSource?.fees
+      ? `${exactFeeSource.collegeName || exactFeeSource.title} MBBS fees: ${exactFeeSource.fees}. Verify the latest official fee notice before payment or choice filling.`
+      : `${subject} MBBS fee is to be updated in ilmalink. Open the linked page and verify the latest official fee notice or contact an ilmaLink expert before payment.`;
+  } else if (isRankQuery) {
+    answer = `${subject} rank or counselling information is available in ilmalink. Open the linked page to check available cutoff, last-rank, counselling-route or allotment details. Final allotment can change by year, category, quota and counselling round.`;
+  } else if (isBestQuery) {
+    answer = `I found relevant ilmalink information for this college-selection question. Use the linked pages to compare recommendation level, accreditation notes, FMGE information, fees, location, patient exposure and admission suitability before final choice.`;
+  } else if (isEligibilityQuery) {
+    answer = `Eligibility information related to your query is available in ilmalink. Open the linked page to check NEET, academic marks, documents, country-specific rules and admission requirements.`;
+  } else if (isFmgeQuery) {
+    answer = `FMGE-related information is available in ilmalink for this query. Open the linked page to review appeared, passed, pass-rate or university-level FMGE references where listed.`;
+  } else if (isRecognitionQuery) {
+    answer = `Recognition or accreditation-related information is available in ilmalink. Open the linked page and verify the latest NMC/FMGL, WDOMS or official recognition details before admission.`;
+  } else if (isDocumentQuery) {
+    answer = `Document-related information is available in ilmalink. Open the linked page to check passport, marksheet, certificate, embassy, OCI, NRI or country-specific document requirements where listed.`;
+  } else if (isHostelQuery) {
+    answer = `Hostel, mess, food, accommodation or campus-related information is available in ilmalink. Open the linked page to check the available living and campus details before final admission planning.`;
+  } else {
+    answer = `I found relevant ilmalink information for your query. Open the linked page to check the available details and verify final admission information before taking a decision.`;
+  }
+
+  return {
+    answer,
+    mode: "direct_page_answer",
+    confidence: "medium",
+    dataAvailable: true,
+    partialData: true,
+    needsCounselling: false,
+    openCounsellingPopup: false,
+    sourcesUsed: topSources,
   };
 }
 
@@ -366,6 +451,13 @@ function buildRetrievedContext(sources: SearchSource[]) {
       const facts = source.keyFacts?.length
         ? source.keyFacts.map((fact) => `- ${compact(fact, 220)}`).join("\n")
         : "";
+      const dataFacts = [
+        source.fees ? `Fees: ${source.fees}` : "",
+        source.seatMatrixText ? `Seat matrix: ${compact(source.seatMatrixText, 320)}` : "",
+        source.cutoffText ? `Cutoff/last rank: ${compact(source.cutoffText, 420)}` : "",
+      ]
+        .filter(Boolean)
+        .join("\n");
 
       return `Source ${index + 1}
 Title: ${compact(source.title, 220)}
@@ -374,7 +466,7 @@ Category: ${compact(source.category || source.dataType || "", 120)}
 Location: ${compact(location, 160)}
 College/University: ${compact(source.collegeName || "", 160)}
 Useful facts:
-${facts || "- No separate fact list."}
+${dataFacts || facts || "- No separate fact list."}
 Excerpt: ${compact(source.content || source.description || "", 1600)}`;
     })
     .join("\n\n---\n\n");
@@ -387,8 +479,13 @@ ${query}
 Relevant ilmalink source excerpts:
 ${buildRetrievedContext(sources)}
 
-Write the answer only from the excerpts above. If the exact answer is not clearly supported, return only:
-${ILMALINK_COUNSELLING_FALLBACK}`;
+Write the answer only from the excerpts above.
+
+Rules:
+- If exact values are present, show them clearly.
+- If the source is relevant but exact values are not present, still answer directly and guide the user to open the linked ilmalink source page.
+- Do not use the counselling fallback when relevant sources exist.
+- Use the counselling fallback only if there is no relevant ilmalink source at all.`;
 }
 
 function cleanGeminiAnswer(answer: string) {
@@ -427,19 +524,34 @@ export async function generateIlmalinkGeminiAnswer({
     .filter((source) => source.description || source.content || source.keyFacts?.length)
     .slice(0, MAX_SOURCES_FOR_GEMINI);
 
+  if (!topSources.length) {
+    return buildCounsellingFallback();
+  }
+
   const apiKey = process.env.GEMINI_API_KEY?.trim();
 
   if (!apiKey) {
     console.warn("Missing GEMINI_API_KEY for ilmalink Gemini answer generation.");
-    return buildCounsellingFallback(topSources);
+    return buildDirectPageAnswer({
+      query: cleanQuery,
+      sources: topSources,
+    });
   }
 
-  if (!hasMeaningfulSourceMatch(cleanQuery, topSources)) {
-    return buildCounsellingFallback(topSources);
+  const hasLocalMatch = hasMeaningfulSourceMatch(cleanQuery, topSources);
+
+  if (!hasLocalMatch) {
+    return buildDirectPageAnswer({
+      query: cleanQuery,
+      sources: topSources,
+    });
   }
 
   if (Date.now() < geminiUnavailableUntil) {
-    return buildCounsellingFallback(topSources);
+    return buildDirectPageAnswer({
+      query: cleanQuery,
+      sources: topSources,
+    });
   }
 
   try {
@@ -457,17 +569,25 @@ export async function generateIlmalinkGeminiAnswer({
     const answer = cleanGeminiAnswer(String(interaction.output_text || ""));
 
     if (!answer || shouldBlockAnswer(answer)) {
-      return buildCounsellingFallback(topSources);
+      return buildDirectPageAnswer({
+        query: cleanQuery,
+        sources: topSources,
+      });
     }
 
     if (isFallbackAnswer(answer) || answer.includes(ILMALINK_COUNSELLING_FALLBACK)) {
-      return buildCounsellingFallback(topSources);
+      return buildDirectPageAnswer({
+        query: cleanQuery,
+        sources: topSources,
+      });
     }
 
     return {
       answer,
+      mode: "strong_answer",
       confidence: topSources.length >= 3 ? "high" : "medium",
       dataAvailable: true,
+      partialData: false,
       needsCounselling: false,
       openCounsellingPopup: false,
       sourcesUsed: topSources,
@@ -480,6 +600,10 @@ export async function generateIlmalinkGeminiAnswer({
     }
 
     console.error("Gemini answer generation failed:", message);
-    return buildCounsellingFallback(topSources);
+
+    return buildDirectPageAnswer({
+      query: cleanQuery,
+      sources: topSources,
+    });
   }
 }

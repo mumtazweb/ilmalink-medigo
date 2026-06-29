@@ -53,6 +53,7 @@ import { mbbsIndiaCollegesByState, type MBBSIndiaCollege, type MBBSIndiaStateGro
 import { getMBBSIndiaAdmissionAccess } from "../data/mbbsIndiaAdmissionAccess";
 import { navbarCountryDestinations } from "../data/navbarDestinations";
 import { getMBBSIndiaCollegeHref } from "../data/exploreLinks";
+import { getMBBSIndiaCollegeFacts } from "../data/mbbsIndiaCollegeFacts";
 
 type NavbarMenuPortalProps = {
   children: ReactNode;
@@ -308,19 +309,26 @@ export default function Navbar() {
           </span>
         </div>
         <div className="grid max-h-64 gap-2 overflow-y-auto pr-1">
-          {visibleColleges.map((college) => (
-            <Link
-              key={`${group.state}-${college.category}-${college.collegeName}`}
-              href={getMBBSIndiaCollegeHref(college)}
-              onClick={closeMenuAfterClick}
-              className="rounded-lg border border-slate-100 bg-slate-50 px-3 py-2 transition hover:border-[#00C896]/50 hover:bg-white"
-            >
-              <p className="text-xs font-bold leading-5 text-slate-950">{college.collegeName}</p>
-              <p className="mt-1 text-[11px] font-medium leading-4 text-slate-500">
-                Seats: {college.seatCapacity.toLocaleString("en-IN")} | Established: {college.establishmentYear} | Fees: {college.fees}
-              </p>
-            </Link>
-          ))}
+          {visibleColleges.map((college) => {
+            const facts = getMBBSIndiaCollegeFacts(college.collegeName);
+            const feeLabel = facts?.hasFee
+              ? `Fees: ${facts.feeText}`
+              : "Fees to be updated";
+
+            return (
+              <Link
+                key={`${group.state}-${college.category}-${college.collegeName}`}
+                href={getMBBSIndiaCollegeHref(college)}
+                onClick={closeMenuAfterClick}
+                className="rounded-lg border border-slate-100 bg-slate-50 px-3 py-2 transition hover:border-[#00C896]/50 hover:bg-white"
+              >
+                <p className="text-xs font-bold leading-5 text-slate-950">{college.collegeName}</p>
+                <p className="mt-1 text-[11px] font-medium leading-4 text-slate-500">
+                  Seats: {college.seatCapacity.toLocaleString("en-IN")} | Established: {college.establishmentYear} | {feeLabel}
+                </p>
+              </Link>
+            );
+          })}
         </div>
       </div>
     );

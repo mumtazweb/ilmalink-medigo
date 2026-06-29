@@ -286,10 +286,11 @@ export const mbbsIndiaWestBengalPrivateFeeStructures: MBBSIndiaFeeStructure[] = 
     managementDisplay: "Rs. 99 Lakhs",
   }),
   createFeeRecord({
-    collegeName: "Zakir Hossain Medical College and Research Institute",
+    collegeName: "Jakir Hossain Medical College, Jangipur, Murshidabad",
     aliases: [
-      "Jakir Hossain Medical College, Burdwan",
-      "Jakir Hosain Medical College & Research Institute",
+      "Jakir Hossain Medical College and Research Institute",
+      "Jakir Hossain Medical College, Jangipur, Murshidabad",
+      "Jakir Hossain Medical College & Research Institute",
     ],
     seatIntake: 100,
     statePerSemester: 400000,
@@ -384,8 +385,14 @@ export function getMBBSIndiaFeeSummary(
     state2025,
     management2025,
     label:
-      state2025 && management2025
-        ? `State total ${state2025.totalTuition.display}; Management total ${management2025.totalTuition.display}`
+      state2025
+        ? [
+            `State quota total ${state2025.totalTuition.display}`,
+            management2025?.totalTuition.display &&
+            management2025.totalTuition.display !== "Not Available"
+              ? `Management quota total ${management2025.totalTuition.display}`
+              : "Management quota total To be updated",
+          ].join("; ")
         : null,
   };
 }

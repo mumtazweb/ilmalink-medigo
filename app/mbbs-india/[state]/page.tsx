@@ -15,6 +15,7 @@ import {
   getMBBSIndiaStateSlug,
 } from "../../data/exploreLinks";
 import { getMBBSIndiaFeeStructuresForState } from "../../data/mbbsIndiaFeeStructure";
+import { getMBBSIndiaCollegeFacts } from "../../data/mbbsIndiaCollegeFacts";
 import {
   PriorYearCounsellingNotice,
   SeatMatrixTable,
@@ -338,7 +339,13 @@ export default async function MBBSIndiaStatePage({ params }: StatePageProps) {
             All MBBS colleges in {group.state}
           </h2>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {colleges.map((college) => (
+            {colleges.map((college) => {
+              const facts = getMBBSIndiaCollegeFacts(college.collegeName);
+              const feeLabel = facts?.hasFee
+                ? `Fees: ${facts.feeText}`
+                : "Fees to be updated";
+
+              return (
               <Link
                 key={college.collegeName}
                 href={getMBBSIndiaCollegeHref(college)}
@@ -352,10 +359,11 @@ export default async function MBBSIndiaStatePage({ params }: StatePageProps) {
                 </h3>
                 <p className="mt-3 text-sm font-semibold text-slate-600">
                   {formatNumber(college.seatCapacity)} MBBS seats · Established{" "}
-                  {college.establishmentYear}
+                  {college.establishmentYear} | {feeLabel}
                 </p>
               </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

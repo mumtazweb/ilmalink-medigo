@@ -195,6 +195,16 @@ function asUsefulArray(value) {
   return asArray(value).filter((item) => item !== null && item !== undefined && item !== "");
 }
 
+function canonicalizeKnownCollegeText(value) {
+  return String(value ?? "")
+    .replace(/Zakir Hossain/gi, "Jakir Hossain")
+    .replace(/Jakir Hosain/gi, "Jakir Hossain")
+    .replace(
+      /Jakir Hossain Medical College(?: and Research Institute| & Research Institute)(?:, (?:Burdwan|Murshidabad))?|Jakir Hossain Medical College, Burdwan/gi,
+      "Jakir Hossain Medical College, Jangipur, Murshidabad"
+    );
+}
+
 function flattenTextParts(parts) {
   return parts
     .flat(Infinity)
@@ -994,36 +1004,45 @@ async function readPrismaBlogs() {
 }
 
 function blogToSearchEntry(blog) {
+  const title = canonicalizeKnownCollegeText(blog.title);
+  const description = canonicalizeKnownCollegeText(
+    blog.metaDescription || blog.shortDescription || blog.title
+  );
+  const tags = [
+    ...(Array.isArray(blog.tags) ? blog.tags : []),
+    ...(Array.isArray(blog.keywords) ? blog.keywords : []),
+    blog.category,
+    blog.country,
+  ]
+    .map(canonicalizeKnownCollegeText)
+    .filter(Boolean);
+  const content = canonicalizeKnownCollegeText(
+    [
+      blog.title,
+      blog.seoTitle,
+      blog.metaDescription,
+      blog.shortDescription,
+      blog.category,
+      blog.country,
+      blog.authorName,
+      ...(Array.isArray(blog.tags) ? blog.tags : []),
+      ...(Array.isArray(blog.keywords) ? blog.keywords : []),
+      blog.content,
+    ]
+      .filter(Boolean)
+      .join(" ")
+  );
+
   return {
     id: `blog-${slugify(blog.slug || blog.id || blog.title)}`,
-    title: blog.title,
-    description: blog.metaDescription || blog.shortDescription || blog.title,
+    title,
+    description,
     url: `/blogs/${blog.slug}`,
     category: "Blogs",
     group: "Blogs",
     type: "blog",
-    tags: [
-      ...(Array.isArray(blog.tags) ? blog.tags : []),
-      ...(Array.isArray(blog.keywords) ? blog.keywords : []),
-      blog.category,
-      blog.country,
-    ].filter(Boolean),
-    content: normalizeText(
-      [
-        blog.title,
-        blog.seoTitle,
-        blog.metaDescription,
-        blog.shortDescription,
-        blog.category,
-        blog.country,
-        blog.authorName,
-        ...(Array.isArray(blog.tags) ? blog.tags : []),
-        ...(Array.isArray(blog.keywords) ? blog.keywords : []),
-        blog.content,
-      ]
-        .filter(Boolean)
-        .join(" ")
-    ),
+    tags,
+    content: normalizeText(content),
     priority: 90 + Math.min(Number(blog.views) || 0, 5000) / 1000,
   };
 }
@@ -2358,43 +2377,75 @@ function seatRowText(rows) {
 }
 
 function buildIndiaStructuredEntries() {
-  const { mbbsIndiaColleges = [], mbbsIndiaCollegesByState = [] } =
+  const { mbbsIndiaCollegesByState = [] } =
     loadDataModule("app/data/mbbsIndiaColleges.ts");
   const {
     mbbsIndiaWestBengalPrivateFeeStructures = [],
-    getMBBSIndiaFeeStructure,
   } = loadDataModule("app/data/mbbsIndiaFeeStructure.ts");
+  const { getAllMBBSIndiaCollegeFacts } =
+    loadDataModule("app/data/mbbsIndiaCollegeFacts.ts");
 
   return buildIndiaStructuredEntriesFromSources({
-    mbbsIndiaColleges,
+    mbbsIndiaCollegeFacts:
+      typeof getAllMBBSIndiaCollegeFacts === "function"
+        ? getAllMBBSIndiaCollegeFacts()
+        : [],
     mbbsIndiaCollegesByState,
     mbbsIndiaWestBengalPrivateFeeStructures,
-    getMBBSIndiaFeeStructure,
   });
 }
 
 function buildIndiaStructuredEntriesFromSources({
-  mbbsIndiaColleges,
+  mbbsIndiaCollegeFacts,
   mbbsIndiaCollegesByState,
   mbbsIndiaWestBengalPrivateFeeStructures,
-  getMBBSIndiaFeeStructure,
 }) {
   const counselling = globalThis.__mbbsIndiaCounselling2025;
   const entries = [];
   const country = "India";
-  const seatRowsByCollege = new Map();
+  const facts = asArray(mbbsIndiaCollegeFacts);
+  const factByCollegeKey = new Map(
+    facts.map((fact) => [normalizeLookupKey(fact.college?.collegeName ?? ""), fact])
+  );
+  const findFactByName = (name) => factByCollegeKey.get(normalizeLookupKey(name));
+  const findFactByAliases = (aliases) =>
+    asArray(aliases)
+      .map((alias) => findFactByName(alias))
+      .find(Boolean);
+  const feeTotalTextForRecord = (record) => {
+    const fact = findFactByAliases(record.aliases) ?? findFactByName(record.collegeName);
+    if (fact?.hasFee) return fact.feeText;
 
-  for (const row of asArray(counselling?.seatMatrix)) {
-    const key = normalizeLookupKey(row.collegeName);
-    seatRowsByCollege.set(key, [...(seatRowsByCollege.get(key) ?? []), row]);
-  }
+    return asArray(record.rows)
+      .filter((row) => row?.yearLabel === "2025")
+      .map((row) =>
+        row?.totalTuition?.display
+          ? `${row.quota} total ${row.totalTuition.display}`
+          : ""
+      )
+      .filter(Boolean)
+      .join("; ");
+  };
+  const privateFeeSummaries = asArray(mbbsIndiaWestBengalPrivateFeeStructures).map((record) => {
+    const fact = findFactByAliases(record.aliases) ?? findFactByName(record.collegeName);
+    const feeText = feeTotalTextForRecord(record);
+
+    return {
+      collegeName: fact?.college?.collegeName ?? record.collegeName,
+      aliases: record.aliases,
+      seatIntake: record.seatIntake,
+      fees: feeText || "To be updated",
+      feeText: feeText || "To be updated",
+      hasFee: Boolean(feeText),
+    };
+  });
 
   entries.push(
     createStructuredEntry({
       id: "fee-west-bengal-private-medical-colleges",
       title: "West Bengal Private MBBS Fee Structure",
       description:
-        "West Bengal private MBBS college-wise state quota and management quota fees with 2025 totals and 2026 expected planning ranges.",
+        "West Bengal private MBBS college-wise state quota and management quota total fees for 2025.",
       url: "/mbbs-india/west-bengal/",
       category: "MBBS India Admission Data",
       group: "Pages",
@@ -2410,7 +2461,7 @@ function buildIndiaStructuredEntriesFromSources({
         "MBBS India fees",
         "state quota",
         "management quota",
-        ...mbbsIndiaWestBengalPrivateFeeStructures.map((record) => record.collegeName),
+        ...privateFeeSummaries.map((record) => record.collegeName),
       ],
       intentTags: [
         "fees",
@@ -2425,17 +2476,17 @@ function buildIndiaStructuredEntriesFromSources({
         "management quota",
         "state quota",
       ],
-      content: mbbsIndiaWestBengalPrivateFeeStructures.flatMap((record) => [
+      content: privateFeeSummaries.flatMap((record) => [
         record.collegeName,
         `${record.seatIntake ?? "not available"} seats`,
-        rowListText(record.rows),
+        record.feeText,
       ]),
       priority: 130,
       data: {
         kind: "mbbs-india-fees",
         country,
         state: "West Bengal",
-        feeStructures: mbbsIndiaWestBengalPrivateFeeStructures,
+        feeStructures: privateFeeSummaries,
       },
     }),
     createStructuredEntry({
@@ -2501,7 +2552,7 @@ function buildIndiaStructuredEntriesFromSources({
         "top private medical college",
         "preference order",
         "recommended",
-        ...mbbsIndiaWestBengalPrivateFeeStructures.map((record) => record.collegeName),
+        ...privateFeeSummaries.map((record) => record.collegeName),
       ],
       intentTags: [
         "best",
@@ -2514,10 +2565,10 @@ function buildIndiaStructuredEntriesFromSources({
         "better college",
         "compare",
       ],
-      content: mbbsIndiaWestBengalPrivateFeeStructures.flatMap((record) => [
+      content: privateFeeSummaries.flatMap((record) => [
         record.collegeName,
         `${record.seatIntake ?? "not available"} seats`,
-        rowListText(record.rows),
+        record.feeText,
       ]),
       priority: 120,
       data: {
@@ -2529,21 +2580,19 @@ function buildIndiaStructuredEntriesFromSources({
   );
 
   for (const record of mbbsIndiaWestBengalPrivateFeeStructures) {
-    const urlCollege =
-      mbbsIndiaColleges.find((college) =>
-        record.aliases.some(
-          (alias) => normalizeLookupKey(alias) === normalizeLookupKey(college.collegeName)
-        )
-      ) ?? {
-        state: "West Bengal",
-        collegeName: record.aliases[0] ?? record.collegeName,
-      };
+    const recordFact = findFactByAliases(record.aliases) ?? findFactByName(record.collegeName);
+    const recordFeeText = feeTotalTextForRecord(record);
+    const recordCollegeName = recordFact?.college?.collegeName ?? record.collegeName;
+
     entries.push(
       createStructuredEntry({
-        id: `fee-west-bengal-${routeSlug(record.collegeName)}`,
-        title: `${record.collegeName} MBBS Fees`,
-        description: `${record.collegeName}: state quota and management quota fee structure with per-semester and total tuition values.`,
-        url: mbbsIndiaCollegeUrl(urlCollege),
+        id: `fee-west-bengal-${routeSlug(recordCollegeName)}`,
+        title: `${recordCollegeName} MBBS Fees`,
+        description: `${recordCollegeName}: ${recordFeeText || "Fees to be updated"}.`,
+        url: recordFact?.href ?? mbbsIndiaCollegeUrl({
+          state: "West Bengal",
+          collegeName: recordCollegeName,
+        }),
         category: "MBBS India Admission Data",
         group: "Pages",
         type: "page",
@@ -2551,11 +2600,11 @@ function buildIndiaStructuredEntriesFromSources({
         dataType: "University Fee",
         country,
         state: "West Bengal",
-        collegeName: record.collegeName,
+        collegeName: recordCollegeName,
         tags: [
           "West Bengal",
           "India",
-          record.collegeName,
+          recordCollegeName,
           ...record.aliases,
           "fees",
           "fee structure",
@@ -2576,40 +2625,40 @@ function buildIndiaStructuredEntriesFromSources({
           "state quota",
         ],
         content: [
-          record.collegeName,
+          recordCollegeName,
           record.aliases,
           `${record.seatIntake ?? "not available"} seats`,
-          rowListText(record.rows),
+          recordFeeText,
         ],
         priority: 128,
         data: {
           kind: "mbbs-india-fee-structure",
           country,
           state: "West Bengal",
-          collegeName: record.collegeName,
+          collegeName: recordCollegeName,
           aliases: record.aliases,
           seatIntake: record.seatIntake,
-          rows: record.rows,
+          fees: recordFeeText || "To be updated",
+          feeText: recordFeeText || "To be updated",
+          hasFee: Boolean(recordFeeText),
         },
       })
     );
   }
 
   for (const cutoff of asArray(counselling?.cutoffs)) {
-    const college =
-      mbbsIndiaColleges.find(
-        (item) => normalizeLookupKey(item.collegeName) === normalizeLookupKey(cutoff.collegeName)
-      ) ?? {
-        state: cutoff.state,
-        collegeName: cutoff.collegeName,
-      };
+    const cutoffFact = findFactByName(cutoff.collegeName);
+    const cutoffCollege = cutoffFact?.college ?? {
+      state: cutoff.state,
+      collegeName: cutoff.collegeName,
+    };
 
     entries.push(
       createStructuredEntry({
-        id: `cutoff-${routeSlug(cutoff.state)}-${routeSlug(cutoff.collegeName)}`,
-        title: `${cutoff.collegeName} 2025 Cutoff and Last Rank`,
+        id: `cutoff-${routeSlug(cutoff.state)}-${routeSlug(cutoffCollege.collegeName)}`,
+        title: `${cutoffCollege.collegeName} 2025 Cutoff and Last Rank`,
         description: `2025 ${cutoff.state} prior-year cutoff scores and closing ranks by category and round.`,
-        url: mbbsIndiaCollegeUrl(college),
+        url: cutoffFact?.href ?? mbbsIndiaCollegeUrl(cutoffCollege),
         category: "MBBS India Admission Data",
         group: "Pages",
         type: "page",
@@ -2617,10 +2666,10 @@ function buildIndiaStructuredEntriesFromSources({
         dataType: "Cutoff",
         country,
         state: cutoff.state,
-        collegeName: cutoff.collegeName,
+        collegeName: cutoffCollege.collegeName,
         tags: [
           cutoff.state,
-          cutoff.collegeName,
+          cutoffCollege.collegeName,
           "cutoff",
           "last rank",
           "closing rank",
@@ -2640,32 +2689,28 @@ function buildIndiaStructuredEntriesFromSources({
           "score",
           "allotment",
         ],
-        content: [cutoff.collegeName, cutoffRowText(cutoff)],
+        content: [cutoffCollege.collegeName, cutoffFact?.cutoffText ?? cutoffRowText(cutoff)],
         priority: 126,
         data: {
           kind: "mbbs-india-cutoff",
           country,
           state: cutoff.state,
-          collegeName: cutoff.collegeName,
+          collegeName: cutoffCollege.collegeName,
           cutoff,
         },
       })
     );
   }
 
-  for (const college of mbbsIndiaColleges) {
-    const feeStructure =
-      typeof getMBBSIndiaFeeStructure === "function"
-        ? getMBBSIndiaFeeStructure(college)
-        : null;
-    const seatRows = seatRowsByCollege.get(normalizeLookupKey(college.collegeName)) ?? [];
-
+  for (const fact of facts) {
+    const { college } = fact;
+    const feeLabel = fact.hasFee ? `Fees: ${fact.feeText}` : "Fees to be updated";
     entries.push(
       createStructuredEntry({
         id: `seats-${routeSlug(college.state)}-${routeSlug(college.collegeName)}`,
         title: `${college.collegeName} MBBS Seats and Establishment`,
-        description: `${college.category} medical college in ${college.state} with ${college.seatCapacity.toLocaleString("en-IN")} MBBS seats; established ${college.establishmentYear}.`,
-        url: mbbsIndiaCollegeUrl(college),
+        description: `${college.category} medical college in ${college.state} with ${college.seatCapacity.toLocaleString("en-IN")} MBBS seats; established ${college.establishmentYear}. ${feeLabel}.`,
+        url: fact.href,
         category: "MBBS India Admission Data",
         group: "Pages",
         type: "page",
@@ -2684,6 +2729,13 @@ function buildIndiaStructuredEntriesFromSources({
           "annual intake",
           "capacity",
           "establishment year",
+          "fees",
+          "fee structure",
+          "seat matrix",
+          "cutoff",
+          "closing rank",
+          "last rank",
+          ...(fact.hasFee ? [fact.feeText] : []),
           "old college",
           "new college",
         ],
@@ -2695,16 +2747,20 @@ function buildIndiaStructuredEntriesFromSources({
           "establishment year",
           "old college",
           "new college",
+          "fees",
+          "fee structure",
+          "seat matrix",
+          "cutoff",
+          "closing rank",
+          "last rank",
         ],
         content: [
-          college.collegeName,
-          college.state,
-          college.category,
+          fact.searchableText,
           `${college.seatCapacity} seats`,
           `established ${college.establishmentYear}`,
-          college.fees,
-          seatRowText(seatRows),
-          feeStructure ? rowListText(feeStructure.rows) : "",
+          feeLabel,
+          fact.seatMatrixText,
+          fact.cutoffText,
         ],
         priority: college.state === "West Bengal" ? 116 : 96,
         data: {
@@ -2715,9 +2771,15 @@ function buildIndiaStructuredEntriesFromSources({
           collegeName: college.collegeName,
           seatCapacity: college.seatCapacity,
           establishmentYear: college.establishmentYear,
-          fees: college.fees,
-          feeStructure,
-          seatMatrix: seatRows,
+          fees: fact.feeText,
+          feeText: fact.feeText,
+          seatText: fact.seatText,
+          seatMatrixText: fact.seatMatrixText,
+          cutoffText: fact.cutoffText,
+          hasFee: fact.hasFee,
+          hasSeatMatrix: fact.hasSeatMatrix,
+          hasCutoff: fact.hasCutoff,
+          counselling2025: fact.counselling,
         },
       })
     );

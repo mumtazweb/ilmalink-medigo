@@ -6353,7 +6353,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
     collegeName: "East West Institute of Medical Sciences and Research, Burdwan",
     seatCapacity: 100,
     establishmentYear: 2024,
-    fees: "To be updated"
+    fees: "State quota total Rs. 36 lakh; Management quota total Rs. 90 Lakhs"
   },
   {
     state: "West Bengal",
@@ -6369,7 +6369,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
     collegeName: "Gouri Devi Institute of Medical Sciences and Hospital, Durgapur",
     seatCapacity: 200,
     establishmentYear: 2016,
-    fees: "To be updated"
+    fees: "State quota total Rs. 24.66 lakh; Management quota total Rs. 99 Lakhs"
   },
   {
     state: "West Bengal",
@@ -6385,7 +6385,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
     collegeName: "ICARE Institute of Medical Sciences & Research, Haldia, Purba Midanpore",
     seatCapacity: 150,
     establishmentYear: 2011,
-    fees: "To be updated"
+    fees: "State quota total Rs. 22.5 lakh; Management quota total Rs. 85.5 Lakhs"
   },
   {
     state: "West Bengal",
@@ -6401,7 +6401,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
     collegeName: "IQ-City Medical College, Burdwan",
     seatCapacity: 250,
     establishmentYear: 2013,
-    fees: "To be updated"
+    fees: "State quota total Rs. 24.66 lakh; Management quota total Rs. 98-99 Lakhs"
   },
   {
     state: "West Bengal",
@@ -6409,7 +6409,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
     collegeName: "Jagannath Gupta Institute of Medical Sciences & Hospital, Kolkata",
     seatCapacity: 250,
     establishmentYear: 2018,
-    fees: "To be updated"
+    fees: "State quota total Rs. 24.66 lakh; Management quota total Rs. 99,36,000"
   },
   {
     state: "West Bengal",
@@ -6417,15 +6417,15 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
     collegeName: "Jagannath Gupta Institute of Medical Sciences and Hospital",
     seatCapacity: 100,
     establishmentYear: 2025,
-    fees: "To be updated"
+    fees: "State quota total Rs. 33.75 lakh; Management quota total Rs. 99,36,000"
   },
   {
     state: "West Bengal",
     category: "Private",
-    collegeName: "Jakir Hossain Medical College, Burdwan",
+    collegeName: "Jakir Hossain Medical College, Jangipur, Murshidabad",
     seatCapacity: 100,
     establishmentYear: 2024,
-    fees: "To be updated"
+    fees: "State quota total Rs. 36 lakh; Management quota total Rs. 90 Lakhs"
   },
   {
     state: "West Bengal",
@@ -6449,7 +6449,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
     collegeName: "JIS School of Medical Science & Research, Howrah",
     seatCapacity: 150,
     establishmentYear: 2023,
-    fees: "To be updated"
+    fees: "State quota total Rs. 24.66 lakh; Management quota total Rs. 99 Lakhs"
   },
   {
     state: "West Bengal",
@@ -6457,7 +6457,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
     collegeName: "JMN Medical College, Nadia",
     seatCapacity: 150,
     establishmentYear: 2023,
-    fees: "To be updated"
+    fees: "State quota total Rs. 22.5 lakh; Management quota total Rs. 85 Lakhs"
   },
   {
     state: "West Bengal",
@@ -6465,7 +6465,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
     collegeName: "KPC Medical College, Jadavpur, Kolkata",
     seatCapacity: 200,
     establishmentYear: 2008,
-    fees: "To be updated"
+    fees: "State quota total Rs. 18 lakh; Management quota total Rs. 72 Lakhs"
   },
   {
     state: "West Bengal",
@@ -6473,7 +6473,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
     collegeName: "Krishnanagar Institute of Medical Sciences Pvt. Ltd Krishnanagar, Nadia (WB)",
     seatCapacity: 150,
     establishmentYear: 2024,
-    fees: "To be updated"
+    fees: "State quota total Rs. 33.75 lakh; Management quota total Rs. 90 Lakhs"
   },
   {
     state: "West Bengal",
@@ -6521,7 +6521,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
     collegeName: "PKG Medical College & Hospital",
     seatCapacity: 50,
     establishmentYear: 2024,
-    fees: "To be updated"
+    fees: "State quota total Rs. 36 lakh; Management quota total Rs. 90 Lakhs - Rs. 1 Crore"
   },
   {
     state: "West Bengal",
@@ -6561,7 +6561,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
     collegeName: "RANIGANJ INSTITUTE OF MEDICAL SCIENCE",
     seatCapacity: 100,
     establishmentYear: 2025,
-    fees: "To be updated"
+    fees: "State quota total Rs. 33.75 lakh; Management quota total To be updated"
   },
   {
     state: "West Bengal",
@@ -6577,7 +6577,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
     collegeName: "Santiniketan Medical College, Bolpur, West Bengal",
     seatCapacity: 150,
     establishmentYear: 2021,
-    fees: "To be updated"
+    fees: "State quota total Rs. 22.5 lakh; Management quota total Rs. 87 Lakhs"
   },
   {
     state: "West Bengal",
@@ -6593,7 +6593,7 @@ export const mbbsIndiaColleges: MBBSIndiaCollege[] = [
     collegeName: "Shri Ramkrishna Institute of Medical Sciences & Sanaka Hospitals, Durgapur",
     seatCapacity: 250,
     establishmentYear: 2019,
-    fees: "To be updated"
+    fees: "State quota total Rs. 24.66 lakh; Management quota total Rs. 99 Lakhs"
   },
   {
     state: "West Bengal",

@@ -32,7 +32,7 @@ import {
   bangladeshFeaturedUniversities,
   type BangladeshCollegeProfile,
 } from "@/app/data/bangladeshUniversities";
-import { getMBBSIndiaFeeStructure } from "@/app/data/mbbsIndiaFeeStructure";
+import { getMBBSIndiaCollegeFacts } from "@/app/data/mbbsIndiaCollegeFacts";
 
 export type AskilmaLinkAnswer = {
   answer: string;
@@ -409,35 +409,11 @@ function indiaCollegeLink(
 }
 
 function formatWestBengalFeeAnswer(college: MBBSIndiaCollege) {
-  const feeStructure = getMBBSIndiaFeeStructure(college);
-  if (!feeStructure) return null;
+  const facts = getMBBSIndiaCollegeFacts(college.collegeName);
 
-  const state2025 = feeStructure.rows.find(
-    (row) => row.yearLabel === "2025" && row.quota === "State quota"
-  );
-  const management2025 = feeStructure.rows.find(
-    (row) => row.yearLabel === "2025" && row.quota === "Management quota"
-  );
-  const expected2026 = feeStructure.rows.filter(
-    (row) => row.yearLabel === "2026 expected"
-  );
-  const parts = [
-    state2025
-      ? `State quota 2025-26: ${state2025.perSemester.display} per semester, ${state2025.totalTuition.display} total tuition`
-      : "",
-    management2025
-      ? `Management quota 2025-26: ${management2025.perSemester.display} per semester, ${management2025.totalTuition.display} total tuition`
-      : "",
-    expected2026.length
-      ? `2026-27 expected planning range: ${expected2026
-          .map((row) => `${row.quota} total ${row.totalTuition.display}`)
-          .join("; ")}`
-      : "",
-  ].filter(Boolean);
+  if (!facts?.hasFee) return null;
 
-  return `${feeStructure.collegeName} MBBS fee structure: ${parts.join(
-    ". "
-  )}. Verify the current WBMCC notice before payment or choice filling.`;
+  return `${college.collegeName} MBBS fees: ${facts.feeText}. Verify the current official fee notice before payment or choice filling.`;
 }
 
 function getFeeRowDisplay(
@@ -453,25 +429,15 @@ function getFeeRowDisplay(
       (item as { quota?: unknown }).quota === quota
   ) as
     | {
-        perSemester?: { display?: unknown };
         totalTuition?: { display?: unknown };
       }
     | undefined;
-
-  const perSemester =
-    typeof row?.perSemester?.display === "string"
-      ? row.perSemester.display
-      : null;
   const total =
     typeof row?.totalTuition?.display === "string"
       ? row.totalTuition.display
       : null;
 
-  return perSemester || total
-    ? [perSemester ? `${perSemester}/sem` : "", total ? `${total} total` : ""]
-        .filter(Boolean)
-        .join(", ")
-    : null;
+  return total ? `${total} total` : null;
 }
 
 function buildIndiaFeeSummaryAnswer(item: SiteSearchMatch): BuiltAnswer | null {
@@ -491,6 +457,19 @@ function buildIndiaFeeSummaryAnswer(item: SiteSearchMatch): BuiltAnswer | null {
         "string"
           ? (structure as { collegeName: string }).collegeName
           : "College";
+      const feeText =
+        typeof (structure as { feeText?: unknown }).feeText === "string"
+          ? (structure as { feeText: string }).feeText
+          : typeof (structure as { fees?: unknown }).fees === "string"
+            ? (structure as { fees: string }).fees
+            : null;
+
+      if (feeText) {
+        return `${collegeName}: ${
+          feeText === "To be updated" ? "Fees to be updated" : feeText
+        }`;
+      }
+
       const rows = Array.isArray((structure as { rows?: unknown }).rows)
         ? ((structure as { rows: unknown[] }).rows)
         : [];
@@ -500,24 +479,14 @@ function buildIndiaFeeSummaryAnswer(item: SiteSearchMatch): BuiltAnswer | null {
         "2025",
         "Management quota"
       );
-      const state2026 = getFeeRowDisplay(
-        rows,
-        "2026 expected",
-        "State quota"
-      );
-      const management2026 = getFeeRowDisplay(
-        rows,
-        "2026 expected",
-        "Management quota"
-      );
 
-      return `${collegeName}: 2025 state ${state2025 ?? "not available"}; 2025 management ${management2025 ?? "not available"}; 2026 expected state ${state2026 ?? "not available"}; 2026 expected management ${management2026 ?? "not available"}`;
+      return `${collegeName}: State quota total ${state2025 ?? "to be updated"}; Management quota total ${management2025 ?? "to be updated"}`;
     })
     .filter(Boolean)
     .join("\n");
 
   return {
-    answer: `${item.title}: ${feeStructures.length} West Bengal private MBBS fee records are available with state quota, management quota, 2025-26 per-semester/total tuition and 2026-27 expected planning ranges.\n${lines}\nOpen the full page for the complete college-wise table. Verify the current WBMCC notice before payment or choice filling.`,
+    answer: `${item.title}: ${feeStructures.length} West Bengal private MBBS fee records are available with state quota and management quota total tuition values.\n${lines}\nOpen the full page for the complete college-wise table. Verify the current WBMCC notice before payment or choice filling.`,
     suggestedLinks: [toDirectLink(item)],
   };
 }
@@ -1152,14 +1121,14 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
 
     if (unavailable) {
       return {
-        answer: `The verified 2026 fee for ${resolvedIndiaCollege.collegeName} has not yet been updated on this website. Please contact an ilmaLink expert for the latest official fee structure.`,
+        answer: `The total MBBS fee for ${resolvedIndiaCollege.collegeName} is to be updated on this website. Please verify the latest official fee notice or contact an ilmaLink expert before payment.`,
         suggestedLinks: [targetLink],
         shouldAutoOpenCounselling: true,
       };
     }
 
     return {
-      answer: `${resolvedIndiaCollege.collegeName} fee: ${resolvedIndiaCollege.fees}. Open the college page below for the complete available record.`,
+      answer: `${resolvedIndiaCollege.collegeName} MBBS fees: ${resolvedIndiaCollege.fees}. Open the college page below for the complete available record.`,
       suggestedLinks: [targetLink],
     };
   }
@@ -1333,46 +1302,41 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
   );
 
   if (target.data?.kind === "mbbs-india-college") {
-    const feeStructure = target.data.feeStructure;
-    if (
-      feeStructure &&
-      typeof feeStructure === "object" &&
-      Array.isArray((feeStructure as { rows?: unknown[] }).rows)
-    ) {
-      return {
-        answer: `${target.title} has a structured fee table in the current ilmalink data. Open the college page below for state quota, management quota, per-semester and total tuition details.`,
-        suggestedLinks: [targetLink],
-      };
-    }
-
-    const fees = asString(target.data.fees);
+    const fees = asString(target.data.fees) ?? asString(target.data.feeText);
     const unavailable =
       !fees || normalizeSiteSearchText(fees).includes("to be updated");
 
     if (unavailable) {
       return {
-        answer: `The verified 2026 fee for ${target.title} has not yet been updated on this website. Please contact an ilmaLink expert for the latest official fee structure.`,
+        answer: `The total MBBS fee for ${target.title} is to be updated on this website. Please verify the latest official fee notice or contact an ilmaLink expert before payment.`,
         suggestedLinks: [targetLink],
         shouldAutoOpenCounselling: true,
       };
     }
 
     return {
-      answer: `${target.title} fee: ${fees}. Open the college page below for the complete available record.`,
+      answer: `${target.title} MBBS fees: ${fees}. Open the college page below for the complete available record.`,
       suggestedLinks: [targetLink],
     };
   }
 
   if (target.data?.kind === "mbbs-india-fee-structure") {
+    const fees = asString(target.data.fees) ?? asString(target.data.feeText);
+
+    if (fees && !normalizeSiteSearchText(fees).includes("to be updated")) {
+      return {
+        answer: `${target.title} MBBS fees: ${fees}. Verify the current WBMCC notice before payment or choice filling.`,
+        suggestedLinks: [targetLink],
+      };
+    }
+
     const rows = Array.isArray(target.data.rows) ? target.data.rows : [];
     const rowText = rows
       .slice(0, 4)
       .map((row) =>
         row && typeof row === "object"
           ? [
-              (row as { academicYear?: string }).academicYear,
               (row as { quota?: string }).quota,
-              (row as { perSemester?: { display?: string } }).perSemester?.display,
               (row as { totalTuition?: { display?: string } }).totalTuition?.display,
             ]
               .filter(Boolean)
@@ -1381,6 +1345,14 @@ function buildFeeAnswer(search: SiteDataSearchResponse): BuiltAnswer {
       )
       .filter(Boolean)
       .join("; ");
+
+    if (!rowText) {
+      return {
+        answer: `${target.title} MBBS fees are to be updated. Verify the current official fee notice before payment or choice filling.`,
+        suggestedLinks: [targetLink],
+        shouldAutoOpenCounselling: true,
+      };
+    }
 
     return {
       answer: `${target.title} MBBS fee structure: ${rowText}. Verify the current WBMCC notice before payment or choice filling.`,

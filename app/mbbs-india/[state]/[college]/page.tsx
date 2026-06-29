@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 
 import Navbar from "../../../components/navbar";
 import {
-  getMBBSIndiaCollegeCounselling2025,
   getMBBSIndiaStateCounselling2025,
 } from "../../../data/mbbsIndiaCounselling";
 import {
@@ -19,6 +18,7 @@ import {
   getMBBSIndiaStateSlug,
 } from "../../../data/exploreLinks";
 import { getMBBSIndiaFeeStructure } from "../../../data/mbbsIndiaFeeStructure";
+import { getMBBSIndiaCollegeFacts } from "../../../data/mbbsIndiaCollegeFacts";
 import {
   CutoffTable,
   PriorYearCounsellingNotice,
@@ -63,13 +63,16 @@ export async function generateMetadata({
     };
   }
 
-  const counselling = getMBBSIndiaCollegeCounselling2025(college.collegeName);
+  const facts = getMBBSIndiaCollegeFacts(college.collegeName);
+  const counselling = facts?.counselling;
   const counsellingLabel = counselling
     ? " Includes 2025 prior-year seat matrix and cutoff data."
     : "";
   const feeStructure = getMBBSIndiaFeeStructure(college);
-  const feeLabel = feeStructure
-    ? " Includes supplied 2025-26 state and management quota fee details with expected 2026 planning ranges."
+  const feeLabel = facts?.hasFee
+    ? ` Fees: ${facts.feeText}.`
+    : feeStructure
+    ? " Includes supplied 2025-26 state and management quota total fee details with expected 2026 planning ranges."
     : "";
 
   return {
@@ -112,7 +115,8 @@ export default async function MBBSIndiaCollegePage({
 
   if (!college) notFound();
 
-  const counselling = getMBBSIndiaCollegeCounselling2025(college.collegeName);
+  const facts = getMBBSIndiaCollegeFacts(college.collegeName);
+  const counselling = facts?.counselling;
   const feeStructure = getMBBSIndiaFeeStructure(college);
   const stateCounselling = getMBBSIndiaStateCounselling2025(college.state);
   const stateGroup = mbbsIndiaCollegesByState.find(
@@ -242,6 +246,10 @@ export default async function MBBSIndiaCollegePage({
               label="Established"
               value={String(college.establishmentYear)}
             />
+            <CollegeSummaryCard
+              label="Fees"
+              value={facts?.hasFee ? facts.feeText : "Fees to be updated"}
+            />
           </div>
 
           {feeStructure ? (
@@ -268,9 +276,9 @@ export default async function MBBSIndiaCollegePage({
             <div className="mt-5 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
               <h2 className="text-xl font-extrabold">Fee status</h2>
               <p className="mt-2 text-sm font-medium leading-6 text-slate-600">
-                {college.fees === "To be updated"
-                  ? "A verified fee figure is not included in this college record."
-                  : college.fees}
+                {facts?.hasFee
+                  ? `Fees: ${facts.feeText}`
+                  : "Fees to be updated"}
               </p>
             </div>
           )}

@@ -18,15 +18,15 @@ import {
 } from "../data/searchIndex";
 import neetSearchEntries from "../data/neetSearchEntries.json";
 import {
-  getMBBSIndiaCollegeCounselling2025,
   getMBBSIndiaStateCounselling2025,
 } from "../data/mbbsIndiaCounselling";
-import { mbbsIndiaColleges, mbbsIndiaCollegesByState } from "../data/mbbsIndiaColleges";
+import { mbbsIndiaCollegesByState } from "../data/mbbsIndiaColleges";
+import { getAllMBBSIndiaCollegeFacts } from "../data/mbbsIndiaCollegeFacts";
 import { getMBBSIndiaAdmissionAccess } from "../data/mbbsIndiaAdmissionAccess";
 import { navbarCountryDestinations } from "../data/navbarDestinations";
 import { kyrgyzstanUniversities } from "../data/kyrgyzstanUniversities";
 import { georgiaUniversities } from "../data/georgiaUniversities";
-import { getMBBSIndiaCollegeHref, getMBBSIndiaStateHref } from "../data/exploreLinks";
+import { getMBBSIndiaStateHref } from "../data/exploreLinks";
 import { predictNeetRankRangeFromMarks } from "@/lib/neetRankPredictor";
 import {
   buildInternalSearchQueryProfile,
@@ -99,11 +99,15 @@ type AskSource = {
   category?: string;
 };
 
+type AskAnswerMode = "strong_answer" | "direct_page_answer" | "no_answer";
+
 type AskilmaLinkResponse = {
   answer: string;
+  mode?: AskAnswerMode;
   confidence: "high" | "medium" | "low";
   sources?: AskSource[];
   dataAvailable?: boolean;
+  partialData?: boolean;
   needsCounselling?: boolean;
   openCounsellingPopup?: boolean;
   detectedFilters?: string[];
@@ -125,7 +129,7 @@ const MAX_RESULTS = 16;
 const OPEN_COUNSELLING_EVENT = "ilmalink:open-counselling";
 const OPEN_RANK_PREDICTOR_EVENT = "ilmalink:open-rank-predictor";
 const noMatchAnswer =
-  "I could not find a confident match in ilmaLink data. You can ask in another way or connect with ilmalink for counselling support.";
+  "Search is taking longer than expected. Please try again or chat with an ilmaLink expert.";
 
 const isColdNoMatchAnswer = (answer: string) =>
   /not available|not yet available|no exact|no data|no result|information is not/i.test(answer);
@@ -448,33 +452,17 @@ const mbbsIndiaStateSearchEntries: GlobalSearchEntry[] = mbbsIndiaCollegesByStat
   };
 });
 
-const mbbsIndiaCollegeSearchEntries: GlobalSearchEntry[] = mbbsIndiaColleges.map((college) => {
+const mbbsIndiaCollegeSearchEntries: EnhancedSearchEntry[] = getAllMBBSIndiaCollegeFacts().map((facts) => {
+  const { college, counselling } = facts;
   const access = getMBBSIndiaAdmissionAccess(college.state);
-  const counselling = getMBBSIndiaCollegeCounselling2025(college.collegeName);
-  const seatMatrixText =
-    counselling?.seatMatrix
-      .map(
-        (row) =>
-          `${row.quota} ${row.totalSeats ?? "total unavailable"} seats ${Object.entries(
-            row.categorySeats
-          )
-            .map(([category, seats]) => `${category} ${seats ?? "unavailable"}`)
-            .join(" ")}`
-      )
-      .join(" ") ?? "";
-  const cutoffText =
-    counselling?.cutoff?.categories
-      .map(
-        (row) =>
-          `${row.category} round 1 score ${row.round1Score ?? "unavailable"} rank ${row.round1Rank ?? "unavailable"} round 2 score ${row.round2Score ?? "unavailable"} rank ${row.round2Rank ?? "unavailable"} round 3 score ${row.round3Score ?? "unavailable"} rank ${row.round3Rank ?? "unavailable"} stray score ${row.strayScore ?? "unavailable"} rank ${row.strayRank ?? "unavailable"}`
-      )
-      .join(" ") ?? "";
+  const feeLabel = facts.hasFee ? `Fees: ${facts.feeText}` : "Fees to be updated";
+  const feeTags = facts.hasFee ? [facts.feeText] : [];
 
   return {
     id: `mbbs-india-college-${slugifySearchId(`${college.state}-${college.collegeName}`)}`,
     title: college.collegeName,
-    description: `${college.category} medical college in ${college.state} with ${college.seatCapacity.toLocaleString("en-IN")} MBBS seats. ${access.label}.${counselling ? " Includes 2025 prior-year counselling data." : ""}`,
-    url: getMBBSIndiaCollegeHref(college),
+    description: `${college.category} medical college in ${college.state} with ${college.seatCapacity.toLocaleString("en-IN")} MBBS seats. ${feeLabel}. ${access.label}.${counselling ? " Includes 2025 prior-year counselling data." : ""}`,
+    url: facts.href,
     category: "MBBS India",
     group: "Pages",
     type: "page",
@@ -486,20 +474,62 @@ const mbbsIndiaCollegeSearchEntries: GlobalSearchEntry[] = mbbsIndiaColleges.map
       "Medical college",
       "NMC college list",
       `Study MBBS in ${college.state}`,
-      ...(counselling ? ["2025 counselling", "cutoff", "closing rank", "seat matrix"] : []),
+      "fees",
+      "fee structure",
+      "seat matrix",
+      "cutoff",
+      "closing rank",
+      "last rank",
+      ...feeTags,
+      ...(counselling ? ["2025 counselling", "closing score"] : []),
     ],
     content: [
-      college.collegeName,
-      college.state,
-      college.category,
+      facts.searchableText,
       access.detail,
-      `${college.seatCapacity} MBBS seats`,
-      `established ${college.establishmentYear}`,
-      "fees to be updated",
+      facts.seatText,
+      feeLabel,
       `Study MBBS in ${college.state}`,
-      seatMatrixText,
-      cutoffText,
+      facts.seatMatrixText,
+      facts.cutoffText,
     ].join(" "),
+    country: "India",
+    state: college.state,
+    collegeName: college.collegeName,
+    regionType: "india",
+    course: "MBBS",
+    searchIntent: ["college-search", "counselling", "fees", "cutoff"],
+    feeData: [facts.feeText, feeLabel].filter(Boolean),
+    numericalData: [
+      `${college.seatCapacity} seats`,
+      `established ${college.establishmentYear}`,
+      facts.seatMatrixText,
+      facts.cutoffText,
+    ],
+    counsellingIndex: [
+      "NEET",
+      "state quota",
+      "management quota",
+      "seat matrix",
+      "cutoff",
+      "closing rank",
+      "last rank",
+      facts.hasSeatMatrix ? "2025 seat matrix available" : "seat matrix to be updated",
+      facts.hasCutoff ? "2025 cutoff available" : "cutoff to be updated",
+    ],
+    dataSource: "database",
+    data: {
+      kind: "mbbs-india-college",
+      country: "India",
+      state: college.state,
+      category: college.category,
+      collegeName: college.collegeName,
+      seatCapacity: college.seatCapacity,
+      establishmentYear: college.establishmentYear,
+      fees: facts.feeText,
+      hasFee: facts.hasFee,
+      hasSeatMatrix: facts.hasSeatMatrix,
+      hasCutoff: facts.hasCutoff,
+    },
     priority: college.category === "Private" && access.status === "open" ? 94 : college.category === "Government" ? 92 : 90,
   };
 });
@@ -1158,24 +1188,26 @@ export default function SearchModal({ isOpen, onClose, onOpenCounselling }: Sear
 
   const selectedResultIndex =
     filteredResults.length > 0 ? Math.min(selectedIndex, filteredResults.length - 1) : -1;
-    const shouldShowPersonalisedCounselling = Boolean(
-  askError ||
-    askAnswer?.notFound ||
-    (askAnswer?.answer && isColdNoMatchAnswer(askAnswer.answer))
-);
+      const isNoAnswerMode =
+  askAnswer?.mode === "no_answer" ||
+  Boolean(askAnswer?.notFound && !askAnswer?.mode);
 
-const displayedAskAnswer = askAnswer?.answer;
-const displayedDetectedFilters = askAnswer?.detectedFilters ?? [];
-const displayedSuggestedLinks: AskSuggestedLink[] =
-  askAnswer?.suggestedLinks?.length
-    ? askAnswer.suggestedLinks
-    : askAnswer?.sources?.map((source) => ({
-        title: source.title,
-        description: source.description || "",
-        url: source.url,
-        sourceLabel: "ilmaLink local source",
-        dataType: source.category || "Page",
-      })) ?? [];
+  const answerHeading = isNoAnswerMode ? "Expert support" : "Answer";
+  const displayedAskAnswer = askAnswer?.answer;
+
+  const displayedDetectedFilters = (askAnswer?.detectedFilters ?? []).slice(0, 3);
+
+  const displayedSuggestedLinks: AskSuggestedLink[] = (
+    askAnswer?.suggestedLinks?.length
+      ? askAnswer.suggestedLinks
+      : askAnswer?.sources?.map((source) => ({
+          title: source.title,
+          description: source.description || "",
+          url: source.url,
+          sourceLabel: "ilmaLink local source",
+          dataType: source.category || "Page",
+        })) ?? []
+  ).slice(0, 3);
 
   const openCounselling = useCallback(() => {
     onClose();
@@ -1228,10 +1260,9 @@ const displayedSuggestedLinks: AskSuggestedLink[] =
 
       if (controller.signal.aborted) return;
       setAskAnswer(data);
-
-      if (data.openCounsellingPopup) {
-        window.dispatchEvent(new Event("ilmalink:open-counselling"));
-      } else if (data.shouldAutoOpenCounselling) {
+      if (data.openCounsellingPopup && data.mode === "no_answer") {
+        window.dispatchEvent(new Event(OPEN_COUNSELLING_EVENT));
+      } else if (data.shouldAutoOpenCounselling && data.mode === "no_answer") {
         window.setTimeout(() => {
           if (!controller.signal.aborted) {
             openCounselling();
@@ -1246,12 +1277,8 @@ const displayedSuggestedLinks: AskSuggestedLink[] =
         return;
       }
 
-     setAskError(noMatchAnswer);
-setAskAnswer(null);
-
-window.setTimeout(() => {
-  openCounselling();
-}, 2_800);
+      setAskError(noMatchAnswer);
+      setAskAnswer(null);
     } finally {
       if (requestControllerRef.current === controller) {
         requestControllerRef.current = null;
@@ -1577,22 +1604,22 @@ window.setTimeout(() => {
 
                 <div className="flex items-start gap-2.5">
                   <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl ${
-                    askAnswer?.notFound
-                      ? "bg-amber-100 text-amber-800"
-                      : "bg-[#00C896]/15 text-[#087a6a]"
-                  }`}>
-                    {askAnswer?.notFound ? <MessageCircle size={15} /> : <Sparkles size={15} />}
-                  </span>
+  isNoAnswerMode || askError
+    ? "bg-amber-100 text-amber-800"
+    : "bg-[#00C896]/15 text-[#087a6a]"
+}`}>
+  {isNoAnswerMode || askError ? <MessageCircle size={15} /> : <Sparkles size={15} />}
+</span>
                   <div className={`min-w-0 flex-1 rounded-[1.35rem] rounded-tl-md border p-3.5 shadow-[0_12px_34px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:p-4 ${
-                    askAnswer?.notFound
-                      ? "border-amber-200/80 bg-amber-50/85"
-                      : "border-white/90 bg-white/72"
-                  }`}>
+  isNoAnswerMode || askError
+    ? "border-amber-200/80 bg-amber-50/85"
+    : "border-white/90 bg-white/80"
+}`}>
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-xs font-black uppercase tracking-[0.14em] text-[#087a6a]">
-                        {shouldShowPersonalisedCounselling ? "Personalised counselling recommended" : "ilmaLink answer"}
-                      </p>
-                      {askAnswer && !askAnswer.notFound && (
+                      <p className="text-xs font-black uppercase tracking-[0.12em] text-[#087a6a]">
+  {askLoading ? "Searching most authentic Answer" : answerHeading}
+</p>
+                      {askAnswer && !isNoAnswerMode && (
                         <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-bold uppercase text-emerald-700">
                           {askAnswer.confidence} confidence
                         </span>
@@ -1631,53 +1658,36 @@ window.setTimeout(() => {
                         <p className="mt-3 whitespace-pre-line text-sm leading-6 text-slate-800">
                           {displayedAskAnswer}
                         </p>
+{displayedSuggestedLinks.length > 0 && !isNoAnswerMode && (
+  <div className="mt-3 space-y-2">
+    <p className="text-[10px] font-black uppercase tracking-[0.12em] text-slate-400">
+      Sources
+    </p>
 
-                        {displayedSuggestedLinks.length > 0 && (
-                          <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                            {displayedSuggestedLinks.slice(0, 6).map((link, index) => (
-                              <button
-                                key={`${link.url}-${link.title}`}
-                                type="button"
-                                onClick={() => handleSelectSuggestedLink(link)}
-                                className="min-w-0 rounded-xl border border-slate-200/80 bg-white/80 px-3 py-2.5 text-left transition hover:border-[#00C896]/60 hover:bg-white"
-                              >
-                                <span className="flex items-start gap-2">
-                                  <span className="inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-[#00C896]/12 px-1 text-[9px] font-black text-[#087a6a]">
-                                    {index + 1}
-                                  </span>
-                                  <span className="line-clamp-2 block text-xs font-bold leading-4 text-slate-900">
-                                    {link.title}
-                                  </span>
-                                </span>
-                                {(link.details?.length ?? 0) > 0 ? (
-                                  <span className="mt-1.5 block space-y-0.5 pl-7">
-                                    {link.details?.map((detail) => (
-                                      <span
-                                        key={detail}
-                                        className="block text-[10px] leading-4 text-slate-500"
-                                      >
-                                        {detail}
-                                      </span>
-                                    ))}
-                                  </span>
-                                ) : (
-                                  <span className="mt-1.5 line-clamp-2 block pl-7 text-[10px] leading-4 text-slate-500">
-                                    {link.description}
-                                  </span>
-                                )}
-                                {link.whySuggested && (
-                                  <span className="mt-1.5 block pl-7 text-[10px] leading-4 text-slate-600">
-                                    <span className="font-bold text-slate-700">Why suggested: </span>
-                                    {link.whySuggested}
-                                  </span>
-                                )}
-                                <span className="mt-2 inline-flex text-[10px] font-black uppercase tracking-[0.12em] text-[#087a6a]">
-                                  Open full page
-                                </span>
-                              </button>
-                            ))}
-                          </div>
-                        )}
+    <div className="grid gap-2 sm:grid-cols-3">
+      {displayedSuggestedLinks.map((link) => (
+        <button
+          key={`${link.url}-${link.title}`}
+          type="button"
+          onClick={() => handleSelectSuggestedLink(link)}
+          className="min-w-0 rounded-xl border border-slate-200/80 bg-white/85 px-3 py-2.5 text-left shadow-sm transition hover:border-[#00C896]/60 hover:bg-white hover:shadow-md"
+        >
+          <span className="line-clamp-2 block text-xs font-extrabold leading-4 text-slate-900">
+            {link.title}
+          </span>
+
+          <span className="mt-1.5 line-clamp-2 block text-[10px] leading-4 text-slate-500">
+            {link.description}
+          </span>
+
+          <span className="mt-2 inline-flex text-[10px] font-black uppercase tracking-[0.12em] text-[#087a6a]">
+            Open page
+          </span>
+        </button>
+      ))}
+    </div>
+  </div>
+)}
 
                         <p className="mt-3 border-t border-slate-200/80 pt-2.5 text-[10px] leading-4 text-slate-500">
                           {answerDisclaimer}
@@ -1685,20 +1695,20 @@ window.setTimeout(() => {
                       </>
                     ) : null}
 
-                    <Link
-                      href="/?counselling=open"
-                      data-open-counselling
-                      onClick={(event) => {
-                        event.preventDefault();
-                        handleConnectClick();
-                      }}
-                      className="mt-3 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00C896] to-[#098f91] px-4 text-xs font-extrabold text-white shadow-[0_10px_24px_rgba(0,168,120,0.22)] transition hover:-translate-y-0.5"
-                    >
-                      <MessageCircle size={15} />
-                      {askAnswer?.notFound || askError
-                        ? "Let's Connect"
-                        : "Connect ilmaLink Expert"}
-                    </Link>
+                    {(isNoAnswerMode || askError) && (
+  <Link
+    href="/?counselling=open"
+    data-open-counselling
+    onClick={(event) => {
+      event.preventDefault();
+      handleConnectClick();
+    }}
+    className="mt-3 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#00C896] to-[#098f91] px-4 text-xs font-extrabold text-white shadow-[0_10px_24px_rgba(0,168,120,0.22)] transition hover:-translate-y-0.5"
+  >
+    <MessageCircle size={15} />
+    Chat with expert
+  </Link>
+)}
                   </div>
                 </div>
               </div>

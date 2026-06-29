@@ -3,14 +3,11 @@ import {
   type GlobalSearchEntry,
 } from "@/app/data/searchIndex";
 import neetSearchEntries from "@/app/data/neetSearchEntries.json";
+import { mbbsIndiaCollegesByState } from "@/app/data/mbbsIndiaColleges";
 import {
-  mbbsIndiaColleges,
-  mbbsIndiaCollegesByState,
-} from "@/app/data/mbbsIndiaColleges";
-import {
-  getMBBSIndiaCollegeCounselling2025,
   getMBBSIndiaStateCounselling2025,
 } from "@/app/data/mbbsIndiaCounselling";
+import { getAllMBBSIndiaCollegeFacts } from "@/app/data/mbbsIndiaCollegeFacts";
 import { getMBBSIndiaAdmissionAccess } from "@/app/data/mbbsIndiaAdmissionAccess";
 import { navbarCountryDestinations } from "@/app/data/navbarDestinations";
 import { kyrgyzstanUniversities } from "@/app/data/kyrgyzstanUniversities";
@@ -20,7 +17,6 @@ import { fmgeCountries } from "@/app/data/fmgeCountries";
 import {
   getFmgeCollegeDetailHref,
   getFmgeCountryHref,
-  getMBBSIndiaCollegeHref,
   getMBBSIndiaStateHref,
 } from "@/app/data/exploreLinks";
 import {
@@ -1292,32 +1288,12 @@ function buildBaseRecords() {
     );
   }
 
-  for (const college of mbbsIndiaColleges) {
+  for (const facts of getAllMBBSIndiaCollegeFacts()) {
+    const { college, counselling } = facts;
     const access = getMBBSIndiaAdmissionAccess(college.state);
-    const counselling = getMBBSIndiaCollegeCounselling2025(
-      college.collegeName
-    );
-    const seatMatrixText =
-      counselling?.seatMatrix
-        .map(
-          (row) =>
-            `${row.quota} total ${row.totalSeats ?? "unavailable"} ${Object.entries(
-              row.categorySeats
-            )
-              .map(
-                ([category, seats]) =>
-                  `${category} ${seats ?? "unavailable"}`
-              )
-              .join(" ")}`
-        )
-        .join(" ") ?? "";
-    const cutoffText =
-      counselling?.cutoff?.categories
-        .map(
-          (row) =>
-            `${row.category} round 1 score ${row.round1Score ?? "unavailable"} rank ${row.round1Rank ?? "unavailable"} round 2 score ${row.round2Score ?? "unavailable"} rank ${row.round2Rank ?? "unavailable"} round 3 score ${row.round3Score ?? "unavailable"} rank ${row.round3Rank ?? "unavailable"} stray score ${row.strayScore ?? "unavailable"} rank ${row.strayRank ?? "unavailable"}`
-        )
-        .join(" ") ?? "";
+    const feeLabel = facts.hasFee
+      ? `Fees: ${facts.feeText}`
+      : "Fees to be updated";
 
     records.push(
       createRecord(
@@ -1328,8 +1304,8 @@ function buildBaseRecords() {
           title: college.collegeName,
           description: `${college.category} medical college in ${college.state} with ${college.seatCapacity.toLocaleString(
             "en-IN"
-          )} MBBS seats. ${access.label}.`,
-          url: getMBBSIndiaCollegeHref(college),
+          )} MBBS seats. ${feeLabel}. ${access.label}.`,
+          url: facts.href,
           category: "MBBS India",
           group: "Pages",
           type: "page",
@@ -1340,19 +1316,18 @@ function buildBaseRecords() {
             "medical college",
             "cutoff",
             "fees",
-            ...(counselling
-              ? ["2025 counselling", "seat matrix", "closing rank"]
-              : []),
+            "fee structure",
+            "seat matrix",
+            "closing rank",
+            "last rank",
+            ...(facts.hasFee ? [facts.feeText] : []),
+            ...(counselling ? ["2025 counselling", "closing score"] : []),
           ],
           content: [
-            college.collegeName,
-            college.state,
-            college.category,
-            `${college.seatCapacity} seats`,
-            `established ${college.establishmentYear}`,
+            facts.searchableText,
             access.detail,
-            seatMatrixText,
-            cutoffText,
+            facts.seatMatrixText,
+            facts.cutoffText,
             "cutoff closing rank counselling quota domicile fees admission",
           ].join(" "),
           priority: college.category === "Private" ? 95 : 92,
@@ -1364,6 +1339,9 @@ function buildBaseRecords() {
             `${college.category} college`,
             `${college.seatCapacity.toLocaleString("en-IN")} MBBS seats`,
             `State: ${college.state}`,
+            feeLabel,
+            facts.hasSeatMatrix ? facts.seatMatrixText : "Seat matrix to be updated",
+            facts.hasCutoff ? facts.cutoffText : "Cutoff to be updated",
             ...(counselling
               ? [
                   `${counselling.seatMatrix.length} seat-matrix row(s)`,
@@ -1383,14 +1361,21 @@ function buildBaseRecords() {
               : college.category,
             seatCapacity: college.seatCapacity,
             establishmentYear: college.establishmentYear,
-            fees: college.fees,
+            fees: facts.feeText,
+            feeText: facts.feeText,
+            seatText: facts.seatText,
+            seatMatrixText: facts.seatMatrixText,
+            cutoffText: facts.cutoffText,
+            hasFee: facts.hasFee,
+            hasSeatMatrix: facts.hasSeatMatrix,
+            hasCutoff: facts.hasCutoff,
             counselling2025: counselling,
             dataCompleteness: countAvailableValues([
               college.state,
               college.category,
               college.seatCapacity,
               college.establishmentYear,
-              college.fees !== "To be updated" ? college.fees : undefined,
+              facts.hasFee ? facts.feeText : undefined,
               counselling,
             ]),
           },

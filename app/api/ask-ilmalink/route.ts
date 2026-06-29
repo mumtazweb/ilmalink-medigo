@@ -124,15 +124,49 @@ function toSearchSource(item: SiteSearchMatch): SearchSource {
     lastUpdated: item.lastUpdated,
     score: item.score,
     keyFacts: item.keyFacts,
+    country:
+      typeof item.data?.country === "string" ? item.data.country : undefined,
+    state: typeof item.data?.state === "string" ? item.data.state : undefined,
+    city: typeof item.data?.city === "string" ? item.data.city : undefined,
+    collegeName:
+      typeof item.data?.collegeName === "string"
+        ? item.data.collegeName
+        : typeof item.data?.universityName === "string"
+          ? item.data.universityName
+          : undefined,
+    fees:
+      typeof item.data?.fees === "string"
+        ? item.data.fees
+        : typeof item.data?.feeText === "string"
+          ? item.data.feeText
+          : undefined,
+    hasFee:
+      typeof item.data?.hasFee === "boolean" ? item.data.hasFee : undefined,
+    seatMatrixText:
+      typeof item.data?.seatMatrixText === "string"
+        ? item.data.seatMatrixText
+        : undefined,
+    cutoffText:
+      typeof item.data?.cutoffText === "string"
+        ? item.data.cutoffText
+        : undefined,
   };
 }
 
 function toPublicSource(source: SearchSource) {
   return {
+    id: source.id,
     title: source.title,
     url: source.url,
     category: source.category || source.dataType,
     description: source.description,
+    dataType: source.dataType,
+    sourceLabel: source.sourceLabel,
+    lastUpdated: source.lastUpdated,
+    country: source.country,
+    state: source.state,
+    city: source.city,
+    collegeName: source.collegeName,
   };
 }
 
@@ -147,12 +181,35 @@ function toSuggestedLink(source: SearchSource) {
   };
 }
 
+function buildNoAnswerResponse(status = 200) {
+  return NextResponse.json(
+    {
+      answer: ILMALINK_COUNSELLING_FALLBACK,
+      mode: "no_answer",
+      sources: [],
+      confidence: "low",
+      dataAvailable: false,
+      partialData: false,
+      needsCounselling: true,
+      openCounsellingPopup: true,
+      detectedFilters: [],
+      matchedItems: [],
+      suggestedLinks: [],
+      shouldShowConnectCTA: true,
+      shouldAutoOpenCounselling: true,
+      notFound: true,
+    },
+    { status }
+  );
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as {
       question?: unknown;
       query?: unknown;
     };
+
     const question =
       typeof body.question === "string"
         ? body.question.trim()
@@ -161,46 +218,35 @@ export async function POST(request: NextRequest) {
           : "";
 
     if (!question) {
-      return NextResponse.json(
-        {
-          answer: ILMALINK_COUNSELLING_FALLBACK,
-          sources: [],
-          confidence: "low",
-          dataAvailable: false,
-          needsCounselling: true,
-          openCounsellingPopup: true,
-          detectedFilters: [],
-          matchedItems: [],
-          suggestedLinks: [],
-          shouldShowConnectCTA: true,
-          shouldAutoOpenCounselling: true,
-          notFound: true,
-        },
-        { status: 400 }
-      );
+      return buildNoAnswerResponse(400);
     }
 
     const advisoryRecords = await getApprovedAdvisoryRecords();
+
     const search = searchSiteData(question, {
       limit: 12,
       extraRecords: advisoryRecords,
     });
-    const localSources = search.matchedItems
-      .slice(0, 8)
-      .map(toSearchSource);
+
+    const localSources = search.matchedItems.slice(0, 8).map(toSearchSource);
+
     const aiResult = await generateIlmalinkGeminiAnswer({
       query: question,
       sources: localSources,
     });
+
     const publicSources = aiResult.sourcesUsed.map(toPublicSource);
+    const isNoAnswer = aiResult.mode === "no_answer";
 
     return NextResponse.json({
       answer: aiResult.answer,
+      mode: aiResult.mode,
       sources: publicSources,
       confidence: aiResult.confidence,
       dataAvailable: aiResult.dataAvailable,
+      partialData: aiResult.partialData,
       needsCounselling: aiResult.needsCounselling,
-      openCounsellingPopup: aiResult.openCounsellingPopup,
+      openCounsellingPopup: aiResult.openCounsellingPopup && isNoAnswer,
       detectedFilters: search.detectedFilters,
       matchedItems: search.matchedItems.slice(0, 4).map((item) => ({
         id: item.id,
@@ -211,28 +257,11 @@ export async function POST(request: NextRequest) {
       })),
       suggestedLinks: aiResult.sourcesUsed.map(toSuggestedLink),
       shouldShowConnectCTA: true,
-      shouldAutoOpenCounselling: aiResult.openCounsellingPopup,
-      notFound: !aiResult.dataAvailable,
+      shouldAutoOpenCounselling: aiResult.openCounsellingPopup && isNoAnswer,
+      notFound: isNoAnswer,
     });
-   } catch (error) {
+  } catch (error) {
     console.error("Ask ilmaLink API error:", error);
-
-    return NextResponse.json(
-      {
-        answer: ILMALINK_COUNSELLING_FALLBACK,
-        sources: [],
-        confidence: "low",
-        dataAvailable: false,
-        needsCounselling: true,
-        openCounsellingPopup: true,
-        detectedFilters: [],
-        matchedItems: [],
-        suggestedLinks: [],
-        shouldShowConnectCTA: true,
-        shouldAutoOpenCounselling: true,
-        notFound: true,
-      },
-      { status: 500 }
-    );
+    return buildNoAnswerResponse(500);
   }
 }
