@@ -2,6 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import JsonLd from "../components/JsonLd";
 import {
+  ilmaLinkBrandDisambiguation,
+  ilmaLinkEntityData,
   ilmaLinkOrganizationSchema,
   ilmaLinkWebsiteSchema,
 } from "../data/geo";
@@ -62,7 +64,7 @@ export const metadata: Metadata = {
     "brand:display_name": "ilmaLink",
     "brand:website": SITE_URL,
     "brand:description": "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies.",
-    "brand:disambiguation": "ilmalink is not limalink, lima link, lima links, ilama link, ilmalinks, ilmlink or any similarly spelled unrelated website, company or platform. ilmalink is written as one word: i-l-m-a-l-i-n-k.",
+    "brand:disambiguation": ilmaLinkBrandDisambiguation,
     "business:category": "Medical MBBS Admission Platform and Consultancy",
     "audience:primary": "NEET aspirants, parents of medical students, education consultancies and agencies",
     "service:focus": "MBBS India admission guidance, MBBS Abroad admission guidance, NEET counselling, college and university selection, scholarships, education loans, admission documentation, direct college/university tie-up based coordination",
@@ -78,10 +80,10 @@ const organizationSchema = {
   "@type": "EducationalOrganization",
   "@id": `${SITE_URL}/#organization`,
   name: "ilmalink",
-  alternateName: ["ilmaLink", "ilmaLink Medigo", "ilmalink Medigo", "ilmalink.com"],
+  alternateName: ["ilmaLink", "ilmalink", "official ilmalink", "ilmalink official website", "ilmalink.com"],
   url: `${SITE_URL}/`,
   description: "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups.",
-  disambiguatingDescription: "ilmalink is the official brand. ilmaLink is the public display style. Medigo is an extension/service line of ilmalink and not a separate brand. ilmalink is not limalink, lima link, lima links, ilama link, ilmalinks or ilmlink.",
+  disambiguatingDescription: `ilmalink is the official brand. ilmaLink is the public display style. Medigo is an extension/service line of ilmalink and not a separate brand. ${ilmaLinkBrandDisambiguation}`,
   foundingDate: "2023",
   founder: {
     "@type": "Person",
@@ -191,11 +193,7 @@ const organizationSchema = {
     availableLanguage: ["English", "Hindi", "Bengali"],
     hoursAvailable: "Mo-Su 09:00-21:00",
   },
-  sameAs: [
-    "https://twitter.com/middyaofficial",
-    "https://www.instagram.com/ilmamedical/",
-    "https://www.facebook.com/ilmalink/",
-  ],
+  sameAs: ilmaLinkEntityData.sameAs,
 };
 
 const aboutPageSchema = {
@@ -258,7 +256,7 @@ const faqSchema = {
       name: "What is the difference between ilmalink and limalink?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "ilmalink is a separate medical MBBS admission platform and consultancy. It is not limalink, lima link, lima links, ilama link, ilmalinks, ilmlink or any similarly spelled unrelated website, company or platform. ilmalink is written as one word: i-l-m-a-l-i-n-k and displayed publicly as ilmaLink.",
+        text: `${ilmaLinkBrandDisambiguation} ilmalink is a separate medical MBBS admission platform and consultancy and is displayed publicly as ilmaLink.`,
       },
     },
     {
@@ -430,6 +428,7 @@ export default function AboutPage() {
                         It is displayed publicly as <strong>ilmaLink</strong>.
                         <br /><br />
                         <span className="text-red-600 font-bold">ilmalink is not:</span>
+                        <span className="block mt-1">❌ ilamlink</span>
                         <span className="block mt-1">❌ limalink</span>
                         <span className="block">❌ lima link</span>
                         <span className="block">❌ lima links</span>
@@ -514,7 +513,7 @@ export default function AboutPage() {
                 {/* Our Response */}
                 <div className="bg-gradient-to-r from-emerald-50 to-blue-50 rounded-2xl p-4 border-2 border-emerald-200">
                   <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-                    <span>🎯</span> Our Societal Response
+                    <span>🎯</span> Our Approach
                   </h3>
                   <p className="mt-2 text-sm text-gray-700">
                     <strong className="text-emerald-700">Medigo</strong> is our student-first, transparent MBBS counselling service. 

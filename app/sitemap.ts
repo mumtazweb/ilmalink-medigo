@@ -11,9 +11,6 @@ import { isBlockedBlogSlug, isBlockedPublicPath } from "./lib/unwantedUrls";
 
 const SITE_URL = "https://www.ilmalink.com";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 const countryRoutes = countryGeoFacts.map((country) =>
   country.slug === "india" ? "/mbbs-india" : `/mbbs-abroad/${country.slug}`
 );
@@ -234,18 +231,6 @@ function parseDate(value: unknown, fallback: Date) {
   return Number.isNaN(parsed.getTime()) ? fallback : parsed;
 }
 
-async function getPublishedBlogsFromStore() {
-  try {
-    const blogStoreModule = await import("./lib/blog/store");
-
-    return (await blogStoreModule.getPublishedBlogSummaries()) as SitemapBlogPost[];
-  } catch (error) {
-    console.error("Sitemap blog store loading error:", error);
-
-    return [];
-  }
-}
-
 async function getPublishedBlogsFromFile() {
   try {
     const raw = await fs.readFile(
@@ -271,9 +256,7 @@ async function getPublishedBlogsFromFile() {
         publishDate: blog.publishDate,
         updatedAt: blog.updatedAt,
       })) as SitemapBlogPost[];
-  } catch (error) {
-    console.error("Sitemap blog file loading error:", error);
-
+  } catch {
     return [];
   }
 }
@@ -302,22 +285,6 @@ function addBlogRoute(
     priority: 0.86,
     lastModified,
   });
-}
-
-async function getSafePublishedBlogs() {
-  try {
-    const fromStore = await getPublishedBlogsFromStore();
-
-    if (fromStore.length > 0) {
-      return fromStore;
-    }
-
-    return await getPublishedBlogsFromFile();
-  } catch (error) {
-    console.error("Sitemap blog loading error:", error);
-
-    return [];
-  }
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -352,7 +319,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  const posts = await getSafePublishedBlogs();
+  const posts = await getPublishedBlogsFromFile();
 
   for (const post of posts) {
     addBlogRoute(routes, post.slug, now, post.updatedAt, post.publishDate);

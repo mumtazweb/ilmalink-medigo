@@ -136,6 +136,14 @@ const isColdNoMatchAnswer = (answer: string) =>
 const answerDisclaimer =
   "Cutoffs, fees, counselling rules, accreditation, FMGE/NExT outcomes, and NMC/FMGL compliance can change. Use Connect ilmaLink for a personalised eligibility review before final admission.";
 const searchSpellingAliases: Record<string, string> = {
+  ilamlink: "ilmalink",
+  ilama: "ilmalink",
+  ilmalinks: "ilmalink",
+  ilmlink: "ilmalink",
+  limalink: "ilmalink",
+  limalinks: "ilmalink",
+  limmalink: "ilmalink",
+  lima: "ilmalink",
   collage: "college",
   colage: "college",
   colleg: "college",
@@ -225,7 +233,10 @@ const searchCorrectionVocabulary = [
   "fmgl",
   "georgia",
   "hostel",
+  "ilmalink",
   "india",
+  "official",
+  "website",
   "institute",
   "internship",
   "kyrgyzstan",

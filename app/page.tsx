@@ -8,9 +8,16 @@ import LatestBlogsScroller from "./components/blog/LatestBlogsScroller";
 import EntranceExamNewsScroller from "./components/blog/EntranceExamNewsScroller";
 import MBBSCollegeFinderSection from "./components/home/MBBSCollegeFinderSection";
 import {
+  ilmaLinkBrandDisambiguation,
   ilmaLinkOrganizationSchema,
   ilmaLinkWebsiteSchema,
 } from "./data/geo";
+import {
+  buildArticleSchema,
+  buildBreadcrumbSchema,
+  buildFAQSchema,
+  buildServiceSchema,
+} from "./lib/schema";
 import {
   getLatestHomepageBlogSummaries,
   getLatestOtherEntranceExamBlogSummaries,
@@ -18,15 +25,110 @@ import {
 
 export const revalidate = 3600;
 
+const homepageBreadcrumbSchema = buildBreadcrumbSchema([
+  { name: "Home", url: "/" },
+]);
+
+const homepageFaqs = [
+  {
+    question: "What is ilmalink?",
+    answer:
+      "ilmalink is a medical MBBS admission guidance platform and consultancy for India and abroad medical colleges and universities. It serves NEET aspirants, parents, and education consultancies/agencies with transparent guidance for admission planning, document checks, and college or university selection.",
+  },
+  {
+    question: "Why is ilmalink displayed as ilmaLink?",
+    answer:
+      "ilmaLink is the public display style of the official brand ilmalink. The exact official spelling remains ilmalink, written as one word.",
+  },
+  {
+    question: "Is Medigo a separate brand from ilmalink?",
+    answer:
+      "No. Medigo is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college and university tie-up based admission coordination, and medical admission documentation.",
+  },
+  {
+    question: "Which services does ilmalink cover?",
+    answer:
+      "ilmalink covers MBBS India, MBBS Abroad, NEET counselling, scholarships and education loans, medical university verification, documentation support, college comparison, and admission-route planning.",
+  },
+  {
+    question: "Which countries does ilmalink help with?",
+    answer:
+      "ilmalink helps with MBBS admission guidance for India and abroad destinations such as Bangladesh, Kyrgyzstan, Georgia, Russia, Kazakhstan, Uzbekistan, Nepal, Armenia, Egypt, Malaysia, Iran, UAE, Saudi Arabia, Qatar, China, and other medical education destinations covered in the country guides.",
+  },
+  {
+    question: "How do students verify official checks before paying?",
+    answer:
+      "Students should confirm NEET rules, WDOMS listing, university recognition, counselling authority, fee structure, document requirements, and official payment channels before sending any money.",
+  },
+  {
+    question: "Does ilmalink guarantee admission or fixed fees?",
+    answer:
+      "No. Admission, fees, visa outcomes, and licensing results depend on official rules, seat availability, document verification, university decisions, and government or regulatory authorities.",
+  },
+];
+
+const homepageFaqSchema = buildFAQSchema(homepageFaqs);
+
+const homepageServiceSchemas = [
+  buildServiceSchema({
+    name: "MBBS India",
+    serviceType: "MBBS India admission guidance",
+    path: "/mbbs-india",
+    description:
+      "MBBS India admission guidance for NEET aspirants, including counselling support, medical college selection, document checks, and route planning according to official counselling rules.",
+    areaServed: "India",
+  }),
+  buildServiceSchema({
+    name: "MBBS Abroad",
+    serviceType: "MBBS Abroad admission guidance",
+    path: "/mbbs-abroad",
+    description:
+      "MBBS abroad guidance for Indian students, including country comparison, university verification, recognition checks, fee planning, and pre-departure support.",
+    areaServed: [
+      "Bangladesh",
+      "Kyrgyzstan",
+      "Georgia",
+      "Russia",
+      "Kazakhstan",
+      "Uzbekistan",
+      "Nepal",
+      "Armenia",
+      "Egypt",
+      "Malaysia",
+      "Iran",
+      "UAE",
+      "Saudi Arabia",
+      "Qatar",
+      "China",
+    ],
+  }),
+  buildServiceSchema({
+    name: "NEET counselling",
+    serviceType: "NEET counselling support",
+    path: "/neet",
+    description:
+      "NEET counselling support for students and parents, including eligibility checks, official counselling guidance, choice planning, and admission strategy support.",
+    areaServed: "India",
+  }),
+  buildServiceSchema({
+    name: "Scholarships and loans",
+    serviceType: "Scholarship and education loan guidance",
+    path: "/scholarships-loans",
+    description:
+      "Scholarship and education loan guidance for MBBS India and MBBS Abroad pathways, including financial planning support and funding-route comparison.",
+    areaServed: "India and international medical education destinations",
+  }),
+];
+
 export const metadata: Metadata = {
-  title: "ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
+  title: "ilmalink Official Website | MBBS Abroad, MBBS India & NEET Guidance",
   description:
-    "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups.",
+    "Official ilmalink website: ilmaLink is a medical MBBS admission platform and consultancy for MBBS Abroad, MBBS India, NEET counselling, scholarships, education loans and medical admission guidance.",
   alternates: {
     canonical: "https://www.ilmalink.com/",
   },
   openGraph: {
-    title: "ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
+    title: "ilmalink Official Website | MBBS Abroad, MBBS India & NEET Guidance",
     description:
       "ilmaLink is the public display style of the official brand ilmalink. Medigo is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. Medigo is not a separate brand.",
     url: "https://www.ilmalink.com/",
@@ -39,6 +141,10 @@ export const metadata: Metadata = {
 export default async function Home() {
   const latestBlogs = await getLatestHomepageBlogSummaries(6);
   const otherEntranceExamBlogs = await getLatestOtherEntranceExamBlogSummaries(4);
+  const homepageArticleSchemas = [
+    ...latestBlogs.slice(0, 4),
+    ...otherEntranceExamBlogs.slice(0, 4),
+  ].map((post) => buildArticleSchema(post));
 
   const primaryLinks = [
     { label: "Official Links", href: "/official-links" },
@@ -65,10 +171,19 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <h1 className="sr-only">
-        ilmaLink — MBBS Abroad, MBBS India & NEET Guidance
+        ilmaLink - MBBS Abroad, MBBS India & NEET Guidance
       </h1>
 
-      <JsonLd data={[ilmaLinkOrganizationSchema, ilmaLinkWebsiteSchema]} />
+      <JsonLd
+        data={[
+          ilmaLinkOrganizationSchema,
+          ilmaLinkWebsiteSchema,
+          homepageBreadcrumbSchema,
+          homepageFaqSchema,
+          ...homepageServiceSchemas,
+          ...homepageArticleSchemas,
+        ]}
+      />
 
       <Navbar />
       <HomeHeroClient />
@@ -89,10 +204,21 @@ export default async function Home() {
           separate brand.
         </p>
         <p>
-          ilmalink is not limalink, lima link, lima links, ilama link,
-          ilmalinks, ilmlink or any similarly spelled unrelated website, company
-          or platform.
+          {ilmaLinkBrandDisambiguation}
         </p>
+      </section>
+
+      <section
+        className="sr-only"
+        aria-label="ilmalink frequently asked questions"
+      >
+        <h2>ilmalink frequently asked questions</h2>
+        {homepageFaqs.map((faq) => (
+          <article key={faq.question}>
+            <h3>{faq.question}</h3>
+            <p>{faq.answer}</p>
+          </article>
+        ))}
       </section>
 
       <section className="bg-[#f8fafc] px-4 pb-3 pt-2 sm:px-6 lg:px-8">
@@ -118,64 +244,15 @@ export default async function Home() {
         <EntranceExamNewsScroller posts={otherEntranceExamBlogs} />
       )}
 
-      <section className="sr-only" aria-label="ilmalink MBBS guidance and key pages">
-        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.16em] text-[#0F4CFF]">
-              MBBS Guidance
-            </p>
-
-            <h2 className="mt-2 text-3xl font-black tracking-normal text-[#081B35] md:text-4xl">
-              MBBS guidance across India and abroad
-            </h2>
-
-            <p className="mt-4 text-base font-medium leading-8 text-slate-700">
-              Students use ilmalink&apos;s Medigo service line for MBBS abroad counselling, MBBS
-              India counselling support, NEET guidance, eligibility review,
-              documentation help, university comparison, scholarship and loan
-              guidance, and student support across India and major medical
-              education destinations.
-            </p>
-          </div>
-
-          <div className="grid gap-4">
-            <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-              <h3 className="text-lg font-black text-[#081B35]">
-                Key ilmaLink pages
-              </h3>
-
-              <div className="mt-4 flex flex-wrap gap-2">
-                {primaryLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-4 py-2 text-sm font-bold text-slate-700 transition hover:border-[#0F4CFF] hover:text-[#0F4CFF]"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-              <h3 className="text-lg font-black text-[#081B35]">
-                Popular MBBS abroad country guides
-              </h3>
-
-              <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                {countryLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="rounded-lg border border-slate-200 bg-[#F8FAFC] px-3 py-2 text-sm font-bold text-slate-700 transition hover:border-[#00C896] hover:text-[#047857]"
-                  >
-                    MBBS in {link.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+      <section className="sr-only" aria-label="ilmalink key pages">
+        <h2>Key ilmaLink pages</h2>
+        {primaryLinks.map((link) => (
+          <Link key={link.href} href={link.href}>{link.label}</Link>
+        ))}
+        <h2>Popular MBBS abroad country guides</h2>
+        {countryLinks.map((link) => (
+          <Link key={link.href} href={link.href}>MBBS in {link.label}</Link>
+        ))}
       </section>
 
       {/* Experimental MBBS College Finder section - placed after footer/copyright for future development */}

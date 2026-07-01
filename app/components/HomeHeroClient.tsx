@@ -1046,19 +1046,11 @@ function JourneyFlowLane({
         </div>
       </div>
 
-      <div className="relative mt-4 lg:hidden">
-        <div className="grid grid-cols-3 gap-x-2 gap-y-4">
-          {steps.map((step, index) => renderMilestone(step, index, true))}
-        </div>
-      </div>
-
       <div
-        className="relative mt-4 hidden gap-0 lg:grid"
-        style={{
-          gridTemplateColumns: `repeat(${steps.length}, minmax(0, 1fr))`,
-        }}
+        className="relative mt-4 grid grid-cols-3 gap-x-2 gap-y-4 lg:grid-cols-[repeat(var(--steps-count),minmax(0,1fr))] lg:gap-0"
+        style={{ "--steps-count": steps.length } as React.CSSProperties}
       >
-        {steps.map((step, index) => renderMilestone(step, index, false))}
+        {steps.map((step, index) => renderMilestone(step, index, true))}
       </div>
     </article>
   );

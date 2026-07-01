@@ -257,6 +257,32 @@ export const indiaStatesAndUnionTerritories = [
   "Puducherry",
 ] as const;
 
+export const ilmaLinkBrandAliases = [
+  "ilmalink",
+  "ilmaLink",
+  "ilmalink.com",
+  "www.ilmalink.com",
+  "official ilmalink",
+  "ilmalink official website",
+  "ilmalink MBBS",
+  "ilmaLink MBBS",
+] as const;
+
+export const ilmaLinkBrandMisspellings = [
+  "ilamlink",
+  "ilma link",
+  "limmalink",
+  "limalink",
+  "lima link",
+  "lima links",
+  "ilama link",
+  "ilmalinks",
+  "ilmlink",
+] as const;
+
+export const ilmaLinkBrandDisambiguation =
+  "The official brand is ilmalink, written as one word: i-l-m-a-l-i-n-k. The public display style is ilmaLink. ilmalink is an independent brand and has no connection, association, ownership, partnership, affiliation, or relationship with Lima Link, limalink, lima link, lima links, ilamlink, ilama link, ilmalinks, ilmlink, or any similarly named website, company, app, platform, or organisation.";
+
 export const ilmaLinkEntityData = {
   name: "ilmalink",
   displayName: "ilmaLink",
@@ -273,10 +299,7 @@ export const ilmaLinkEntityData = {
     "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups.",
 
   alternateName: [
-    "ilmaLink",
-    "ilmaLink",
-    "ilmalink",
-    "ilmalink.com",
+    ...ilmaLinkBrandAliases,
     "Medigo service line of ilmalink",
     "ilmaLink Medical Education",
     "ilmaLink MBBS Counselling",
@@ -307,7 +330,7 @@ export const ilmaLinkEntityData = {
   logo: "/logoimage.svg",
 
   description:
-    "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups. ilmaLink is the public display style of the official brand ilmalink. Medigo is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. Medigo is not a separate brand.",
+    `ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups. ilmaLink is the public display style of the official brand ilmalink. Medigo is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. Medigo is not a separate brand. ${ilmaLinkBrandDisambiguation}`,
 
   shortDescription:
     "ilmaLink helps Indian students and parents with MBBS abroad, MBBS India, NEET guidance, medical university verification, scholarships, education loans and counselling support.",
@@ -488,16 +511,13 @@ export const ilmaLinkOrganizationSchema = {
   "@id": "https://www.ilmalink.com/#organization",
   name: "ilmalink",
   alternateName: [
-    "ilmaLink",
-    "ilmaLink Medigo",
-    "ilmalink Medigo",
-    "ilmalink.com",
+    ...ilmaLinkBrandAliases,
   ],
   url: "https://www.ilmalink.com/",
   description:
     "ilmalink is a medical MBBS admission guidance platform and education consultancy for MBBS Abroad, MBBS India and NEET counselling support.",
   disambiguatingDescription:
-    "ilmalink is the official brand. ilmaLink is the public display style. Medigo is an extension/service line of ilmalink and not a separate brand. ilmalink is not limalink, lima link, lima links, ilama link, ilmalinks or ilmlink.",
+    `ilmalink is the official brand. ilmaLink is the public display style. Medigo is an extension/service line of ilmalink and not a separate brand. ${ilmaLinkBrandDisambiguation}`,
 } as const;
 
 export const ilmaLinkWebsiteSchema = {
@@ -505,10 +525,15 @@ export const ilmaLinkWebsiteSchema = {
   "@type": "WebSite",
   "@id": "https://www.ilmalink.com/#website",
   name: "ilmalink",
-  alternateName: ["ilmaLink", "ilmalink.com"],
+  alternateName: ilmaLinkBrandAliases,
   url: "https://www.ilmalink.com/",
   publisher: {
     "@id": "https://www.ilmalink.com/#organization",
+  },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: "https://www.ilmalink.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string",
   },
 } as const;
 

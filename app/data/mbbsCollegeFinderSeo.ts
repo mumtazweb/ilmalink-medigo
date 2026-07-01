@@ -1,8 +1,8 @@
 export const mbbsCollegeFinderSeoHeading =
-  "MBBS College Finder 2026 ILMALINK guidance summary";
+  "MBBS College Finder 2026 — ilmaLink guidance summary";
 
 export const mbbsCollegeFinderSeoParagraphs = [
-  "MBBS College Finder 2026 is an ILMALINK guidance tool for students and parents planning medical admission pathways.",
+  "MBBS College Finder 2026 is an ilmaLink guidance tool for students and parents planning medical admission pathways.",
   "The tool helps students compare MBBS in India and MBBS abroad pathways before final counselling verification.",
   "India and abroad MBBS admission follow different logic and should not be compared with one common rule.",
   "For MBBS in India, NEET rank or score, domicile state, category and budget matter.",

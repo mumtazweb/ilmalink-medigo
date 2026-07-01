@@ -121,7 +121,7 @@ const organizationSchema = {
   "@type": "EducationalOrganization",
   "@id": `${SITE_URL}/#organization`,
   name: "ilmalink",
-  alternateName: ["ilmaLink", "ilmaLink Medigo", "ilmalink Medigo", "ilmalink.com"],
+  alternateName: ["ilmaLink", "ilmalink.com"],
   url: `${SITE_URL}/`,
   description: brandDescription,
   disambiguatingDescription:

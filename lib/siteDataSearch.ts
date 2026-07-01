@@ -457,6 +457,14 @@ const synonymGroups = [
 ];
 
 const spellingAliases: Record<string, string> = {
+  ilamlink: "ilmalink",
+  ilama: "ilmalink",
+  ilmalinks: "ilmalink",
+  ilmlink: "ilmalink",
+  limalink: "ilmalink",
+  limalinks: "ilmalink",
+  limmalink: "ilmalink",
+  lima: "ilmalink",
   acadamy: "academy",
   accreditaton: "accreditation",
   accredition: "accreditation",
@@ -552,6 +560,7 @@ const coreVocabulary = [
   "government",
   "hostel",
   "holy",
+  "ilmalink",
   "india",
   "institute",
   "institution",
@@ -566,6 +575,7 @@ const coreVocabulary = [
   "national",
   "neet",
   "nmc",
+  "official",
   "private",
   "quota",
   "last",
@@ -588,6 +598,7 @@ const coreVocabulary = [
   "university",
   "universities",
   "uzbekistan",
+  "website",
   "wdoms",
 ];
 

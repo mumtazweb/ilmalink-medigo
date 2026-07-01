@@ -6,9 +6,9 @@ import Navbar from "../components/navbar";
 import { searchInternalSiteData } from "@/lib/siteDataSearch";
 
 export const metadata: Metadata = {
-  title: "Search ilmaLink | MBBS, NEET, Countries, Colleges & Blogs",
+  title: "Search ilmalink | Official ilmaLink Site Search",
   description:
-    "Search ilmaLink for MBBS abroad countries, MBBS India colleges, FMGE data, NEET guidance, scholarships, loans, and blogs.",
+    "Search the official ilmalink website for MBBS abroad countries, MBBS India colleges, FMGE data, NEET guidance, scholarships, loans, and blogs.",
   alternates: {
     canonical: "https://www.ilmalink.com/search",
   },

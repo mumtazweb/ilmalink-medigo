@@ -5,6 +5,7 @@ import {
   type CountryGeoFact,
   type IlmaLinkOffice,
 } from "../data/geo";
+import type { BlogSummaryPost } from "./blog/types";
 
 type BreadcrumbItem = {
   name: string;
@@ -14,6 +15,14 @@ type BreadcrumbItem = {
 type FAQItem = {
   question: string;
   answer: string;
+};
+
+type ServiceSchemaInput = {
+  name: string;
+  serviceType: string;
+  path: string;
+  description: string;
+  areaServed?: string | string[];
 };
 
 type SiteNavigationItem = {
@@ -202,6 +211,64 @@ export function buildWebsiteSchema() {
   return {
     ...ilmaLinkWebsiteSchema,
     inLanguage: "en-IN",
+  };
+}
+
+export function buildServiceSchema(service: ServiceSchemaInput) {
+  const serviceUrl = absoluteUrl(service.path);
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${serviceUrl}#service`,
+    name: service.name,
+    serviceType: service.serviceType,
+    url: serviceUrl,
+    description: service.description,
+    provider: {
+      "@id": "https://www.ilmalink.com/#organization",
+    },
+    ...(service.areaServed ? { areaServed: service.areaServed } : {}),
+    isPartOf: {
+      "@id": "https://www.ilmalink.com/#website",
+    },
+  };
+}
+
+export function buildArticleSchema(post: BlogSummaryPost) {
+  const articleUrl = absoluteUrl(`/blogs/${post.slug}/`);
+
+  return {
+    "@context": "https://schema.org",
+    "@type": ["Article", "BlogPosting"],
+    "@id": `${articleUrl}#article`,
+    headline: post.title,
+    description: post.shortDescription,
+    articleSection: post.category,
+    inLanguage: "en-IN",
+    datePublished: post.publishDate,
+    dateModified: post.publishDate,
+    url: articleUrl,
+    mainEntityOfPage: articleUrl,
+    author: {
+      "@id": "https://www.ilmalink.com/#organization",
+    },
+    publisher: {
+      "@id": "https://www.ilmalink.com/#organization",
+    },
+    isPartOf: {
+      "@id": "https://www.ilmalink.com/#website",
+    },
+    ...(post.tags.length
+      ? {
+          keywords: post.tags.slice(0, 8).join(", "),
+        }
+      : {}),
+    ...(post.featuredImage
+      ? {
+          image: absoluteUrl(post.featuredImage),
+        }
+      : {}),
   };
 }
 

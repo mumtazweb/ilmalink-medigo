@@ -9,6 +9,8 @@ import JsonLd from "./components/JsonLd";
 import NeetFloatingPopup from "./components/NeetFloatingPopup";
 import UniversalTranslator from "./components/UniversalTranslator";
 import {
+  ilmaLinkBrandDisambiguation,
+  ilmaLinkBrandMisspellings,
   ilmaLinkEntityData,
   ilmaLinkOrganizationSchema,
   ilmaLinkWebsiteSchema,
@@ -43,18 +45,23 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.ilmalink.com"),
-  applicationName: "ilmaLink",
+  applicationName: "ilmalink",
   title: {
-    default: "ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
+    default: "ilmalink Official Website | ilmaLink MBBS Abroad, MBBS India & NEET Guidance",
     template: "%s | ilmaLink",
   },
   description:
-    "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups.",
+    "Official ilmalink website: ilmaLink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies.",
   keywords: [
     "ilmaLink",
     "ilmalink",
-    "ilmaLink",
     "ilmalink.com",
+    "www.ilmalink.com",
+    "official ilmalink",
+    "ilmalink official website",
+    "ilmalink MBBS",
+    "ilmaLink official website",
+    ...ilmaLinkBrandMisspellings,
     "Medigo service line of ilmalink",
     "ilmaLink education consultancy",
     "ilmaLink MBBS guidance",
@@ -96,7 +103,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
+    title: "ilmalink Official Website | ilmaLink MBBS Abroad, MBBS India & NEET Guidance",
     description:
       "ilmaLink helps Indian students with MBBS abroad, MBBS India, NEET guidance, university verification, counselling, scholarships and education loans.",
     url: "https://www.ilmalink.com/",
@@ -106,7 +113,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
+    title: "ilmalink Official Website | ilmaLink MBBS Abroad, MBBS India & NEET Guidance",
     description:
       "Indian education consultancy platform for MBBS abroad, MBBS India, NEET guidance, medical university verification and admission counselling.",
   },
@@ -115,6 +122,12 @@ export const metadata: Metadata = {
     "geo.placename": "Kolkata, Bengaluru, Mumbai",
     "application-name": "ilmaLink",
     "apple-mobile-web-app-title": "ilmaLink",
+    "brand:official_name": "ilmalink",
+    "brand:display_name": "ilmaLink",
+    "brand:canonical_url": "https://www.ilmalink.com/",
+    "brand:disambiguation": ilmaLinkBrandDisambiguation,
+    "ai:official_entity": "ilmalink",
+    "ai:canonical_website": "https://www.ilmalink.com/",
     "brand": "ilmaLink",
     "subject":
       "MBBS abroad, MBBS India, NEET guidance, medical admission counselling and university verification",

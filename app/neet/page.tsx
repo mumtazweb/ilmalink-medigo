@@ -540,7 +540,12 @@ export default function NeetHubPage() {
                   { label: "Telegram", href: "https://t.me/+919563910223", icon: FaTelegramPlane },
                 ].map((social) => <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label} className="flex h-7 w-7 items-center justify-center rounded-full bg-white !text-[#0B4AA2]"><social.icon className="h-3.5 w-3.5" /></a>)}
               </div>
-              <div className="mt-2 rounded-lg border border-white/35 px-2 py-1.5 text-[9px] leading-3.5 text-blue-100"><strong className="block text-white">Need Help?</strong>support@ilmalinkmedigo.com<br />+91 98765 43210</div>
+              <div className="mt-2 rounded-lg border border-white/35 px-2 py-1.5 text-[9px] leading-3.5 text-blue-100">
+                <strong className="block text-white">Need Help?</strong>
+                <a href="mailto:middya@ilmalink.com" className="block !text-blue-100 hover:underline">middya@ilmalink.com</a>
+                <a href="tel:+919330155576" className="block !text-blue-100 hover:underline">+91 93301 55576</a>
+                <a href="https://wa.me/919563910223" target="_blank" rel="noopener noreferrer" className="block !text-blue-100 hover:underline">WhatsApp: +91 95639 10223</a>
+              </div>
             </div>
           </div>
         </footer>

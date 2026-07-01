@@ -109,7 +109,7 @@ export default function BlogsDirectory({
 
           <div className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-black text-[#50617A] shadow-sm">
             <BookOpen size={14} className="text-[#0F4CFF]" />
-            Showing {visiblePosts.length} of {filteredPosts.length}
+            Showing latest {visiblePosts.length} updates
           </div>
         </div>
 

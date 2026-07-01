@@ -2859,7 +2859,69 @@ async function buildStructuredAdmissionEntries() {
 }
 
 function buildManualEntries() {
+  const {
+    ilmaLinkBrandAliases = [],
+    ilmaLinkBrandMisspellings = [],
+    ilmaLinkBrandDisambiguation = "",
+  } = loadDataModule("app/data/geo.ts");
+  const brandSearchTerms = [
+    ...asArray(ilmaLinkBrandAliases),
+    ...asArray(ilmaLinkBrandMisspellings),
+  ];
   const entries = [
+    {
+      id: "official-ilmalink-brand-entity",
+      title: "ilmalink Official Website and Brand Entity",
+      description:
+        "Official ilmalink website: ilmaLink is the public display style of ilmalink, a medical MBBS admission platform and consultancy for MBBS Abroad, MBBS India and NEET guidance.",
+      url: "/",
+      category: "Official Brand",
+      group: "Pages",
+      type: "page",
+      subType: "brand-entity",
+      dataType: "Official Brand",
+      tags: [
+        "ilmalink",
+        "ilmaLink",
+        "official ilmalink",
+        "ilmalink official website",
+        "ilmalink.com",
+        "www.ilmalink.com",
+        "MBBS admission platform",
+        "MBBS abroad consultancy",
+        "MBBS India guidance",
+        "NEET guidance",
+        "GEO entity reference",
+        "AI entity reference",
+        ...brandSearchTerms,
+      ],
+      intentTags: [
+        "official website",
+        "brand",
+        "entity",
+        "about",
+        "contact",
+        "ai",
+        "geo",
+      ],
+      content: [
+        "Official ilmalink website",
+        "ilmalink is written as one word i-l-m-a-l-i-n-k",
+        "ilmaLink is the public display style of ilmalink",
+        "Medigo is an extension/service line of ilmalink, not a separate brand",
+        "ilmalink MBBS Abroad MBBS India NEET counselling scholarships education loans medical admission guidance",
+        ilmaLinkBrandDisambiguation,
+        brandSearchTerms.join(" "),
+      ].join(" "),
+      priority: 140,
+      data: {
+        kind: "brand-entity",
+        officialName: "ilmalink",
+        displayName: "ilmaLink",
+        canonicalUrl: "https://www.ilmalink.com/",
+        commonMistypedQueries: asArray(ilmaLinkBrandMisspellings),
+      },
+    },
     {
       id: "page-bangladesh-gpa-calculator",
       title: "Bangladesh MBBS GPA Eligibility Calculator",
