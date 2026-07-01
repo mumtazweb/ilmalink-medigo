@@ -23,7 +23,7 @@ type TranslatorInitialState = {
 };
 
 const PROTECTED_TERMS = [
-  "Medigo service line of ilmalink",
+  "ilmalink service line of ilmalink",
   "ilmaLink",
   "ilmaLink",
   "ilmalink",

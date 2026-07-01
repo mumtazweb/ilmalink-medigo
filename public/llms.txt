@@ -7,7 +7,7 @@ Public display style: ilmaLink
 
 ilmalink is a medical MBBS admission platform and consultancy for MBBS Abroad, MBBS India, NEET guidance, medical admission counselling, university verification, scholarships, education loans, and admission documentation support.
 
-Medigo is an extension/service line of ilmalink. Medigo is not a separate brand.
+ilmalink is an extension/service line of ilmalink. ilmalink is not a separate brand.
 
 Correct spelling and disambiguation:
 - Correct: ilmalink

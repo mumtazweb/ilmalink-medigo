@@ -409,7 +409,7 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
                   Article
                 </p>
                 <p className="text-xs font-bold text-slate-600">
-                  Medigo service line of ilmalink
+                  ilmalink service line of ilmalink
                 </p>
                 <p className="mt-2 text-[#00A986]">★★★★★</p>
               </div>

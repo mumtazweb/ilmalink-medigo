@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title:
     "MBBS Decision Intelligence | Costs, Countries, NEET & Admission Support",
   description:
-    "Compare indicative MBBS India and MBBS Abroad budgets, country checks, NEET pathways and Medigo service-line admission support under ilmalink for Indian students.",
+    "Compare indicative MBBS India and MBBS Abroad budgets, country checks, NEET pathways and ilmalink service-line admission support under ilmalink for Indian students.",
   keywords: [
     "MBBS cost comparison",
     "MBBS abroad country comparison",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     "MBBS admission journey",
     "FMGE preparation support",
     "NExT preparation support",
-    "Medigo service line of ilmalink",
+    "ilmalink service line of ilmalink",
   ],
   alternates: {
     canonical: "https://www.ilmalink.com/mbbs-decision-intelligence",
@@ -52,7 +52,7 @@ const faqs = [
   {
     question: "Are the MBBS cost figures final university fees?",
     answer:
-      "No. They are indicative planning estimates from the current Medigo service-line dataset of ilmalink. Students must verify the latest written university, college or counselling fee structure, exchange rate and official charges before payment.",
+      "No. They are indicative planning estimates from the current ilmalink service-line dataset of ilmalink. Students must verify the latest written university, college or counselling fee structure, exchange rate and official charges before payment.",
   },
   {
     question: "How does ilmaLink support MBBS India admission?",

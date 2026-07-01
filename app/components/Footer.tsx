@@ -347,17 +347,17 @@ export default function Footer() {
     ilmaLink
   </p>
   <p className="mt-1 max-w-xl text-sm leading-5 text-slate-400">
-    Medigo, an extension/service line of ilmalink, guides Indian students for
+    ilmalink, an extension/service line of ilmalink, guides Indian students for
     MBBS Abroad, MBBS India, NEET counselling, scholarships, education loans
     and medical admission documentation through transparent support from
     Kolkata, Bengaluru and Mumbai contact points.
   </p>
   <p className="mt-2 max-w-xl text-xs leading-5 text-slate-500">
-    ilmaLink is the public display style of the official brand ilmalink. Medigo
+    ilmaLink is the public display style of the official brand ilmalink. ilmalink
     is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET
     guidance, counselling support, scholarships, education loans, direct
     college/university tie-up based admission coordination, and medical
-    admission documentation. Medigo is not a separate brand.
+    admission documentation. ilmalink is not a separate brand.
   </p>
 </div>
           </div>

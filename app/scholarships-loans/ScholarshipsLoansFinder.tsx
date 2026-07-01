@@ -891,7 +891,7 @@ export default function ScholarshipsLoansFinder() {
                     <p className="mt-3 text-sm font-semibold leading-6 text-slate-700">
                       ilmaLink will assist end-to-end to secure eligible
                       admission-linked support for students processed through
-                      Medigo, an extension/service line of ilmalink.
+                      ilmalink, an extension/service line of ilmalink.
                     </p>
 
                     <div className="mt-3 grid gap-2 text-xs font-bold text-emerald-900 sm:grid-cols-3">

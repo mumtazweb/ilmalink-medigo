@@ -7,7 +7,7 @@ export const metadata = {
     "Study Medicine in Germany 2026 for Indian Students | WDOMS & NMC/FMGL Checks",
 
   description:
-    "Explore medical study in Germany for Indian students with 48 WDOMS-listed medical schools, admission route guidance, language and eligibility checks, NMC/FMGL rule review and Medigo service-line counselling support under ilmalink.",
+    "Explore medical study in Germany for Indian students with 48 WDOMS-listed medical schools, admission route guidance, language and eligibility checks, NMC/FMGL rule review and ilmalink service-line counselling support under ilmalink.",
 
   keywords: [
     "Study medicine in Germany",
@@ -168,7 +168,7 @@ export default function GermanyPage() {
 
               <p className="text-gray-300 leading-8">
 
-                Medigo, an extension/service line of ilmalink, can help students compare Germany with other
+                ilmalink, an extension/service line of ilmalink, can help students compare Germany with other
                 MBBS abroad routes, review documents, check WDOMS listing,
                 verify university-wise language requirements and plan NMC/FMGL
                 eligibility questions before applying.

@@ -3,7 +3,7 @@
 All shipped assets are locally stored WebP files below 100 KB. Campus images
 were resized and compressed for the university cards and profile pages.
 
-- `kyrgyzstan-scenery.webp`: AI-generated for the Medigo service line of ilmalink. Prompt: wide
+- `kyrgyzstan-scenery.webp`: AI-generated for the ilmalink service line of ilmalink. Prompt: wide
   photorealistic Kyrgyzstan scene with the Tian Shan mountains, Issyk-Kul,
   steppe, a traditional yurt, and a subtle Bishkek skyline; no people, text,
   logos, or watermark.

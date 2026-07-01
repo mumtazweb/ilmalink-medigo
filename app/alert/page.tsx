@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     "MCC counselling",
     "MBBS India admission",
     "MBBS abroad safety checklist",
-    "Medigo service-line alert for ilmalink",
+    "ilmalink service-line alert for ilmalink",
   ],
   alternates: {
     canonical: "https://www.ilmalink.com/alert/",
@@ -304,7 +304,7 @@ export default function AlertPage() {
         <section id="fraud-reporting" className="mt-10">
           <h2 className="text-xl font-extrabold text-[#081B35]">Fraud reporting & victim support</h2>
 
-          <p className="mt-3 text-sm text-slate-700">If you believe you have been targeted by an admission fraudster or agency, act quickly. The guidance below is legally-safe, practical, and focuses on protecting victims and preserving evidence. Medigo, an extension/service line of ilmalink, does not publish unverified allegations or personal names without reliable public sources.</p>
+          <p className="mt-3 text-sm text-slate-700">If you believe you have been targeted by an admission fraudster or agency, act quickly. The guidance below is legally-safe, practical, and focuses on protecting victims and preserving evidence. ilmalink, an extension/service line of ilmalink, does not publish unverified allegations or personal names without reliable public sources.</p>
 
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
@@ -471,8 +471,8 @@ export default function AlertPage() {
 
         {/* ilmaLink SECTION */}
         <section className="mt-10">
-          <h2 className="text-xl font-extrabold text-[#081B35]">What Medigo Does Under ilmalink</h2>
-          <p className="mt-3 text-sm text-slate-700">Medigo, an extension/service line of ilmalink, does not promote blind admission selling. We focus on counselling guidance, data guidance, eligibility verification, cutoff understanding, country comparison, university comparison, risk analysis, scholarship and loan guidance, official source awareness and student safety.</p>
+          <h2 className="text-xl font-extrabold text-[#081B35]">What ilmalink Does Under ilmalink</h2>
+          <p className="mt-3 text-sm text-slate-700">ilmalink, an extension/service line of ilmalink, does not promote blind admission selling. We focus on counselling guidance, data guidance, eligibility verification, cutoff understanding, country comparison, university comparison, risk analysis, scholarship and loan guidance, official source awareness and student safety.</p>
 
           <ul className="mt-4 grid gap-2 sm:grid-cols-2 text-sm text-slate-700">
             {[
@@ -496,7 +496,7 @@ export default function AlertPage() {
 
           <div className="mt-6 rounded-xl bg-white/30 backdrop-blur ring-1 ring-white/30 p-4 shadow-[0_14px_34px_rgba(8,27,53,0.08)]">
             <h4 className="text-sm font-extrabold text-[#081B35]">About ilmaLink</h4>
-            <p className="mt-2 text-sm text-slate-700">Medigo is an extension/service line of ilmalink, not a separate agency brand. We act as a watchdog and information service with verified updates and resources. Our team includes members with over 10 years&apos; experience in the medical education sector, including college administration, NEET tutoring and counselling-system experience. We publish verified guidance to protect students and parents from fraud risks.</p>
+            <p className="mt-2 text-sm text-slate-700">ilmalink is an extension/service line of ilmalink, not a separate agency brand. We act as a watchdog and information service with verified updates and resources. Our team includes members with over 10 years&apos; experience in the medical education sector, including college administration, NEET tutoring and counselling-system experience. We publish verified guidance to protect students and parents from fraud risks.</p>
             <div className="mt-3 flex gap-3">
               <Link href="/portal/signup/" className="inline-flex items-center gap-2 rounded-lg border border-[#00C896] bg-[#00C896]/10 px-4 py-2 text-sm font-bold text-[#008f72]">Contact ilmaLink</Link>
               <Link href="/blogs" className="inline-flex items-center gap-2 rounded-lg bg-white/50 px-4 py-2 text-sm font-semibold text-slate-800">Read latest updates</Link>
@@ -506,7 +506,7 @@ export default function AlertPage() {
 
         {/* What we do not claim */}
         <section className="mt-10">
-          <h2 className="text-xl font-extrabold text-[#081B35]">What Medigo Does Not Claim</h2>
+          <h2 className="text-xl font-extrabold text-[#081B35]">What ilmalink Does Not Claim</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {[
               "Guaranteed MBBS admission in India",

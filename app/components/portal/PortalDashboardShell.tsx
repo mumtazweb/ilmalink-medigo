@@ -102,7 +102,7 @@ export default function PortalDashboardShell({
                   ilmaLink
                 </strong>
                 <span className="block truncate text-[9px] font-bold uppercase tracking-[.12em] text-[#60738F]">
-                  Medigo service line portal
+                  ilmalink service line portal
                 </span>
               </span>
             </Link>

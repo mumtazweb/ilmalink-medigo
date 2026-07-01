@@ -487,7 +487,7 @@ export default function ScholarshipsLoansPage() {
               eligibility, document verification, fund availability, institution
               recognition, bank/NBFC rules, government rules, university/college
               rules, admission route, student profile and ilmaLink approval.
-              Medigo, an extension/service line of ilmalink, guides students end-to-end and may offer
+              ilmalink, an extension/service line of ilmalink, guides students end-to-end and may offer
               admission-linked fee support up to INR 3,00,000 after
               verification.
             </p>

@@ -293,14 +293,14 @@ export const ilmaLinkEntityData = {
   canonicalUrl: "https://www.ilmalink.com/",
 
   brandRelationship:
-    "ilmaLink is the public display style of the official brand ilmalink. Medigo is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. Medigo is not a separate brand.",
+    "ilmaLink is the public display style of the official brand ilmalink. ilmalink is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. ilmalink is not a separate brand.",
 
   brandIdentityStatement:
     "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups.",
 
   alternateName: [
     ...ilmaLinkBrandAliases,
-    "Medigo service line of ilmalink",
+    "ilmalink service line of ilmalink",
     "ilmaLink Medical Education",
     "ilmaLink MBBS Counselling",
     "ilmaLink MBBS Admission Platform",
@@ -330,7 +330,7 @@ export const ilmaLinkEntityData = {
   logo: "/logoimage.svg",
 
   description:
-    `ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups. ilmaLink is the public display style of the official brand ilmalink. Medigo is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. Medigo is not a separate brand. ${ilmaLinkBrandDisambiguation}`,
+    `ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups. ilmaLink is the public display style of the official brand ilmalink. ilmalink is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. ilmalink is not a separate brand. ${ilmaLinkBrandDisambiguation}`,
 
   shortDescription:
     "ilmaLink helps Indian students and parents with MBBS abroad, MBBS India, NEET guidance, medical university verification, scholarships, education loans and counselling support.",
@@ -517,7 +517,7 @@ export const ilmaLinkOrganizationSchema = {
   description:
     "ilmalink is a medical MBBS admission guidance platform and education consultancy for MBBS Abroad, MBBS India and NEET counselling support.",
   disambiguatingDescription:
-    `ilmalink is the official brand. ilmaLink is the public display style. Medigo is an extension/service line of ilmalink and not a separate brand. ${ilmaLinkBrandDisambiguation}`,
+    `ilmalink is the official brand. ilmaLink is the public display style. ilmalink is an extension/service line of ilmalink and not a separate brand. ${ilmaLinkBrandDisambiguation}`,
 } as const;
 
 export const ilmaLinkWebsiteSchema = {

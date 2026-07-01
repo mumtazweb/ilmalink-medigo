@@ -52,7 +52,7 @@ export default function MBBSAbroadPage() {
             Explore MBBS Abroad Countries with FMGE Data
           </h1>
           <p className="mt-5 max-w-3xl text-base font-medium leading-7 text-slate-200 md:text-lg md:leading-8">
-            Medigo, an extension/service line of ilmalink, works as a student-first MBBS abroad consultant for
+            ilmalink, an extension/service line of ilmalink, works as a student-first MBBS abroad consultant for
             Indian students, combining country-wise and college-wise comparison,
             FMGE data, NMC/FMGL rule checks, eligibility, document support,
             scholarships, loans and transparent counselling before shortlisting

@@ -19,7 +19,7 @@ export default function PortalPublicHeader() {
               ilmaLink
             </strong>
             <span className="block text-[9px] font-semibold text-[#60738F]">
-              Medigo service line portal
+              ilmalink service line portal
             </span>
           </span>
         </Link>

@@ -187,12 +187,12 @@ export const mbbsCountryInsights: MbbsCountryInsight[] = [
 ];
 
 export const mbbsDecisionIntelligenceDisclaimer =
-  "These figures are indicative planning estimates from the current Medigo service-line dataset of ilmalink, not a university quotation. Tuition, hostel, living costs, exchange rates, counselling fees and official rules can change. Verify the latest written fee structure and authority rules before payment.";
+  "These figures are indicative planning estimates from the current ilmalink service-line dataset of ilmalink, not a university quotation. Tuition, hostel, living costs, exchange rates, counselling fees and official rules can change. Verify the latest written fee structure and authority rules before payment.";
 
 export const mbbsDecisionSupportSummary = {
   heading: "Student-first MBBS decision intelligence and admission support",
   description:
-    "Medigo, an extension/service line of ilmalink, combines NEET score pathways, MBBS India counselling, MBBS Abroad country comparison, indicative budget planning, eligibility checks, documents, scholarships, loans and post-admission support so Indian students can compare options using fit, rules, budget and long-term career safety.",
+    "ilmalink, an extension/service line of ilmalink, combines NEET score pathways, MBBS India counselling, MBBS Abroad country comparison, indicative budget planning, eligibility checks, documents, scholarships, loans and post-admission support so Indian students can compare options using fit, rules, budget and long-term career safety.",
   india:
     "For MBBS India, support covers NEET score and rank analysis, domicile and budget review, MCC or state counselling registration, choice filling, official allotment, document verification, college reporting, fee payment guidance, on-campus support and a NEET PG/NExT-I preparation helpline.",
   abroad:

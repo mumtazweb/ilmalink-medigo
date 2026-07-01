@@ -4,7 +4,7 @@
 
 ### 1. **Database Migration**
 ```bash
-cd c:\Users\91956\ilmalink-medigo
+cd <project-root>
 
 # Run Prisma migration to add images field to Blog model
 npx prisma migrate dev --name add_blog_images

@@ -25,7 +25,7 @@ export default function GeoCountrySection({
   }
 
   const faqs = buildCountryFaqs(country);
-  const summary = `MBBS in ${country.countryName} should be shortlisted only after checking eligibility, NEET status, university recognition, course duration, WDOMS listing, medium of instruction and licensing pathway. The Medigo service-line country dataset of ilmalink lists ${country.wdomsCount} WDOMS medical school entries for ${country.countryName}. ${country.eligibilitySummary} ${country.licensingNote}`;
+  const summary = `MBBS in ${country.countryName} should be shortlisted only after checking eligibility, NEET status, university recognition, course duration, WDOMS listing, medium of instruction and licensing pathway. The ilmalink service-line country dataset of ilmalink lists ${country.wdomsCount} WDOMS medical school entries for ${country.countryName}. ${country.eligibilitySummary} ${country.licensingNote}`;
 
   return (
     <section className="overflow-x-hidden bg-[#F8FAFC] px-4 py-12 text-slate-950 sm:px-6 lg:px-8">
@@ -60,7 +60,7 @@ export default function GeoCountrySection({
               value: country.neetRequirementForIndianStudents,
             },
           ]}
-          sourceNote="WDOMS counts are maintained in the Medigo service-line country dataset of ilmalink for student shortlisting. Students should verify each university name, recognition status and licensing pathway before admission."
+          sourceNote="WDOMS counts are maintained in the ilmalink service-line country dataset of ilmalink for student shortlisting. Students should verify each university name, recognition status and licensing pathway before admission."
         />
 
         <CountryFactTable

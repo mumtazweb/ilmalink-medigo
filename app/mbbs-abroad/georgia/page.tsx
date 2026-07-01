@@ -66,7 +66,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "MBBS in Georgia 2026 | Universities, Fees & FMGE",
     description:
-      "Compare all Georgia medical universities in the Medigo service-line data of ilmalink, including full fee and admission pages for GAU, ALTE and EEU.",
+      "Compare all Georgia medical universities in the ilmalink service-line data of ilmalink, including full fee and admission pages for GAU, ALTE and EEU.",
     url: pageUrl,
     siteName: "ilmaLink",
     images: [

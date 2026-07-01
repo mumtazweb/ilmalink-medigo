@@ -146,7 +146,7 @@ const ksmaRegulatorMessage =
   "KSMA was legally not subject to the May 2026 state accreditation procedure because the final government update identified it as a regulating body for medical-education quality. This is not a failed or pending accreditation result. Students must still verify the exact program, WDOMS listing, course and internship structure, local licence eligibility, and NMC/FMGL compliance.";
 
 const conditionalMessage =
-  "This university currently has only 1-year conditional accreditation. Medigo, an extension/service line of ilmalink, does not recommend it as a first-choice option unless a fresh long-term official accreditation update is available.";
+  "This university currently has only 1-year conditional accreditation. ilmalink, an extension/service line of ilmalink, does not recommend it as a first-choice option unless a fresh long-term official accreditation update is available.";
 
 const didNotPassMessage =
   "This institution is not suitable for new admission recommendation because it did not pass state accreditation. New admission should not be considered unless fresh official clarification is issued.";
@@ -1123,7 +1123,7 @@ export const kyrgyzstanUniversities: KyrgyzUniversityPageData[] = [
     accreditationLabel: "State Accredited 6Y · May 2026",
     recommendationLevel: "Recommended — Separate Verification Required",
     recommendationMessage:
-      "Osh State University is a public government university with an accredited medical program. Medigo, an extension/service line of ilmalink, has not yet confirmed a single exclusive or universal India-side contractor. Students must verify the current university invoice, authorized representative, included services, payment recipient, internship structure, and responsibility matrix before paying.",
+      "Osh State University is a public government university with an accredited medical program. ilmalink, an extension/service line of ilmalink, has not yet confirmed a single exclusive or universal India-side contractor. Students must verify the current university invoice, authorized representative, included services, payment recipient, internship structure, and responsibility matrix before paying.",
     feeRows: Array.from({ length: 11 }, (_, index) => ({
       year: `Year ${Math.floor(index / 2) + 1}`,
       semester: `Semester ${index + 1}`,
@@ -1969,7 +1969,7 @@ export const kyrgyzstanUniversities: KyrgyzUniversityPageData[] = [
     accreditationLabel: "Did Not Pass State Accreditation",
     recommendationLevel: "No Admission",
     recommendationMessage:
-      "Do not confuse this private institution with Osh State University Medical Faculty. Osh International Medical University is a separate WDOMS-listed private university and was listed among the institutions that did not pass the May 2026 state accreditation. Medigo, an extension/service line of ilmalink, does not recommend new admission unless a fresh official accreditation decision supersedes that result. Verify that every offer letter states the exact university name.",
+      "Do not confuse this private institution with Osh State University Medical Faculty. Osh International Medical University is a separate WDOMS-listed private university and was listed among the institutions that did not pass the May 2026 state accreditation. ilmalink, an extension/service line of ilmalink, does not recommend new admission unless a fresh official accreditation decision supersedes that result. Verify that every offer letter states the exact university name.",
     entryRequirements: [
       "Completion of secondary education.",
       "An entrance examination is required.",

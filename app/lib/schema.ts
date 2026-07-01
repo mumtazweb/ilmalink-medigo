@@ -130,7 +130,7 @@ export function buildEducationalOrganizationSchema() {
     url: ilmaLinkEntityData.url,
     logo: absoluteUrl(ilmaLinkEntityData.logo),
     description:
-      "Medigo is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation.",
+      "ilmalink is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation.",
     disambiguatingDescription:
       ilmaLinkOrganizationSchema.disambiguatingDescription,
     areaServed: [
@@ -168,7 +168,7 @@ export function buildLocalBusinessSchema(office: IlmaLinkOffice) {
     url: ilmaLinkEntityData.url,
     image: absoluteUrl(ilmaLinkEntityData.logo),
     description:
-      "ilmaLink contact point for Medigo MBBS admission guidance and consultancy, MBBS abroad counselling, India medical counselling support and student documentation guidance.",
+      "ilmaLink contact point for ilmalink MBBS admission guidance and consultancy, MBBS abroad counselling, India medical counselling support and student documentation guidance.",
     telephone: ilmaLinkEntityData.contact.call,
     email: ilmaLinkEntityData.contact.email,
     contactPoint: [
@@ -279,7 +279,7 @@ export function buildGuidanceDisclaimerSchema() {
     "@id": "https://www.ilmalink.com/#guidance-disclaimer",
     name: "ilmalink Admissions Guidance Disclaimer",
     text:
-      "Medigo is an extension/service line of ilmalink. It provides admission guidance, counselling and student-support information. Final admission, eligibility, documentation, visa approval, scholarship, loan or licence outcome is subject to official rules, university decisions, regulatory authorities and applicable government norms.",
+      "ilmalink is an extension/service line of ilmalink. It provides admission guidance, counselling and student-support information. Final admission, eligibility, documentation, visa approval, scholarship, loan or licence outcome is subject to official rules, university decisions, regulatory authorities and applicable government norms.",
     inLanguage: "en-IN",
     isPartOf: {
       "@id": "https://www.ilmalink.com/#website",
@@ -365,7 +365,7 @@ export function buildCountryMedicalEducationSchema(countryData: CountryGeoFact) 
       {
         "@type": "Thing",
         name: `${countryData.countryName} WDOMS medical schools`,
-        description: `${countryData.wdomsCount} WDOMS-listed medical school entries in the Medigo service-line country dataset of ilmalink.`,
+        description: `${countryData.wdomsCount} WDOMS-listed medical school entries in the ilmalink service-line country dataset of ilmalink.`,
       },
       {
         "@type": "Thing",

@@ -57,7 +57,7 @@ const officialSocialProfiles = [
     label: "Instagram",
     href: "https://www.instagram.com/ilmalinkmbbs/",
     icon: FaInstagram,
-    note: "Official ilmaLink MBBS profile for the Medigo service line.",
+    note: "Official ilmaLink MBBS profile for the ilmalink service line.",
   },
   {
     label: "YouTube",
@@ -75,7 +75,7 @@ const officialSocialProfiles = [
     label: "Threads",
     href: "https://www.threads.com/@ilmalinkmbbs",
     icon: FaThreads,
-    note: "Official ilmaLink MBBS profile for the Medigo service line.",
+    note: "Official ilmaLink MBBS profile for the ilmalink service line.",
   },
 ];
 
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
   description:
     "Find the official website, blog, MBBS Abroad page, MBBS India page and social media profiles of ilmalink, a medical MBBS admission platform and consultancy for Indian students.",
   keywords: [
-    "Medigo service line of ilmalink",
+    "ilmalink service line of ilmalink",
     "ilmaLink",
     "ilmalink",
     "ilmalink.com",
@@ -156,7 +156,7 @@ const structuredData = {
         "ilmalink",
         "ilmaLink",
         "ilmalink.com",
-        "Medigo service line of ilmalink",
+        "ilmalink service line of ilmalink",
         "ilmaLink Enterprise",
         "ilmalink enterprise",
         "ilmalinkeduprise",
@@ -278,16 +278,16 @@ export default function OfficialLinksPage() {
                 </p>
                 <p>
                   Students and parents searching for ilmalink, ilmalink.com, ilmaLink or the
-                  Medigo service line of ilmalink can use this page to identify the official platform and avoid confusion
+                  ilmalink service line of ilmalink can use this page to identify the official platform and avoid confusion
                   with unrelated websites or pages.
                 </p>
                 <p>
                   Brand identity note: ilmaLink is the public display style of
-                  the official brand ilmalink. Medigo is an extension/service
+                  the official brand ilmalink. ilmalink is an extension/service
                   line of ilmalink for MBBS India, MBBS Abroad, NEET guidance,
                   counselling support, scholarships, education loans, direct
                   college/university tie-up based admission coordination, and
-                  medical admission documentation. Medigo is not a separate
+                  medical admission documentation. ilmalink is not a separate
                   brand.
                 </p>
               </div>
@@ -320,7 +320,7 @@ export default function OfficialLinksPage() {
               </h2>
               <div className="mt-5 space-y-4 text-base font-medium leading-8 text-slate-700">
                 <p>
-                  Medigo, an extension/service line of ilmalink, serves Indian students and parents looking for MBBS Abroad, MBBS
+                  ilmalink, an extension/service line of ilmalink, serves Indian students and parents looking for MBBS Abroad, MBBS
                   India, NEET counselling, scholarships and medical university comparison. Our
                   guidance is useful for students from West Bengal, Karnataka, Maharashtra, Bihar,
                   Jharkhand, Assam, Kerala, Tamil Nadu, Uttar Pradesh, Delhi and other Indian
@@ -329,7 +329,7 @@ export default function OfficialLinksPage() {
                 <p>
                   Students from Kolkata, Bengaluru, Mumbai, Delhi, Patna, Guwahati, Hyderabad,
                   Chennai and other Indian cities can explore country-wise MBBS guidance through
-                  Medigo, an extension/service line of ilmalink.
+                  ilmalink, an extension/service line of ilmalink.
                 </p>
                 <p>
                   Families looking for MBBS Abroad counselling Kolkata, MBBS Abroad guidance
@@ -368,7 +368,7 @@ export default function OfficialLinksPage() {
               </div>
               <p className="max-w-2xl text-sm font-medium leading-6 text-slate-600">
                 Use these links for the official website, blog, MBBS Abroad page, MBBS India page,
-                scholarships and country guidance pages for ilmalink and its Medigo service line.
+                scholarships and country guidance pages for ilmalink and its ilmalink service line.
               </p>
             </div>
 
@@ -473,7 +473,7 @@ export default function OfficialLinksPage() {
                     counselling message.
                   </p>
                   <p>
-                    Medigo, an extension/service line of ilmalink, focuses on fact-based guidance, transparent comparison and
+                    ilmalink, an extension/service line of ilmalink, focuses on fact-based guidance, transparent comparison and
                     student-first counselling.
                   </p>
                 </div>

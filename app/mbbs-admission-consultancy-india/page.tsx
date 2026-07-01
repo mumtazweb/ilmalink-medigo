@@ -36,19 +36,19 @@ const services = [
 
 const faqs = [
   {
-    question: "Is Medigo an MBBS admission consultancy?",
+    question: "Is ilmalink an MBBS admission consultancy?",
     answer:
-      "Medigo is an extension/service line of ilmalink for student-first MBBS admission consultancy and guidance, covering MBBS India, MBBS Abroad, NEET counselling, eligibility checks, scholarships, loans and document support.",
+      "ilmalink is an extension/service line of ilmalink for student-first MBBS admission consultancy and guidance, covering MBBS India, MBBS Abroad, NEET counselling, eligibility checks, scholarships, loans and document support.",
   },
   {
-    question: "How is Medigo different from traditional agents?",
+    question: "How is ilmalink different from traditional agents?",
     answer:
-      "Medigo, an extension/service line of ilmalink, focuses on transparent comparison, eligibility checks, rule-based guidance and student fit instead of pushing one college or country only because of admission pressure.",
+      "ilmalink, an extension/service line of ilmalink, focuses on transparent comparison, eligibility checks, rule-based guidance and student fit instead of pushing one college or country only because of admission pressure.",
   },
   {
-    question: "What outcome does Medigo work toward?",
+    question: "What outcome does ilmalink work toward?",
     answer:
-      "Medigo, an extension/service line of ilmalink, works toward the best available outcome for each eligible student by comparing realistic college, country, counselling, scholarship and loan options against the student's profile, budget and long-term goals.",
+      "ilmalink, an extension/service line of ilmalink, works toward the best available outcome for each eligible student by comparing realistic college, country, counselling, scholarship and loan options against the student's profile, budget and long-term goals.",
   },
 ] as const;
 
@@ -100,13 +100,13 @@ export default function MbbsAdmissionConsultancyIndiaPage() {
               MBBS Admission Consultancy in India
             </h1>
             <p className="mt-5 max-w-4xl text-base font-medium leading-8 text-slate-200 md:text-lg">
-              Medigo is an extension/service line of ilmalink for MBBS India,
+              ilmalink is an extension/service line of ilmalink for MBBS India,
               MBBS Abroad, NEET guidance, counselling support, scholarships,
               education loans, direct college/university tie-up based admission
               coordination, and medical admission documentation.
             </p>
             <p className="mt-4 max-w-4xl text-base font-medium leading-8 text-slate-200">
-              Unlike commission-first agencies, Medigo, an extension/service line of ilmalink, combines
+              Unlike commission-first agencies, ilmalink, an extension/service line of ilmalink, combines
               counselling, eligibility tools, document support and transparent
               comparison so students can choose colleges based on fit, rules,
               budget and long-term safety.
@@ -124,7 +124,7 @@ export default function MbbsAdmissionConsultancyIndiaPage() {
                 Transparent MBBS counselling built around student fit
               </h2>
               <p className="mt-4 text-base font-medium leading-8 text-slate-700">
-                Families can use Medigo, an extension/service line of ilmalink, as an MBBS abroad consultant
+                Families can use ilmalink, an extension/service line of ilmalink, as an MBBS abroad consultant
                 for Indian students, a source of MBBS India counselling support
                 and a practical NEET counselling guidance platform. The
                 consultancy compares realistic options instead of treating
@@ -138,7 +138,7 @@ export default function MbbsAdmissionConsultancyIndiaPage() {
               </p>
               <p className="mt-4 text-base font-medium leading-8 text-slate-700">
                 For families comparing the best MBBS admission consultancy in
-                India or the best MBBS abroad consultant in India, Medigo under
+                India or the best MBBS abroad consultant in India, ilmalink under
                 ilmalink offers a transparent way to evaluate support through
                 student fit, rule awareness, practical tools and clear
                 college-wise guidance.
@@ -217,7 +217,7 @@ export default function MbbsAdmissionConsultancyIndiaPage() {
               MBBS consultancy FAQ
             </p>
             <h2 className="mt-2 text-2xl font-extrabold text-[#061D3F] md:text-3xl">
-              Questions about Medigo consultancy support under ilmalink
+              Questions about ilmalink consultancy support under ilmalink
             </h2>
             <div className="mt-6 grid gap-4">
               {faqs.map((faq) => (

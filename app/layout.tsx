@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     "ilmalink MBBS",
     "ilmaLink official website",
     ...ilmaLinkBrandMisspellings,
-    "Medigo service line of ilmalink",
+    "ilmalink service line of ilmalink",
     "ilmaLink education consultancy",
     "ilmaLink MBBS guidance",
     "MBBS Abroad",

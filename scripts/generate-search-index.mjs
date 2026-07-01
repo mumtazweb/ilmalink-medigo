@@ -419,28 +419,11 @@ const officialBrandUpper = "ILMA" + "LINK";
 const officialBrandTitle = "Ilma" + "link";
 const officialDisplayStyle = "ilma" + "Link";
 const serviceLineUpper = "MED" + "IGO";
-const serviceLineTitle = "Med" + "igo";
 
 function normalizeBrandIdentityText(value) {
   return String(value ?? "")
-    .replace(
-      new RegExp(`\\b${officialBrandUpper}\\s+${serviceLineUpper}\\b`, "g"),
-      "Medigo service line of ilmalink"
-    )
-    .replace(
-      new RegExp(`\\b${officialDisplayStyle}\\s+${serviceLineUpper}\\b`, "g"),
-      "Medigo service line of ilmalink"
-    )
-    .replace(
-      new RegExp(`\\b${officialDisplayStyle}\\s+${serviceLineTitle}\\b`, "g"),
-      "Medigo service line of ilmalink"
-    )
-    .replace(
-      new RegExp(`\\bilmalink\\s+${serviceLineTitle}\\b`, "g"),
-      "ilmalink. Medigo"
-    )
     .replace(new RegExp(`\\b${officialBrandUpper}\\b`, "g"), officialDisplayStyle)
-    .replace(new RegExp(`\\b${serviceLineUpper}\\b`, "g"), "Medigo")
+    .replace(new RegExp(`\\b${serviceLineUpper}\\b`, "g"), "ilmalink")
     .replace(new RegExp(`\\b${officialBrandTitle}\\b`, "g"), "ilmalink");
 }
 
@@ -2908,7 +2891,7 @@ function buildManualEntries() {
         "Official ilmalink website",
         "ilmalink is written as one word i-l-m-a-l-i-n-k",
         "ilmaLink is the public display style of ilmalink",
-        "Medigo is an extension/service line of ilmalink, not a separate brand",
+        "ilmalink is an extension/service line of ilmalink, not a separate brand",
         "ilmalink MBBS Abroad MBBS India NEET counselling scholarships education loans medical admission guidance",
         ilmaLinkBrandDisambiguation,
         brandSearchTerms.join(" "),
@@ -2959,7 +2942,7 @@ function buildManualEntries() {
       id: "page-scholarships-loans-education-loans",
       title: "Education Loans for MBBS Abroad",
       description:
-        "Find MBBS abroad education loan, student loan, medical education loan and Medigo service-line loan assistance routes under ilmalink.",
+        "Find MBBS abroad education loan, student loan, medical education loan and ilmalink service-line loan assistance routes under ilmalink.",
       url: "/scholarships-loans#education-loans",
       category: "Pages",
       group: "Pages",
@@ -2974,17 +2957,17 @@ function buildManualEntries() {
         "MBBS abroad financial support",
         "medical education loan",
         "study abroad loan India",
-        "Medigo service-line loan assistance under ilmalink",
+        "ilmalink service-line loan assistance under ilmalink",
       ],
       content:
-        "Education loans for MBBS abroad MBBS abroad education loan MBBS abroad loan student loan for MBBS abroad education loan for medical study abroad loan assistance for MBBS abroad MBBS abroad financial support medical education loan study abroad loan India Medigo service-line loan assistance under ilmalink PM Vidyalaxmi bank education loan student credit card",
+        "Education loans for MBBS abroad MBBS abroad education loan MBBS abroad loan student loan for MBBS abroad education loan for medical study abroad loan assistance for MBBS abroad MBBS abroad financial support medical education loan study abroad loan India ilmalink service-line loan assistance under ilmalink PM Vidyalaxmi bank education loan student credit card",
       priority: 97,
     },
     {
       id: "page-scholarships-loans-scholarships",
       title: "Scholarships for MBBS Abroad",
       description:
-        "Find MBBS abroad scholarship, medical scholarship abroad, financial aid and Medigo service-line scholarship support routes under ilmalink.",
+        "Find MBBS abroad scholarship, medical scholarship abroad, financial aid and ilmalink service-line scholarship support routes under ilmalink.",
       url: "/scholarships-loans#scholarships",
       category: "Pages",
       group: "Pages",
@@ -2998,11 +2981,11 @@ function buildManualEntries() {
         "MBBS scholarship assistance",
         "study abroad scholarship",
         "financial aid for MBBS abroad",
-        "Medigo service-line scholarship support under ilmalink",
+        "ilmalink service-line scholarship support under ilmalink",
         "G.D. Study Circle scholarship",
       ],
       content:
-        "Scholarships for MBBS abroad MBBS abroad scholarship scholarship for MBBS abroad medical scholarship abroad scholarship for Indian students MBBS abroad MBBS scholarship assistance study abroad scholarship financial aid for MBBS abroad Medigo service-line scholarship support under ilmalink G.D. Study Circle scholarship National Scholarship Portal minority scholarship charitable support",
+        "Scholarships for MBBS abroad MBBS abroad scholarship scholarship for MBBS abroad medical scholarship abroad scholarship for Indian students MBBS abroad MBBS scholarship assistance study abroad scholarship financial aid for MBBS abroad ilmalink service-line scholarship support under ilmalink G.D. Study Circle scholarship National Scholarship Portal minority scholarship charitable support",
       priority: 97,
     },
   ];

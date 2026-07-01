@@ -548,7 +548,7 @@ function QuickFacts({
       id="quick-facts"
       eyebrow="Quick facts"
       title={`${university.name} at a glance`}
-      description="The facts below are taken from the existing Medigo service-line Georgia university data of ilmalink."
+      description="The facts below are taken from the existing ilmalink service-line Georgia university data of ilmalink."
     >
       <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {baseFacts.map(([label, value]) => (

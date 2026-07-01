@@ -424,7 +424,7 @@ export default function Navbar() {
 
                 <Link href="/" className="group flex min-w-0 flex-1 items-center gap-2 sm:gap-2.5 xl:flex-none xl:flex-shrink-0">
                   {/* Logo Image */}
-                  <div className="relative hidden h-14 w-14 flex-shrink-0 items-center justify-center sm:h-16 sm:w-16 xl:flex">
+                  <div className="relative hidden h-12 w-12 flex-shrink-0 items-center justify-center sm:h-14 sm:w-14 xl:flex">
                     <img 
                       src="/logoimage.svg" 
                       alt="ilmaLink logo" 
@@ -433,26 +433,22 @@ export default function Navbar() {
                   </div>
 
                   {/* Brand Text Stack - Desktop */}
-                  <div className="hidden flex-col gap-0.5 xl:flex">
-                    <span className="font-[family-name:var(--font-plus-jakarta)] text-xl font-extrabold tracking-tight text-[#081B35] leading-tight">
+                  <div className="hidden min-w-0 flex-col gap-0.5 xl:flex">
+                    <span className="font-[family-name:var(--font-plus-jakarta)] text-[1.04rem] font-extrabold leading-none tracking-[-0.04em] text-[#081B35] sm:text-[1.08rem]">
                       ilmaLink
                     </span>
-                    <span className="font-[family-name:var(--font-plus-jakarta)] text-xl font-extrabold tracking-tight text-[#00C896] leading-tight">
-                      Medigo
-                    </span>
-                    <p className="text-[10px] font-medium text-slate-500 tracking-wide mt-0.5">
-                      Global Medical Education
+                    <p className="mt-0.5 text-[9px] font-medium tracking-[0.08em] text-slate-500 sm:text-[10px]">
+                      MBBS Abroad, India & NEET Guidance
                     </p>
                   </div>
 
                   {/* Brand Text Stack - Mobile & Tablet */}
                   <div className="flex min-w-0 flex-col gap-0.5 overflow-hidden xl:hidden">
-                    <span className="min-w-0 truncate whitespace-nowrap font-[family-name:var(--font-plus-jakarta)] text-xm sm:text- font-extrabold leading-none">
-                      <span className="text-[#081B35]">ilmaLink</span>{" "}
-                      <span className="text-[#00C896]">Medigo </span>
+                    <span className="min-w-0 truncate whitespace-nowrap font-[family-name:var(--font-plus-jakarta)] text-[0.98rem] font-extrabold leading-none tracking-[-0.03em] text-[#081B35] sm:text-[1.05rem]">
+                      ilmaLink
                     </span>
-                    <p className="truncate text-[9px] sm:text-[10px] font-medium leading-tight text-slate-500">
-                      Global Medical Education
+                    <p className="truncate text-[9px] font-medium leading-tight text-slate-500 sm:text-[10px]">
+                      MBBS Abroad, India & NEET Guidance
                     </p>
                   </div>
                 </Link>
@@ -718,8 +714,12 @@ export default function Navbar() {
               <div className="flex items-center justify-between gap-3 border-b border-slate-100 bg-gradient-to-br from-white via-[#f6fffc] to-slate-50 p-5">
                 <div className="flex-1">
                   <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#008f72]">Navigation</p>
-                  <h2 className="mt-1 text-lg font-extrabold text-[#081B35]">ilmaLink</h2>
-                  <p className="mt-0.5 text-xs font-medium text-slate-500">Global Medical Education</p>
+                  <h2 className="mt-1 text-[1.05rem] font-extrabold leading-none tracking-[-0.03em] text-[#081B35] sm:text-lg">
+                    ilmaLink
+                  </h2>
+                  <p className="mt-1 text-[10px] font-medium tracking-[0.08em] text-slate-500 sm:text-xs">
+                    MBBS Abroad, India & NEET Guidance
+                  </p>
                 </div>
                 <button
                   type="button"

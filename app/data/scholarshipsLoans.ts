@@ -168,7 +168,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     documents: [...baseAcademicDocuments, "Annual tuition fee estimate", "Admission processing details through ilmaLink"],
     importantNotes: [
       "ilmaLink will assist end-to-end after profile verification.",
-      "Applicable only when admission is processed through Medigo, an extension/service line of ilmalink.",
+      "Applicable only when admission is processed through ilmalink, an extension/service line of ilmalink.",
       "Subject to university/college/institute approval.",
       "Subject to available partner benefit, document verification and ilmaLink approval.",
       "Final amount is confirmed after profile and document review.",

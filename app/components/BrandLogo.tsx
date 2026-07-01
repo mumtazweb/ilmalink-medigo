@@ -14,7 +14,7 @@ Link
 
 <span className="text-blue-500">
 
- Medigo service line
+ ilmalink service line
 
 </span>
 

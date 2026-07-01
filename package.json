@@ -1,5 +1,5 @@
 {
-  "name": "ilmalink-medigo",
+  "name": "ilmalink",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -54,13 +54,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mumtazweb/ilmalink-medigo.git"
+    "url": "git+https://github.com/mumtazweb/ilmalink.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mumtazweb/ilmalink-medigo/issues"
+    "url": "https://github.com/mumtazweb/ilmalink/issues"
   },
-  "homepage": "https://github.com/mumtazweb/ilmalink-medigo#readme"
+  "homepage": "https://github.com/mumtazweb/ilmalink#readme"
 }

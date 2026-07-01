@@ -109,12 +109,12 @@ const faqs = [
   {
     question: "Is USD 1,700 per semester the official OshSU fee?",
     answer:
-      "No. Medigo, an extension/service line of ilmalink, is showing USD 1,700 only as an unconfirmed working estimate. Students must obtain a current written invoice from the university or a verified authorized entity.",
+      "No. ilmalink, an extension/service line of ilmalink, is showing USD 1,700 only as an unconfirmed working estimate. Students must obtain a current written invoice from the university or a verified authorized entity.",
   },
   {
     question: "Does Osh State University have one exclusive Indian contractor?",
     answer:
-      "Medigo, an extension/service line of ilmalink, has not yet confirmed one exclusive or universal India-side contractor. Agency fees, inclusions, payment recipients and responsibilities may differ.",
+      "ilmalink, an extension/service line of ilmalink, has not yet confirmed one exclusive or universal India-side contractor. Agency fees, inclusions, payment recipients and responsibilities may differ.",
   },
   {
     question: "What does WDOMS report for the English program?",
@@ -295,7 +295,7 @@ export default function OshStateUniversityMedicalFacultyPage() {
                     Main contractor not yet confirmed
                   </h2>
                   <p className="mt-3 text-sm font-semibold leading-7 text-amber-950">
-                    Medigo, an extension/service line of ilmalink, is in contact with the medical faculty, but
+                    ilmalink, an extension/service line of ilmalink, is in contact with the medical faculty, but
                     has not yet confirmed one exclusive or universal contractor
                     for Indian admissions. Fees, inclusions and responsibility
                     can differ between agencies.

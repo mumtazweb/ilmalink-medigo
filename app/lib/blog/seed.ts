@@ -27,8 +27,8 @@ Students and families need verified information before choosing a medical educat
 - Keep documents ready before the counselling or application timeline begins.
 - Speak with an expert before making payments or selecting a university.
 
-## Medigo guidance under ilmalink
-Medigo, an extension/service line of ilmalink, helps students compare realistic options for ${country}, India, NEET counselling, scholarships, education loans, and career planning with transparent guidance.
+## ilmalink guidance under ilmalink
+ilmalink, an extension/service line of ilmalink, helps students compare realistic options for ${country}, India, NEET counselling, scholarships, education loans, and career planning with transparent guidance.
 `;
 
 const vijayNeetAbolitionContent = `
