@@ -1,4 +1,4 @@
-import CounsellingActionButton from "./CounsellingActionButton";
+﻿import CounsellingActionButton from "./CounsellingActionButton";
 
 export type AdvisoryHistoryItem = {
   id: string;
@@ -93,7 +93,7 @@ export default function OfficialAdvisoryBox({
 
       {hasPendingUpdate && (
         <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium leading-6 text-amber-900">
-          New official update detected. ilmalink, an extension/service line of ilmalink, is reviewing
+          New official update detected. ilmaLink, is reviewing
           the changes. Current information will be updated after admin
           verification.
         </p>
@@ -177,3 +177,4 @@ export default function OfficialAdvisoryBox({
     </article>
   );
 }
+

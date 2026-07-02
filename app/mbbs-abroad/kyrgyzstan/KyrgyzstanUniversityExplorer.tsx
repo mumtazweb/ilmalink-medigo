@@ -21,7 +21,7 @@ const filterOptions: { label: string; value: FilterValue }[] = [
 function isRecommended(level: KyrgyzRecommendationLevel) {
   return (
     level === "Recommended" ||
-    level === "Recommended — Separate Verification Required"
+    level === "Recommended - Separate Verification Required"
   );
 }
 

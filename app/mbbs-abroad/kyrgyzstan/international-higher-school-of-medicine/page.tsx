@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 
 import {
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical:
-      "https://www.ilmalink.com/mbbs-abroad/kyrgyzstan/international-higher-school-of-medicine",
+      "https://www.ilmalink.com/mbbs-abroad/kyrgyzstan/international-higher-school-of-medicine/",
   },
 };
 
@@ -526,3 +526,6 @@ export default function InternationalHigherSchoolOfMedicinePage() {
     </main>
   );
 }
+
+
+

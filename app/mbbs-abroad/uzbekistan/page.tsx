@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -109,7 +109,7 @@ const universities = [
     name: "Alfraganus University Faculty of Medicine",
     city: "Tashkent",
     type: "University Faculty of Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -139,7 +139,7 @@ const universities = [
     name: "Angren University Faculty of Medicine",
     city: "Tashkent",
     type: "University Faculty of Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -154,7 +154,7 @@ const universities = [
     name: "Asia International University Faculty of Medicine",
     city: "Bukhara",
     type: "University Faculty of Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -169,7 +169,7 @@ const universities = [
     name: "Bukhara Innovative Education and Medical University",
     city: "Bukhara",
     type: "Medical University",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -199,7 +199,7 @@ const universities = [
     name: "Central Asian Medical University",
     city: "Ferghana",
     type: "Medical University",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -214,7 +214,7 @@ const universities = [
     name: "Central Asian University Medical School",
     city: "Tashkent",
     type: "Medical School",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -229,7 +229,7 @@ const universities = [
     name: "Chirchik Branch of Tashkent State Medical University",
     city: "Chirchik City",
     type: "Branch of State Medical University",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -244,7 +244,7 @@ const universities = [
     name: "EMU University Faculty of Medicine",
     city: "Tashkent",
     type: "University Faculty of Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -274,7 +274,7 @@ const universities = [
     name: "Fergana State University Medical Centre",
     city: "Fergana",
     type: "State University Medical Centre",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -289,7 +289,7 @@ const universities = [
     name: "First Tashkent State Medical Institute",
     city: "Tashkent",
     type: "State Medical Institute",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -304,7 +304,7 @@ const universities = [
     name: "Gulistan State University Faculty of Medicine",
     city: "Gulistan City",
     type: "State University Faculty of Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -319,7 +319,7 @@ const universities = [
     name: "Impuls Medical Institute",
     city: "Namangan",
     type: "Medical Institute",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -334,7 +334,7 @@ const universities = [
     name: "Impuls Medical Institute, Chirchiq Branch",
     city: "Chirchik City",
     type: "Branch Medical Institute",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -349,7 +349,7 @@ const universities = [
     name: "Institute of Pharmaceutical Education and Research",
     city: "Tashkent",
     type: "Institute",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Course suitability must be verified",
     medium: "English-medium route must be verified",
     description:
@@ -364,7 +364,7 @@ const universities = [
     name: "Karshi State University Faculty of Medicine",
     city: "Karshi",
     type: "State University Faculty of Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -379,7 +379,7 @@ const universities = [
     name: "Kimyo International University School of Medicine",
     city: "Tashkent",
     type: "School of Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -394,7 +394,7 @@ const universities = [
     name: "Kokand University Andijan Branch Faculty of Medicine",
     city: "Andijan",
     type: "Branch Faculty of Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -409,7 +409,7 @@ const universities = [
     name: "Ma'mun University Faculty of Medicine",
     city: "Khiva",
     type: "University Faculty of Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -424,7 +424,7 @@ const universities = [
     name: "Medical Institute of Karakalpakstan",
     city: "Nukus",
     type: "Medical Institute",
-    feeRange: "Official tuition USD ~3,500/yr — verify hostel and extras",
+    feeRange: "Official tuition USD ~3,500/yr â€” verify hostel and extras",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -439,7 +439,7 @@ const universities = [
     name: "Namangan State University Faculty of Medicine",
     city: "Namangan",
     type: "State University Faculty of Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -454,7 +454,7 @@ const universities = [
     name: "Navoi State University Faculty of Natural Sciences and Medicine",
     city: "Navoi",
     type: "State University Faculty",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Course suitability must be verified",
     medium: "English-medium route must be verified",
     description:
@@ -469,7 +469,7 @@ const universities = [
     name: "Profi University Faculty of Medicine",
     city: "Tashkent",
     type: "University Faculty of Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -499,7 +499,7 @@ const universities = [
     name: "Second Tashkent State Medical Institute",
     city: "Tashkent",
     type: "State Medical Institute",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -529,7 +529,7 @@ const universities = [
     name: "Tashkent Pharmaceutical Institute Faculty of General Medicine",
     city: "Tashkent",
     type: "Faculty of General Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Course suitability must be verified",
     medium: "English-medium route must be verified",
     description:
@@ -559,7 +559,7 @@ const universities = [
     name: "Tashkent State Medical University",
     city: "Tashkent",
     type: "State Medical University",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -574,7 +574,7 @@ const universities = [
     name: "Termez Branch of Tashkent State Medical University",
     city: "Termez",
     type: "Branch of State Medical University",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -589,7 +589,7 @@ const universities = [
     name: "Termez University of Economics and Services",
     city: "Termez",
     type: "University",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Course suitability must be verified",
     medium: "English-medium route must be verified",
     description:
@@ -604,7 +604,7 @@ const universities = [
     name: "Turon University Faculty of Medicine",
     city: "Karshi",
     type: "University Faculty of Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -619,7 +619,7 @@ const universities = [
     name: "University of Business and Science",
     city: "Namangan",
     type: "University",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Course suitability must be verified",
     medium: "English-medium route must be verified",
     description:
@@ -634,7 +634,7 @@ const universities = [
     name: "Urgench Ranch University of Technology Faculty of Medical Sciences",
     city: "Urgench",
     type: "Faculty of Medical Sciences",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Course suitability must be verified",
     medium: "English-medium route must be verified",
     description:
@@ -649,7 +649,7 @@ const universities = [
     name: "Urgench State Medical Institute",
     city: "Urgench",
     type: "State Medical Institute",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -664,7 +664,7 @@ const universities = [
     name: "Zarmed University Faculty of Medicine",
     city: "Bukhara",
     type: "University Faculty of Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -679,7 +679,7 @@ const universities = [
     name: "Zarmed University Faculty of Medicine Samarkand",
     city: "Samarkand",
     type: "University Faculty of Medicine",
-    feeRange: "Fee not verified — official invoice required",
+    feeRange: "Fee not verified â€” official invoice required",
     duration: "Usually 6 years; verify officially",
     medium: "English-medium route must be verified",
     description:
@@ -778,7 +778,7 @@ const feeRows = [
     notes: "Admission, visa and travel extra",
   },
   {
-    year: "Year 2–5",
+    year: "Year 2â€“5",
     tuitionFee: "University-wise",
     hostelAndLiving: "City-wise",
     notes: "Verify annual increase and payment terms",
@@ -1156,11 +1156,11 @@ function UzbekistanUniversityRail({ labelledBy }: { labelledBy: string }) {
           </h3>
 
           <div className="mt-3 grid gap-2 text-xs font-semibold leading-5 text-slate-600">
-            <p>📍 {university.city}</p>
-            <p>🏛️ {university.type}</p>
-            <p>💰 {university.feeRange}</p>
-            <p>⏳ {university.duration}</p>
-            <p>🗣️ {university.medium}</p>
+            <p>ðŸ“ {university.city}</p>
+            <p>ðŸ›ï¸ {university.type}</p>
+            <p>ðŸ’° {university.feeRange}</p>
+            <p>â³ {university.duration}</p>
+            <p>ðŸ—£ï¸ {university.medium}</p>
           </div>
 
           <p className="mt-3 rounded-xl border border-blue-100 bg-[#f2f7ff] p-3 text-xs font-medium leading-6 text-slate-700">
@@ -1168,11 +1168,11 @@ function UzbekistanUniversityRail({ labelledBy }: { labelledBy: string }) {
           </p>
 
           <p className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs font-semibold leading-6 text-emerald-950">
-            📊 {university.fmgeSummary}
+            ðŸ“Š {university.fmgeSummary}
           </p>
 
           <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-semibold leading-6 text-amber-950">
-            ⚠️ {university.caution}
+            âš ï¸ {university.caution}
           </p>
 
           <span className="mt-4 inline-flex items-center gap-2 text-xs font-black text-[#0F4CFF] group-hover:text-[#00A878]">
@@ -1540,3 +1540,7 @@ export default function UzbekistanPage() {
     </main>
   );
 }
+
+
+
+

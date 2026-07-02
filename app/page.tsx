@@ -8,7 +8,6 @@ import LatestBlogsScroller from "./components/blog/LatestBlogsScroller";
 import EntranceExamNewsScroller from "./components/blog/EntranceExamNewsScroller";
 import MBBSCollegeFinderSection from "./components/home/MBBSCollegeFinderSection";
 import {
-  ilmaLinkBrandDisambiguation,
   ilmaLinkOrganizationSchema,
   ilmaLinkWebsiteSchema,
 } from "./data/geo";
@@ -33,27 +32,27 @@ const homepageFaqs = [
   {
     question: "What is ilmalink?",
     answer:
-      "ilmalink is a medical MBBS admission guidance platform and consultancy for India and abroad medical colleges and universities. It serves NEET aspirants, parents, and education consultancies/agencies with transparent guidance for admission planning, document checks, and college or university selection.",
+      "ilmalink is an MBBS admission guidance platform for India and abroad medical colleges and universities. It serves NEET aspirants, parents and education partners with transparent guidance for admission planning, document checks and college or university selection.",
   },
   {
-    question: "Why is ilmalink displayed as ilmaLink?",
+    question: "Why is ilmaLink used on the site?",
     answer:
-      "ilmaLink is the public display style of the official brand ilmalink. The exact official spelling remains ilmalink, written as one word.",
+      "ilmaLink is the public display style of ilmalink.",
   },
   {
-    question: "Is ilmalink a separate brand from ilmalink?",
+    question: "Is ilmaLink different from ilmalink?",
     answer:
-      "No. ilmalink is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college and university tie-up based admission coordination, and medical admission documentation.",
+      "No. ilmalink is the official entity name. ilmaLink is the public display style.",
   },
   {
-    question: "Which services does ilmalink cover?",
+    question: "Which services does ilmaLink cover?",
     answer:
-      "ilmalink covers MBBS India, MBBS Abroad, NEET counselling, scholarships and education loans, medical university verification, documentation support, college comparison, and admission-route planning.",
+      "ilmaLink covers MBBS India, MBBS Abroad, NEET counselling, scholarships and education loans, medical university verification, documentation support, college comparison and admission-route planning.",
   },
   {
-    question: "Which countries does ilmalink help with?",
+    question: "Which countries does ilmaLink help with?",
     answer:
-      "ilmalink helps with MBBS admission guidance for India and abroad destinations such as Bangladesh, Kyrgyzstan, Georgia, Russia, Kazakhstan, Uzbekistan, Nepal, Armenia, Egypt, Malaysia, Iran, UAE, Saudi Arabia, Qatar, China, and other medical education destinations covered in the country guides.",
+      "ilmaLink helps with MBBS admission guidance for India and abroad destinations such as Bangladesh, Kyrgyzstan, Georgia, Russia, Kazakhstan, Uzbekistan, Nepal, Armenia, Egypt, Malaysia, Iran, UAE, Saudi Arabia, Qatar, China and other medical education destinations covered in the country guides.",
   },
   {
     question: "How do students verify official checks before paying?",
@@ -61,7 +60,7 @@ const homepageFaqs = [
       "Students should confirm NEET rules, WDOMS listing, university recognition, counselling authority, fee structure, document requirements, and official payment channels before sending any money.",
   },
   {
-    question: "Does ilmalink guarantee admission or fixed fees?",
+    question: "Does ilmaLink guarantee admission or fixed fees?",
     answer:
       "No. Admission, fees, visa outcomes, and licensing results depend on official rules, seat availability, document verification, university decisions, and government or regulatory authorities.",
   },
@@ -121,16 +120,16 @@ const homepageServiceSchemas = [
 ];
 
 export const metadata: Metadata = {
-  title: "ilmalink Official Website | MBBS Abroad, MBBS India & NEET Guidance",
+  title: "ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
   description:
-    "Official ilmalink website: ilmaLink is a medical MBBS admission platform and consultancy for MBBS Abroad, MBBS India, NEET counselling, scholarships, education loans and medical admission guidance.",
+    "ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad. It helps NEET aspirants, parents and education partners with MBBS India counselling support, MBBS Abroad guidance, eligibility review, documentation, scholarships, education loans and transparent college or university comparison.",
   alternates: {
     canonical: "https://www.ilmalink.com/",
   },
   openGraph: {
-    title: "ilmalink Official Website | MBBS Abroad, MBBS India & NEET Guidance",
+    title: "ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
     description:
-      "ilmaLink is the public display style of the official brand ilmalink. ilmalink is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. ilmalink is not a separate brand.",
+      "ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad. It helps NEET aspirants, parents and education partners with MBBS India counselling support, MBBS Abroad guidance, eligibility review, documentation, scholarships, education loans and transparent college or university comparison.",
     url: "https://www.ilmalink.com/",
     siteName: "ilmaLink",
     locale: "en_IN",
@@ -190,29 +189,9 @@ export default async function Home() {
 
       <section
         className="sr-only"
-        aria-label="About ilmalink official brand and platform"
+        aria-label="ilmaLink frequently asked questions"
       >
-        <h2>About ilmalink</h2>
-        <p>
-          ilmalink is a medical MBBS admission guidance platform and education
-          consultancy for MBBS Abroad, MBBS India and NEET counselling support.
-          ilmaLink is the public display style of the official brand ilmalink.
-          ilmalink is an extension/service line of ilmalink for MBBS India, MBBS
-          Abroad, NEET guidance, counselling support, scholarships, education
-          loans, direct college and university tie-up based admission
-          coordination, and medical admission documentation. ilmalink is not a
-          separate brand.
-        </p>
-        <p>
-          {ilmaLinkBrandDisambiguation}
-        </p>
-      </section>
-
-      <section
-        className="sr-only"
-        aria-label="ilmalink frequently asked questions"
-      >
-        <h2>ilmalink frequently asked questions</h2>
+        <h2>ilmaLink frequently asked questions</h2>
         {homepageFaqs.map((faq) => (
           <article key={faq.question}>
             <h3>{faq.question}</h3>
@@ -224,7 +203,7 @@ export default async function Home() {
       <section className="bg-[#f8fafc] px-4 pb-3 pt-2 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <p className="text-center text-[11px] font-medium leading-5 text-slate-600">
-            Data compiled from the ilmalink service-line guidance records of ilmalink and official public sources.
+            Data compiled from ilmalink guidance records and official public sources.
           </p>
 
           <p className="mt-1 text-center text-[11px] font-semibold leading-5">
@@ -244,7 +223,7 @@ export default async function Home() {
         <EntranceExamNewsScroller posts={otherEntranceExamBlogs} />
       )}
 
-      <section className="sr-only" aria-label="ilmalink key pages">
+      <section className="sr-only" aria-label="ilmaLink key pages">
         <h2>Key ilmaLink pages</h2>
         {primaryLinks.map((link) => (
           <Link key={link.href} href={link.href}>{link.label}</Link>

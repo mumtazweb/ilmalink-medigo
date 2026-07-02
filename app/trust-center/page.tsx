@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description:
     "Trust Center hub for student safety pages: Alert, Official Links and Official Advisories.",
   alternates: {
-    canonical: "https://www.ilmalink.com/trust-center",
+    canonical: "https://www.ilmalink.com/trust-center/",
   },
 };
 
@@ -81,3 +81,6 @@ export default function TrustCenterPage() {
     </main>
   );
 }
+
+
+

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import CounsellingActionButton from "../components/CounsellingActionButton";
 import Navbar from "../components/navbar";
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   description:
     "Explore the complete MBBS India medical college list with state-wise government and private colleges, MBBS seats, establishment year, and counselling guidance.",
   alternates: {
-    canonical: "https://www.ilmalink.com/mbbs-india",
+    canonical: "https://www.ilmalink.com/mbbs-india/",
   },
 };
 
@@ -214,8 +214,8 @@ export default function MBBSIndiaPage() {
                 </p>
                 <p className="mt-1 text-sm font-semibold text-slate-600">
                   {mbbsIndiaCounselling2025.general.neet.totalQuestions}{" "}
-                  questions · {mbbsIndiaCounselling2025.general.neet.totalMarks}{" "}
-                  marks · {mbbsIndiaCounselling2025.general.neet.durationHours}{" "}
+                  questions Â· {mbbsIndiaCounselling2025.general.neet.totalMarks}{" "}
+                  marks Â· {mbbsIndiaCounselling2025.general.neet.durationHours}{" "}
                   hours
                 </p>
               </div>
@@ -370,3 +370,6 @@ export default function MBBSIndiaPage() {
     </main>
   );
 }
+
+
+

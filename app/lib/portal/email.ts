@@ -1,4 +1,4 @@
-import "server-only";
+﻿import "server-only";
 
 import nodemailer from "nodemailer";
 import { Resend } from "resend";
@@ -136,7 +136,7 @@ export async function sendNewStudentAlert(student: LeadAlertStudent) {
   await sendMail({
     to,
     subject: "New Student Signup - ilmaLink",
-    text: `${text}\nDashboard: https://www.ilmalink.com/portal/admin/leads`,
+    text: `${text}\nDashboard: https://www.ilmalink.com/portal/admin/leads/`,
     html: `
       <div style="font-family:Arial,sans-serif;max-width:680px;margin:auto;padding:24px;color:#082a62">
         <h2>New Student Signup - ilmaLink</h2>
@@ -152,7 +152,7 @@ export async function sendNewStudentAlert(student: LeadAlertStudent) {
             )
             .join("")}
         </table>
-        <p style="margin-top:20px"><a href="https://www.ilmalink.com/portal/admin/leads">Open Education Portal Leads</a></p>
+        <p style="margin-top:20px"><a href="https://www.ilmalink.com/portal/admin/leads/">Open Education Portal Leads</a></p>
       </div>
     `,
   });
@@ -199,7 +199,7 @@ export async function sendCounsellingRequestAlert(
   await sendMail({
     to,
     subject: `New Counselling Request - ${request.name} - ${request.leadCode}`,
-    text: `${text}\n\nOpen lead: https://www.ilmalink.com/portal/admin/leads`,
+    text: `${text}\n\nOpen lead: https://www.ilmalink.com/portal/admin/leads/`,
     html: `
       <div style="background:#f3f8fc;padding:28px 12px;font-family:Arial,sans-serif;color:#17396e">
         <div style="max-width:700px;margin:auto;overflow:hidden;border:1px solid #d8e4ef;border-radius:18px;background:#ffffff;box-shadow:0 12px 32px rgba(8,42,98,.08)">
@@ -222,7 +222,7 @@ export async function sendCounsellingRequestAlert(
                 .join("")}
             </table>
             <p style="margin:22px 0 0">
-              <a href="https://www.ilmalink.com/portal/admin/leads" style="display:inline-block;border-radius:10px;background:#0b4aa2;padding:12px 18px;color:#ffffff;font-weight:700;text-decoration:none">Open Education Portal Leads</a>
+              <a href="https://www.ilmalink.com/portal/admin/leads/" style="display:inline-block;border-radius:10px;background:#0b4aa2;padding:12px 18px;color:#ffffff;font-weight:700;text-decoration:none">Open Education Portal Leads</a>
             </p>
           </div>
         </div>
@@ -230,3 +230,6 @@ export async function sendCounsellingRequestAlert(
     `,
   });
 }
+
+
+

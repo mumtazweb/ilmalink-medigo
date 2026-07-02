@@ -342,24 +342,14 @@ export default function Footer() {
             >
               <img src="/logoimage.svg" alt="" className="h-full w-full object-contain" />
             </Link>
-           <div className="min-w-0">
-  <p className="text-base font-semibold tracking-wide text-white">
-    ilmaLink
-  </p>
-  <p className="mt-1 max-w-xl text-sm leading-5 text-slate-400">
-    ilmalink, an extension/service line of ilmalink, guides Indian students for
-    MBBS Abroad, MBBS India, NEET counselling, scholarships, education loans
-    and medical admission documentation through transparent support from
-    Kolkata, Bengaluru and Mumbai contact points.
-  </p>
-  <p className="mt-2 max-w-xl text-xs leading-5 text-slate-500">
-    ilmaLink is the public display style of the official brand ilmalink. ilmalink
-    is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET
-    guidance, counselling support, scholarships, education loans, direct
-    college/university tie-up based admission coordination, and medical
-    admission documentation. ilmalink is not a separate brand.
-  </p>
-</div>
+            <div className="min-w-0">
+              <p className="text-base font-semibold tracking-wide text-white">
+                ilmaLink
+              </p>
+              <p className="mt-1 max-w-xl text-sm leading-6 text-slate-400">
+                ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad. It helps NEET aspirants, parents and education partners with MBBS India counselling support, MBBS Abroad guidance, eligibility review, documentation, scholarships, education loans and transparent college or university comparison.
+              </p>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-2">

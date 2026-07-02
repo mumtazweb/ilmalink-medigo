@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   Atom,
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   description:
     "Read NEET 2026 paper analysis, search questions, compare supplied answer markers and explore moderated student discussion topics.",
   alternates: {
-    canonical: "https://www.ilmalink.com/neet/discussion-centre",
+    canonical: "https://www.ilmalink.com/neet/discussion-centre/",
   },
   keywords: [
     "NEET 2026 question paper analysis",
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     title: "NEET 2026 Analysis & Discussion Centre | ilmaLink",
     description:
       "Question search, supplied answer-key PDF, subject review and student discussion topics for NEET 2026.",
-    url: "https://www.ilmalink.com/neet/discussion-centre",
+    url: "https://www.ilmalink.com/neet/discussion-centre/",
     type: "website",
   },
 };
@@ -222,7 +222,7 @@ export default function NeetDiscussionCentrePage() {
             "@context": "https://schema.org",
             "@type": "WebPage",
             name: "Question Paper Analysis & Students Discussion Centre",
-            url: "https://www.ilmalink.com/neet/discussion-centre",
+            url: "https://www.ilmalink.com/neet/discussion-centre/",
             description:
               "NEET 2026 question search, subject review, supplied answer markers and moderated discussion topics.",
             about: ["NEET 2026", "Question paper analysis", "Student discussion"],
@@ -431,7 +431,7 @@ export default function NeetDiscussionCentrePage() {
                     Academic review note
                   </h2>
                   <p className="mt-1 text-sm font-medium leading-6 text-[#526985]">
-                    Question pages preserve the supplied booklet’s answer
+                    Question pages preserve the supplied bookletâ€™s answer
                     markers and source images. Detailed explanations, chapter
                     tags, topic tags and difficulty labels are being reviewed.
                   </p>
@@ -446,3 +446,6 @@ export default function NeetDiscussionCentrePage() {
     </>
   );
 }
+
+
+

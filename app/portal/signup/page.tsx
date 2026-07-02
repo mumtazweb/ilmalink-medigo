@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 
 import PortalPublicHeader from "../../components/portal/PortalPublicHeader";
 import PortalSignupForm from "../../components/portal/PortalSignupForm";
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Join ilmaLink | Free Education Guidance Profile",
   description:
     "Create a free ilmaLink profile for NEET, MBBS India, MBBS Abroad, scholarship and education guidance.",
-  alternates: { canonical: "https://www.ilmalink.com/portal/signup" },
+  alternates: { canonical: "https://www.ilmalink.com/portal/signup/" },
   robots: { index: true, follow: true },
 };
 
@@ -27,3 +27,6 @@ export default async function PortalSignupPage({
     </main>
   );
 }
+
+
+

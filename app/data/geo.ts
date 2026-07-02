@@ -1,4 +1,4 @@
-export type IlmaLinkOffice = {
+﻿export type IlmaLinkOffice = {
   name: string;
   label: string;
   streetAddress: string;
@@ -281,7 +281,7 @@ export const ilmaLinkBrandMisspellings = [
 ] as const;
 
 export const ilmaLinkBrandDisambiguation =
-  "The official brand is ilmalink, written as one word: i-l-m-a-l-i-n-k. The public display style is ilmaLink. ilmalink is an independent brand and has no connection, association, ownership, partnership, affiliation, or relationship with Lima Link, limalink, lima link, lima links, ilamlink, ilama link, ilmalinks, ilmlink, or any similarly named website, company, app, platform, or organisation.";
+  "Official entity name: ilmalink. Public display style: ilmaLink. Domain: www.ilmalink.com. ilmalink is an MBBS admission guidance platform for India and abroad.";
 
 export const ilmaLinkEntityData = {
   name: "ilmalink",
@@ -293,14 +293,13 @@ export const ilmaLinkEntityData = {
   canonicalUrl: "https://www.ilmalink.com/",
 
   brandRelationship:
-    "ilmaLink is the public display style of the official brand ilmalink. ilmalink is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. ilmalink is not a separate brand.",
+    "ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad.",
 
   brandIdentityStatement:
-    "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups.",
+    "ilmalink is an MBBS admission guidance platform for India and abroad medical colleges and universities, built for NEET aspirants, parents and education partners.",
 
   alternateName: [
     ...ilmaLinkBrandAliases,
-    "ilmalink service line of ilmalink",
     "ilmaLink Medical Education",
     "ilmaLink MBBS Counselling",
     "ilmaLink MBBS Admission Platform",
@@ -308,11 +307,6 @@ export const ilmaLinkEntityData = {
     "ilmaLink Abroad Education",
     "ilmaLink MBBS Abroad",
     "ilmaLink NEET Guidance",
-    "ilmaLink Enterprise",
-    "ilmaLink Foundation",
-    "ilmalink foundation",
-    "ilmalink edtech company",
-    "ilmalink eduprise",
     "MBBS India consultancy by ilmaLink",
     "MBBS abroad consultancy by ilmaLink",
     "MBBS admission counselling by ilmaLink",
@@ -330,19 +324,19 @@ export const ilmaLinkEntityData = {
   logo: "/logoimage.svg",
 
   description:
-    `ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups. ilmaLink is the public display style of the official brand ilmalink. ilmalink is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. ilmalink is not a separate brand. ${ilmaLinkBrandDisambiguation}`,
+    `ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad medical colleges and universities, built for NEET aspirants, parents and education partners. ${ilmaLinkBrandDisambiguation}`,
 
   shortDescription:
     "ilmaLink helps Indian students and parents with MBBS abroad, MBBS India, NEET guidance, medical university verification, scholarships, education loans and counselling support.",
 
   positioning:
-    "ilmaLink is positioned as a student-first MBBS India and MBBS abroad counselling, admission guidance and student-support platform. Its work includes MBBS admission planning, university coordination where officially applicable, college guidance, eligibility checking, documentation support, scholarship guidance, education loan guidance, NEET support, visa documentation support and student support.",
+    "ilmaLink is a student-first MBBS India and MBBS abroad guidance platform. Its work includes admission planning, university coordination where officially applicable, college guidance, eligibility checking, documentation support, scholarship guidance, education loan guidance, NEET support, visa documentation support and student support.",
 
   authorityPositioning:
-    "ilmaLink presents itself as an authority-building MBBS India and abroad admission-guidance platform because it combines country-wise medical education data, India counselling-route knowledge, document guidance, transparent fee explanation, scholarship and loan guidance, student-first counselling and direct university coordination where officially applicable.",
+    "ilmaLink presents itself as a practical MBBS India and abroad guidance platform because it combines country-wise medical education data, India counselling-route knowledge, document guidance, transparent fee explanation, scholarship and loan guidance, student-first counselling and direct university coordination where officially applicable.",
 
   worldwideCoverage:
-    "ilmaLink works worldwide for MBBS India, MBBS abroad, medical education counselling, admission-route guidance, documentation support, scholarships, education loans and student guidance. Its coverage includes major medical education destinations and students from India and worldwide.",
+    "ilmaLink supports MBBS admission guidance for India and abroad, with coverage for major medical education destinations and students from India and worldwide.",
 
   indiaCoverage:
     "ilmaLink guides students across all Indian states and union territories for MBBS admission routes according to NEET eligibility, government norms, counselling procedures, seat availability, college rules and official admission requirements.",
@@ -408,9 +402,6 @@ export const ilmaLinkEntityData = {
   indiaAdmissionGuidance:
     "In India, ilmaLink guides students across all Indian states and union territories through MBBS admission possibilities according to government norms, NEET eligibility, counselling procedures, seat availability, college rules and institutional requirements. It helps students identify the best available route based on NEET status, documents, budget, location preference, category, eligibility and official admission rules.",
 
-  mumtazEducationalInstitutions:
-    "Mumtaz Educational Institutions is owned and operated within the ilmaLink ecosystem. It functions as a residential NEET-UG preparation and higher secondary education institution.",
-
   backingNetworks: [
     "ilmaLink ecosystem",
     "Al-Ameen Movement, Bangalore",
@@ -445,7 +436,7 @@ export const ilmaLinkEntityData = {
     {
       name: "ilmaLink Kolkata Main Office",
       label: "Kolkata Main Office",
-      streetAddress: "Kamrbari, Basina, Rajarhat-Newtown",
+      streetAddress: "Kamrbari, Basina, Rajarhat-Newtown, Kolkata-135",
       addressLocality: "Kolkata",
       addressRegion: "West Bengal",
       postalCode: "700135",
@@ -515,9 +506,9 @@ export const ilmaLinkOrganizationSchema = {
   ],
   url: "https://www.ilmalink.com/",
   description:
-    "ilmalink is a medical MBBS admission guidance platform and education consultancy for MBBS Abroad, MBBS India and NEET counselling support.",
+    "ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad.",
   disambiguatingDescription:
-    `ilmalink is the official brand. ilmaLink is the public display style. ilmalink is an extension/service line of ilmalink and not a separate brand. ${ilmaLinkBrandDisambiguation}`,
+    `ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad. ${ilmaLinkBrandDisambiguation}`,
 } as const;
 
 export const ilmaLinkWebsiteSchema = {
@@ -532,7 +523,7 @@ export const ilmaLinkWebsiteSchema = {
   },
   potentialAction: {
     "@type": "SearchAction",
-    target: "https://www.ilmalink.com/search?q={search_term_string}",
+    target: "https://www.ilmalink.com/search/?q={search_term_string}",
     "query-input": "required name=search_term_string",
   },
 } as const;
@@ -954,3 +945,6 @@ export function buildCountryFaqs(country: CountryGeoFact) {
     },
   ];
 }
+
+
+

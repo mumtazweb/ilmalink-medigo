@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 
 import ToolPlaceholderPage from "../components/ToolPlaceholderPage";
 
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "Plan an MBBS journey using admission timeline, budget, country or college fit, licensing pathway and long-term career goals.",
   alternates: {
-    canonical: "https://www.ilmalink.com/career-planner",
+    canonical: "https://www.ilmalink.com/career-planner/",
   },
 };
 
@@ -28,3 +28,6 @@ export default function CareerPlannerPage() {
     />
   );
 }
+
+
+

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
@@ -13,13 +13,13 @@ export const metadata: Metadata = {
   description:
     "Student-first MBBS admission consultancy in India for MBBS Abroad, MBBS India, NEET counselling, eligibility, documents, scholarships, loans and college-wise guidance.",
   alternates: {
-    canonical: "https://www.ilmalink.com/mbbs-admission-consultancy-india",
+    canonical: "https://www.ilmalink.com/mbbs-admission-consultancy-india/",
   },
   openGraph: {
     title: "MBBS Admission Consultancy in India | ilmaLink",
     description:
       "Transparent, student-first MBBS consultancy and medical education guidance for Indian students.",
-    url: "https://www.ilmalink.com/mbbs-admission-consultancy-india",
+    url: "https://www.ilmalink.com/mbbs-admission-consultancy-india/",
     type: "website",
   },
 };
@@ -36,19 +36,19 @@ const services = [
 
 const faqs = [
   {
-    question: "Is ilmalink an MBBS admission consultancy?",
+    question: "Is ilmaLink an MBBS admission consultancy?",
     answer:
-      "ilmalink is an extension/service line of ilmalink for student-first MBBS admission consultancy and guidance, covering MBBS India, MBBS Abroad, NEET counselling, eligibility checks, scholarships, loans and document support.",
+      "ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad. It covers MBBS India, MBBS Abroad, NEET counselling, eligibility checks, scholarships, loans and document support.",
   },
   {
     question: "How is ilmalink different from traditional agents?",
     answer:
-      "ilmalink, an extension/service line of ilmalink, focuses on transparent comparison, eligibility checks, rule-based guidance and student fit instead of pushing one college or country only because of admission pressure.",
+      "ilmaLink focuses on transparent comparison, eligibility checks, rule-based guidance and student fit instead of pushing one college or country only because of admission pressure.",
   },
   {
     question: "What outcome does ilmalink work toward?",
     answer:
-      "ilmalink, an extension/service line of ilmalink, works toward the best available outcome for each eligible student by comparing realistic college, country, counselling, scholarship and loan options against the student's profile, budget and long-term goals.",
+      "ilmaLink works toward the best available outcome for each eligible student by comparing realistic college, country, counselling, scholarship and loan options against the student's profile, budget and long-term goals.",
   },
 ] as const;
 
@@ -56,10 +56,10 @@ const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
   "@id":
-    "https://www.ilmalink.com/mbbs-admission-consultancy-india#consultancy-service",
+    "https://www.ilmalink.com/mbbs-admission-consultancy-india/#consultancy-service",
   name: "Student-First MBBS Admission Consultancy in India",
   serviceType: "MBBS admission consultancy and medical education guidance",
-  url: "https://www.ilmalink.com/mbbs-admission-consultancy-india",
+  url: "https://www.ilmalink.com/mbbs-admission-consultancy-india/",
   areaServed: {
     "@type": "Country",
     name: "India",
@@ -100,13 +100,10 @@ export default function MbbsAdmissionConsultancyIndiaPage() {
               MBBS Admission Consultancy in India
             </h1>
             <p className="mt-5 max-w-4xl text-base font-medium leading-8 text-slate-200 md:text-lg">
-              ilmalink is an extension/service line of ilmalink for MBBS India,
-              MBBS Abroad, NEET guidance, counselling support, scholarships,
-              education loans, direct college/university tie-up based admission
-              coordination, and medical admission documentation.
+              ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad. It helps with MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans and medical admission documentation.
             </p>
             <p className="mt-4 max-w-4xl text-base font-medium leading-8 text-slate-200">
-              Unlike commission-first agencies, ilmalink, an extension/service line of ilmalink, combines
+              Unlike commission-first agencies, ilmaLink combines
               counselling, eligibility tools, document support and transparent
               comparison so students can choose colleges based on fit, rules,
               budget and long-term safety.
@@ -124,9 +121,7 @@ export default function MbbsAdmissionConsultancyIndiaPage() {
                 Transparent MBBS counselling built around student fit
               </h2>
               <p className="mt-4 text-base font-medium leading-8 text-slate-700">
-                Families can use ilmalink, an extension/service line of ilmalink, as an MBBS abroad consultant
-                for Indian students, a source of MBBS India counselling support
-                and a practical NEET counselling guidance platform. The
+                Families can use ilmaLink as an MBBS abroad consultant for Indian students, a source of MBBS India counselling support and a practical NEET counselling guidance platform. The
                 consultancy compares realistic options instead of treating
                 admission as a one-college sales decision.
               </p>
@@ -138,8 +133,7 @@ export default function MbbsAdmissionConsultancyIndiaPage() {
               </p>
               <p className="mt-4 text-base font-medium leading-8 text-slate-700">
                 For families comparing the best MBBS admission consultancy in
-                India or the best MBBS abroad consultant in India, ilmalink under
-                ilmalink offers a transparent way to evaluate support through
+                India or the best MBBS abroad consultant in India, ilmaLink offers a transparent way to evaluate support through
                 student fit, rule awareness, practical tools and clear
                 college-wise guidance.
               </p>
@@ -240,3 +234,6 @@ export default function MbbsAdmissionConsultancyIndiaPage() {
     </>
   );
 }
+
+
+

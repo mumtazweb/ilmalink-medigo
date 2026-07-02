@@ -1,4 +1,4 @@
-export type StudyDestination = "India" | "Abroad";
+﻿export type StudyDestination = "India" | "Abroad";
 
 export type StudentState =
   | "West Bengal"
@@ -24,11 +24,11 @@ export type CommunityCategory =
 export type Gender = "Male" | "Female" | "Other";
 
 export type IncomeBand =
-  | "Below ₹1 lakh"
-  | "₹1-2.5 lakh"
-  | "₹2.5-4.5 lakh"
-  | "₹4.5-8 lakh"
-  | "Above ₹8 lakh";
+  | "Below â‚¹1 lakh"
+  | "â‚¹1-2.5 lakh"
+  | "â‚¹2.5-4.5 lakh"
+  | "â‚¹4.5-8 lakh"
+  | "Above â‚¹8 lakh";
 
 export type AdmissionType =
   | "Government MBBS India"
@@ -168,7 +168,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     documents: [...baseAcademicDocuments, "Annual tuition fee estimate", "Admission processing details through ilmaLink"],
     importantNotes: [
       "ilmaLink will assist end-to-end after profile verification.",
-      "Applicable only when admission is processed through ilmalink, an extension/service line of ilmalink.",
+      "Applicable only when admission is processed through ilmaLink.",
       "Subject to university/college/institute approval.",
       "Subject to available partner benefit, document verification and ilmaLink approval.",
       "Final amount is confirmed after profile and document review.",
@@ -302,7 +302,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
       "MBBS Abroad",
       "Counselling not completed yet",
     ],
-    maxAmount: "Up to ₹10 lakh, subject to official rules.",
+    maxAmount: "Up to â‚¹10 lakh, subject to official rules.",
     interestRate: "4% simple annual interest, subject to official scheme rules.",
     repayment: "As per WBSCC and lending bank terms.",
     moratorium: "As per official scheme and bank rules.",
@@ -338,7 +338,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     eligibleStates: ["West Bengal", "All India"],
     eligibleCommunities: ["Muslim Minority", "Other Minority"],
     incomeLimit: {
-      label: "Credit Line-1 up to ₹3 lakh family income; Credit Line-2 up to ₹8 lakh family income.",
+      label: "Credit Line-1 up to â‚¹3 lakh family income; Credit Line-2 up to â‚¹8 lakh family income.",
       maxAnnualIncome: 800000,
     },
     marksRequirement: {
@@ -353,7 +353,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
       "MBBS Abroad",
       "Counselling not completed yet",
     ],
-    maxAmount: "Up to ₹20 lakh for India and up to ₹30 lakh for abroad, subject to NMDFC rules.",
+    maxAmount: "Up to â‚¹20 lakh for India and up to â‚¹30 lakh for abroad, subject to NMDFC rules.",
     interestRate:
       "Credit Line-1 around 3% p.a.; Credit Line-2 around 8% p.a. with female concession where officially applicable.",
     repayment: "Maximum repayment after course completion is subject to official NMDFC/MILAN/WBMDFC terms.",
@@ -725,7 +725,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     eligibleStates: ["All India"],
     eligibleCommunities: ["SC"],
     incomeLimit: {
-      label: "Income ceiling generally up to ₹2.5 lakh; verify state/NSP rules.",
+      label: "Income ceiling generally up to â‚¹2.5 lakh; verify state/NSP rules.",
       maxAnnualIncome: 250000,
     },
     marksRequirement: {
@@ -770,7 +770,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     eligibleStates: ["All India"],
     eligibleCommunities: ["ST"],
     incomeLimit: {
-      label: "Income ceiling is scheme/state specific; commonly check ₹2.5 lakh rules on official portal.",
+      label: "Income ceiling is scheme/state specific; commonly check â‚¹2.5 lakh rules on official portal.",
       maxAnnualIncome: 250000,
     },
     marksRequirement: {
@@ -860,7 +860,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     eligibleStates: ["All India"],
     eligibleCommunities: ["SC"],
     incomeLimit: {
-      label: "Official guidelines mention income up to ₹8 lakh for eligible SC students.",
+      label: "Official guidelines mention income up to â‚¹8 lakh for eligible SC students.",
       maxAnnualIncome: 800000,
     },
     marksRequirement: {
@@ -995,7 +995,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     eligibleStates: ["West Bengal"],
     eligibleCommunities: ["All"],
     incomeLimit: {
-      label: "Annual family income generally not more than ₹2.5 lakh; verify current SVMCM rules.",
+      label: "Annual family income generally not more than â‚¹2.5 lakh; verify current SVMCM rules.",
       maxAnnualIncome: 250000,
     },
     marksRequirement: {
@@ -1040,7 +1040,7 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     eligibleStates: ["West Bengal"],
     eligibleCommunities: ["Muslim Minority", "Other Minority"],
     incomeLimit: {
-      label: "Merit-cum-Means component generally up to ₹2.5 lakh; check WBMDFC portal.",
+      label: "Merit-cum-Means component generally up to â‚¹2.5 lakh; check WBMDFC portal.",
       maxAnnualIncome: 250000,
     },
     marksRequirement: {
@@ -1122,3 +1122,4 @@ export const scholarshipLoanSchemes: ScholarshipLoanScheme[] = [
     isInternalilmaLinkSupport: false,
   },
 ];
+

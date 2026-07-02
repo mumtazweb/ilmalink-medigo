@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, ExternalLink, Globe2, Link as LinkIcon, MapPin, ShieldCheck } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
@@ -11,14 +11,14 @@ export const dynamic = "force-static";
 const pageTitle = "Official Links of ilmaLink";
 const seoTitle = "Official Links | ilmaLink";
 const metaDescription =
-  "Find the official website, blog, MBBS Abroad page, MBBS India page and social media profiles of ilmalink, a medical MBBS admission platform and consultancy for Indian students.";
-const canonicalUrl = "https://www.ilmalink.com/official-links";
+  "Find the official website, blog, MBBS Abroad page, MBBS India page and social media profiles for ilmaLink, the public display style of ilmalink.";
+const canonicalUrl = "https://www.ilmalink.com/official-links/";
 
 const officialWebsiteLinks = [
   {
     label: "Official Website",
     href: "https://www.ilmalink.com/",
-    note: "Primary ilmalink website and brand home.",
+    note: "Primary ilmaLink website and brand home.",
   },
   {
     label: "Blogs",
@@ -57,7 +57,7 @@ const officialSocialProfiles = [
     label: "Instagram",
     href: "https://www.instagram.com/ilmalinkmbbs/",
     icon: FaInstagram,
-    note: "Official ilmaLink MBBS profile for the ilmalink service line.",
+    note: "Official ilmaLink MBBS profile.",
   },
   {
     label: "YouTube",
@@ -75,7 +75,7 @@ const officialSocialProfiles = [
     label: "Threads",
     href: "https://www.threads.com/@ilmalinkmbbs",
     icon: FaThreads,
-    note: "Official ilmaLink MBBS profile for the ilmalink service line.",
+    note: "Official ilmaLink MBBS profile.",
   },
 ];
 
@@ -84,22 +84,7 @@ const sameAs = officialSocialProfiles.map((profile) => profile.href);
 export const metadata: Metadata = {
   title: "Official Links | ilmaLink",
   description:
-    "Find the official website, blog, MBBS Abroad page, MBBS India page and social media profiles of ilmalink, a medical MBBS admission platform and consultancy for Indian students.",
-  keywords: [
-    "ilmalink service line of ilmalink",
-    "ilmaLink",
-    "ilmalink",
-    "ilmalink.com",
-    "MBBS Abroad guidance India",
-    "MBBS India guidance",
-    "NEET counselling India",
-    "MBBS Abroad counselling Kolkata",
-    "MBBS Abroad guidance Bengaluru",
-    "medical education guidance for Indian students",
-    "MBBS counselling for West Bengal students",
-    "MBBS university comparison",
-    "student-first MBBS guidance",
-  ],
+    "Find the official website, blog, MBBS Abroad page, MBBS India page and social media profiles for ilmaLink, the public display style of ilmalink.",
   alternates: {
     canonical: canonicalUrl,
   },
@@ -156,7 +141,7 @@ const structuredData = {
         "ilmalink",
         "ilmaLink",
         "ilmalink.com",
-        "ilmalink service line of ilmalink",
+        "ilmaLink",
         "ilmaLink Enterprise",
         "ilmalink enterprise",
         "ilmalinkeduprise",
@@ -277,18 +262,16 @@ export default function OfficialLinksPage() {
                   connected with ilmalink.
                 </p>
                 <p>
-                  Students and parents searching for ilmalink, ilmalink.com, ilmaLink or the
-                  ilmalink service line of ilmalink can use this page to identify the official platform and avoid confusion
-                  with unrelated websites or pages.
+                  Students and parents searching for ilmalink, ilmalink.com or ilmaLink can use
+                  this page to identify the official platform and avoid confusion with unrelated
+                  websites or pages.
                 </p>
                 <p>
                   Brand identity note: ilmaLink is the public display style of
-                  the official brand ilmalink. ilmalink is an extension/service
-                  line of ilmalink for MBBS India, MBBS Abroad, NEET guidance,
-                  counselling support, scholarships, education loans, direct
-                  college/university tie-up based admission coordination, and
-                  medical admission documentation. ilmalink is not a separate
-                  brand.
+                  the official brand ilmalink. The platform supports MBBS India,
+                  MBBS Abroad, NEET guidance, counselling support, scholarships,
+                  education loans, direct college and university tie-up based
+                  admission coordination, and medical admission documentation.
                 </p>
               </div>
             </div>
@@ -320,7 +303,7 @@ export default function OfficialLinksPage() {
               </h2>
               <div className="mt-5 space-y-4 text-base font-medium leading-8 text-slate-700">
                 <p>
-                  ilmalink, an extension/service line of ilmalink, serves Indian students and parents looking for MBBS Abroad, MBBS
+                  ilmaLink, serves Indian students and parents looking for MBBS Abroad, MBBS
                   India, NEET counselling, scholarships and medical university comparison. Our
                   guidance is useful for students from West Bengal, Karnataka, Maharashtra, Bihar,
                   Jharkhand, Assam, Kerala, Tamil Nadu, Uttar Pradesh, Delhi and other Indian
@@ -329,7 +312,7 @@ export default function OfficialLinksPage() {
                 <p>
                   Students from Kolkata, Bengaluru, Mumbai, Delhi, Patna, Guwahati, Hyderabad,
                   Chennai and other Indian cities can explore country-wise MBBS guidance through
-                  ilmalink, an extension/service line of ilmalink.
+                  ilmaLink.
                 </p>
                 <p>
                   Families looking for MBBS Abroad counselling Kolkata, MBBS Abroad guidance
@@ -367,8 +350,9 @@ export default function OfficialLinksPage() {
                 </h2>
               </div>
               <p className="max-w-2xl text-sm font-medium leading-6 text-slate-600">
-                Use these links for the official website, blog, MBBS Abroad page, MBBS India page,
-                scholarships and country guidance pages for ilmalink and its ilmalink service line.
+                Use these links for the official website, blog, MBBS Abroad
+                page, MBBS India page, scholarships and country guidance pages
+                for the official ilmaLink platform.
               </p>
             </div>
 
@@ -473,7 +457,7 @@ export default function OfficialLinksPage() {
                     counselling message.
                   </p>
                   <p>
-                    ilmalink, an extension/service line of ilmalink, focuses on fact-based guidance, transparent comparison and
+                    ilmaLink, focuses on fact-based guidance, transparent comparison and
                     student-first counselling.
                   </p>
                 </div>
@@ -501,3 +485,9 @@ export default function OfficialLinksPage() {
     </>
   );
 }
+
+
+
+
+
+

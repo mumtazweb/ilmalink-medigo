@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import {
   useCallback,
   useEffect,
@@ -23,7 +23,7 @@ type TranslatorInitialState = {
 };
 
 const PROTECTED_TERMS = [
-  "ilmalink service line of ilmalink",
+  "ilmaLink",
   "ilmaLink",
   "ilmaLink",
   "ilmalink",
@@ -436,8 +436,8 @@ export default function UniversalTranslator() {
   const showEnglishRestore = !!lang;
   const leftAction = lang === "hi" ? "en" : "hi";
   const rightAction = lang === "bn" ? "en" : "bn";
-  const leftLabel = lang === "hi" ? "Read in English" : "हिन्दी में पढ़ें";
-  const rightLabel = lang === "bn" ? "Read in English" : "বাংলায় পড়ুন";
+  const leftLabel = lang === "hi" ? "Read in English" : "à¤¹à¤¿à¤¨à¥à¤¦à¥€ à¤®à¥‡à¤‚ à¤ªà¤¢à¤¼à¥‡à¤‚";
+  const rightLabel = lang === "bn" ? "Read in English" : "à¦¬à¦¾à¦‚à¦²à¦¾à§Ÿ à¦ªà§œà§à¦¨";
 
   const consumeSuppressedClick = () => {
     if (!suppressClickRef.current) return false;
@@ -504,7 +504,7 @@ export default function UniversalTranslator() {
         data-ilm-translator
         className="fixed bottom-0 left-1/2 z-[2147483647] origin-bottom -translate-x-1/2 scale-[0.78] rounded-t-full bg-slate-950/90 px-2 py-0.5 text-[9px] font-bold text-white shadow-xl ring-1 ring-white/15 backdrop-blur-sm transition hover:bg-slate-800"
       >
-        Translator/অনুবাদক
+        Translator/à¦…à¦¨à§à¦¬à¦¾à¦¦à¦•
       </button>
     );
   }
@@ -567,3 +567,4 @@ export default function UniversalTranslator() {
     </div>
   );
 }
+

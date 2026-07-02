@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 
 import ToolPlaceholderPage from "../components/ToolPlaceholderPage";
 
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "Prepare the common academic, identity, NEET, admission, financial and visa documents used for MBBS India and MBBS Abroad planning.",
   alternates: {
-    canonical: "https://www.ilmalink.com/document-checklist",
+    canonical: "https://www.ilmalink.com/document-checklist/",
   },
 };
 
@@ -28,3 +28,6 @@ export default function DocumentChecklistPage() {
     />
   );
 }
+
+
+

@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react";
+﻿import type { LucideIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   description:
     "Download the official NTA provisional answer key PDF for Re-NEET UG 2026 Paper Codes 50, 60, 70 and 80, download the Code 50 questions-with-answer-key PDF, and read the code-wise answer table online.",
   alternates: {
-    canonical: "https://www.ilmalink.com/neet/answer-key",
+    canonical: "https://www.ilmalink.com/neet/answer-key/",
   },
 };
 
@@ -211,3 +211,5 @@ function ResourceLink({
     </Link>
   );
 }
+
+

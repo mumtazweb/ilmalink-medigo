@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -79,11 +79,11 @@ const communityOptions: StudentCommunity[] = [
 const genderOptions: Gender[] = ["Male", "Female", "Other"];
 
 const incomeOptions: IncomeBand[] = [
-  "Below ₹1 lakh",
-  "₹1-2.5 lakh",
-  "₹2.5-4.5 lakh",
-  "₹4.5-8 lakh",
-  "Above ₹8 lakh",
+  "Below â‚¹1 lakh",
+  "â‚¹1-2.5 lakh",
+  "â‚¹2.5-4.5 lakh",
+  "â‚¹4.5-8 lakh",
+  "Above â‚¹8 lakh",
 ];
 
 const admissionTypeOptions: AdmissionType[] = [
@@ -101,7 +101,7 @@ const defaultProfile: FinderProfile = {
   class12Percentage: "",
   neetScore: "",
   neetRank: "",
-  incomeBand: "₹2.5-4.5 lakh",
+  incomeBand: "â‚¹2.5-4.5 lakh",
   admissionType: "MBBS Abroad",
   annualTuitionFee: "500000",
 };
@@ -109,11 +109,11 @@ const defaultProfile: FinderProfile = {
 export const ilmaLink_SUPPORT_CAP = 300000;
 
 const incomeBandMaximums: Record<IncomeBand, number> = {
-  "Below ₹1 lakh": 100000,
-  "₹1-2.5 lakh": 250000,
-  "₹2.5-4.5 lakh": 450000,
-  "₹4.5-8 lakh": 800000,
-  "Above ₹8 lakh": 1200000,
+  "Below â‚¹1 lakh": 100000,
+  "â‚¹1-2.5 lakh": 250000,
+  "â‚¹2.5-4.5 lakh": 450000,
+  "â‚¹4.5-8 lakh": 800000,
+  "Above â‚¹8 lakh": 1200000,
 };
 
 function toNumber(value: string) {
@@ -122,7 +122,7 @@ function toNumber(value: string) {
 }
 
 export function formatCurrencyINR(amount: number) {
-  if (!amount || amount <= 0) return "₹0";
+  if (!amount || amount <= 0) return "â‚¹0";
 
   return new Intl.NumberFormat("en-IN", {
     currency: "INR",
@@ -891,7 +891,7 @@ export default function ScholarshipsLoansFinder() {
                     <p className="mt-3 text-sm font-semibold leading-6 text-slate-700">
                       ilmaLink will assist end-to-end to secure eligible
                       admission-linked support for students processed through
-                      ilmalink, an extension/service line of ilmalink.
+                      ilmaLink.
                     </p>
 
                     <div className="mt-3 grid gap-2 text-xs font-bold text-emerald-900 sm:grid-cols-3">
@@ -968,3 +968,4 @@ export default function ScholarshipsLoansFinder() {
     </section>
   );
 }
+

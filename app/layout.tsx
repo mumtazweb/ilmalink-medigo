@@ -9,8 +9,6 @@ import JsonLd from "./components/JsonLd";
 import NeetFloatingPopup from "./components/NeetFloatingPopup";
 import UniversalTranslator from "./components/UniversalTranslator";
 import {
-  ilmaLinkBrandDisambiguation,
-  ilmaLinkBrandMisspellings,
   ilmaLinkEntityData,
   ilmaLinkOrganizationSchema,
   ilmaLinkWebsiteSchema,
@@ -46,48 +44,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.ilmalink.com"),
   applicationName: "ilmalink",
-  title: {
-    default: "ilmalink Official Website | ilmaLink MBBS Abroad, MBBS India & NEET Guidance",
-    template: "%s | ilmaLink",
-  },
+  title: "ilmaLink",
   description:
-    "Official ilmalink website: ilmaLink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies.",
-  keywords: [
-    "ilmaLink",
-    "ilmalink",
-    "ilmalink.com",
-    "www.ilmalink.com",
-    "official ilmalink",
-    "ilmalink official website",
-    "ilmalink MBBS",
-    "ilmaLink official website",
-    ...ilmaLinkBrandMisspellings,
-    "ilmalink service line of ilmalink",
-    "ilmaLink education consultancy",
-    "ilmaLink MBBS guidance",
-    "MBBS Abroad",
-    "MBBS India",
-    "MBBS admission consultancy in India",
-    "MBBS abroad consultant for Indian students",
-    "student-first medical admission consultancy",
-    "transparent MBBS counselling platform",
-    "MBBS admission guidance",
-    "medical university verification",
-    "WDOMS verification",
-    "FMGE data",
-    "NMC guidelines",
-    "FMGL compliance",
-    "NEET UG counselling",
-    "NEET guidance",
-    "medical colleges in India",
-    "MBBS in Uzbekistan",
-    "MBBS in Kyrgyzstan",
-    "MBBS in Georgia",
-    "MBBS in Russia",
-    "MBBS in Bangladesh",
-    "MBBS education loan guidance",
-    "scholarship guidance for MBBS",
-  ],
+    "ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad. It helps NEET aspirants, parents and education partners with MBBS India counselling support, MBBS Abroad guidance, eligibility review, documentation, scholarships, education loans and transparent college or university comparison.",
   authors: [{ name: "ilmalink" }],
   creator: "ilmalink",
   publisher: "ilmalink",
@@ -103,9 +62,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "ilmalink Official Website | ilmaLink MBBS Abroad, MBBS India & NEET Guidance",
+    title: "ilmaLink",
     description:
-      "ilmaLink helps Indian students with MBBS abroad, MBBS India, NEET guidance, university verification, counselling, scholarships and education loans.",
+      "ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad. It helps NEET aspirants, parents and education partners with MBBS India counselling support, MBBS Abroad guidance, eligibility review, documentation, scholarships, education loans and transparent college or university comparison.",
     url: "https://www.ilmalink.com/",
     siteName: "ilmaLink",
     type: "website",
@@ -113,24 +72,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ilmalink Official Website | ilmaLink MBBS Abroad, MBBS India & NEET Guidance",
+    title: "ilmaLink",
     description:
-      "Indian education consultancy platform for MBBS abroad, MBBS India, NEET guidance, medical university verification and admission counselling.",
+      "ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad.",
   },
   other: {
-    "geo.region": "IN",
-    "geo.placename": "Kolkata, Bengaluru, Mumbai",
     "application-name": "ilmaLink",
     "apple-mobile-web-app-title": "ilmaLink",
-    "brand:official_name": "ilmalink",
-    "brand:display_name": "ilmaLink",
-    "brand:canonical_url": "https://www.ilmalink.com/",
-    "brand:disambiguation": ilmaLinkBrandDisambiguation,
-    "ai:official_entity": "ilmalink",
-    "ai:canonical_website": "https://www.ilmalink.com/",
-    "brand": "ilmaLink",
-    "subject":
-      "MBBS abroad, MBBS India, NEET guidance, medical admission counselling and university verification",
   },
 };
 

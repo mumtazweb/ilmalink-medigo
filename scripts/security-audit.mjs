@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+﻿import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -7,6 +7,7 @@ const appDir = path.join(rootDir, "app");
 const outputDir = path.join(rootDir, "artifacts", "security-audit");
 
 const blockedRoutePrefixes = [
+  "/4check",
   "/russianmarket",
   "/ultimateshop",
   "/blackbet",
@@ -47,6 +48,7 @@ const suspiciousTextPattern =
   /\b(russianmarket|ultimateshop|blackbet|casino|gambling|betting|porn|escort|viagra|cialis|levitra|carding|fullz|xmlrpc\.php|wp-login|wp-admin)\b/i;
 
 const googleSearchConsoleRemovalUrls = [
+  "https://www.ilmalink.com/4check/",
   "https://www.ilmalink.com/russianmarket/",
   "https://www.ilmalink.com/ultimateshop/",
   "https://www.ilmalink.com/blackbet/",
@@ -426,3 +428,6 @@ main().catch((error) => {
   console.error(error);
   process.exit(1);
 });
+
+
+

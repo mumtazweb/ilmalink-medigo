@@ -1,19 +1,19 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Navbar from "../components/navbar";
 
 const pageUrl = "https://www.ilmalink.com/data-methodology/";
 
 export const metadata: Metadata = {
-  title: "ilmaLink Data Methodology",
+  title: "Data Methodology | ilmaLink",
   description:
-    "Understand how ilmalink compiles country, university, seat and counselling statistics, and how to verify official eligibility and compliance.",
+    "Understand how ilmaLink compiles country, university, seat and counselling statistics, and how to verify official eligibility and compliance.",
   alternates: {
     canonical: pageUrl,
   },
   openGraph: {
-    title: "ilmaLink Data Methodology",
+    title: "Data Methodology | ilmaLink",
     description:
-      "How ilmalink compiles educational data and what students should verify before admission.",
+      "How ilmaLink compiles educational data and what students should verify before admission.",
     url: pageUrl,
     type: "article",
   },
@@ -33,7 +33,7 @@ export default function DataMethodologyPage() {
       {
         "@type": "ListItem",
         position: 2,
-        name: "ilmaLink Data Methodology",
+        name: "Data Methodology | ilmaLink",
         item: pageUrl,
       },
     ],
@@ -52,10 +52,10 @@ export default function DataMethodologyPage() {
       <section className="border-b border-[#0B2244]/15 bg-[#061733] px-4 py-9 text-white sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl">
           <h1 className="text-3xl font-black tracking-normal md:text-5xl">
-            ilmaLink Data Methodology
+            Data Methodology
           </h1>
           <p className="mt-4 max-w-4xl text-sm font-semibold leading-7 text-slate-200 md:text-base">
-            This page explains how ilmalink presents public-reference education data and
+            This page explains how ilmaLink presents public-reference education data and
             internal counselling activity figures.
           </p>
         </div>
@@ -106,3 +106,6 @@ export default function DataMethodologyPage() {
     </main>
   );
 }
+
+
+

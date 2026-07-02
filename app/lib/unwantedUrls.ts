@@ -1,4 +1,5 @@
-const BLOCKED_ROUTE_PREFIXES = [
+﻿const BLOCKED_ROUTE_PREFIXES = [
+  "/4check",
   "/russianmarket",
   "/ultimateshop",
   "/blackbet",
@@ -36,6 +37,7 @@ const UNWANTED_SLUG_SEGMENT_PATTERN =
   /(?:^|[-_])(russianmarket|russian-market|ultimateshop|ultimate-shop|blackbet|black-bet|casino|gambling|betting|adult|porn|escort|viagra|cialis|levitra|fullz|carding|dumps|ccv)(?:$|[-_])/i;
 
 export const GOOGLE_SEARCH_CONSOLE_REMOVAL_URLS = [
+  "https://www.ilmalink.com/4check/",
   "https://www.ilmalink.com/russianmarket/",
   "https://www.ilmalink.com/ultimateshop/",
   "https://www.ilmalink.com/blackbet/",
@@ -116,3 +118,6 @@ export function isBlockedBlogSlug(slug: string) {
     isBlockedPublicPath(`/blogs/${normalizedSlug}`)
   );
 }
+
+
+

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -424,7 +424,7 @@ function UniversityHero({
             </span>
             <p className="mt-4 text-xs font-black uppercase tracking-[0.2em] text-[#51e6b3]">
               {university.shortName
-                ? `${university.shortName} · `
+                ? `${university.shortName} Â· `
                 : ""}
               {university.location}
             </p>
@@ -548,7 +548,7 @@ function QuickFacts({
       id="quick-facts"
       eyebrow="Quick facts"
       title={`${university.name} at a glance`}
-      description="The facts below are taken from the existing ilmalink service-line Georgia university data of ilmalink."
+      description="The facts below are taken from the existing ilmaLink Georgia university data of ilmalink."
     >
       <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {baseFacts.map(([label, value]) => (
@@ -1052,3 +1052,4 @@ export default function GeorgiaUniversityProfile({
     </main>
   );
 }
+

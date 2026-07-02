@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import type { LucideIcon } from "lucide-react";
 import {
   AlertTriangle,
@@ -79,7 +79,7 @@ const pageTitle =
   "NEET UG 2026 Information Bulletin | Eligibility, Exam Pattern, Syllabus, Counselling & NRI Rules";
 const pageDescription =
   "Read the NEET UG 2026 Information Bulletin in a student-friendly format with exam pattern, eligibility, counselling rules, reservation, merit criteria, dress code, barred items, result process, syllabus, NRI/OCI/foreign candidate documents and state counselling contacts.";
-const canonical = "https://www.ilmalink.com/neet/information-bulletin";
+const canonical = "https://www.ilmalink.com/neet/information-bulletin/";
 
 export const metadata: Metadata = {
   title: pageTitle,
@@ -450,3 +450,6 @@ function ImportantLinks() {
 function Disclaimer() {
   return <section className="mt-5 rounded-xl border border-amber-300 bg-amber-50 p-4 text-xs font-semibold leading-5 text-amber-950"><p><strong>Disclaimer:</strong> This ilmaLink page is a student-friendly guide based on the NEET UG 2026 Information Bulletin. For final and legally binding instructions, candidates must rely on NTA, MCC, NMC, NCISM, NCH, AACCC and respective State counselling authorities.</p><div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-amber-200 pt-3"><span>Always verify updates on official websites.</span><span className="font-black">Last updated: 22 June 2026</span></div></section>;
 }
+
+
+

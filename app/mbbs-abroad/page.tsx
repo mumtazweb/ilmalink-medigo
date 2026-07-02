@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 
 import CounsellingActionButton from "../components/CounsellingActionButton";
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description:
     "Student-first MBBS abroad consultancy for Indian students with country comparison, FMGE data, eligibility, document support and transparent counselling.",
   alternates: {
-    canonical: "https://www.ilmalink.com/mbbs-abroad",
+    canonical: "https://www.ilmalink.com/mbbs-abroad/",
   },
 };
 
@@ -52,7 +52,7 @@ export default function MBBSAbroadPage() {
             Explore MBBS Abroad Countries with FMGE Data
           </h1>
           <p className="mt-5 max-w-3xl text-base font-medium leading-7 text-slate-200 md:text-lg md:leading-8">
-            ilmalink, an extension/service line of ilmalink, works as a student-first MBBS abroad consultant for
+            ilmaLink, works as a student-first MBBS abroad consultant for
             Indian students, combining country-wise and college-wise comparison,
             FMGE data, NMC/FMGL rule checks, eligibility, document support,
             scholarships, loans and transparent counselling before shortlisting
@@ -244,3 +244,7 @@ export default function MBBSAbroadPage() {
     </main>
   );
 }
+
+
+
+

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   AlertTriangle,
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   description:
     "Official NEET UG 2026 re-examination admit-card status, 21 June timing, reporting window, documents, dress code, permitted items and NTA links.",
   alternates: {
-    canonical: "https://www.ilmalink.com/neet/admit-card",
+    canonical: "https://www.ilmalink.com/neet/admit-card/",
   },
 };
 
@@ -225,3 +225,6 @@ export default function NeetAdmitCardPage() {
     </main>
   );
 }
+
+
+

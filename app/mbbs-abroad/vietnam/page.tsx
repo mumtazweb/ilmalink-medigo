@@ -1,4 +1,4 @@
-import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
+﻿import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
 
 export const dynamic = "force-static";
 
@@ -7,7 +7,7 @@ export const metadata = {
     "Study MBBS in Vietnam 2026 for Indian Students | Fees, WDOMS & NMC/FMGL Checks",
 
   description:
-    "Explore MBBS in Vietnam for Indian students with 29 WDOMS-listed medical schools, fee guidance, eligibility checks, NMC/FMGL rule review, documents and ilmalink service-line counselling support under ilmalink.",
+    "Explore MBBS in Vietnam for Indian students with 29 WDOMS-listed medical schools, fee guidance, eligibility checks, NMC/FMGL rule review, documents and ilmaLink counselling support under ilmalink.",
 
   keywords: [
     "MBBS in Vietnam",
@@ -27,42 +27,42 @@ const universities = [
   {
     name: "Duy Tan University",
     city: "Da Nang",
-    fees: "₹30-45 Lakhs Total",
+    fees: "â‚¹30-45 Lakhs Total",
     note: "Verify WDOMS listing, host-country recognition and medicine pathway before admission",
   },
 
   {
     name: "Can Tho University of Medicine and Pharmacy",
     city: "Can Tho",
-    fees: "₹28-42 Lakhs Total",
+    fees: "â‚¹28-42 Lakhs Total",
     note: "Official university details and clinical training structure should be checked university-wise",
   },
 
   {
     name: "Hong Bang International University",
     city: "Ho Chi Minh City",
-    fees: "₹32-50 Lakhs Total",
+    fees: "â‚¹32-50 Lakhs Total",
     note: "English-medium route, internship and licensing pathway must be verified before admission",
   },
 
   {
     name: "Hai Phong Medical University",
     city: "Hai Phong",
-    fees: "₹25-38 Lakhs Total",
+    fees: "â‚¹25-38 Lakhs Total",
     note: "Students should confirm current eligibility, recognition and language structure directly",
   },
 
   {
     name: "Phan Chau Trinh University",
     city: "Da Nang",
-    fees: "₹30-48 Lakhs Total",
+    fees: "â‚¹30-48 Lakhs Total",
     note: "Check host-country recognition, WDOMS listing and NMC/FMGL fit before shortlisting",
   },
 
   {
     name: "Hue University of Medicine and Pharmacy",
     city: "Hue",
-    fees: "₹25-40 Lakhs Total",
+    fees: "â‚¹25-40 Lakhs Total",
     note: "Verify current official admission, medium of instruction and clinical pathway details",
   },
 ];
@@ -105,7 +105,7 @@ export default function VietnamPage() {
 
             <div className="w-14 h-14 rounded-full bg-yellow-500/20 flex items-center justify-center text-3xl">
 
-              ⚠️
+              âš ï¸
 
             </div>
 
@@ -132,31 +132,31 @@ export default function VietnamPage() {
             <ul className="space-y-4">
 
               <li>
-                ⚠️ Vietnam is still a comparatively newer MBBS abroad route for Indian students
+                âš ï¸ Vietnam is still a comparatively newer MBBS abroad route for Indian students
               </li>
 
               <li>
-                ⚠️ Published FMGE/NExT performance data may be limited for some universities
+                âš ï¸ Published FMGE/NExT performance data may be limited for some universities
               </li>
 
               <li>
-                ⚠️ English-medium route must be verified university-wise
+                âš ï¸ English-medium route must be verified university-wise
               </li>
 
               <li>
-                ⚠️ Host-country recognition and local licensing eligibility should be checked
+                âš ï¸ Host-country recognition and local licensing eligibility should be checked
               </li>
 
               <li>
-                ⚠️ NMC/FMGL compliance should be reviewed before admission
+                âš ï¸ NMC/FMGL compliance should be reviewed before admission
               </li>
 
               <li>
-                ⚠️ Clinical exposure, internship structure and documents may vary by university
+                âš ï¸ Clinical exposure, internship structure and documents may vary by university
               </li>
 
               <li>
-                ⚠️ Students should not rely only on agent brochures or fee claims
+                âš ï¸ Students should not rely only on agent brochures or fee claims
               </li>
 
             </ul>
@@ -201,27 +201,27 @@ export default function VietnamPage() {
           <ul className="space-y-5 text-gray-300 text-lg leading-8">
 
             <li>
-              ✔ Nearby Asian destination with improving medical education interest
+              âœ” Nearby Asian destination with improving medical education interest
             </li>
 
             <li>
-              ✔ Semester fee guidance around ₹ 3.0L/Semester for planning
+              âœ” Semester fee guidance around â‚¹ 3.0L/Semester for planning
             </li>
 
             <li>
-              ✔ 29 WDOMS-listed medical schools for listing checks
+              âœ” 29 WDOMS-listed medical schools for listing checks
             </li>
 
             <li>
-              ✔ Some universities may offer English-medium routes that need direct verification
+              âœ” Some universities may offer English-medium routes that need direct verification
             </li>
 
             <li>
-              ✔ Clinical training, internship and hospital exposure should be compared carefully
+              âœ” Clinical training, internship and hospital exposure should be compared carefully
             </li>
 
             <li>
-              ✔ ilmalink, an extension/service line of ilmalink, can support document verification and counselling
+              âœ” ilmaLink, can support document verification and counselling
             </li>
 
           </ul>
@@ -258,13 +258,13 @@ export default function VietnamPage() {
 
                 <p className="text-gray-300 mb-3">
 
-                  📍 {uni.city}
+                  ðŸ“ {uni.city}
 
                 </p>
 
                 <p className="text-gray-300 mb-3">
 
-                  💰 Estimated Cost: {uni.fees}
+                  ðŸ’° Estimated Cost: {uni.fees}
 
                 </p>
 
@@ -298,27 +298,27 @@ export default function VietnamPage() {
           <ul className="space-y-5 text-gray-300 text-lg leading-8">
 
             <li>
-              ✔ NEET qualification and Indian eligibility must be checked
+              âœ” NEET qualification and Indian eligibility must be checked
             </li>
 
             <li>
-              ✔ Course duration should be reviewed against current FMGL regulations
+              âœ” Course duration should be reviewed against current FMGL regulations
             </li>
 
             <li>
-              ✔ Internship and clinical training structure should be verified
+              âœ” Internship and clinical training structure should be verified
             </li>
 
             <li>
-              ✔ Students should verify registration eligibility in Vietnam
+              âœ” Students should verify registration eligibility in Vietnam
             </li>
 
             <li>
-              ✔ English-medium instruction should be confirmed university-wise
+              âœ” English-medium instruction should be confirmed university-wise
             </li>
 
             <li>
-              ✔ FMGE/NExT or applicable licensing pathway must be planned before admission
+              âœ” FMGE/NExT or applicable licensing pathway must be planned before admission
             </li>
 
           </ul>
@@ -343,23 +343,23 @@ export default function VietnamPage() {
             <ul className="space-y-5 text-gray-300 leading-8">
 
               <li>
-                💰 Semester Fee Guidance: ₹ 3.0L/Semester
+                ðŸ’° Semester Fee Guidance: â‚¹ 3.0L/Semester
               </li>
 
               <li>
-                💰 Tuition Fees: ₹25-50 Lakhs Total
+                ðŸ’° Tuition Fees: â‚¹25-50 Lakhs Total
               </li>
 
               <li>
-                🏠 Living Cost: ₹10k - ₹25k/month
+                ðŸ  Living Cost: â‚¹10k - â‚¹25k/month
               </li>
 
               <li>
-                📚 Course Duration: verify university-wise
+                ðŸ“š Course Duration: verify university-wise
               </li>
 
               <li>
-                ✈️ Visa + Insurance + Travel Extra
+                âœˆï¸ Visa + Insurance + Travel Extra
               </li>
 
             </ul>
@@ -377,23 +377,23 @@ export default function VietnamPage() {
             <ul className="space-y-5 text-gray-300 leading-8">
 
               <li>
-                ✔ NEET qualification and PCB eligibility review
+                âœ” NEET qualification and PCB eligibility review
               </li>
 
               <li>
-                ✔ WDOMS listing and host-country recognition check
+                âœ” WDOMS listing and host-country recognition check
               </li>
 
               <li>
-                ✔ English-medium route verification
+                âœ” English-medium route verification
               </li>
 
               <li>
-                ✔ Student visa and document support
+                âœ” Student visa and document support
               </li>
 
               <li>
-                ✔ University-wise admission and licensing pathway review
+                âœ” University-wise admission and licensing pathway review
               </li>
 
             </ul>
@@ -468,3 +468,4 @@ export default function VietnamPage() {
     </main>
   );
 }
+

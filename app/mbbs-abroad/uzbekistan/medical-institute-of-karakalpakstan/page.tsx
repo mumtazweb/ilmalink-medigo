@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -117,7 +117,7 @@ const sections = [
       "The institution was later transformed into the Medical Institute of Karakalpakstan by Presidential Decree dated 14 February 2020, No. 4598.",
       "The Uzbek legal portal shows Resolution of the President of Uzbekistan No. RP-4598 dated 14 February 2020, titled 'On the establishment of the Medical Institute of Karakalpakstan.'",
     ],
-    sources: ["KMI official general information — kkmi.uz/en/about_institute/general-information/", "Uzbek legal portal, Presidential Resolution RP-4598 — lex.uz/en/docs/7602093"],
+    sources: ["KMI official general information â€” kkmi.uz/en/about_institute/general-information/", "Uzbek legal portal, Presidential Resolution RP-4598 â€” lex.uz/en/docs/7602093"],
     icon: Building2, tone: "green" as const,
   },
   {
@@ -130,7 +130,7 @@ const sections = [
       "The 2020 Presidential Decree transformed the earlier TashPMI-related structure into the present Medical Institute of Karakalpakstan.",
       "If the English-medium international track started recently after the 2020 transformation, Indian students may not have yet graduated in large numbers. This may explain why KMI-specific FMGE data is not visible.",
     ],
-    sources: ["KMI official general information — kkmi.uz", "WDOMS school listing F0000700 — search.wdoms.org", "Uzbek legal portal RP-4598 — lex.uz"],
+    sources: ["KMI official general information â€” kkmi.uz", "WDOMS school listing F0000700 â€” search.wdoms.org", "Uzbek legal portal RP-4598 â€” lex.uz"],
     icon: TrendingUp, tone: "blue" as const,
   },
   {
@@ -142,7 +142,7 @@ const sections = [
       "KMI's official foreign-student admission page lists General Medicine with a duration of 6 years.",
       "The Study in Uzbekistan official portal lists: General Medicine, Programme code: 60910200, Form of study: Full-time, Level: Bachelor, Language of instruction: English, Duration: 6 years.",
     ],
-    sources: ["KMI official foreign-student admission page — kkmi.uz/en/foreign-students/admission-procedure/", "Study in Uzbekistan KMI profile — studyin-uzbekistan.uz/universities/117"],
+    sources: ["KMI official foreign-student admission page â€” kkmi.uz/en/foreign-students/admission-procedure/", "Study in Uzbekistan KMI profile â€” studyin-uzbekistan.uz/universities/117"],
     icon: GraduationCap, tone: "green" as const,
   },
   {
@@ -182,7 +182,7 @@ const sections = [
       "That programme follows a 3+3 model: 1st to 3rd courses in Karakalpakstan, 4th to 6th courses in St. Petersburg, all classes conducted exclusively in Russian.",
       "Students must confirm: exact programme name, exact programme code, language of instruction, full duration, country of study, internship structure.",
     ],
-    sources: ["KMI official Russia Pediatrics notice — kkmi.uz/en/235237/"],
+    sources: ["KMI official Russia Pediatrics notice â€” kkmi.uz/en/235237/"],
     icon: AlertTriangle, tone: "amber" as const,
   },
   {
@@ -195,7 +195,7 @@ const sections = [
       "Important caution: WDOMS listing does not denote recognition, accreditation or endorsement unless expressly stated.",
       'Safe wording: "KMI is listed in WDOMS with FAIMER School ID F0000700." Unsafe wording: "KMI is WHO/FAIMER/NMC approved."',
     ],
-    sources: ["WDOMS KMI school listing — search.wdoms.org/home/SchoolDetail/F0000700", "WDOMS disclaimer — search.wdoms.org/"],
+    sources: ["WDOMS KMI school listing â€” search.wdoms.org/home/SchoolDetail/F0000700", "WDOMS disclaimer â€” search.wdoms.org/"],
     icon: Globe, tone: "green" as const,
   },
   {
@@ -205,10 +205,10 @@ const sections = [
     verdict: "KMI has ECAQA accreditation evidence, but students should not assume the English-medium General Medicine track is covered unless KMI or ECAQA gives written proof.",
     points: [
       "ECAQA's Accreditation Council page states that KMI educational programmes were accredited for 5 years from 20 November 2025 to 19 November 2030.",
-      "The public ECAQA entry lists General Medicine, code 5510100/60910200 — Uzbek and Russian mediums of instruction.",
+      "The public ECAQA entry lists General Medicine, code 5510100/60910200 â€” Uzbek and Russian mediums of instruction.",
       "The same ECAQA page separately mentions English-medium General Medicine for some other Uzbek medical universities.",
     ],
-    sources: ["ECAQA Accreditation Council meetings — ecaqa.org/en/about-ecaqa/accreditation-council/ac-meetings"],
+    sources: ["ECAQA Accreditation Council meetings â€” ecaqa.org/en/about-ecaqa/accreditation-council/ac-meetings"],
     icon: Verified, tone: "yellow" as const,
   },
   {
@@ -220,7 +220,7 @@ const sections = [
       "NMC states that it does not endorse any list of foreign medical institutions or universities for MBBS or equivalent courses.",
       "For Indian students, the correct question is whether the course satisfies NMC FMGL Regulations.",
     ],
-    sources: ["NMC page for students studying abroad — nmc.org.in/information-desk/for-students-to-study-in-abroad/"],
+    sources: ["NMC page for students studying abroad â€” nmc.org.in/information-desk/for-students-to-study-in-abroad/"],
     icon: Scale, tone: "yellow" as const,
   },
   {
@@ -237,7 +237,7 @@ const sections = [
       "Student must clear FMGE/NExT or the applicable screening test in India.",
       "Student will also need to complete required supervised internship in India as per applicable rules.",
     ],
-    sources: ["NMC FMGL Regulations, 2021 — nmc.org.in"],
+    sources: ["NMC FMGL Regulations, 2021 â€” nmc.org.in"],
     icon: ClipboardCheck, tone: "blue" as const,
   },
   {
@@ -250,7 +250,7 @@ const sections = [
       "The 6-year programme meets NMC requirements regarding duration of training and periods allotted for practice.",
       "The Embassy also states that after completing the programme, the graduate will have the right to practise medicine in Uzbekistan.",
     ],
-    sources: ["Embassy of India, Tashkent advisory — eoitashkent.gov.in"],
+    sources: ["Embassy of India, Tashkent advisory â€” eoitashkent.gov.in"],
     icon: ShieldCheck, tone: "green" as const,
   },
   {
@@ -262,7 +262,7 @@ const sections = [
       "KMI's official website says that more than 20 treatment and preventive institutions in Nukus city serve as clinical bases.",
       "What still needs checking: Which hospitals are used for English-medium students? From which year do clinical postings start? Are clinical discussions and case presentations in English? Is internship done in these clinical bases?",
     ],
-    sources: ["KMI official general information — kkmi.uz"],
+    sources: ["KMI official general information â€” kkmi.uz"],
     icon: Stethoscope, tone: "blue" as const,
   },
   {
@@ -275,7 +275,7 @@ const sections = [
       "What is not included publicly: hostel fee, food/mess fee, visa fee, health insurance, medical checkup, registration charges, translation/notary charges, airport pickup, exam fees, agent service charge, yearly fee increase policy.",
       "If a consultant gives a package higher than the official tuition, they must show a full breakup. Pay official fees directly to the university wherever possible.",
     ],
-    sources: ["KMI foreign-student admission page — kkmi.uz/en/foreign-students/admission-procedure/"],
+    sources: ["KMI foreign-student admission page â€” kkmi.uz/en/foreign-students/admission-procedure/"],
     icon: CircleDollarSign, tone: "green" as const,
   },
   {
@@ -299,7 +299,7 @@ const sections = [
       "Basic educational programmes for foreign citizens: 8. Bachelor programmes for foreign citizens: 8.",
       "What is not verified: total international students, total Indian students, year-wise batch strength, number of Indian graduates, FMGE-qualified KMI graduates.",
     ],
-    sources: ["Study in Uzbekistan KMI profile — studyin-uzbekistan.uz/universities/117"],
+    sources: ["Study in Uzbekistan KMI profile â€” studyin-uzbekistan.uz/universities/117"],
     icon: Users, tone: "yellow" as const,
   },
   {
@@ -311,7 +311,7 @@ const sections = [
       "This means KMI is not completely unknown to Indian students.",
       "But the Embassy source does not give exact KMI-specific numbers, batch details, graduates, or FMGE passes.",
     ],
-    sources: ["Embassy of India, Tashkent — eoitashkent.gov.in"],
+    sources: ["Embassy of India, Tashkent â€” eoitashkent.gov.in"],
     icon: UserCheck, tone: "yellow" as const,
   },
   {
@@ -324,7 +324,7 @@ const sections = [
       "FMGE June 2025: Uzbekistan had 429 appeared, 139 passed (32.40%).",
       "Search within the report did not find 'Karakalpak' as a university name.",
     ],
-    sources: ["NBEMS FMGE Performance Report 2025 — natboard.edu.in", "NBEMS official website — natboard.edu.in/"],
+    sources: ["NBEMS FMGE Performance Report 2025 â€” natboard.edu.in", "NBEMS official website â€” natboard.edu.in/"],
     icon: TrendingUp, tone: "red" as const,
   },
   {
@@ -334,8 +334,8 @@ const sections = [
     verdict: "KMI may be an early-stage international option. Outcome risk is higher than older universities with many years of FMGE data.",
     points: [
       "KMI's current independent identity is from 2020. If English/Indian track started then, first meaningful FMGE outcomes appear after the first batches complete 6 years.",
-      "Example: Batch started 2020 → graduation 2026 → FMGE visibility 2026/2027.",
-      "Batch started 2021 → FMGE visibility 2027/2028. Batch 2022 → 2028/2029.",
+      "Example: Batch started 2020 â†’ graduation 2026 â†’ FMGE visibility 2026/2027.",
+      "Batch started 2021 â†’ FMGE visibility 2027/2028. Batch 2022 â†’ 2028/2029.",
     ],
     sources: ["NBEMS FMGE reports", "WDOMS KMI listing"],
     icon: HelpCircle, tone: "amber" as const,
@@ -359,13 +359,13 @@ const sections = [
     verdict: "KMI has 8 verified positive points that make it a genuine option.",
     points: [
       "Strength 1: Real public institution with government and WDOMS presence.",
-      "Strength 2: Historical roots — medical instruction from around 1990/1991.",
+      "Strength 2: Historical roots â€” medical instruction from around 1990/1991.",
       "Strength 3: 6-year General Medicine confirmed on official page.",
       "Strength 4: English General Medicine listing on Study in Uzbekistan.",
-      "Strength 5: Affordable official tuition — USD 3,500.",
+      "Strength 5: Affordable official tuition â€” USD 3,500.",
       "Strength 6: More than 20 clinical bases.",
-      "Strength 7: WDOMS listing — FAIMER School ID F0000700.",
-      "Strength 8: ECAQA accreditation evidence, 2025–2030.",
+      "Strength 7: WDOMS listing â€” FAIMER School ID F0000700.",
+      "Strength 8: ECAQA accreditation evidence, 2025â€“2030.",
     ],
     sources: ["KMI official site", "WDOMS", "ECAQA", "Study in Uzbekistan"],
     icon: Lightbulb, tone: "green" as const,
@@ -381,7 +381,7 @@ const sections = [
       "Risk 3: Full English delivery not publicly proved for clinicals, exams, internship.",
       "Risk 4: Student numbers unclear from official portal.",
       "Risk 5: Public reviews are mostly promotional, not independent.",
-      "Risk 6: Internship details not KMI-specific — only Uzbekistan-level support available.",
+      "Risk 6: Internship details not KMI-specific â€” only Uzbekistan-level support available.",
     ],
     sources: ["NBEMS", "ECAQA", "Study in Uzbekistan"],
     icon: AlertTriangle, tone: "red" as const,
@@ -392,7 +392,7 @@ const sections = [
     answer: "Question: Are student reviews reliable? Answer: Not enough reliable independent reviews were found.",
     verdict: "Speak directly with current Indian students, senior clinical students, hostel residents, and any Indian graduates before admission.",
     points: [
-      "Many online reviews are from consultants or promotional channels — useful but not strong proof.",
+      "Many online reviews are from consultants or promotional channels â€” useful but not strong proof.",
       "Ask current students: Are classes actually in English? Are teachers fluent? Are exams in English? Are hospital postings in English? Is hostel safe and clean? Is Indian food available? Any hidden charges?",
     ],
     sources: ["Independent verification recommended"],
@@ -406,7 +406,7 @@ const sections = [
     points: [
       "Embassy guidance: check university credentials, verify medium of instruction, clarify fees, avoid cash payments, keep receipts, check hostel/food conditions, understand the contract.",
     ],
-    sources: ["Embassy of India, Tashkent — eoitashkent.gov.in"],
+    sources: ["Embassy of India, Tashkent â€” eoitashkent.gov.in"],
     icon: Newspaper, tone: "blue" as const,
   },
   {
@@ -473,21 +473,21 @@ const sections = [
 ];
 
 const sourceList = [
-  "KMI official general information — kkmi.uz/en/about_institute/general-information/",
-  "KMI foreign-student admission procedure and fee — kkmi.uz/en/foreign-students/admission-procedure/",
-  "Study in Uzbekistan KMI profile — studyin-uzbekistan.uz/universities/117",
-  "Study in Uzbekistan KMI programmes — studyin-uzbekistan.uz/universities/117/programs",
-  "WDOMS KMI school listing — search.wdoms.org/home/SchoolDetail/F0000700",
-  "WDOMS disclaimer — search.wdoms.org/",
-  "ECAQA Accreditation Council meetings — ecaqa.org/en/about-ecaqa/accreditation-council/ac-meetings",
-  "NMC FMGL Regulations, 2021 — nmc.org.in",
-  "NMC page for students studying abroad — nmc.org.in",
-  "Embassy of India, Tashkent advisory — eoitashkent.gov.in",
-  "Embassy of India, Tashkent student information — eoitashkent.gov.in",
-  "Uzbek legal portal RP-4598 — lex.uz/en/docs/7602093",
-  "KMI 3+3 Pediatrics Russia notice — kkmi.uz/en/235237/",
-  "NBEMS FMGE Performance Report 2025 — natboard.edu.in",
-  "NBEMS official website — natboard.edu.in/",
+  "KMI official general information â€” kkmi.uz/en/about_institute/general-information/",
+  "KMI foreign-student admission procedure and fee â€” kkmi.uz/en/foreign-students/admission-procedure/",
+  "Study in Uzbekistan KMI profile â€” studyin-uzbekistan.uz/universities/117",
+  "Study in Uzbekistan KMI programmes â€” studyin-uzbekistan.uz/universities/117/programs",
+  "WDOMS KMI school listing â€” search.wdoms.org/home/SchoolDetail/F0000700",
+  "WDOMS disclaimer â€” search.wdoms.org/",
+  "ECAQA Accreditation Council meetings â€” ecaqa.org/en/about-ecaqa/accreditation-council/ac-meetings",
+  "NMC FMGL Regulations, 2021 â€” nmc.org.in",
+  "NMC page for students studying abroad â€” nmc.org.in",
+  "Embassy of India, Tashkent advisory â€” eoitashkent.gov.in",
+  "Embassy of India, Tashkent student information â€” eoitashkent.gov.in",
+  "Uzbek legal portal RP-4598 â€” lex.uz/en/docs/7602093",
+  "KMI 3+3 Pediatrics Russia notice â€” kkmi.uz/en/235237/",
+  "NBEMS FMGE Performance Report 2025 â€” natboard.edu.in",
+  "NBEMS official website â€” natboard.edu.in/",
 ];
 
 /* ============================================================
@@ -541,7 +541,7 @@ function SourceChip({ label }: { label: string }) {
   return (
     <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold text-slate-600">
       <ExternalLink size={10} />
-      {label.length > 50 ? label.slice(0, 50) + "…" : label}
+      {label.length > 50 ? label.slice(0, 50) + "â€¦" : label}
     </span>
   );
 }
@@ -570,7 +570,7 @@ function KMIHero() {
               Karakalpakstan<br /><span className="text-[#00D39B]">Medical Institute</span>
             </h1>
             <p className="mt-2 text-sm font-extrabold uppercase tracking-[0.12em] text-[#7ff0ca] sm:text-base">
-              Uzbekistan — Detailed Decision-Making Research for Indian MBBS Students
+              Uzbekistan â€” Detailed Decision-Making Research for Indian MBBS Students
             </p>
             <p className="mt-4 max-w-2xl text-sm font-semibold leading-7 text-blue-100 sm:text-base">
               Prepared for Indian students, parents and admission consultants who want to decide whether Karakalpakstan Medical Institute, Nukus, Uzbekistan, is suitable for MBBS-equivalent / General Medicine admission. Based solely on official, authorized and public sources.
@@ -701,7 +701,7 @@ function FinalConclusion() {
         <div className="rounded-3xl bg-[linear-gradient(135deg,#02162e,#063b70)] p-6 shadow-[0_24px_70px_rgba(3,27,53,0.2)] sm:p-8 lg:p-10">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#00d39b]/20 text-[#51e6b3]"><Target size={20} /></span>
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#51e6b3]">Section 28 — Final Overall Conclusion</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#51e6b3]">Section 28 â€” Final Overall Conclusion</p>
           </div>
           <h2 className="mt-4 text-2xl font-black text-white sm:text-3xl">Karakalpakstan Medical Institute: Final Verdict</h2>
           <p className="mt-4 text-base font-semibold leading-8 text-blue-100">
@@ -763,7 +763,7 @@ function SourceList() {
           ))}
         </div>
         <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold leading-7 text-amber-950">
-          ⚠️ This report is for informational and decision-support purposes only. It does not constitute admission guarantee, NMC approval, or a recommendation to join. Students must verify all details directly with KMI, NMC, and relevant authorities before making any payment or admission commitment.
+          âš ï¸ This report is for informational and decision-support purposes only. It does not constitute admission guarantee, NMC approval, or a recommendation to join. Students must verify all details directly with KMI, NMC, and relevant authorities before making any payment or admission commitment.
         </div>
       </div>
     </section>
@@ -869,3 +869,7 @@ export default function KMIPage() {
     </main>
   );
 }
+
+
+
+

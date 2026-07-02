@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     "AYUSH admission",
     "NEET repeat strategy",
     "paramedical after NEET",
-    "ilmalink service line of ilmalink",
+    "ilmaLink",
   ],
   alternates: {
     canonical: "https://ilmalink.com/neet-pathway-guide",
@@ -197,12 +197,12 @@ export default function NeetPathwayGuidePage() {
         <section className="px-4 py-10 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <h2 className="text-2xl font-extrabold text-[#061D3F]">
-              ilmalink service-line counselling support under ilmalink across India
+              ilmaLink counselling support across India
             </h2>
             <p className="mt-3 max-w-4xl text-sm font-medium leading-7 text-slate-700">
               Students can request score, counselling, budget, MBBS India,
               MBBS Abroad, BDS, AYUSH, repeat-NEET and allied-health pathway
-              guidance through ilmalink service-line contact points under ilmalink.
+              guidance through ilmaLink contact points.
             </p>
             <div className="mt-5 grid gap-4 md:grid-cols-3">
               {offices.map((office) => (
@@ -251,3 +251,5 @@ export default function NeetPathwayGuidePage() {
     </>
   );
 }
+
+

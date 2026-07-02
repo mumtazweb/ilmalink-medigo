@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import {
@@ -19,7 +19,7 @@ import VerificationCounsellingCard from "../../components/VerificationCounsellin
 
 export const dynamic = "force-static";
 
-const canonicalUrl = "https://www.ilmalink.com/mbbs-abroad/nepal";
+const canonicalUrl = "https://www.ilmalink.com/mbbs-abroad/nepal/";
 const counsellingHref = "/?counselling=open";
 
 export const metadata: Metadata = {
@@ -218,12 +218,12 @@ const faqs = [
   {
     question: "Does Nepal accept Indian reserved-category NEET cutoff?",
     answer:
-      "Students should not assume that Nepal accepts only Indian reserved-category NEET qualification. ilmalink, an extension/service line of ilmalink, uses the general NEET 50th percentile benchmark for Nepal's foreign NEET-based route unless MEC issues fresh official clarification.",
+      "Students should not assume that Nepal accepts only Indian reserved-category NEET qualification. ilmaLink, uses the general NEET 50th percentile benchmark for Nepal's foreign NEET-based route unless MEC issues fresh official clarification.",
   },
   {
     question: "Is PCB aggregate 50% enough for Nepal MBBS?",
     answer:
-      "For safe counselling, no. ilmalink, an extension/service line of ilmalink, checks minimum 50% individually in Physics, Chemistry and Biology, along with any MEC/university aggregate or CGPA requirement.",
+      "For safe counselling, no. ilmaLink, checks minimum 50% individually in Physics, Chemistry and Biology, along with any MEC/university aggregate or CGPA requirement.",
   },
   {
     question: "Are seats limited in Nepal?",
@@ -257,7 +257,7 @@ const jsonLd = JSON.stringify([
         "@type": "ListItem",
         position: 2,
         name: "MBBS Abroad",
-        item: "https://www.ilmalink.com/mbbs-abroad",
+        item: "https://www.ilmalink.com/mbbs-abroad/",
       },
       {
         "@type": "ListItem",
@@ -516,7 +516,7 @@ export default function NepalPage() {
                 </h3>
               </div>
               <p className="mt-4 text-sm font-medium leading-7 text-slate-700">
-                For Nepal MBBS counselling, ilmalink, an extension/service line of ilmalink, uses a safer
+                For Nepal MBBS counselling, ilmaLink, uses a safer
                 eligibility benchmark of minimum 50% individually in Physics,
                 Chemistry and Biology. Students should also satisfy the latest
                 MEC/university aggregate or CGPA requirement where applicable.
@@ -552,7 +552,7 @@ export default function NepalPage() {
               <p className="mt-3 text-sm font-medium leading-7 text-slate-700">
                 For Nepal&apos;s foreign NEET-based route, Indian students should
                 not assume that reserved-category NEET qualification is enough.
-                ilmalink, an extension/service line of ilmalink, uses the general NEET qualifying benchmark /
+                ilmaLink, uses the general NEET qualifying benchmark /
                 50th percentile and above as the safer standard, unless Nepal
                 Medical Education Commission issues fresh official
                 clarification.
@@ -807,7 +807,7 @@ export default function NepalPage() {
               </h2>
               <p className="mt-4 text-sm font-medium leading-7 text-slate-700 md:text-base">
                 Students from West Bengal, Karnataka, Maharashtra and other
-                Indian states can request ilmalink service-line counselling under ilmalink before
+                Indian states can request ilmaLink counselling under ilmalink before
                 choosing Nepal, because Nepal&apos;s route is stricter than many
                 other MBBS abroad destinations.
               </p>
@@ -859,9 +859,13 @@ export default function NepalPage() {
       <VerificationCounsellingCard
         countryName="Nepal MBBS"
         title="Check Nepal MBBS eligibility before choosing a college"
-        description="ilmalink, an extension/service line of ilmalink, can screen individual PCB marks, NEET benchmark, MECEE-BL planning, MEC matching risk, document readiness, and college verification before admission."
+        description="ilmaLink, can screen individual PCB marks, NEET benchmark, MECEE-BL planning, MEC matching risk, document readiness, and college verification before admission."
         buttonLabel="Get Nepal MBBS Counselling"
       />
     </main>
   );
 }
+
+
+
+

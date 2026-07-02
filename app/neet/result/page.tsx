@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   description:
     "NEET UG 2026 result guide covering official result access, OMR and answer-key challenges, All India Rank and category-wise qualifying percentiles.",
   alternates: {
-    canonical: "https://www.ilmalink.com/neet/result",
+    canonical: "https://www.ilmalink.com/neet/result/",
   },
 };
 
@@ -162,3 +162,6 @@ export default function NeetResultPage() {
     </main>
   );
 }
+
+
+

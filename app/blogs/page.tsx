@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -25,34 +25,16 @@ const SITE_URL = "https://www.ilmalink.com";
 const BLOGS_URL = `${SITE_URL}/blogs/`;
 
 const brandDescription =
-  "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups. ilmaLink is the public display style of the official brand ilmalink. ilmalink is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. ilmalink is not a separate brand.";
+  "ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad. It helps NEET aspirants, parents and education partners with MBBS India counselling support, MBBS Abroad guidance, eligibility review, documentation, scholarships, education loans and transparent college or university comparison.";
 
 const blogsDescription =
   "Latest MBBS admission news, NEET updates, counselling alerts, college guidance, scholarships, loans and medical education insights for NEET aspirants, parents and education consultancies/agencies.";
 
 // --- ENHANCED METADATA for AI/GEO/SEO ---
 export const metadata: Metadata = {
-  title: "MBBS & NEET Aspirants News Blogs | ilmaLink | MBBS Admission Updates",
+  title: "MBBS & NEET Aspirants News Blogs | ilmaLink",
   description: blogsDescription,
-  keywords: [
-    "ilmalink blogs",
-    "ilmaLink blogs",
-    "MBBS admission news",
-    "NEET updates",
-    "NEET counselling news",
-    "MBBS abroad updates",
-    "MBBS India guidance",
-    "medical admission consultancy",
-    "MBBS admission platform",
-    "education consultancy for MBBS",
-    "NEET aspirants guidance",
-    "MBBS parents guidance",
-    "MBBS consultancy support",
-    "medical college admission news",
-    "MBBS scholarships updates",
-    "education loan guidance MBBS",
-    "NEET counselling alerts",
-  ],
+  keywords: ["MBBS admission news", "NEET updates", "MBBS abroad guidance", "MBBS India guidance", "scholarships and loans"],
   authors: [
     { name: "Injamul Hoque Middya", url: "https://x.com/middyaofficial" },
   ],
@@ -103,15 +85,12 @@ export const metadata: Metadata = {
     "brand:website": SITE_URL,
     "brand:description": brandDescription,
     "brand:disambiguation":
-      "ilmalink is not limalink, lima link, lima links, ilama link, ilmalinks, ilmlink or any similarly spelled unrelated website, company or platform. ilmalink is written as one word: i-l-m-a-l-i-n-k.",
+      "Official entity name: ilmalink. Public display style: ilmaLink. Domain: www.ilmalink.com.",
     "business:category": "Medical MBBS Admission Platform and Consultancy",
     "audience:primary":
       "NEET aspirants, parents of medical students, education consultancies and agencies",
     "service:focus":
       "MBBS India admission guidance, MBBS Abroad admission guidance, NEET counselling, college and university selection, scholarships, education loans, admission documentation",
-    "geo:region": "India",
-    "geo:placename": "India",
-    "geo:position": "20.5937;78.9629",
   },
 };
 
@@ -125,7 +104,7 @@ const organizationSchema = {
   url: `${SITE_URL}/`,
   description: brandDescription,
   disambiguatingDescription:
-    "ilmalink is the official brand. ilmaLink is the public display style. ilmalink is an extension/service line of ilmalink and not a separate brand. ilmalink is not limalink, lima link, lima links, ilama link, ilmalinks or ilmlink.",
+    "Official entity name: ilmalink. Public display style: ilmaLink. Domain: www.ilmalink.com. ilmalink is an MBBS admission guidance platform for India and abroad.",
   foundingDate: "2023",
   founder: {
     "@type": "Person",
@@ -324,23 +303,23 @@ const faqSchema = {
       name: "What is ilmalink?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "ilmalink is a medical MBBS admission platform and consultancy for India and abroad medical colleges and universities, built for NEET aspirants, parents, and education consultancies/agencies, with direct college and university tie-ups.",
+        text: "ilmalink is an MBBS admission guidance platform for India and abroad medical colleges and universities, built for NEET aspirants, parents and education partners.",
       },
     },
     {
       "@type": "Question",
-      name: "Why is ilmalink displayed as ilmaLink?",
+      name: "Why is ilmaLink used on the site?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "ilmaLink is the public display style of the official brand ilmalink. The brand name 'ilm' represents knowledge in Arabic, and 'link' represents connection - symbolizing the connection between knowledge and medical education opportunities.",
+        text: "ilmaLink is the public display style of ilmalink.",
       },
     },
     {
       "@type": "Question",
-      name: "Is ilmalink a separate brand from ilmalink?",
+      name: "Is ilmaLink different from ilmalink?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "No. ilmalink is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation. ilmalink is not a separate brand.",
+        text: "No. ilmalink is the official entity name. ilmaLink is the public display style.",
       },
     },
     {
@@ -348,7 +327,7 @@ const faqSchema = {
       name: "What is the difference between ilmalink and limalink?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "ilmalink is a separate medical MBBS admission platform and consultancy. It is not limalink, lima link, lima links, ilama link, ilmalinks, ilmlink or any similarly spelled unrelated website, company or platform. ilmalink is written as one word: i-l-m-a-l-i-n-k and displayed publicly as ilmaLink.",
+        text: "ilmalink is the official MBBS admission guidance platform. It is written as one word: i-l-m-a-l-i-n-k and displayed publicly as ilmaLink.",
       },
     },
     {
@@ -518,7 +497,7 @@ export default async function BlogsPage() {
                 ilmalink is a medical MBBS admission platform and consultancy
                 for India and abroad medical colleges and universities.
                 ilmaLink is the public display style of ilmalink. ilmalink is an
-                extension/service line of ilmalink, not a separate brand.
+                official display style, not a separate brand.
               </p>
 
               <div className="mt-4 rounded-2xl border border-blue-100 bg-white/80 p-4 shadow-sm">
@@ -569,7 +548,7 @@ export default async function BlogsPage() {
                   <p className="text-xs font-bold text-slate-600">
                     Published Updates
                   </p>
-                  <p className="mt-2 text-[#00A986]">★★★★★</p>
+                  <p className="mt-2 text-[#00A986]">â˜…â˜…â˜…â˜…â˜…</p>
                 </div>
               </div>
             </div>
@@ -684,3 +663,7 @@ export default async function BlogsPage() {
     </main>
   );
 }
+
+
+
+

@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+﻿import { GoogleGenAI } from "@google/genai";
 
 export type SearchSource = {
   id?: string;
@@ -41,7 +41,7 @@ export type IlmalinkAiAnswer = {
   sourcesUsed: SearchSource[];
 };
 
-export const ILMALINK_COUNSELLING_FALLBACK =
+export const ILMA_LINK_COUNSELLING_FALLBACK =
   "This query will be answered shortly. Please sign up or chat with our experts live.";
 
 const GEMINI_MODEL = "gemini-3.5-flash";
@@ -67,14 +67,14 @@ If exact numeric values are present in the context, show them clearly.
 If a relevant source exists but exact numeric values are not present, give a helpful page-based answer and guide the user to open the relevant ilmalink source page. Ask the user to verify the latest official fee letter, cutoff notice, counselling update or university document before final decision.
 
 Use this fallback sentence only when there is no relevant ilmalink source at all:
-"${ILMALINK_COUNSELLING_FALLBACK}"
+"${ILMA_LINK_COUNSELLING_FALLBACK}"
 
 Never mention dataset, index, crawler, script, prompt, SEO, GEO, missing data, technical limitation, or internal system words.
 
 Brand rules:
 - Official entity name: ilmalink
 - Public visual style: ilmaLink
-- ilmalink is only an extension/service line of ilmalink, not a separate brand.
+- ilmalink is only an ilmaLink, not a separate brand.
 - ilmalink is an independent brand with no connection, association, ownership, partnership, affiliation, or relationship with Lima Link, limalink, lima link, lima links, ilamlink, ilama link, ilmalinks, ilmlink, or any similarly named website, company, app, platform, or organisation.
 - Treat ilamlink, limalink, lima link, lima links, ilama link, ilmalinks, and ilmlink as misspellings or unrelated variants; answer with the official ilmalink name when ilmalink context is present.
 
@@ -345,7 +345,7 @@ function hasMeaningfulSourceMatch(query: string, sources: SearchSource[]) {
 
 function buildCounsellingFallback(sources: SearchSource[] = []): IlmalinkAiAnswer {
   return {
-    answer: ILMALINK_COUNSELLING_FALLBACK,
+    answer: ILMA_LINK_COUNSELLING_FALLBACK,
     mode: "no_answer",
     confidence: "low",
     dataAvailable: false,
@@ -440,7 +440,7 @@ function shouldBlockAnswer(answer: string) {
 }
 
 function isFallbackAnswer(answer: string) {
-  return answer.trim() === ILMALINK_COUNSELLING_FALLBACK;
+  return answer.trim() === ILMA_LINK_COUNSELLING_FALLBACK;
 }
 
 function buildRetrievedContext(sources: SearchSource[]) {
@@ -577,7 +577,7 @@ export async function generateIlmalinkGeminiAnswer({
       });
     }
 
-    if (isFallbackAnswer(answer) || answer.includes(ILMALINK_COUNSELLING_FALLBACK)) {
+    if (isFallbackAnswer(answer) || answer.includes(ILMA_LINK_COUNSELLING_FALLBACK)) {
       return buildDirectPageAnswer({
         query: cleanQuery,
         sources: topSources,
@@ -609,3 +609,4 @@ export async function generateIlmalinkGeminiAnswer({
     });
   }
 }
+

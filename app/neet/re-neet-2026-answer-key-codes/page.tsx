@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     "Read the NTA provisional official Re-NEET 2026 answer-key table for Paper Codes 50, 60, 70 and 80, covering Questions 1 to 180 with Drop and multiple-answer entries.",
   alternates: {
     canonical:
-      "https://www.ilmalink.com/neet/re-neet-2026-answer-key-codes",
+      "https://www.ilmalink.com/neet/re-neet-2026-answer-key-codes/",
   },
   keywords: [
     "Re-NEET 2026 Code 50 answer key",
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     title: "NTA Provisional Official Answer Key | Re-NEET 2026 Codes 50, 60, 70 & 80",
     description:
       "Official provisional answer-key tables for Re-NEET 2026 Paper Codes 50, 60, 70 and 80 in browser-readable format.",
-    url: "https://www.ilmalink.com/neet/re-neet-2026-answer-key-codes",
+    url: "https://www.ilmalink.com/neet/re-neet-2026-answer-key-codes/",
     type: "article",
   },
 };
@@ -146,7 +146,7 @@ export default function ReNeet2026CodeAnswerKeysPage() {
                     The NTA provisional official {reNeet2026CodeAnswerSource.pageCount}-page
                     PDF contains answer-key tables only. It provides question
                     numbers and answer markers for four paper codes, not the
-                    full question text. “Drop” means the question is dropped;
+                    full question text. â€œDropâ€ means the question is dropped;
                     multiple accepted answers are shown with comma-separated
                     options.
                   </p>
@@ -303,3 +303,6 @@ export default function ReNeet2026CodeAnswerKeysPage() {
     </>
   );
 }
+
+
+

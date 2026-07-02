@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 export default function HeroTyping() {
   const subtitle =
@@ -18,7 +18,7 @@ export default function HeroTyping() {
             description: subtitle,
             potentialAction: {
               "@type": "SearchAction",
-              target: "https://www.ilmalink.com/search?q={search_term_string}",
+              target: "https://www.ilmalink.com/search/?q={search_term_string}",
               "query-input": "required name=search_term_string",
             },
           }),
@@ -63,3 +63,6 @@ export default function HeroTyping() {
     </section>
   );
 }
+
+
+

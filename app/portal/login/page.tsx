@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { LockKeyhole, ShieldCheck } from "lucide-react";
 
 import PortalLoginForm from "../../components/portal/PortalLoginForm";
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "Education Portal Login | ilmaLink",
   description:
     "Student, education admin, counsellor and management login for the separate ilmaLink Education Portal.",
-  alternates: { canonical: "https://www.ilmalink.com/portal/login" },
+  alternates: { canonical: "https://www.ilmalink.com/portal/login/" },
   robots: { index: true, follow: true },
 };
 
@@ -62,3 +62,6 @@ export default async function PortalLoginPage({
     </main>
   );
 }
+
+
+

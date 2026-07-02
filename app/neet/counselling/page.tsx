@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   description:
     "NEET UG 2026 counselling guide with MCC All India routes, state counselling, private/deemed pathways, reservation snapshot and official links.",
   alternates: {
-    canonical: "https://www.ilmalink.com/neet/counselling",
+    canonical: "https://www.ilmalink.com/neet/counselling/",
   },
 };
 
@@ -203,3 +203,6 @@ export default function NeetCounsellingPage() {
     </main>
   );
 }
+
+
+

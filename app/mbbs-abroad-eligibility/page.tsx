@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 
 import ToolPlaceholderPage from "../components/ToolPlaceholderPage";
 
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "Check the main academic, NEET, document, university, course and NMC/FMGL considerations before planning MBBS abroad.",
   alternates: {
-    canonical: "https://www.ilmalink.com/mbbs-abroad-eligibility",
+    canonical: "https://www.ilmalink.com/mbbs-abroad-eligibility/",
   },
 };
 
@@ -28,3 +28,6 @@ export default function MbbsAbroadEligibilityPage() {
     />
   );
 }
+
+
+

@@ -1,9 +1,9 @@
-# Kyrgyzstan image sources
+﻿# Kyrgyzstan image sources
 
 All shipped assets are locally stored WebP files below 100 KB. Campus images
 were resized and compressed for the university cards and profile pages.
 
-- `kyrgyzstan-scenery.webp`: AI-generated for the ilmalink service line of ilmalink. Prompt: wide
+- `kyrgyzstan-scenery.webp`: AI-generated for the ilmaLink. Prompt: wide
   photorealistic Kyrgyzstan scene with the Tian Shan mountains, Issyk-Kul,
   steppe, a traditional yurt, and a subtle Bishkek skyline; no people, text,
   logos, or watermark.
@@ -36,3 +36,4 @@ were resized and compressed for the university cards and profile pages.
 - `batken-state-university.webp`: https://sputnik.kg/20250410/batken-okuu-zhay-ukmk-korruptsiya-1093241279.html
 - `kyrgyz-national-agrarian-university.webp`: https://rmgoe.org/study-abroad/kyrgyz-national-agrarian-university
 - `ishenaly-arabaev-kyrgyz-state-university.webp`: https://commons.wikimedia.org/wiki/File:Kyrgyz_State_University_of_Arabaev.jpg
+

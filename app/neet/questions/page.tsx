@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, BookOpenCheck, FileText, Search } from "lucide-react";
 
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   description:
     "Search NEET 2026 questions by subject, question text, option text, answer marker, topic, keyword or question number.",
   alternates: {
-    canonical: "https://www.ilmalink.com/neet/questions",
+    canonical: "https://www.ilmalink.com/neet/questions/",
   },
   keywords: [
     "search NEET 2026 questions",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: "Search NEET 2026 Questions | ilmaLink",
     description:
       "Search the supplied NEET 2026 question set with answer markers, source images and individual question pages.",
-    url: "https://www.ilmalink.com/neet/questions",
+    url: "https://www.ilmalink.com/neet/questions/",
     type: "website",
   },
 };
@@ -161,3 +161,6 @@ export default function NeetQuestionsPage() {
     </>
   );
 }
+
+
+

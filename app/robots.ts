@@ -1,4 +1,4 @@
-import type { MetadataRoute } from "next";
+﻿import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -19,7 +19,8 @@ export default function robots(): MetadataRoute.Robots {
         "/portal/management/",
         "/portal/forgot-password/",
         "/portal/reset-password/",
-        /* Spam / hacked URLs — return 410 Gone */
+        /* Spam / hacked URLs â€” return 410 Gone */
+        "/4check/",
         "/russianmarket/",
         "/ultimateshop/",
         "/blackbet/",
@@ -52,3 +53,6 @@ export default function robots(): MetadataRoute.Robots {
     host: "https://www.ilmalink.com",
   };
 }
+
+
+

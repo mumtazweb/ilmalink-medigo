@@ -1,4 +1,4 @@
-{
+﻿{
   "generatedAt": "2026-06-27T19:48:15.260Z",
   "blockedRouteFiles": [],
   "blockedInternalLinks": [],
@@ -11,27 +11,28 @@
     "The repeatable audit should be run after content imports, database blog publishing, or route additions to catch blocked slugs before sitemap/search generation."
   ],
   "googleSearchConsoleRemovalUrls": [
-    "https://www.ilmalink.com/russianmarket/",
-    "https://www.ilmalink.com/ultimateshop/",
-    "https://www.ilmalink.com/blackbet/",
-    "https://www.ilmalink.com/courses/",
-    "https://www.ilmalink.com/key-function/",
-    "https://www.ilmalink.com/area-of-operations/",
-    "https://www.ilmalink.com/mode-of-operations/",
-    "https://www.ilmalink.com/scholarship-info/",
-    "https://www.ilmalink.com/career-roadmap/",
-    "https://www.ilmalink.com/author/",
-    "https://www.ilmalink.com/ar/",
-    "https://www.ilmalink.com/ar/search/",
-    "https://www.ilmalink.com/bn/",
-    "https://www.ilmalink.com/bn/search/",
-    "https://www.ilmalink.com/hi/",
-    "https://www.ilmalink.com/hi/search/",
-    "https://www.ilmalink.com/login/",
-    "https://www.ilmalink.com/create-account/",
-    "https://www.ilmalink.com/forgot-password/",
-    "https://www.ilmalink.com/reset-password/",
-    "https://www.ilmalink.com/dashboard/"
+    "https://www.ilmalink.com/russianmarket//",
+    "https://www.ilmalink.com/ultimateshop//",
+    "https://www.ilmalink.com/blackbet//",
+    "https://www.ilmalink.com/courses//",
+    "https://www.ilmalink.com/key-function//",
+    "https://www.ilmalink.com/area-of-operations//",
+    "https://www.ilmalink.com/mode-of-operations//",
+    "https://www.ilmalink.com/scholarship-info//",
+    "https://www.ilmalink.com/career-roadmap//",
+    "https://www.ilmalink.com/author//",
+    "https://www.ilmalink.com/ar//",
+    "https://www.ilmalink.com/ar/search//",
+    "https://www.ilmalink.com/bn//",
+    "https://www.ilmalink.com/bn/search//",
+    "https://www.ilmalink.com/hi//",
+    "https://www.ilmalink.com/hi/search//",
+    "https://www.ilmalink.com/login//",
+    "https://www.ilmalink.com/create-account//",
+    "https://www.ilmalink.com/forgot-password//",
+    "https://www.ilmalink.com/reset-password//",
+    "https://www.ilmalink.com/dashboard//"
   ],
   "routeCount": 120
 }
+

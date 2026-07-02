@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { FaFacebookF, FaInstagram, FaTelegramPlane, FaYoutube } from "react-icons/fa";
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   title: "NEET UG 2026 Hub: Exam, Answer Key, Preparation & Counselling",
   description:
     "Explore NEET UG 2026 exam information, question-paper analysis, answer keys, previous papers, preparation planning, counselling and MBBS admission guidance.",
-  alternates: { canonical: "https://www.ilmalink.com/neet" },
+  alternates: { canonical: "https://www.ilmalink.com/neet/" },
   keywords: [
     "NEET UG 2026",
     "NEET 2026 answer key",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     title: "NEET UG 2026 Student Hub | ilmaLink",
     description:
       "NEET 2026 exam information, questions, answer keys, preparation, counselling and MBBS admission support in one hub.",
-    url: "https://www.ilmalink.com/neet",
+    url: "https://www.ilmalink.com/neet/",
     type: "website",
   },
   robots: { index: true, follow: true },
@@ -197,13 +197,13 @@ const trustItems = [
   { title: "Trusted by Thousands", note: "Students across India", icon: ShieldCheck },
   { title: "Official & Updated", note: "Accurate information only", icon: CheckCircle2 },
   { title: "Secure & Reliable", note: "Your privacy is our priority", icon: LockKeyhole },
-  { title: "Student Support", note: "We’re here to help", icon: Headphones },
+  { title: "Student Support", note: "Weâ€™re here to help", icon: Headphones },
 ] as const;
 
 const hubItemListSchema = {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  "@id": "https://www.ilmalink.com/neet#student-resources",
+  "@id": "https://www.ilmalink.com/neet/#student-resources",
   name: "NEET UG 2026 student resources",
   numberOfItems: hubCards.length,
   itemListElement: hubCards.map((card, index) => ({
@@ -221,8 +221,8 @@ const hubItemListSchema = {
 const neetHubSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "@id": "https://www.ilmalink.com/neet#webpage",
-  url: "https://www.ilmalink.com/neet",
+  "@id": "https://www.ilmalink.com/neet/#webpage",
+  url: "https://www.ilmalink.com/neet/",
   name: "NEET UG 2026 Student Hub",
   description:
     "NEET UG 2026 exam information, answer keys, questions, preparation, counselling and MBBS admission guidance.",
@@ -240,7 +240,7 @@ const neetHubSchema = {
     "NEET counselling",
     "MBBS admission",
   ],
-  hasPart: { "@id": "https://www.ilmalink.com/neet#student-resources" },
+  hasPart: { "@id": "https://www.ilmalink.com/neet/#student-resources" },
 };
 
 export default function NeetHubPage() {
@@ -553,3 +553,6 @@ export default function NeetHubPage() {
     </>
   );
 }
+
+
+

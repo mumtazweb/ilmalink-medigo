@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Search, Sparkles } from "lucide-react";
 
@@ -6,11 +6,11 @@ import Navbar from "../components/navbar";
 import { searchInternalSiteData } from "@/lib/siteDataSearch";
 
 export const metadata: Metadata = {
-  title: "Search ilmalink | Official ilmaLink Site Search",
+  title: "Search ilmaLink | Official Site Search",
   description:
-    "Search the official ilmalink website for MBBS abroad countries, MBBS India colleges, FMGE data, NEET guidance, scholarships, loans, and blogs.",
+    "Search the official ilmaLink website for MBBS abroad countries, MBBS India colleges, FMGE data, NEET guidance, scholarships, loans and blogs.",
   alternates: {
-    canonical: "https://www.ilmalink.com/search",
+    canonical: "https://www.ilmalink.com/search/",
   },
   robots: {
     index: false,
@@ -37,8 +37,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     : searchInternalSiteData("MBBS", { limit: 12 });
   const results = search.matchedItems;
   const pageUrl = query
-    ? `https://www.ilmalink.com/search?q=${encodeURIComponent(query)}`
-    : "https://www.ilmalink.com/search";
+    ? `https://www.ilmalink.com/search/?q=${encodeURIComponent(query)}`
+    : "https://www.ilmalink.com/search/";
   const searchResultsSchema = {
     "@context": "https://schema.org",
     "@type": "SearchResultsPage",
@@ -149,3 +149,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     </main>
   );
 }
+
+
+

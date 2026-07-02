@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -109,12 +109,12 @@ const faqs = [
   {
     question: "Is USD 1,700 per semester the official OshSU fee?",
     answer:
-      "No. ilmalink, an extension/service line of ilmalink, is showing USD 1,700 only as an unconfirmed working estimate. Students must obtain a current written invoice from the university or a verified authorized entity.",
+      "No. ilmaLink, is showing USD 1,700 only as an unconfirmed working estimate. Students must obtain a current written invoice from the university or a verified authorized entity.",
   },
   {
     question: "Does Osh State University have one exclusive Indian contractor?",
     answer:
-      "ilmalink, an extension/service line of ilmalink, has not yet confirmed one exclusive or universal India-side contractor. Agency fees, inclusions, payment recipients and responsibilities may differ.",
+      "ilmaLink, has not yet confirmed one exclusive or universal India-side contractor. Agency fees, inclusions, payment recipients and responsibilities may differ.",
   },
   {
     question: "What does WDOMS report for the English program?",
@@ -197,7 +197,7 @@ function buildJsonLd() {
     {
       "@context": "https://schema.org",
       "@type": "Course",
-      name: "International Medical Faculty — Doctor of Medicine (M.D.)",
+      name: "International Medical Faculty â€” Doctor of Medicine (M.D.)",
       provider: {
         "@type": "CollegeOrUniversity",
         name: "Osh State University Medical Faculty",
@@ -261,7 +261,7 @@ export default function OshStateUniversityMedicalFacultyPage() {
               </h1>
               <p className="mt-4 max-w-3xl text-base font-medium leading-8 text-blue-50 sm:text-lg">
                 Public medical school profile based on Osh State University,
-                WDOMS and IAAR records—separated clearly from private agency
+                WDOMS and IAAR recordsâ€”separated clearly from private agency
                 fee packages and contractor claims.
               </p>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -295,7 +295,7 @@ export default function OshStateUniversityMedicalFacultyPage() {
                     Main contractor not yet confirmed
                   </h2>
                   <p className="mt-3 text-sm font-semibold leading-7 text-amber-950">
-                    ilmalink, an extension/service line of ilmalink, is in contact with the medical faculty, but
+                    ilmaLink, is in contact with the medical faculty, but
                     has not yet confirmed one exclusive or universal contractor
                     for Indian admissions. Fees, inclusions and responsibility
                     can differ between agencies.
@@ -679,3 +679,7 @@ export default function OshStateUniversityMedicalFacultyPage() {
     </main>
   );
 }
+
+
+
+

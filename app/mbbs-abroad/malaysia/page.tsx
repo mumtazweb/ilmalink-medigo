@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 
 import Navbar from "../../components/navbar";
 import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
@@ -112,17 +112,17 @@ export default function MalaysiaPage() {
 
             <div className="grid gap-8 text-lg leading-8 text-gray-300 md:grid-cols-2">
               <div className="space-y-5">
-                <p>✅ English-medium medical education</p>
-                <p>✅ Advanced hospitals and modern medical facilities</p>
-                <p>✅ International student-friendly environment</p>
-                <p>✅ Safe and developed urban lifestyle</p>
+                <p>âœ… English-medium medical education</p>
+                <p>âœ… Advanced hospitals and modern medical facilities</p>
+                <p>âœ… International student-friendly environment</p>
+                <p>âœ… Safe and developed urban lifestyle</p>
               </div>
 
               <div className="space-y-5">
-                <p>✅ Exposure to multicultural healthcare systems</p>
-                <p>✅ Strong infrastructure and transport systems</p>
-                <p>✅ International collaborations in some universities</p>
-                <p>✅ Globally recognized academic ecosystem</p>
+                <p>âœ… Exposure to multicultural healthcare systems</p>
+                <p>âœ… Strong infrastructure and transport systems</p>
+                <p>âœ… International collaborations in some universities</p>
+                <p>âœ… Globally recognized academic ecosystem</p>
               </div>
             </div>
 
@@ -150,7 +150,7 @@ export default function MalaysiaPage() {
         <div className="mx-auto max-w-7xl rounded-3xl border-2 border-red-500/40 bg-red-500/10 p-8 shadow-[0_0_40px_rgba(239,68,68,0.12)]">
           <div className="mb-6 flex items-center gap-4">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-red-500/20 text-3xl">
-              ⚠️
+              âš ï¸
             </div>
 
             <div>
@@ -172,11 +172,11 @@ export default function MalaysiaPage() {
             </p>
 
             <ul className="space-y-4">
-              <li>❌ Some universities may not fulfill same-country internship requirements</li>
-              <li>❌ Certain programs may not match the required 54-month academic duration</li>
-              <li>❌ Twinning or transfer models can create FMGL/NMC eligibility complications</li>
-              <li>❌ Clinical rotations outside the primary university country may affect eligibility</li>
-              <li>❌ NMC recognition status and compliance may change over time</li>
+              <li>âŒ Some universities may not fulfill same-country internship requirements</li>
+              <li>âŒ Certain programs may not match the required 54-month academic duration</li>
+              <li>âŒ Twinning or transfer models can create FMGL/NMC eligibility complications</li>
+              <li>âŒ Clinical rotations outside the primary university country may affect eligibility</li>
+              <li>âŒ NMC recognition status and compliance may change over time</li>
             </ul>
 
             <div className="mt-8 rounded-2xl border border-yellow-500/30 bg-yellow-500/10 p-6">
@@ -200,3 +200,6 @@ export default function MalaysiaPage() {
     </main>
   );
 }
+
+
+

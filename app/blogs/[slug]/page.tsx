@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -409,9 +409,9 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
                   Article
                 </p>
                 <p className="text-xs font-bold text-slate-600">
-                  ilmalink service line of ilmalink
+                  ilmaLink
                 </p>
-                <p className="mt-2 text-[#00A986]">★★★★★</p>
+                <p className="mt-2 text-[#00A986]">â˜…â˜…â˜…â˜…â˜…</p>
               </div>
             </div>
           </div>
@@ -765,3 +765,4 @@ export default async function SingleBlogPage({ params }: BlogPageProps) {
     </main>
   );
 }
+

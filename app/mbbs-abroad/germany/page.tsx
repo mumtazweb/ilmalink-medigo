@@ -1,4 +1,4 @@
-import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
+﻿import VerificationCounsellingCard from "../../components/VerificationCounsellingCard";
 
 export const dynamic = "force-static";
 
@@ -7,7 +7,7 @@ export const metadata = {
     "Study Medicine in Germany 2026 for Indian Students | WDOMS & NMC/FMGL Checks",
 
   description:
-    "Explore medical study in Germany for Indian students with 48 WDOMS-listed medical schools, admission route guidance, language and eligibility checks, NMC/FMGL rule review and ilmalink service-line counselling support under ilmalink.",
+    "Explore medical study in Germany for Indian students with 48 WDOMS-listed medical schools, admission route guidance, language and eligibility checks, NMC/FMGL rule review and ilmaLink counselling support under ilmalink.",
 
   keywords: [
     "Study medicine in Germany",
@@ -97,7 +97,7 @@ export default function GermanyPage() {
 
             <div className="w-14 h-14 rounded-full bg-red-500/20 flex items-center justify-center text-3xl">
 
-              ⚠️
+              âš ï¸
 
             </div>
 
@@ -133,27 +133,27 @@ export default function GermanyPage() {
             <ul className="space-y-4">
 
               <li>
-                ⚠️ Medicine in Germany is not usually a simple direct MBBS admission route
+                âš ï¸ Medicine in Germany is not usually a simple direct MBBS admission route
               </li>
 
               <li>
-                ⚠️ Strong German language ability may be important for study and clinical training
+                âš ï¸ Strong German language ability may be important for study and clinical training
               </li>
 
               <li>
-                ⚠️ Admission restrictions and selection processes must be checked carefully
+                âš ï¸ Admission restrictions and selection processes must be checked carefully
               </li>
 
               <li>
-                ⚠️ WDOMS listing is a directory check, not an approval claim
+                âš ï¸ WDOMS listing is a directory check, not an approval claim
               </li>
 
               <li>
-                ⚠️ Indian students must verify NMC/FMGL rules before admission
+                âš ï¸ Indian students must verify NMC/FMGL rules before admission
               </li>
 
               <li>
-                ⚠️ Licensing, internship and clinical pathway details should be reviewed before choosing a route
+                âš ï¸ Licensing, internship and clinical pathway details should be reviewed before choosing a route
               </li>
 
             </ul>
@@ -168,7 +168,7 @@ export default function GermanyPage() {
 
               <p className="text-gray-300 leading-8">
 
-                ilmalink, an extension/service line of ilmalink, can help students compare Germany with other
+                ilmaLink, can help students compare Germany with other
                 MBBS abroad routes, review documents, check WDOMS listing,
                 verify university-wise language requirements and plan NMC/FMGL
                 eligibility questions before applying.
@@ -198,17 +198,17 @@ export default function GermanyPage() {
 
             <ul className="space-y-5 text-gray-300 leading-8">
 
-              <li>✔ School qualification and eligibility review</li>
+              <li>âœ” School qualification and eligibility review</li>
 
-              <li>✔ DAAD and official university admission requirement check</li>
+              <li>âœ” DAAD and official university admission requirement check</li>
 
-              <li>✔ German language requirement verification</li>
+              <li>âœ” German language requirement verification</li>
 
-              <li>✔ WDOMS listing and host-country recognition check</li>
+              <li>âœ” WDOMS listing and host-country recognition check</li>
 
-              <li>✔ NMC/FMGL rule review for Indian students</li>
+              <li>âœ” NMC/FMGL rule review for Indian students</li>
 
-              <li>✔ Licensing pathway and clinical training comparison</li>
+              <li>âœ” Licensing pathway and clinical training comparison</li>
 
             </ul>
 
@@ -224,15 +224,15 @@ export default function GermanyPage() {
 
             <ul className="space-y-5 text-gray-300 leading-8">
 
-              <li>💰 Semester Fee Guidance: ₹ 5L/Semester</li>
+              <li>ðŸ’° Semester Fee Guidance: â‚¹ 5L/Semester</li>
 
-              <li>🏠 Living Cost: verify city-wise</li>
+              <li>ðŸ  Living Cost: verify city-wise</li>
 
-              <li>📚 Course Duration: verify official medicine pathway</li>
+              <li>ðŸ“š Course Duration: verify official medicine pathway</li>
 
-              <li>✈️ Visa + Insurance + Travel Extra</li>
+              <li>âœˆï¸ Visa + Insurance + Travel Extra</li>
 
-              <li>📄 Translations, certifications and application fees may apply</li>
+              <li>ðŸ“„ Translations, certifications and application fees may apply</li>
 
             </ul>
 
@@ -270,13 +270,13 @@ export default function GermanyPage() {
 
                 <p className="text-gray-300 mb-3">
 
-                  📍 {uni.city}
+                  ðŸ“ {uni.city}
 
                 </p>
 
                 <p className="text-gray-300">
 
-                  💰 {uni.fees}
+                  ðŸ’° {uni.fees}
 
                 </p>
 
@@ -313,13 +313,13 @@ export default function GermanyPage() {
 
           <ul className="space-y-5 text-gray-300 leading-8">
 
-            <li>✔ Confirm the exact medicine route and degree structure</li>
+            <li>âœ” Confirm the exact medicine route and degree structure</li>
 
-            <li>✔ Verify German or English instruction requirements university-wise</li>
+            <li>âœ” Verify German or English instruction requirements university-wise</li>
 
-            <li>✔ Check whether the pathway fits current Indian NMC/FMGL rules</li>
+            <li>âœ” Check whether the pathway fits current Indian NMC/FMGL rules</li>
 
-            <li>✔ Review documents, translation and application process early</li>
+            <li>âœ” Review documents, translation and application process early</li>
 
           </ul>
 
@@ -392,3 +392,4 @@ export default function GermanyPage() {
     </main>
   );
 }
+

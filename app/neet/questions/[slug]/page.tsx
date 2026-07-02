@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react";
+﻿import type { LucideIcon } from "lucide-react";
 import type { Metadata } from "next";
 import {
   ArrowLeft,
@@ -61,7 +61,7 @@ export async function generateMetadata({
 
   const title = `NEET 2026 ${question.subject} Question ${question.questionNumber}`;
   const description = `${question.question.slice(0, 145)} Read the NTA provisional answer marker, source image and review note.`;
-  const canonical = `https://www.ilmalink.com/neet/questions/${question.slug}`;
+  const canonical = `https://www.ilmalink.com/neet/questions/${question.slug}/`;
 
   return {
     title,
@@ -93,7 +93,7 @@ export default async function NeetQuestionDetailPage({
 
   const title = `NEET 2026 ${question.subject} Question ${question.questionNumber}`;
   const relatedQuestions = getRelatedNeetQuestions(question);
-  const canonical = `https://www.ilmalink.com/neet/questions/${question.slug}`;
+  const canonical = `https://www.ilmalink.com/neet/questions/${question.slug}/`;
   const questionSchema = {
     "@context": "https://schema.org",
     "@type": "Question",
@@ -123,7 +123,7 @@ export default async function NeetQuestionDetailPage({
           buildBreadcrumbSchema([
             { name: "NEET Hub", url: "/neet" },
             { name: "Questions", url: "/neet/questions" },
-            { name: title, url: `/neet/questions/${question.slug}` },
+            { name: title, url: `/neet/questions/${question.slug}/` },
           ]),
           questionSchema,
         ]}
@@ -433,3 +433,6 @@ function RelatedLink({
     </Link>
   );
 }
+
+
+

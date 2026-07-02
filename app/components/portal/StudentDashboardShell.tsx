@@ -240,7 +240,7 @@ function PortalBrand({ inverse = false }: { inverse?: boolean }) {
           ilmaLink
         </strong>
         <strong className="block text-[17px] font-black tracking-[.11em] text-[#00B886]">
-          ilmalink service line
+          ilmaLink
         </strong>
         <span className={`block text-[9px] font-bold tracking-[.13em] ${inverse ? "text-white/70" : "text-[#23324D]"}`}>
           STUDENT PORTAL

@@ -1,4 +1,4 @@
-import {
+﻿import {
   ilmaLinkEntityData,
   ilmaLinkOrganizationSchema,
   ilmaLinkWebsiteSchema,
@@ -130,7 +130,7 @@ export function buildEducationalOrganizationSchema() {
     url: ilmaLinkEntityData.url,
     logo: absoluteUrl(ilmaLinkEntityData.logo),
     description:
-      "ilmalink is an extension/service line of ilmalink for MBBS India, MBBS Abroad, NEET guidance, counselling support, scholarships, education loans, direct college/university tie-up based admission coordination, and medical admission documentation.",
+      "ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad.",
     disambiguatingDescription:
       ilmaLinkOrganizationSchema.disambiguatingDescription,
     areaServed: [
@@ -279,7 +279,7 @@ export function buildGuidanceDisclaimerSchema() {
     "@id": "https://www.ilmalink.com/#guidance-disclaimer",
     name: "ilmalink Admissions Guidance Disclaimer",
     text:
-      "ilmalink is an extension/service line of ilmalink. It provides admission guidance, counselling and student-support information. Final admission, eligibility, documentation, visa approval, scholarship, loan or licence outcome is subject to official rules, university decisions, regulatory authorities and applicable government norms.",
+      "ilmaLink provides admission guidance, counselling and student-support information. Final admission, eligibility, documentation, visa approval, scholarship, loan or licence outcome is subject to official rules, university decisions, regulatory authorities and applicable government norms.",
     inLanguage: "en-IN",
     isPartOf: {
       "@id": "https://www.ilmalink.com/#website",
@@ -343,9 +343,9 @@ export function buildCountryMedicalEducationSchema(countryData: CountryGeoFact) 
   return {
     "@context": "https://schema.org",
     "@type": "EducationalOccupationalProgram",
-    "@id": `https://www.ilmalink.com/mbbs-abroad/${countryData.slug}#medical-education-program`,
+    "@id": `https://www.ilmalink.com/mbbs-abroad/${countryData.slug}/#medical-education-program`,
     name: `MBBS in ${countryData.countryName} guidance`,
-    url: `https://www.ilmalink.com/mbbs-abroad/${countryData.slug}`,
+    url: `https://www.ilmalink.com/mbbs-abroad/${countryData.slug}/`,
     description: countryData.eligibilitySummary,
     educationalProgramMode: "On campus",
     programPrerequisites: countryData.neetRequirementForIndianStudents,
@@ -365,7 +365,7 @@ export function buildCountryMedicalEducationSchema(countryData: CountryGeoFact) 
       {
         "@type": "Thing",
         name: `${countryData.countryName} WDOMS medical schools`,
-        description: `${countryData.wdomsCount} WDOMS-listed medical school entries in the ilmalink service-line country dataset of ilmalink.`,
+        description: `${countryData.wdomsCount} WDOMS-listed medical school entries in the ilmaLink country guide.`,
       },
       {
         "@type": "Thing",
@@ -375,3 +375,6 @@ export function buildCountryMedicalEducationSchema(countryData: CountryGeoFact) 
     ],
   };
 }
+
+
+

@@ -7,6 +7,7 @@ import type { NextRequest } from "next/server";
  * and should not be re-crawled by search engines.
  */
 const GONE_ROUTES = [
+  "/4check",
   "/russianmarket",
   "/ultimateshop",
   "/blackbet",

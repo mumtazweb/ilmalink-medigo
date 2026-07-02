@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, FileCheck2 } from "lucide-react";
 
@@ -14,13 +14,13 @@ export const metadata: Metadata = {
   description:
     "Find MBBS scholarships, education loans, merit-based and category-based funding, student credit cards, minority finance, charitable support and ilmaLink fee support for medical students in India and abroad.",
   alternates: {
-    canonical: "https://www.ilmalink.com/scholarships-loans",
+    canonical: "https://www.ilmalink.com/scholarships-loans/",
   },
   openGraph: {
     title: "MBBS Scholarships & Education Loans | ilmaLink",
     description:
       "Find MBBS scholarships, education loans, merit scholarships, category support, student credit cards, charitable routes and ilmaLink fee support.",
-    url: "https://www.ilmalink.com/scholarships-loans",
+    url: "https://www.ilmalink.com/scholarships-loans/",
     type: "website",
   },
   twitter: {
@@ -277,7 +277,7 @@ const breadcrumbJsonLd = {
       "@type": "ListItem",
       position: 2,
       name: "Scholarships & Loans",
-      item: "https://www.ilmalink.com/scholarships-loans",
+      item: "https://www.ilmalink.com/scholarships-loans/",
     },
   ],
 };
@@ -487,7 +487,7 @@ export default function ScholarshipsLoansPage() {
               eligibility, document verification, fund availability, institution
               recognition, bank/NBFC rules, government rules, university/college
               rules, admission route, student profile and ilmaLink approval.
-              ilmalink, an extension/service line of ilmalink, guides students end-to-end and may offer
+              ilmaLink, guides students end-to-end and may offer
               admission-linked fee support up to INR 3,00,000 after
               verification.
             </p>
@@ -528,3 +528,7 @@ export default function ScholarshipsLoansPage() {
     </main>
   );
 }
+
+
+
+

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   description:
     "Browse all 180 supplied Re-NEET 2026 Physics, Chemistry and Biology questions with source images and answer markers.",
   alternates: {
-    canonical: "https://www.ilmalink.com/neet/re-neet-2026-questions",
+    canonical: "https://www.ilmalink.com/neet/re-neet-2026-questions/",
   },
   keywords: [
     "Re-NEET 2026 questions",
@@ -235,3 +235,6 @@ function Stat({ value, label }: { value: string; label: string }) {
     </div>
   );
 }
+
+
+

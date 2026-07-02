@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Compass } from "lucide-react";
 
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     "Explore ilmaLink study destinations, NEET guidance, scholarships, official updates and student-support pages.",
   alternates: {
-    canonical: "https://www.ilmalink.com/site-hierarchy",
+    canonical: "https://www.ilmalink.com/site-hierarchy/",
   },
 };
 
@@ -178,3 +178,6 @@ export default function SiteHierarchyPage() {
     </main>
   );
 }
+
+
+

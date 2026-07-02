@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+﻿import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createJiti } from "jiti";
@@ -31,6 +31,7 @@ const componentUrls = new Map([
 ]);
 
 const publicSearchExcludedRoutes = [
+  "/4check",
   "/admin",
   "/api",
   "/login",
@@ -50,6 +51,7 @@ const publicSearchExcludedRoutes = [
 ];
 
 const blockedRoutePrefixes = [
+  "/4check",
   "/russianmarket",
   "/ultimateshop",
   "/blackbet",
@@ -2845,7 +2847,6 @@ function buildManualEntries() {
   const {
     ilmaLinkBrandAliases = [],
     ilmaLinkBrandMisspellings = [],
-    ilmaLinkBrandDisambiguation = "",
   } = loadDataModule("app/data/geo.ts");
   const brandSearchTerms = [
     ...asArray(ilmaLinkBrandAliases),
@@ -2854,9 +2855,9 @@ function buildManualEntries() {
   const entries = [
     {
       id: "official-ilmalink-brand-entity",
-      title: "ilmalink Official Website and Brand Entity",
+      title: "ilmaLink | MBBS Abroad, MBBS India & NEET Guidance",
       description:
-        "Official ilmalink website: ilmaLink is the public display style of ilmalink, a medical MBBS admission platform and consultancy for MBBS Abroad, MBBS India and NEET guidance.",
+        "ilmaLink is the public display style of ilmalink, an MBBS admission guidance platform for India and abroad. It helps NEET aspirants, parents and education partners with MBBS India counselling support, MBBS Abroad guidance, eligibility review, documentation, scholarships, education loans and transparent college or university comparison.",
       url: "/",
       category: "Official Brand",
       group: "Pages",
@@ -2866,16 +2867,18 @@ function buildManualEntries() {
       tags: [
         "ilmalink",
         "ilmaLink",
+        "official ilmaLink",
         "official ilmalink",
-        "ilmalink official website",
+        "official website",
         "ilmalink.com",
         "www.ilmalink.com",
-        "MBBS admission platform",
-        "MBBS abroad consultancy",
+        "MBBS admission guidance",
         "MBBS India guidance",
+        "MBBS Abroad guidance",
         "NEET guidance",
-        "GEO entity reference",
-        "AI entity reference",
+        "scholarships",
+        "education loans",
+        "medical admission guidance",
         ...brandSearchTerms,
       ],
       intentTags: [
@@ -2884,16 +2887,13 @@ function buildManualEntries() {
         "entity",
         "about",
         "contact",
-        "ai",
-        "geo",
       ],
       content: [
-        "Official ilmalink website",
+        "Official ilmaLink website",
         "ilmalink is written as one word i-l-m-a-l-i-n-k",
         "ilmaLink is the public display style of ilmalink",
-        "ilmalink is an extension/service line of ilmalink, not a separate brand",
-        "ilmalink MBBS Abroad MBBS India NEET counselling scholarships education loans medical admission guidance",
-        ilmaLinkBrandDisambiguation,
+        "ilmalink is an MBBS admission guidance platform for India and abroad",
+        "ilmaLink helps NEET aspirants parents and education partners with MBBS India counselling support MBBS Abroad guidance eligibility review documentation scholarships education loans and transparent college or university comparison",
         brandSearchTerms.join(" "),
       ].join(" "),
       priority: 140,
@@ -2942,7 +2942,7 @@ function buildManualEntries() {
       id: "page-scholarships-loans-education-loans",
       title: "Education Loans for MBBS Abroad",
       description:
-        "Find MBBS abroad education loan, student loan, medical education loan and ilmalink service-line loan assistance routes under ilmalink.",
+        "Find MBBS abroad education loan, student loan, medical education loan and ilmaLink loan assistance routes under ilmalink.",
       url: "/scholarships-loans#education-loans",
       category: "Pages",
       group: "Pages",
@@ -2957,17 +2957,17 @@ function buildManualEntries() {
         "MBBS abroad financial support",
         "medical education loan",
         "study abroad loan India",
-        "ilmalink service-line loan assistance under ilmalink",
+        "ilmaLink loan assistance under ilmalink",
       ],
       content:
-        "Education loans for MBBS abroad MBBS abroad education loan MBBS abroad loan student loan for MBBS abroad education loan for medical study abroad loan assistance for MBBS abroad MBBS abroad financial support medical education loan study abroad loan India ilmalink service-line loan assistance under ilmalink PM Vidyalaxmi bank education loan student credit card",
+        "Education loans for MBBS abroad MBBS abroad education loan MBBS abroad loan student loan for MBBS abroad education loan for medical study abroad loan assistance for MBBS abroad MBBS abroad financial support medical education loan study abroad loan India ilmaLink loan assistance under ilmalink PM Vidyalaxmi bank education loan student credit card",
       priority: 97,
     },
     {
       id: "page-scholarships-loans-scholarships",
       title: "Scholarships for MBBS Abroad",
       description:
-        "Find MBBS abroad scholarship, medical scholarship abroad, financial aid and ilmalink service-line scholarship support routes under ilmalink.",
+        "Find MBBS abroad scholarship, medical scholarship abroad, financial aid and ilmaLink scholarship support routes under ilmalink.",
       url: "/scholarships-loans#scholarships",
       category: "Pages",
       group: "Pages",
@@ -2981,11 +2981,11 @@ function buildManualEntries() {
         "MBBS scholarship assistance",
         "study abroad scholarship",
         "financial aid for MBBS abroad",
-        "ilmalink service-line scholarship support under ilmalink",
+        "ilmaLink scholarship support under ilmalink",
         "G.D. Study Circle scholarship",
       ],
       content:
-        "Scholarships for MBBS abroad MBBS abroad scholarship scholarship for MBBS abroad medical scholarship abroad scholarship for Indian students MBBS abroad MBBS scholarship assistance study abroad scholarship financial aid for MBBS abroad ilmalink service-line scholarship support under ilmalink G.D. Study Circle scholarship National Scholarship Portal minority scholarship charitable support",
+        "Scholarships for MBBS abroad MBBS abroad scholarship scholarship for MBBS abroad medical scholarship abroad scholarship for Indian students MBBS abroad MBBS scholarship assistance study abroad scholarship financial aid for MBBS abroad ilmaLink scholarship support under ilmalink G.D. Study Circle scholarship National Scholarship Portal minority scholarship charitable support",
       priority: 97,
     },
   ];
@@ -3201,3 +3201,4 @@ main().catch((error) => {
   console.error(error);
   process.exit(1);
 });
+

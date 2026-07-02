@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "MBBS in Georgia 2026 | Universities, Fees & FMGE",
     description:
-      "Compare all Georgia medical universities in the ilmalink service-line data of ilmalink, including full fee and admission pages for GAU, ALTE and EEU.",
+      "Compare all Georgia medical universities in the ilmaLink data of ilmalink, including full fee and admission pages for GAU, ALTE and EEU.",
     url: pageUrl,
     siteName: "ilmaLink",
     images: [
@@ -858,3 +858,8 @@ export default function GeorgiaPage() {
     </main>
   );
 }
+
+
+
+
+

@@ -1,4 +1,4 @@
-# Google Search Console URL Removal Requests
+﻿# Google Search Console URL Removal Requests
 # Submit these URLs for removal in Google Search Console > Removals
 # https://search.google.com/search-console/removals
 #
@@ -6,45 +6,45 @@
 # robots.txt also disallows all of them.
 #
 # Spam / hacked URLs
-https://www.ilmalink.com/russianmarket/
-https://www.ilmalink.com/ultimateshop/
-https://www.ilmalink.com/blackbet/
-https://www.ilmalink.com/casino/
-https://www.ilmalink.com/gambling/
-https://www.ilmalink.com/betting/
-https://www.ilmalink.com/adult/
-https://www.ilmalink.com/porn/
-https://www.ilmalink.com/escort/
+https://www.ilmalink.com/russianmarket//
+https://www.ilmalink.com/ultimateshop//
+https://www.ilmalink.com/blackbet//
+https://www.ilmalink.com/casino//
+https://www.ilmalink.com/gambling//
+https://www.ilmalink.com/betting//
+https://www.ilmalink.com/adult//
+https://www.ilmalink.com/porn//
+https://www.ilmalink.com/escort//
 
 # Old WordPress attack surface
-https://www.ilmalink.com/wp-admin/
-https://www.ilmalink.com/wp-login/
-https://www.ilmalink.com/wp-login.php
-https://www.ilmalink.com/xmlrpc.php
-https://www.ilmalink.com/administrator/
-https://www.ilmalink.com/admin/login/
-https://www.ilmalink.com/user/login/
+https://www.ilmalink.com/wp-admin//
+https://www.ilmalink.com/wp-login//
+https://www.ilmalink.com/wp-login/.php
+https://www.ilmalink.com/xmlrpc/.php
+https://www.ilmalink.com/administrator//
+https://www.ilmalink.com/admin/login//
+https://www.ilmalink.com/user/login//
 
 # Old template / generic pages
-https://www.ilmalink.com/courses/
-https://www.ilmalink.com/key-function/
-https://www.ilmalink.com/area-of-operations/
-https://www.ilmalink.com/mode-of-operations/
-https://www.ilmalink.com/scholarship-info/
-https://www.ilmalink.com/career-roadmap/
-https://www.ilmalink.com/author/
+https://www.ilmalink.com/courses//
+https://www.ilmalink.com/key-function//
+https://www.ilmalink.com/area-of-operations//
+https://www.ilmalink.com/mode-of-operations//
+https://www.ilmalink.com/scholarship-info//
+https://www.ilmalink.com/career-roadmap//
+https://www.ilmalink.com/author//
 
 # Old locale redirect pages
-https://www.ilmalink.com/ar/
-https://www.ilmalink.com/ar/search/
-https://www.ilmalink.com/bn/
-https://www.ilmalink.com/bn/search/
-https://www.ilmalink.com/hi/
-https://www.ilmalink.com/hi/search/
+https://www.ilmalink.com/ar//
+https://www.ilmalink.com/ar/search//
+https://www.ilmalink.com/bn//
+https://www.ilmalink.com/bn/search//
+https://www.ilmalink.com/hi//
+https://www.ilmalink.com/hi/search//
 
 # Removed public auth pages (replaced by /portal/*)
-https://www.ilmalink.com/login/
-https://www.ilmalink.com/create-account/
-https://www.ilmalink.com/forgot-password/
-https://www.ilmalink.com/reset-password/
-https://www.ilmalink.com/dashboard/
+https://www.ilmalink.com/login//
+https://www.ilmalink.com/create-account//
+https://www.ilmalink.com/forgot-password//
+https://www.ilmalink.com/reset-password//
+https://www.ilmalink.com/dashboard//

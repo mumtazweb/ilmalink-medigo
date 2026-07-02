@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 
 import ToolPlaceholderPage from "../components/ToolPlaceholderPage";
 
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "Compare practical MBBS counselling pathways based on NEET profile, budget, preferred location, eligibility and admission goals.",
   alternates: {
-    canonical: "https://www.ilmalink.com/best-available-counselling",
+    canonical: "https://www.ilmalink.com/best-available-counselling/",
   },
 };
 
@@ -28,3 +28,6 @@ export default function BestAvailableCounsellingPage() {
     />
   );
 }
+
+
+

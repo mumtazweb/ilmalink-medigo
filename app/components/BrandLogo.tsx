@@ -14,7 +14,7 @@ Link
 
 <span className="text-blue-500">
 
- ilmalink service line
+ ilmaLink
 
 </span>
 

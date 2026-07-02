@@ -200,7 +200,7 @@ const portalRoot = document.getElementById("modal-root") ?? document.body;
                       <span className="text-green-600">ilma</span>
                       <span className="text-red-500">Link</span>
                     </h3>
-                    <span className="text-blue-600 font-semibold text-xs md:text-sm">ilmalink service line</span>
+                    <span className="text-blue-600 font-semibold text-xs md:text-sm">ilmaLink</span>
                   </div>
                 </div>
               </div>

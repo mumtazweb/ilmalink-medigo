@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import {
   generateIlmalinkGeminiAnswer,
-  ILMALINK_COUNSELLING_FALLBACK,
+  ILMA_LINK_COUNSELLING_FALLBACK,
   type SearchSource,
 } from "@/lib/ilmalinkGeminiAnswer";
 import {
@@ -184,7 +184,7 @@ function toSuggestedLink(source: SearchSource) {
 function buildNoAnswerResponse(status = 200) {
   return NextResponse.json(
     {
-      answer: ILMALINK_COUNSELLING_FALLBACK,
+      answer: ILMA_LINK_COUNSELLING_FALLBACK,
       mode: "no_answer",
       sources: [],
       confidence: "low",

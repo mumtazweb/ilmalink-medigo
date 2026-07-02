@@ -1,4 +1,4 @@
-import type { BlogDatabase, BlogPost } from "./types";
+﻿import type { BlogDatabase, BlogPost } from "./types";
 
 // BLOG SYSTEM: Seed posts provide production-like content until a real database is attached.
 export const blogCategories = [
@@ -28,7 +28,7 @@ Students and families need verified information before choosing a medical educat
 - Speak with an expert before making payments or selecting a university.
 
 ## ilmalink guidance under ilmalink
-ilmalink, an extension/service line of ilmalink, helps students compare realistic options for ${country}, India, NEET counselling, scholarships, education loans, and career planning with transparent guidance.
+ilmaLink, helps students compare realistic options for ${country}, India, NEET counselling, scholarships, education loans, and career planning with transparent guidance.
 `;
 
 const vijayNeetAbolitionContent = `
@@ -448,3 +448,4 @@ export const seedDatabase: BlogDatabase = {
   drafts: [],
   views: [],
 };
+

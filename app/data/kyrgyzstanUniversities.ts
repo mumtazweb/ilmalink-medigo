@@ -1,4 +1,4 @@
-export type KyrgyzAccreditationStatus =
+﻿export type KyrgyzAccreditationStatus =
   | "6-Year Accredited"
   | "Accredited until 29 May 2030"
   | "Not Subject to 2026 State Accreditation"
@@ -9,7 +9,7 @@ export type KyrgyzAccreditationStatus =
 
 export type KyrgyzRecommendationLevel =
   | "Recommended"
-  | "Recommended — Separate Verification Required"
+  | "Recommended - Separate Verification Required"
   | "Not Recommended"
   | "No Admission";
 
@@ -146,7 +146,7 @@ const ksmaRegulatorMessage =
   "KSMA was legally not subject to the May 2026 state accreditation procedure because the final government update identified it as a regulating body for medical-education quality. This is not a failed or pending accreditation result. Students must still verify the exact program, WDOMS listing, course and internship structure, local licence eligibility, and NMC/FMGL compliance.";
 
 const conditionalMessage =
-  "This university currently has only 1-year conditional accreditation. ilmalink, an extension/service line of ilmalink, does not recommend it as a first-choice option unless a fresh long-term official accreditation update is available.";
+  "This university currently has only 1-year conditional accreditation. ilmaLink, does not recommend it as a first-choice option unless a fresh long-term official accreditation update is available.";
 
 const didNotPassMessage =
   "This institution is not suitable for new admission recommendation because it did not pass state accreditation. New admission should not be considered unless fresh official clarification is issued.";
@@ -452,8 +452,8 @@ const ihsmCampuses: KyrgyzCampusData[] = [
     intake: "2026-2027",
     feeRows: ihsmCentralCampusFeeRows,
     additionalFees: [
-      { label: "Premium Training Program", amount: "₹1,25,000" },
-      { label: "Visa & Air-ticket Fee", amount: "₹75,000" },
+      { label: "Premium Training Program", amount: "â‚¹1,25,000" },
+      { label: "Visa & Air-ticket Fee", amount: "â‚¹75,000" },
     ],
     feeNotes: [
       "Duration of course: as per NMC guidelines.",
@@ -534,8 +534,8 @@ const ihsmCampuses: KyrgyzCampusData[] = [
     intake: "2026-2027",
     feeRows: ihsmEliteCampusFeeRows,
     additionalFees: [
-      { label: "Premium Training Program", amount: "₹1,25,000" },
-      { label: "Visa & Air-ticket Fee", amount: "₹75,000" },
+      { label: "Premium Training Program", amount: "â‚¹1,25,000" },
+      { label: "Visa & Air-ticket Fee", amount: "â‚¹75,000" },
     ],
     feeNotes: [
       "Duration of course: as per NMC guidelines.",
@@ -700,8 +700,8 @@ export const kyrgyzstanUniversities: KyrgyzUniversityPageData[] = [
       },
     ],
     additionalFees: [
-      { label: "Premium Training Program", amount: "₹1,25,000" },
-      { label: "Visa & Air-ticket Fee", amount: "₹75,000" },
+      { label: "Premium Training Program", amount: "â‚¹1,25,000" },
+      { label: "Visa & Air-ticket Fee", amount: "â‚¹75,000" },
     ],
     feeNotes: [
       "Duration of course: As per NMC guidelines.",
@@ -863,8 +863,8 @@ export const kyrgyzstanUniversities: KyrgyzUniversityPageData[] = [
     recommendationMessage: recommendedMessage,
     feeRows: ihsmEliteCampusFeeRows,
     additionalFees: [
-      { label: "Premium Training Program", amount: "₹1,25,000" },
-      { label: "Visa & Air-ticket Fee", amount: "₹75,000" },
+      { label: "Premium Training Program", amount: "â‚¹1,25,000" },
+      { label: "Visa & Air-ticket Fee", amount: "â‚¹75,000" },
     ],
     feeNotes: [
       "Duration of course: as per NMC guidelines.",
@@ -947,8 +947,8 @@ export const kyrgyzstanUniversities: KyrgyzUniversityPageData[] = [
     recommendationMessage: recommendedMessage,
     feeRows: ihsmCentralCampusFeeRows,
     additionalFees: [
-      { label: "Premium Training Program", amount: "₹1,25,000" },
-      { label: "Visa & Air-ticket Fee", amount: "₹75,000" },
+      { label: "Premium Training Program", amount: "â‚¹1,25,000" },
+      { label: "Visa & Air-ticket Fee", amount: "â‚¹75,000" },
     ],
     feeNotes: [
       "Duration of course: as per NMC guidelines.",
@@ -1043,8 +1043,8 @@ export const kyrgyzstanUniversities: KyrgyzUniversityPageData[] = [
     recommendationMessage: recommendedMessage,
     feeRows: toBeUpdatedFeeRows,
     additionalFees: [
-      { label: "Premium Training Program", amount: "₹1,25,000" },
-      { label: "Visa & Air-ticket Fee", amount: "₹75,000" },
+      { label: "Premium Training Program", amount: "â‚¹1,25,000" },
+      { label: "Visa & Air-ticket Fee", amount: "â‚¹75,000" },
     ],
     feeNotes: [
       "IHSM has separate Central Campus and Elite Campus fee tables in the uploaded 2026-2027 brochures.",
@@ -1117,13 +1117,13 @@ export const kyrgyzstanUniversities: KyrgyzUniversityPageData[] = [
     name: "Osh State University Medical Faculty",
     slug: "osh-state-university",
     location: "Osh, Kyrgyzstan",
-    program: "International Medical Faculty — Doctor of Medicine (M.D.)",
+    program: "International Medical Faculty â€” Doctor of Medicine (M.D.)",
     intake: "Verify directly with Osh State University",
     accreditationStatus: "6-Year Accredited",
-    accreditationLabel: "State Accredited 6Y · May 2026",
-    recommendationLevel: "Recommended — Separate Verification Required",
+    accreditationLabel: "State Accredited 6Y Â· May 2026",
+    recommendationLevel: "Recommended - Separate Verification Required",
     recommendationMessage:
-      "Osh State University is a public government university with an accredited medical program. ilmalink, an extension/service line of ilmalink, has not yet confirmed a single exclusive or universal India-side contractor. Students must verify the current university invoice, authorized representative, included services, payment recipient, internship structure, and responsibility matrix before paying.",
+      "Osh State University is a public government university with an accredited medical program. ilmaLink, has not yet confirmed a single exclusive or universal India-side contractor. Students must verify the current university invoice, authorized representative, included services, payment recipient, internship structure, and responsibility matrix before paying.",
     feeRows: Array.from({ length: 11 }, (_, index) => ({
       year: `Year ${Math.floor(index / 2) + 1}`,
       semester: `Semester ${index + 1}`,
@@ -1296,7 +1296,7 @@ export const kyrgyzstanUniversities: KyrgyzUniversityPageData[] = [
     slug: "international-university-of-kyrgyzstan",
     location: "Bishkek, Kyrgyzstan",
     program:
-      "International School of Medicine medical program — verify current official title",
+      "International School of Medicine medical program â€” verify current official title",
     accreditationStatus: "6-Year Accredited",
     accreditationLabel: "6-Year Accredited",
     recommendationLevel: "Recommended",
@@ -1421,8 +1421,8 @@ export const kyrgyzstanUniversities: KyrgyzUniversityPageData[] = [
       },
     ],
     additionalFees: [
-      { label: "Premium Training Program", amount: "₹1,25,000" },
-      { label: "Visa & Air-ticket Fee", amount: "₹75,000" },
+      { label: "Premium Training Program", amount: "â‚¹1,25,000" },
+      { label: "Visa & Air-ticket Fee", amount: "â‚¹75,000" },
     ],
     feeNotes: [
       "Duration of course: As per NMC guidelines.",
@@ -1963,13 +1963,13 @@ export const kyrgyzstanUniversities: KyrgyzUniversityPageData[] = [
     name: "Osh International Medical University",
     slug: "osh-international-medical-university",
     location: "Osh, Kyrgyzstan",
-    program: "General Medicine in English — Doctor of Medicine (M.D.)",
+    program: "General Medicine in English â€” Doctor of Medicine (M.D.)",
     intake: "Verify directly before admission",
     accreditationStatus: "Did Not Pass State Accreditation",
     accreditationLabel: "Did Not Pass State Accreditation",
     recommendationLevel: "No Admission",
     recommendationMessage:
-      "Do not confuse this private institution with Osh State University Medical Faculty. Osh International Medical University is a separate WDOMS-listed private university and was listed among the institutions that did not pass the May 2026 state accreditation. ilmalink, an extension/service line of ilmalink, does not recommend new admission unless a fresh official accreditation decision supersedes that result. Verify that every offer letter states the exact university name.",
+      "Do not confuse this private institution with Osh State University Medical Faculty. Osh International Medical University is a separate WDOMS-listed private university and was listed among the institutions that did not pass the May 2026 state accreditation. ilmaLink, does not recommend new admission unless a fresh official accreditation decision supersedes that result. Verify that every offer letter states the exact university name.",
     entryRequirements: [
       "Completion of secondary education.",
       "An entrance examination is required.",
@@ -2092,3 +2092,4 @@ export const kyrgyzstanUniversityDirectory = kyrgyzstanUniversities.filter(
 export function getKyrgyzUniversityBySlug(slug: string) {
   return kyrgyzstanUniversities.find((university) => university.slug === slug);
 }
+
